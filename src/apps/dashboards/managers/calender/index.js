@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import {
     Calendar, ConfigProvider, Modal, Divider, Tag, Table, Space, Tooltip, Popconfirm, Button, Avatar, Image, Select, message
 } from 'antd';
-import { toast } from 'react-toastify';
 import { AiFillEdit, AiFillDelete, AiFillEye } from "react-icons/ai";
 import { delete_schedule, get_list_schedule, get_schedule } from '../../../../services/schedule_services';
 import { get_list_user } from '../../../../services/user_services';
@@ -161,23 +160,23 @@ class index extends Component {
         var minute = time_raw.getMinutes();
         return `${hour}:${minute}`
     }
-    handle_Delete = async (id) => {
-        try {
-            let data = await delete_schedule(id);
-            if (data && data.data && data.data.success == 1) {
-                let type_filter = this.state.type_filter;
-                await this.get_list_schedule(type_filter);
-                let type_filter1 = type_filter;
-                type_filter1.type_date = 1;
-                await this.get_list_schedule(type_filter1);
-                toast.success('Success')
-            } else {
-                toast.error('Error')
-            }
-        } catch (e) {
-            toast.error('System error');
-        }
-    }
+    // handle_Delete = async (id) => {
+    //     try {
+    //         let data = await delete_schedule(id);
+    //         if (data && data.data && data.data.success == 1) {
+    //             let type_filter = this.state.type_filter;
+    //             await this.get_list_schedule(type_filter);
+    //             let type_filter1 = type_filter;
+    //             type_filter1.type_date = 1;
+    //             await this.get_list_schedule(type_filter1);
+    //             toast.success('Success')
+    //         } else {
+    //             toast.error('Error')
+    //         }
+    //     } catch (e) {
+    //         toast.error('System error');
+    //     }
+    // }
     onChange_User = async (value) => {
         let type_filter = this.state.type_filter;
         type_filter.user_id = value;

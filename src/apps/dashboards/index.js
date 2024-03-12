@@ -4,7 +4,7 @@ import { DatabaseOutlined, } from '@ant-design/icons';
 import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGitlab, AiOutlineUser, AiOutlineQq, AiTwotoneSkin, AiFillIdcard,
-    AiFillGold, AiOutlineFieldTime, AiFillUsb, AiOutlineContainer, AiFillBook
+    AiFillGold, AiOutlineFieldTime, AiFillUsb, AiOutlineContainer, AiFillBook, AiFillLayout
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
 import { get_local_account } from '../../auths/local_storage';
@@ -23,6 +23,9 @@ import Login_DB from './pages/login';
 import Not_logged from './pages_error/not_logged';
 import Not_found from './pages_error/not_found';
 import Empty from './pages/empty';
+
+import Manager_category_type from './managers/category_type/index';
+
 class index extends Component {
     constructor(props) {
         super(props);
@@ -30,7 +33,7 @@ class index extends Component {
             collapsed: false,
             url: '/dashboard/',
             value: {},
-            logged_in_db: false,
+            logged_in_db: true,
             is_form_drawer: false,
 
         }
@@ -73,6 +76,9 @@ class index extends Component {
                     { key: 'user', icon: <AiOutlineUser />, label: 'User' },
                     { key: 'role', icon: <AiFillGold />, label: 'Role' },
                     { key: 'device', icon: <AiFillUsb />, label: 'Device' },
+
+
+                    { key: 'category_type', icon: <AiFillLayout />, label: 'Loại danh mục' },
                 ],
             },
         ];
@@ -113,7 +119,11 @@ class index extends Component {
                                     <Route exact path={`${url}time_location`}><ManagerTime_location /></Route>
                                     <Route exact path={`${url}device`}><ManagerDevice /></Route>
                                     <Route exact path={`${url}login`}><Empty /></Route>
+
+                                    <Route exact path={`${url}category_type`}><Manager_category_type /></Route>
                                     <Route ><Not_found /></Route>
+
+
                                 </Switch>
                             </Layout.Content>
                         </Layout>
