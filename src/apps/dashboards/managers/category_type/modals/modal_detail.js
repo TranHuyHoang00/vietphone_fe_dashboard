@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Button } from 'antd';
+import { Modal, Button, Typography } from 'antd';
 class modal_detail extends Component {
     constructor(props) {
         super(props);
@@ -22,26 +22,38 @@ class modal_detail extends Component {
                         </Button>
                     </>
                 ]}>
-                <div className="space-y-[10px]">
-                    <div className='space-y-[3px]'>
-                        <label className='font-semibold italic'>Tên loại danh mục</label>
-                        <input value={data_category_type.name} disabled
-                            className='w-full h-[40px] border border-[#07d1bc] px-[10px] rounded-[5px]' />
+                <div className='border-t py-[10px] space-y-[5px]'>
+                    <div className='flex gap-[5px]'>
+                        <div className='w-1/3'>
+                            <Typography.Text className='text-gray-700'>Tên loại danh mục</Typography.Text>
+                        </div>
+                        <div className='w-2/3'>
+                            <Typography.Text>: {data_category_type.name}</Typography.Text>
+                        </div>
                     </div>
-                    <div className='space-y-[3px]'>
-                        <label className='font-semibold italic'>Mô tả</label>
-                        <textarea disabled value={data_category_type.description} rows="5"
-                            className='w-full border border-[#07d1bc] px-[10px] rounded-[5px]' />
+                    <div className='flex gap-[5px]'>
+                        <div className='w-1/3'>
+                            <Typography.Text className='text-gray-700'>Mô tả</Typography.Text>
+                        </div>
+                        <div className='w-2/3'>
+                            <Typography.Text>: {data_category_type.description}</Typography.Text>
+                        </div>
                     </div>
-                    <div className='space-y-[3px]'>
-                        <label className='font-semibold italic'>Ngày tạo</label>
-                        <input disabled value={data_category_type.created_at}
-                            className='w-full h-[40px] border border-[#07d1bc] px-[10px] rounded-[5px]' />
+                    <div className='flex gap-[5px]'>
+                        <div className='w-1/3'>
+                            <Typography.Text className='text-gray-700'>Ngày tạo</Typography.Text>
+                        </div>
+                        <div className='w-2/3'>
+                            <Typography.Text>: {data_category_type.created_at}</Typography.Text>
+                        </div>
                     </div>
-                    <div className='space-y-[3px]'>
-                        <label className='font-semibold italic'>Ngày cập nhập</label>
-                        <input disabled value={data_category_type.updated_at}
-                            className='w-full h-[40px] border border-[#07d1bc] px-[10px] rounded-[5px]' />
+                    <div className='flex gap-[5px]'>
+                        <div className='w-1/3'>
+                            <Typography.Text className='text-gray-700'>Ngày sửa</Typography.Text>
+                        </div>
+                        <div className='w-2/3'>
+                            <Typography.Text>: {data_category_type.updated_at}</Typography.Text>
+                        </div>
                     </div>
                 </div>
             </Modal>

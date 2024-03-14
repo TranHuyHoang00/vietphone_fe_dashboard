@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Table, Space, Divider, Button, Popconfirm, Tooltip, message, AutoComplete, Spin, Pagination, Typography, Image } from 'antd';
+import { Table, Space, Divider, Button, Popconfirm, Tooltip, message, AutoComplete, Spin, Pagination, Typography, Image, Tag } from 'antd';
 import { AiFillEdit, AiFillDelete, AiFillEye, AiOutlinePlus } from "react-icons/ai";
+import { FaLock, FaLockOpen } from "react-icons/fa";
 import Display_line_number from '../../components/display_line_number';
-import { get_list_brand, get_brand, delete_brand } from '../../../../services/brand_service';
+import { get_list_category, get_category, delete_category } from '../../../../services/category_service';
 import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
@@ -21,26 +22,62 @@ class index extends Component {
                 page: 1,
                 limit: 5,
             },
-            data_brand: {},
-            data_brands: [
-                { id: 3, name: 'SAMSUNG', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', slug: '/samsung', description: 'none', created_at: '23/12/2023', updated_at: '26/12/2023' },
-                { id: 2, name: 'IPHONE', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', slug: '/iphone', description: 'none', created_at: '24/12/2023', updated_at: '27/12/2023' },
-                { id: 1, name: 'OPPO', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', slug: '/oppo', description: 'none', created_at: '25/12/2023', updated_at: '28/12/2023' },
+            data_category: {},
+            data_categorys: [
+                {
+                    id: 1,
+                    parent_id: null,
+                    category_type_id: null,
+                    name: 'Điện thoại',
+                    icon: 'fa-solid fa-sim-card',
+                    image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
+                    activate: true,
+                    slug: '/dienthoai',
+                    description: 'none',
+                    created_at: '23/12/2023',
+                    updated_at: '26/12/2023',
+                },
+                {
+                    id: 2,
+                    parent_id: null,
+                    category_type_id: null,
+                    name: 'Phụ kiện',
+                    icon: 'fa-solid fa-sim-card',
+                    image: 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg',
+                    activate: false,
+                    slug: '/samsung',
+                    description: 'none',
+                    created_at: '23/12/2023',
+                    updated_at: '26/12/2023',
+                },
+                {
+                    id: 3,
+                    parent_id: { id: 1, name: 'Điện thoại' },
+                    category_type_id: { id: 1, name: 'Nhu cầu' },
+                    name: 'Chụp ảnh',
+                    icon: 'fa-solid fa-sim-card',
+                    image: 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg',
+                    activate: false,
+                    slug: '/chupanh',
+                    description: 'none',
+                    created_at: '23/12/2023',
+                    updated_at: '26/12/2023',
+                },
             ],
         }
     }
     async componentDidMount() {
-        await this.get_list_brand(this.state.data_filter);
+        await this.get_list_category(this.state.data_filter);
     }
     handle_loading = (value) => {
         this.setState({ is_loading: value });
     }
-    get_list_brand = async () => {
+    get_list_category = async () => {
         this.handle_loading(true);
         try {
-            let data = await get_list_brand();
+            let data = await get_list_category();
             if (data && data.data && data.data.success == 1) {
-                this.setState({ data_brands: data.data.data });
+                this.setState({ data_categorys: data.data.data });
             } else {
                 message.error("Lỗi");
             }
@@ -50,14 +87,26 @@ class index extends Component {
             this.handle_loading(false);
         }
     }
-    get_brand = async (id) => {
+    get_category = async (id) => {
         this.handle_loading(true);
         try {
-            let data = { id: 1, name: 'OPPO', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', slug: '/oppo', description: 'none', created_at: '25/12/2023', updated_at: '28/12/2023' };
-            this.setState({ data_brand: data })
-            // let data = await get_brand(id);
+            let data = {
+                id: 3,
+                parent_id: { id: 1, name: 'Điện thoại' },
+                category_type_id: { id: 1, name: 'Nhu cầu' },
+                name: 'Chụp ảnh',
+                icon: 'fa-solid fa-sim-card',
+                image: 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg',
+                activate: false,
+                slug: '/chupanh',
+                description: 'none',
+                created_at: '23/12/2023',
+                updated_at: '26/12/2023',
+            };
+            this.setState({ data_category: data })
+            // let data = await get_category(id);
             // if (data && data.data && data.data.success == 1) {
-            //     this.setState({ data_brand: data.data.data });
+            //     this.setState({ data_category: data.data.data });
             // } else {
             //     message.error("Lỗi");
             // }
@@ -72,18 +121,18 @@ class index extends Component {
         if (name == 'create') { this.setState({ modal_create: value }); }
         if (name == 'detail') {
             if (id == null) {
-                this.setState({ modal_detail: value, data_brand: {} });
+                this.setState({ modal_detail: value, data_category: {} });
             } else {
                 this.setState({ modal_detail: value });
-                await this.get_brand(id);
+                await this.get_category(id);
             }
         }
         if (name == 'edit') {
             if (id == null) {
-                this.setState({ modal_edit: value, data_brand: {} });
+                this.setState({ modal_edit: value, data_category: {} });
             } else {
                 this.setState({ modal_edit: value });
-                await this.get_brand(id);
+                await this.get_category(id);
             }
         }
     }
@@ -92,7 +141,7 @@ class index extends Component {
         try {
             let data_selected = this.state.data_selected;
             for (const id of data_selected) {
-                let data = await delete_brand(id);
+                let data = await delete_category(id);
                 if (data && data.data && data.data.success == 1) {
                     message.success(`Thành công xóa dòng ID=${id}`);
                 } else {
@@ -114,7 +163,7 @@ class index extends Component {
         if (type == 'page') {
             data_filter.page = value;
         }
-        await this.get_list_brand(data_filter);
+        await this.get_list_category(data_filter);
         this.setState({ data_filter: data_filter })
     }
     render() {
@@ -129,15 +178,39 @@ class index extends Component {
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
             {
-                title: 'Logo', dataIndex: 'image',
-                render: (image) => <Image src={image} width={30} />,
+                title: 'Quan hệ', dataIndex: 'parent_id', responsive: ['md'],
+                render: (parent_id) =>
+                    <>
+                        {parent_id == null ?
+                            <Typography.Text ></Typography.Text>
+                            :
+                            <Tag color="volcano">{parent_id.name}</Tag>
+                        }
+                    </>,
             },
             {
-                title: 'Slug', dataIndex: 'slug', responsive: ['md'],
-                sorter: (a, b) => a.description.localeCompare(b.description),
+                title: 'Loại danh mục', dataIndex: 'category_type_id', responsive: ['md'],
+                render: (category_type_id) =>
+                    <>
+                        {category_type_id == null ?
+                            <Typography.Text></Typography.Text>
+                            :
+                            <Tag color="blue">{category_type_id.name}</Tag>}
+                    </>,
             },
             {
-                title: 'Mô tả', dataIndex: 'description', responsive: ['md'],
+                title: 'Status', dataIndex: 'activate', width: 60,
+                render: (activate) =>
+                    <div className='flex items-center justify-start'>
+                        {activate == true ?
+                            <FaLock className='text-[20px] text-[#ed1e24]' />
+                            :
+                            <FaLockOpen className='text-[20px] text-[#36aa00]' />
+                        }
+                    </div>
+            },
+            {
+                title: 'Slug', dataIndex: 'slug', responsive: ['lg'],
                 sorter: (a, b) => a.description.localeCompare(b.description),
             },
             {
@@ -201,10 +274,10 @@ class index extends Component {
                                     </Button>
                                 </Popconfirm>
                             </div>
-                            <Divider>THƯƠNG HIỆU</Divider>
+                            <Divider>DANH MỤC</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
-                                    columns={columns} dataSource={this.state.data_brands} pagination={false}
+                                    columns={columns} dataSource={this.state.data_categorys} pagination={false}
                                     size="middle" bordered scroll={{ y: 250 }} />
 
                                 <Pagination size={{ xs: 'small', xl: 'defaul', }}
@@ -215,12 +288,12 @@ class index extends Component {
                     </div >
                 </Spin>
                 <Modal_create modal_create={this.state.modal_create}
-                    open_modal={this.open_modal} get_list_brand={this.get_list_brand} />
+                    open_modal={this.open_modal} get_list_category={this.get_list_category} />
                 <Modal_detail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} data_brand={this.state.data_brand} />
+                    open_modal={this.open_modal} data_category={this.state.data_category} />
                 <Modal_edit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal} get_list_brand={this.get_list_brand}
-                    data_brand={this.state.data_brand} />
+                    open_modal={this.open_modal} get_list_category={this.get_list_category}
+                    data_category={this.state.data_category} />
             </>
         );
     }

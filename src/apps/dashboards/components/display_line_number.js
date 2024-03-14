@@ -10,16 +10,17 @@ class index extends Component {
     }
     async componentDidMount() {
     }
+    onchange_select = (value) => {
+        this.props.onchange_page(value, 'limit');
+    }
     render() {
-
         return (
-            <>
-                <Select
-                    defaultValue="5 dòng"
-                    style={{ width: 100 }}
-                    options={data_line_number}
-                />
-            </>
+            <Select
+                onChange={(value) => this.onchange_select(value)}
+                defaultValue="5 dòng"
+                style={{ width: 100 }}
+                options={data_line_number}
+            />
         );
     }
 

@@ -1,15 +1,12 @@
 import './App.css';
 import Index from './apps/index';
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
+import { ConfigProvider } from 'antd';
+import { theme } from './assets/themes/theme'
 function App() {
-
   return (
-
-    <div>
+    <ConfigProvider theme={theme}>
       <Index />
-    </div>
+    </ConfigProvider>
   );
 }
 

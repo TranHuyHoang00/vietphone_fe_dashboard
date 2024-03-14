@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Input, Modal, message, Button, Spin, Typography } from 'antd';
-import { create_category_type } from '../../../../../services/category_type_service';
+import { Input, Modal, message, Button, Spin, Typography, Image } from 'antd';
+import { create_category } from '../../../../../services/category_service';
+import { image_to_base64 } from '../../../../../utils/base64';
 class modal_create extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_category_type: {},
+            data_category: {},
             is_loading: false,
             mask_closable: true,
 
@@ -15,11 +16,11 @@ class modal_create extends Component {
     async componentDidMount() {
     }
     handle_onchange_input = (event, id, type) => {
-        let copyState = { ...this.state.data_category_type };
+        let copyState = { ...this.state.data_category };
         if (type == 'input') { copyState[id] = event.target.value; }
         if (type == 'select') { copyState[id] = event; }
         this.setState({
-            data_category_type: {
+            data_category: {
                 ...copyState
             }
         });
@@ -33,19 +34,19 @@ class modal_create extends Component {
     validation = (data) => {
         this.handle_loading(true);
         if (!data.name) {
-            return { mess: "Không được bỏ trống 'Tên loại danh mục' ", code: 1 };
+            return { mess: "Không được bỏ trống 'Tên thương hiệu' ", code: 1 };
         }
         return { code: 0 };
     }
     handle_create = async () => {
-        let result = this.validation(this.state.data_category_type);
+        let result = this.validation(this.state.data_category);
         if (result.code == 0) {
             try {
-                let data = await create_category_type(this.state.data_category_type);
+                let data = await create_category(this.state.data_category);
                 if (data && data.data && data.data.success == 1) {
-                    await this.props.get_list_category_type();
+                    await this.props.get_list_category();
                     this.props.open_Form("create", false);
-                    this.setState({ data_category_type: {} });
+                    this.setState({ data_category: {} });
                     message.success("Thành công");
                 } else {
                     message.error('Thất bại');
@@ -58,8 +59,12 @@ class modal_create extends Component {
         }
         this.handle_loading(false);
     }
+    onchange_image = async (image) => {
+        let image_new = await image_to_base64(image);
+        this.handle_onchange_input(image_new, "image", 'select')
+    }
     render() {
-        let data_category_type = this.state.data_category_type;
+        let data_category = this.state.data_category;
         return (
 
             <Modal title="TẠO MỚI" open={this.props.modal_create}
@@ -80,17 +85,39 @@ class modal_create extends Component {
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
                         <div className='space-y-[3px]'>
+                            <Typography.Text italic strong>Logo</Typography.Text>
+                            <div className='flex items-center justify-center'>
+                                <div className='space-y-[5px]'>
+                                    <Image width={240} height={80} className='object-cover' src={data_category.image} />
+                                    <input id="load_file" type="file" accept="image/*" hidden
+                                        onChange={(image) => this.onchange_image(image)} />
+                                    <div className='text-center'>
+                                        <label htmlFor="load_file"
+                                            className=' border border-gray-800 rounded-[5px] px-[10px] py-[3px] cursor-pointer '>
+                                            Tải lên
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='space-y-[3px]'>
                             <Typography.Text italic strong>
-                                Tên loại danh mục
+                                Tên thương hiệu
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
-                            <Input value={data_category_type.name}
+                            <Input value={data_category.name}
                                 onChange={(event) => this.handle_onchange_input(event, "name", 'input')}
                             />
                         </div>
                         <div className='space-y-[3px]'>
+                            <Typography.Text italic strong>Slug</Typography.Text>
+                            <Input value={data_category.slug}
+                                onChange={(event) => this.handle_onchange_input(event, "slug", 'input')}
+                            />
+                        </div>
+                        <div className='space-y-[3px]'>
                             <Typography.Text italic strong>Mô tả</Typography.Text>
-                            <Input.TextArea value={data_category_type.description} rows="3"
+                            <Input.TextArea value={data_category.description} rows="3"
                                 onChange={(event) => this.handle_onchange_input(event, "description", 'input')} />
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Button, Typography, Image } from 'antd';
+import { Modal, Button, Input, Typography, Select } from 'antd';
 class modal_detail extends Component {
     constructor(props) {
         super(props);
@@ -10,7 +10,7 @@ class modal_detail extends Component {
     async componentDidMount() {
     }
     render() {
-        let data_brand = this.props.data_brand;
+        let data_customer = this.props.data_customer;
         return (
             <Modal title="CHI TIẾT" open={this.props.modal_detail}
                 onCancel={() => this.props.open_modal("detail", false)} width={400}
@@ -25,34 +25,42 @@ class modal_detail extends Component {
                 <div className='border-t py-[10px] space-y-[5px]'>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Logo</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Họ và tên</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Image width={30} src={data_brand.image} />
+                            <Typography.Text>: {data_customer.full_name}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Tên loại</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Số điện thoại</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.name}</Typography.Text>
+                            <Typography.Text>: {data_customer.phone}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Slug</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Email</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.slug}</Typography.Text>
+                            <Typography.Text>: {data_customer.email}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Mô tả</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Giới tính</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.description}</Typography.Text>
+                            <Typography.Text>: {data_customer.gender == true ? 'Nam' : 'Nữ'}</Typography.Text>
+                        </div>
+                    </div>
+                    <div className='flex gap-[5px]'>
+                        <div className='w-1/3'>
+                            <Typography.Text className='text-gray-700'>Trạng thái</Typography.Text>
+                        </div>
+                        <div className='w-2/3'>
+                            <Typography.Text>: {data_customer.activate == true ? 'Mở' : 'Khóa'}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
@@ -60,7 +68,7 @@ class modal_detail extends Component {
                             <Typography.Text className='text-gray-700'>Ngày tạo</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.created_at}</Typography.Text>
+                            <Typography.Text>: {data_customer.created_at}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
@@ -68,7 +76,7 @@ class modal_detail extends Component {
                             <Typography.Text className='text-gray-700'>Ngày sửa</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.updated_at}</Typography.Text>
+                            <Typography.Text>: {data_customer.updated_at}</Typography.Text>
                         </div>
                     </div>
                 </div>

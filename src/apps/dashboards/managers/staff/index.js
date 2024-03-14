@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Table, Space, Divider, Button, Popconfirm, Tooltip, message, AutoComplete, Spin, Pagination, Typography, Image } from 'antd';
+import {
+    Table, Space, Divider, Button, Popconfirm, Tooltip, message, AutoComplete,
+    Spin, Pagination, Avatar, Typography, Tag
+} from 'antd';
 import { AiFillEdit, AiFillDelete, AiFillEye, AiOutlinePlus } from "react-icons/ai";
+import { FaFemale, FaMale, FaLock, FaLockOpen } from "react-icons/fa";
 import Display_line_number from '../../components/display_line_number';
-import { get_list_brand, get_brand, delete_brand } from '../../../../services/brand_service';
+import { get_list_staff, get_staff, delete_staff } from '../../../../services/staff_service';
 import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
@@ -21,26 +25,45 @@ class index extends Component {
                 page: 1,
                 limit: 5,
             },
-            data_brand: {},
-            data_brands: [
-                { id: 3, name: 'SAMSUNG', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', slug: '/samsung', description: 'none', created_at: '23/12/2023', updated_at: '26/12/2023' },
-                { id: 2, name: 'IPHONE', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', slug: '/iphone', description: 'none', created_at: '24/12/2023', updated_at: '27/12/2023' },
-                { id: 1, name: 'OPPO', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', slug: '/oppo', description: 'none', created_at: '25/12/2023', updated_at: '28/12/2023' },
+            data_staff: {},
+            data_staffs: [
+                {
+                    id: 1,
+                    full_name: 'Hoàng Thị Hương',
+                    phone: '0912345678',
+                    email: '',
+                    activate: false,
+                    gender: false,
+                    registered_at: '',
+                    created_at: '30/11/2023',
+                    updated_at: '02/12/2023'
+                },
+                {
+                    id: 2,
+                    full_name: 'Nguyễn Thị Lan',
+                    phone: '0987654321',
+                    email: 'lan.nguyen@example.com',
+                    activate: true,
+                    gender: false,
+                    registered_at: '',
+                    created_at: '10/02/2023',
+                    updated_at: '15/02/2023'
+                },
             ],
         }
     }
     async componentDidMount() {
-        await this.get_list_brand(this.state.data_filter);
+        await this.get_list_staff(this.state.data_filter);
     }
     handle_loading = (value) => {
         this.setState({ is_loading: value });
     }
-    get_list_brand = async () => {
+    get_list_staff = async () => {
         this.handle_loading(true);
         try {
-            let data = await get_list_brand();
+            let data = await get_list_staff();
             if (data && data.data && data.data.success == 1) {
-                this.setState({ data_brands: data.data.data });
+                this.setState({ data_staffs: data.data.data });
             } else {
                 message.error("Lỗi");
             }
@@ -50,14 +73,24 @@ class index extends Component {
             this.handle_loading(false);
         }
     }
-    get_brand = async (id) => {
+    get_staff = async (id) => {
         this.handle_loading(true);
         try {
-            let data = { id: 1, name: 'OPPO', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', slug: '/oppo', description: 'none', created_at: '25/12/2023', updated_at: '28/12/2023' };
-            this.setState({ data_brand: data })
-            // let data = await get_brand(id);
+            let data = {
+                id: 1,
+                full_name: 'Hoàng Thị Hương',
+                phone: '0912345678',
+                email: 'thh@gmail.com',
+                activate: false,
+                gender: false,
+                registered_at: '',
+                created_at: '30/11/2023',
+                updated_at: '02/12/2023'
+            };
+            this.setState({ data_staff: data })
+            // let data = await get_staff(id);
             // if (data && data.data && data.data.success == 1) {
-            //     this.setState({ data_brand: data.data.data });
+            //     this.setState({ data_staff: data.data.data });
             // } else {
             //     message.error("Lỗi");
             // }
@@ -72,18 +105,18 @@ class index extends Component {
         if (name == 'create') { this.setState({ modal_create: value }); }
         if (name == 'detail') {
             if (id == null) {
-                this.setState({ modal_detail: value, data_brand: {} });
+                this.setState({ modal_detail: value, data_staff: {} });
             } else {
                 this.setState({ modal_detail: value });
-                await this.get_brand(id);
+                await this.get_staff(id);
             }
         }
         if (name == 'edit') {
             if (id == null) {
-                this.setState({ modal_edit: value, data_brand: {} });
+                this.setState({ modal_edit: value, data_staff: {} });
             } else {
                 this.setState({ modal_edit: value });
-                await this.get_brand(id);
+                await this.get_staff(id);
             }
         }
     }
@@ -92,7 +125,7 @@ class index extends Component {
         try {
             let data_selected = this.state.data_selected;
             for (const id of data_selected) {
-                let data = await delete_brand(id);
+                let data = await delete_staff(id);
                 if (data && data.data && data.data.success == 1) {
                     message.success(`Thành công xóa dòng ID=${id}`);
                 } else {
@@ -114,7 +147,7 @@ class index extends Component {
         if (type == 'page') {
             data_filter.page = value;
         }
-        await this.get_list_brand(data_filter);
+        await this.get_list_staff(data_filter);
         this.setState({ data_filter: data_filter })
     }
     render() {
@@ -124,29 +157,47 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'Tên', dataIndex: 'name',
-                render: (name) => <Typography.Text strong className='text-[#0574b8]'>{name}</Typography.Text>,
-                sorter: (a, b) => a.name.localeCompare(b.name),
+                title: 'Thông tin', dataIndex: 'full_name',
+                render: (full_name, record) =>
+                    <div className='flex items-center justify-start'>
+                        <Avatar size={60} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
+                        <div>
+                            <Typography.Text strong className='text-[#0574b8]'>{full_name}</Typography.Text><br />
+                            <Typography.Text italic strong>{record.phone}</Typography.Text><br />
+                            {record.email == '' || record.email == null ?
+                                <Typography.Text italic>none@gmail.com</Typography.Text>
+                                :
+                                <Typography.Text italic>{record.email}</Typography.Text>
+                            }
+                        </div>
+                    </div>
             },
             {
-                title: 'Logo', dataIndex: 'image',
-                render: (image) => <Image src={image} width={30} />,
+                title: 'Vai trò', dataIndex: 'id', width: 100,
+                render: (id) =>
+                    <div className='space-y-[5px]'>
+                        <Tag color="blue">Nhân viên</Tag>
+                    </div>,
             },
             {
-                title: 'Slug', dataIndex: 'slug', responsive: ['md'],
-                sorter: (a, b) => a.description.localeCompare(b.description),
+                title: 'Status', dataIndex: 'activate', width: 80,
+                render: (activate, record) =>
+                    <div className='flex items-center justify-start'>
+                        {record && record.gender == true ?
+                            <FaMale className='text-[30px] text-[#016cb9]' />
+                            :
+                            <FaFemale className='text-[30px] text-[#e71e76]' />
+                        }
+                        {activate == true ?
+                            <FaLock className='text-[20px] text-[#ed1e24]' />
+                            :
+                            <FaLockOpen className='text-[20px] text-[#36aa00]' />
+                        }
+                    </div>
             },
             {
-                title: 'Mô tả', dataIndex: 'description', responsive: ['md'],
-                sorter: (a, b) => a.description.localeCompare(b.description),
-            },
-            {
-                title: 'Ngày tạo', dataIndex: 'created_at', width: 100, responsive: ['lg'],
-                sorter: (a, b) => a.created_at.localeCompare(b.created_at),
-            },
-            {
-                title: 'Ngày sửa', dataIndex: 'updated_at', width: 100, responsive: ['lg'],
-                sorter: (a, b) => a.updated_at.localeCompare(b.updated_at),
+                title: 'Người tạo', dataIndex: 'registered_at', width: 100, responsive: ['lg'],
+                render: (registered_at) => <Avatar size={60} src="https://api.dicebear.com/7.x/miniavs/svg?seed=2" />,
             },
             {
                 title: 'HĐ', width: 80,
@@ -201,11 +252,11 @@ class index extends Component {
                                     </Button>
                                 </Popconfirm>
                             </div>
-                            <Divider>THƯƠNG HIỆU</Divider>
+                            <Divider>NHÂN VIÊN</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
-                                    columns={columns} dataSource={this.state.data_brands} pagination={false}
-                                    size="middle" bordered scroll={{ y: 250 }} />
+                                    columns={columns} dataSource={this.state.data_staffs} pagination={false}
+                                    size="middle" bordered scroll={{ y: 260, x: 600 }} />
 
                                 <Pagination size={{ xs: 'small', xl: 'defaul', }}
                                     showQuickJumper defaultCurrent={data_filter.page} total={50} pageSize={data_filter.limit}
@@ -215,12 +266,12 @@ class index extends Component {
                     </div >
                 </Spin>
                 <Modal_create modal_create={this.state.modal_create}
-                    open_modal={this.open_modal} get_list_brand={this.get_list_brand} />
+                    open_modal={this.open_modal} get_list_staff={this.get_list_staff} />
                 <Modal_detail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} data_brand={this.state.data_brand} />
+                    open_modal={this.open_modal} data_staff={this.state.data_staff} />
                 <Modal_edit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal} get_list_brand={this.get_list_brand}
-                    data_brand={this.state.data_brand} />
+                    open_modal={this.open_modal} get_list_staff={this.get_list_staff}
+                    data_staff={this.state.data_staff} />
             </>
         );
     }
