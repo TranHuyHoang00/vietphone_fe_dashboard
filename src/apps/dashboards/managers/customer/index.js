@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-    Table, Space, Divider, Button, Popconfirm, Tooltip, message, AutoComplete,
-    Spin, Pagination, Avatar, Typography, Tag
+    Table, Space, Divider, Button, Popconfirm, Tooltip, message,
+    Spin, Pagination, Avatar, Typography, Tag, Dropdown, Input
 } from 'antd';
-import { AiFillEdit, AiFillDelete, AiFillEye, AiOutlinePlus } from "react-icons/ai";
+import { AiFillEdit, AiFillEye, AiOutlinePlus, AiOutlineMenu } from "react-icons/ai";
 import { FaFemale, FaMale, FaLock, FaLockOpen } from "react-icons/fa";
 import Display_line_number from '../../components/display_line_number';
 import { get_list_customer, get_customer, delete_customer } from '../../../../services/customer_service';
 import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
-
+import Drawer_filter from './drawers/drawer_filter';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
             is_loading: false,
+            drawer_filter: false,
+            type_menu: 1,
             data_selected: [],
             modal_detail: false,
             modal_create: false,
@@ -183,6 +185,11 @@ class index extends Component {
         await this.get_list_customer(data_filter);
         this.setState({ data_filter: data_filter })
     }
+    open_drawer = (name, value) => {
+        if (name = 'filter') {
+            this.setState({ drawer_filter: value });
+        }
+    }
     render() {
         const columns = [
             {
@@ -191,16 +198,16 @@ class index extends Component {
             },
             {
                 title: 'Thông tin', dataIndex: 'full_name',
-                render: (full_name, record) =>
+                render: (full_name, item) =>
                     <div className='flex items-center justify-start'>
                         <Avatar size={60} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
                         <div>
                             <Typography.Text strong className='text-[#0574b8]'>{full_name}</Typography.Text><br />
-                            <Typography.Text italic strong>{record.phone}</Typography.Text><br />
-                            {record.email == '' || record.email == null ?
+                            <Typography.Text italic strong>{item.phone}</Typography.Text><br />
+                            {item.email == '' || item.email == null ?
                                 <Typography.Text italic>none@gmail.com</Typography.Text>
                                 :
-                                <Typography.Text italic>{record.email}</Typography.Text>
+                                <Typography.Text italic>{item.email}</Typography.Text>
                             }
                         </div>
                     </div>
@@ -214,9 +221,9 @@ class index extends Component {
             },
             {
                 title: 'Status', dataIndex: 'activate', width: 80,
-                render: (activate, record) =>
+                render: (activate, item) =>
                     <div className='flex items-center justify-start'>
-                        {record && record.gender == true ?
+                        {item && item.gender == true ?
                             <FaMale className='text-[30px] text-[#016cb9]' />
                             :
                             <FaFemale className='text-[30px] text-[#e71e76]' />
@@ -249,24 +256,35 @@ class index extends Component {
             },
 
         ];
+        const items = [
+            { key: '1', label: 'Xóa' },
+            { key: '2', label: 'Khóa' },
+            { key: '3', label: 'Mở khóa' },
+        ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
             this.setState({ data_selected: data_new })
         };
         const row_selection = { data_selected, onChange: onchange_selected };
         let data_filter = this.state.data_filter;
+        let type_menu = this.state.type_menu;
         return (
             <>
                 <Spin size='large' spinning={this.state.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
-                        <div className='flex items-center justify-between gap-[10px]'>
-                            <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
-                                <Space className='text-white'>
-                                    <AiOutlinePlus />
-                                    Tạo mới
-                                </Space>
-                            </Button>
-                            <AutoComplete style={{ width: 200 }} placeholder="Nhập vào đây !" />
+                        <div className='flex items-center justify-between gap-[5px]'>
+                            <div className='flex items-center gap-[5px]'>
+                                <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
+                                    <Space className='text-white'>
+                                        <AiOutlinePlus />
+                                        Tạo mới
+                                    </Space>
+                                </Button>
+                                <Button onClick={() => { this.setState({ drawer_filter: true }) }} className='bg-white'>
+                                    <Space>Lọc<AiOutlineMenu /></Space>
+                                </Button>
+                            </div>
+                            <div><Input.Search placeholder="Nhập vào đây !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
@@ -274,16 +292,20 @@ class index extends Component {
                                     <span>Hiển thị</span>
                                     <Display_line_number limit={data_filter.limit} onchange_page={this.onchange_page} />
                                 </Space>
-                                <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
-                                    title={`Bạn có chắc chắn muốn xóa ${data_selected && data_selected.length} dòng?`}
-                                    placement="bottomLeft" okType='default' onConfirm={() => this.handle_delete()}>
-                                    <Button className='bg-[#ed1e24] text-white'>
-                                        <Space>
-                                            <AiFillDelete />
-                                            <span>Xóa {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
-                                        </Space>
-                                    </Button>
-                                </Popconfirm>
+                                <div>
+                                    <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
+                                        title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
+                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_delete()}>
+                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
+                                            <div>
+                                                {type_menu == 1 && <span>Xóa</span>}
+                                                {type_menu == 2 && <span>Khóa</span>}
+                                                {type_menu == 3 && <span>Mở khóa</span>}
+                                                <span> {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
+                                            </div>
+                                        </Dropdown.Button>
+                                    </Popconfirm>
+                                </div>
                             </div>
                             <Divider>KHÁCH HÀNG</Divider>
                             <div className='space-y-[20px]'>
@@ -305,6 +327,8 @@ class index extends Component {
                 <Modal_edit modal_edit={this.state.modal_edit}
                     open_modal={this.open_modal} get_list_customer={this.get_list_customer}
                     data_customer={this.state.data_customer} />
+                <Drawer_filter drawer_filter={this.state.drawer_filter}
+                    open_drawer={this.open_drawer} />
             </>
         );
     }

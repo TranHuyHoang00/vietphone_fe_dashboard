@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Table, Space, Divider, Button, Popconfirm, Tooltip, message, AutoComplete, Spin, Pagination, Typography, Image, Tag } from 'antd';
+import {
+    Table, Space, Divider, Button, Popconfirm, Tooltip, message, Input,
+    Spin, Pagination, Typography, Dropdown, Tag
+} from 'antd';
 import { AiFillEdit, AiFillDelete, AiFillEye, AiOutlinePlus } from "react-icons/ai";
 import { FaLock, FaLockOpen } from "react-icons/fa";
 import Display_line_number from '../../components/display_line_number';
@@ -14,6 +17,7 @@ class index extends Component {
         super(props);
         this.state = {
             is_loading: false,
+            type_menu: 1,
             data_selected: [],
             modal_detail: false,
             modal_create: false,
@@ -199,7 +203,7 @@ class index extends Component {
                     </>,
             },
             {
-                title: 'Status', dataIndex: 'activate', width: 60,
+                title: 'Status', dataIndex: 'activate', width: 70,
                 render: (activate) =>
                     <div className='flex items-center justify-start'>
                         {activate == true ?
@@ -238,12 +242,18 @@ class index extends Component {
             },
 
         ];
+        const items = [
+            { key: '1', label: 'Xóa' },
+            { key: '2', label: 'Khóa' },
+            { key: '3', label: 'Mở khóa' },
+        ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
             this.setState({ data_selected: data_new })
         };
         const row_selection = { data_selected, onChange: onchange_selected };
         let data_filter = this.state.data_filter;
+        let type_menu = this.state.type_menu;
         return (
             <>
                 <Spin size='large' spinning={this.state.is_loading}>
@@ -255,7 +265,7 @@ class index extends Component {
                                     Tạo mới
                                 </Space>
                             </Button>
-                            <AutoComplete style={{ width: 200 }} placeholder="Nhập vào đây !" />
+                            <div><Input.Search placeholder="Nhập vào đây !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
@@ -263,16 +273,20 @@ class index extends Component {
                                     <span>Hiển thị</span>
                                     <Display_line_number limit={data_filter.limit} onchange_page={this.onchange_page} />
                                 </Space>
-                                <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
-                                    title={`Bạn có chắc chắn muốn xóa ${data_selected && data_selected.length} dòng?`}
-                                    placement="bottomLeft" okType='default' onConfirm={() => this.handle_delete()}>
-                                    <Button className='bg-[#ed1e24] text-white'>
-                                        <Space>
-                                            <AiFillDelete />
-                                            <span>Xóa {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
-                                        </Space>
-                                    </Button>
-                                </Popconfirm>
+                                <div>
+                                    <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
+                                        title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
+                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_delete()}>
+                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
+                                            <div>
+                                                {type_menu == 1 && <span>Xóa</span>}
+                                                {type_menu == 2 && <span>Khóa</span>}
+                                                {type_menu == 3 && <span>Mở khóa</span>}
+                                                <span> {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
+                                            </div>
+                                        </Dropdown.Button>
+                                    </Popconfirm>
+                                </div>
                             </div>
                             <Divider>DANH MỤC</Divider>
                             <div className='space-y-[20px]'>

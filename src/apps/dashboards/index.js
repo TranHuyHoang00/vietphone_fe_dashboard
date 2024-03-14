@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Switch, Route } from "react-router-dom";
 import { Layout, Menu, Drawer } from 'antd';
 import {
-    AiFillGithub, AiOutlineUser, AiFillGold, AiFillHdd, AiFillFund, AiOutlineUserSwitch
-    , AiFillDropboxSquare, AiFillIdcard
+    AiFillGithub, AiOutlineUser, AiFillGold, AiFillHdd, AiFillFund, AiOutlineUserSwitch, AiFillShop
+    , AiFillDropboxSquare, AiFillIdcard, AiFillSliders, AiFillTag, AiFillStar, AiFillAlert, AiFillMobile,
+    AiFillBuild, AiFillSecurityScan, AiFillLayout
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
 import { get_local_account } from '../../auths/local_storage';
@@ -15,10 +16,14 @@ import Empty from './pages/empty';
 
 import Manager_customer from './managers/customer/index';
 import Manager_staff from './managers/staff/index';
-
 import Manager_category_type from './managers/category_type/index';
 import Manager_brand from './managers/brand/index';
 import Manager_category from './managers/category/index';
+import Manager_menu from './managers/menu/index';
+import Manager_tag from './managers/tag/index';
+import Manager_rating from './managers/rating/index';
+import Manager_location from './managers/location/index';
+import Manager_banner from './managers/banner/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -65,10 +70,28 @@ class index extends Component {
                 ],
             },
             {
+                key: 'comment_rating', icon: <AiFillAlert />, label: 'Phản hổi', children: [
+                    { key: 'manager/rating', icon: <AiFillStar />, label: 'Đánh giá' },
+                ],
+            },
+            {
+                key: 'store', icon: <AiFillShop />, label: 'Cửa hàng', children: [
+                    { key: 'manager/product', icon: <AiFillMobile />, label: 'Sản phẩm' },
+                ],
+            },
+            {
                 key: 'brand_category', icon: <AiFillHdd />, label: 'Danh mục', children: [
+                    { key: 'manager/tag', icon: <AiFillTag />, label: 'Tag' },
+                    { key: 'manager/menu', icon: <AiFillSliders />, label: 'Menu' },
                     { key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu' },
                     { key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục' },
                     { key: 'manager/category_type', icon: <AiFillFund />, label: 'Loại danh mục' },
+                ],
+            },
+            {
+                key: 'banner', icon: <AiFillBuild />, label: 'Quảng cáo', children: [
+                    { key: 'manager/banner', icon: <AiFillLayout />, label: 'Băng rôn' },
+                    { key: 'manager/location', icon: <AiFillSecurityScan />, label: 'Vị trí' },
                 ],
             },
         ];
@@ -105,6 +128,11 @@ class index extends Component {
                                     <Route exact path={`${url}manager/category_type`}><Manager_category_type /></Route>
                                     <Route exact path={`${url}manager/brand`}><Manager_brand /></Route>
                                     <Route exact path={`${url}manager/category`}><Manager_category /></Route>
+                                    <Route exact path={`${url}manager/menu`}><Manager_menu /></Route>
+                                    <Route exact path={`${url}manager/tag`}><Manager_tag /></Route>
+                                    <Route exact path={`${url}manager/rating`}><Manager_rating /></Route>
+                                    <Route exact path={`${url}manager/location`}><Manager_location /></Route>
+                                    <Route exact path={`${url}manager/banner`}><Manager_banner /></Route>
                                     <Route ><Not_found /></Route>
 
 

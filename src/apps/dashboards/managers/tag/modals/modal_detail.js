@@ -10,7 +10,7 @@ class modal_detail extends Component {
     async componentDidMount() {
     }
     render() {
-        let data_brand = this.props.data_brand;
+        let data_tag = this.props.data_tag;
         return (
             <Modal title="CHI TIẾT" open={this.props.modal_detail}
                 onCancel={() => this.props.open_modal("detail", false)} width={400}
@@ -25,39 +25,38 @@ class modal_detail extends Component {
                 <div className='border-t py-[10px] space-y-[5px]'>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Logo</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Ảnh</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            {
-                                data_brand.image == null ?
-                                    <Typography.Text>: None</Typography.Text>
-                                    :
-                                    <Image width={30} src={data_brand.image} />
+                            {data_tag.image == null ?
+                                <Typography.Text >None</Typography.Text>
+                                :
+                                <Image width={30} src={data_tag.image} />
                             }
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Tên loại</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Tên Tag</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.name}</Typography.Text>
+                            <Typography.Text>: {data_tag.name}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Slug</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Icon</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.slug}</Typography.Text>
+                            <Typography.Text>: {data_tag.icon}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Mô tả</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Trạng thái</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.description}</Typography.Text>
+                            <Typography.Text>: {data_tag.activate == true ? 'Mở' : 'Khóa'}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
@@ -65,7 +64,7 @@ class modal_detail extends Component {
                             <Typography.Text className='text-gray-700'>Ngày tạo</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.created_at}</Typography.Text>
+                            <Typography.Text>: {data_tag.created_at}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
@@ -73,7 +72,7 @@ class modal_detail extends Component {
                             <Typography.Text className='text-gray-700'>Ngày sửa</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.updated_at}</Typography.Text>
+                            <Typography.Text>: {data_tag.updated_at}</Typography.Text>
                         </div>
                     </div>
                 </div>

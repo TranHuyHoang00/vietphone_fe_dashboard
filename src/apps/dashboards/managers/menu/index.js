@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
     Table, Space, Divider, Button, Popconfirm, Tooltip, message, Input,
-    Spin, Pagination, Typography, Dropdown, Tag
+    Spin, Pagination, Typography, Image, Dropdown
 } from 'antd';
-import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
+import { AiFillEdit, AiFillDelete, AiFillEye, AiOutlinePlus } from "react-icons/ai";
+import { FaLock, FaLockOpen } from "react-icons/fa";
 import Display_line_number from '../../components/display_line_number';
-import { get_list_category_type, get_category_type, delete_category_type } from '../../../../services/category_type_service';
+import { get_list_menu, get_menu, delete_menu } from '../../../../services/menu_service';
 import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
@@ -25,26 +26,26 @@ class index extends Component {
                 page: 1,
                 limit: 5,
             },
-            data_category_type: {},
-            data_category_types: [
-                { id: 4, name: 'Công việc', description: 'none', created_at: '23/12/2023', updated_at: '26/12/2023' },
-                { id: 2, name: 'Giới tính', description: 'none', created_at: '24/12/2023', updated_at: '27/12/2023' },
-                { id: 1, name: 'Độ tuổi', description: 'none', created_at: '25/12/2023', updated_at: '28/12/2023' },
+            data_menu: {},
+            data_menus: [
+                { id: 4, category_id: { id: 1, name: 'Điện thoại' }, activate: true, created_at: '23/12/2023', updated_at: '26/12/2023' },
+                { id: 2, category_id: { id: 2, name: 'Loa' }, activate: false, created_at: '24/12/2023', updated_at: '27/12/2023' },
+                { id: 1, category_id: { id: 3, name: 'Phụ kiện' }, activate: false, created_at: '25/12/2023', updated_at: '28/12/2023' },
             ],
         }
     }
     async componentDidMount() {
-        await this.get_list_category_type(this.state.data_filter);
+        await this.get_list_menu(this.state.data_filter);
     }
     handle_loading = (value) => {
         this.setState({ is_loading: value });
     }
-    get_list_category_type = async () => {
+    get_list_menu = async () => {
         this.handle_loading(true);
         try {
-            let data = await get_list_category_type();
+            let data = await get_list_menu();
             if (data && data.data && data.data.success == 1) {
-                this.setState({ data_category_types: data.data.data });
+                this.setState({ data_menus: data.data.data });
             } else {
                 message.error("Lỗi");
             }
@@ -54,14 +55,14 @@ class index extends Component {
             this.handle_loading(false);
         }
     }
-    get_category_type = async (id) => {
+    get_menu = async (id) => {
         this.handle_loading(true);
         try {
-            let data = { id: 1, name: 'Công việc', description: 'none', created_at: '23/12/2023', updated_at: '26/12/2023' };
-            this.setState({ data_category_type: data })
-            // let data = await get_category_type(id);
+            let data = { id: 4, category_id: { id: 1, name: 'Điện thoại' }, activate: true, created_at: '23/12/2023', updated_at: '26/12/2023' };
+            this.setState({ data_menu: data })
+            // let data = await get_menu(id);
             // if (data && data.data && data.data.success == 1) {
-            //     this.setState({ data_category_type: data.data.data });
+            //     this.setState({ data_menu: data.data.data });
             // } else {
             //     message.error("Lỗi");
             // }
@@ -76,18 +77,18 @@ class index extends Component {
         if (name == 'create') { this.setState({ modal_create: value }); }
         if (name == 'detail') {
             if (id == null) {
-                this.setState({ modal_detail: value, data_category_type: {} });
+                this.setState({ modal_detail: value, data_menu: {} });
             } else {
                 this.setState({ modal_detail: value });
-                await this.get_category_type(id);
+                await this.get_menu(id);
             }
         }
         if (name == 'edit') {
             if (id == null) {
-                this.setState({ modal_edit: value, data_category_type: {} });
+                this.setState({ modal_edit: value, data_menu: {} });
             } else {
                 this.setState({ modal_edit: value });
-                await this.get_category_type(id);
+                await this.get_menu(id);
             }
         }
     }
@@ -96,7 +97,7 @@ class index extends Component {
         try {
             let data_selected = this.state.data_selected;
             for (const id of data_selected) {
-                let data = await delete_category_type(id);
+                let data = await delete_menu(id);
                 if (data && data.data && data.data.success == 1) {
                     message.success(`Thành công xóa dòng ID=${id}`);
                 } else {
@@ -118,7 +119,7 @@ class index extends Component {
         if (type == 'page') {
             data_filter.page = value;
         }
-        await this.get_list_category_type(data_filter);
+        await this.get_list_menu(data_filter);
         this.setState({ data_filter: data_filter })
     }
     render() {
@@ -128,13 +129,20 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'Tên', dataIndex: 'name',
-                render: (name) => <Typography.Text strong className='text-[#0574b8]'>{name}</Typography.Text>,
-                sorter: (a, b) => a.name.localeCompare(b.name),
+                title: 'Danh mục', dataIndex: 'category_id',
+                render: (category_id) => <Typography.Text strong className='text-[#0574b8]'>{category_id && category_id.name}</Typography.Text>,
+                sorter: (a, b) => a.category_id.name.localeCompare(b.category_id.name),
             },
             {
-                title: 'Mô tả', dataIndex: 'description', responsive: ['md'],
-                sorter: (a, b) => a.description.localeCompare(b.description),
+                title: 'Status', dataIndex: 'activate', width: 70,
+                render: (activate) =>
+                    <div className='flex items-center justify-start'>
+                        {activate == true ?
+                            <FaLock className='text-[20px] text-[#ed1e24]' />
+                            :
+                            <FaLockOpen className='text-[20px] text-[#36aa00]' />
+                        }
+                    </div>
             },
             {
                 title: 'Ngày tạo', dataIndex: 'created_at', width: 100, responsive: ['lg'],
@@ -163,6 +171,8 @@ class index extends Component {
         ];
         const items = [
             { key: '1', label: 'Xóa' },
+            { key: '2', label: 'Khóa' },
+            { key: '3', label: 'Mở khóa' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -197,16 +207,18 @@ class index extends Component {
                                         <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
                                                 {type_menu == 1 && <span>Xóa</span>}
+                                                {type_menu == 2 && <span>Khóa</span>}
+                                                {type_menu == 3 && <span>Mở khóa</span>}
                                                 <span> {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider>LOẠI DANH MỤC</Divider>
+                            <Divider>MENU</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
-                                    columns={columns} dataSource={this.state.data_category_types} pagination={false}
+                                    columns={columns} dataSource={this.state.data_menus} pagination={false}
                                     size="middle" bordered scroll={{ y: 250 }} />
 
                                 <Pagination size={{ xs: 'small', xl: 'defaul', }}
@@ -217,12 +229,12 @@ class index extends Component {
                     </div >
                 </Spin>
                 <Modal_create modal_create={this.state.modal_create}
-                    open_modal={this.open_modal} get_list_category_type={this.get_list_category_type} />
+                    open_modal={this.open_modal} get_list_menu={this.get_list_menu} />
                 <Modal_detail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} data_category_type={this.state.data_category_type} />
+                    open_modal={this.open_modal} data_menu={this.state.data_menu} />
                 <Modal_edit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal} get_list_category_type={this.get_list_category_type}
-                    data_category_type={this.state.data_category_type} />
+                    open_modal={this.open_modal} get_list_menu={this.get_list_menu}
+                    data_menu={this.state.data_menu} />
             </>
         );
     }
