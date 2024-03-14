@@ -102,7 +102,7 @@ class modal_create extends Component {
                         </div>
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>
-                                Tên thương hiệu
+                                Tên danh mục
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
                             <Input value={data_category.name}

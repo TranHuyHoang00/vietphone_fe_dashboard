@@ -29,7 +29,7 @@ class modal_detail extends Component {
                         </div>
                         <div className='w-2/3'>
                             {data_category.image == null ?
-                                <Typography.Text >Không</Typography.Text>
+                                <Typography.Text >None</Typography.Text>
                                 :
                                 <Image width={30} src={data_category.image} />
                             }
