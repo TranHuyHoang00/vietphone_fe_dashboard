@@ -85,7 +85,7 @@ class modal_create extends Component {
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
                         <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>Logo</Typography.Text>
+                            <Typography.Text italic strong>Ảnh</Typography.Text>
                             <div className='flex items-center justify-center'>
                                 <div className='space-y-[5px]'>
                                     <Image width={240} height={80} className='object-cover' src={data_category.image} />
@@ -106,13 +106,17 @@ class modal_create extends Component {
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
                             <Input value={data_category.name}
-                                onChange={(event) => this.handle_onchange_input(event, "name", 'input')}
-                            />
+                                onChange={(event) => this.handle_onchange_input(event, "name", 'input')} />
                         </div>
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>Slug</Typography.Text>
                             <Input value={data_category.slug}
-                                onChange={(event) => this.handle_onchange_input(event, "slug", 'input')}
+                                onChange={(event) => this.handle_onchange_input(event, "slug", 'input')} />
+                        </div>
+                        <div className='space-y-[3px]'>
+                            <Typography.Text italic strong>Icon</Typography.Text>
+                            <Input value={data_category.icon}
+                                onChange={(event) => this.handle_onchange_input(event, "icon", 'input')}
                             />
                         </div>
                         <div className='space-y-[3px]'>
