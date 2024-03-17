@@ -46,7 +46,7 @@ const check_token = async (account, token_init) => {
     } else {
         let data_account_raw = null;
         data_account_raw = get_local_account(account);
-        let data_token = await axios.post(`${process.env.REACT_APP_API}auth/api/v1/token/refresh`, { refresh: data_account_raw.data.refresh });
+        let data_token = await axios.post(`${process.env.REACT_APP_API}/auth/api/v1/token/refresh`, { refresh: data_account_raw.data.refresh });
         let token_new = data_token.data.data.access;
         let data_account_new = data_account_raw.data;
         data_account_new.access = token_new;
