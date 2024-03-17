@@ -131,6 +131,7 @@ class index extends Component {
     on_search = async (value) => {
         let data_filter = this.state.data_filter;
         data_filter.search_query = value;
+        data_filter.page = 1;
         await this.get_list_order(data_filter);
     }
     render() {
