@@ -192,14 +192,10 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <Tooltip title="Xem">
-                            <a onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></a>
-                        </Tooltip>
-                        <Tooltip title="Sửa">
-                            <a onClick={() => this.open_modal('edit', true, item.id)}>
-                                <AiFillEdit />
-                            </a>
-                        </Tooltip>
+                        <a onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></a>
+                        <a onClick={() => this.open_modal('edit', true, item.id)}>
+                            <AiFillEdit />
+                        </a>
                     </Space >
                 ),
             },

@@ -62,7 +62,7 @@ class login extends Component {
                     message.error("Tài khoản hoặc mật khẩu không chính xác!")
                 }
             } catch (e) {
-                message.error("Lỗi hệ thống")
+                message.error("Tài khoản hoặc mật khẩu không chính xác!")
             }
         } else {
             message.error(result.mess);
