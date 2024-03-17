@@ -5,6 +5,7 @@ import { Login } from '../../../services/login_services';
 import { message, Spin } from 'antd';
 import bg from '../../../assets/images/bg.jpg';
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import axios from 'axios';
 
 class login extends Component {
     constructor(props) {
@@ -51,13 +52,9 @@ class login extends Component {
         let result = this.validation(this.state.phone, this.state.password);
         if (result.code == 0) {
             try {
-                // let data = await Login(this.state.phone, this.state.password);
-                // if (data && data.data && data.data.success == 1) {
-                //     set_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
-                //     this.props.history.push(`/dashboard`);
-                //     this.props.handle_login_db();
-                if (this.state.phone == '0886825357' && this.state.password == '12345') {
-                    set_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, { id: 1, full_name: 'HuyHoang', avatar: '' });
+                let data = await Login(this.state.phone, this.state.password);
+                if (data && data.data && data.data.success == 1) {
+                    set_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
                     this.props.history.push(`/dashboard`);
                     this.props.handle_login_db();
                 }

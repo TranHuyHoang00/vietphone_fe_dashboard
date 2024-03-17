@@ -8,17 +8,14 @@ class header extends Component {
         super(props);
         this.state = {
             data_user: {
-                id: '1',
-                fullname: 'HuyHoang',
-                avatar: null,
             },
         }
     }
     async componentDidMount() {
-        // let data_user = get_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
-        // if (data_user) {
-        //     this.setState({ data_user: data_user.data.user })
-        // }
+        let data_user = get_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+        if (data_user) {
+            this.setState({ data_user: data_user.data.user })
+        }
     }
     handle_logout = () => {
         this.props.handle_logout_db();
@@ -44,11 +41,9 @@ class header extends Component {
                 </Space>
                 <Dropdown menu={{ items }} placement='bottomRight' className='cursor-pointer'>
                     <Space>
-                        <Avatar src={(data_user.avatar == "" || !data_user.avatar || data_user.avatar == null) ?
-                            'https://api.dicebear.com/7.x/miniavs/svg?seed=3'
-                            : data_user.avatar} size={40} />
+                        <Avatar src={'https://api.dicebear.com/7.x/miniavs/svg?seed=3'} size={40} />
                         <div className='max-w-[70px] truncate'>
-                            <h1>{data_user && data_user.fullname}</h1>
+                            <h1>{data_user && data_user.full_name}</h1>
                         </div>
                     </Space>
                 </Dropdown>

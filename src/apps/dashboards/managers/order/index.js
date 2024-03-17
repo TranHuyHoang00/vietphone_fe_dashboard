@@ -5,13 +5,13 @@ import {
     Spin, Pagination, Avatar, Typography, Tag, Dropdown, Input
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus, AiOutlineMenu } from "react-icons/ai";
-import { FaFemale, FaMale, FaLock, FaLockOpen } from "react-icons/fa";
 import Display_line_number from '../../components/display_line_number';
-import { get_list_customer, get_customer, delete_customer } from '../../../../services/customer_service';
+import { get_list_order, get_order, delete_order } from '../../../../services/order_service';
 import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
 import Drawer_filter from './drawers/drawer_filter';
+import { format_number } from '../../../../utils/format_number';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -28,24 +28,24 @@ class index extends Component {
                 limit: 5,
                 search_query: ''
             },
-            data_customer: {},
-            data_customers: [],
+            data_order: {},
+            data_orders: [],
             metadata: {},
         }
     }
     async componentDidMount() {
-        await this.get_list_customer(this.state.data_filter);
+        await this.get_list_order(this.state.data_filter);
     }
     handle_loading = (value) => {
         this.setState({ is_loading: value });
     }
-    get_list_customer = async (data_filter) => {
+    get_list_order = async (data_filter) => {
         this.handle_loading(true);
         try {
-            let data = await get_list_customer(data_filter);
+            let data = await get_list_order(data_filter);
             if (data && data.data && data.data.success == 1) {
                 this.setState({
-                    data_customers: data.data.data.customers,
+                    data_orders: data.data.data.orders,
                     metadata: data.data.data.metadata,
                 });
             } else {
@@ -57,12 +57,13 @@ class index extends Component {
             this.handle_loading(false);
         }
     }
-    get_customer = async (id) => {
+    get_order = async (id) => {
         this.handle_loading(true);
         try {
-            let data = await get_customer(id);
+            let data = await get_order(id);
+            console.log(data);
             if (data && data.data && data.data.success == 1) {
-                this.setState({ data_customer: data.data.data });
+                this.setState({ data_order: data.data.data });
             } else {
                 message.error("Lỗi");
             }
@@ -77,18 +78,18 @@ class index extends Component {
         if (name == 'create') { this.setState({ modal_create: value }); }
         if (name == 'detail') {
             if (id == null) {
-                this.setState({ modal_detail: value, data_customer: {} });
+                this.setState({ modal_detail: value, data_order: {} });
             } else {
                 this.setState({ modal_detail: value });
-                await this.get_customer(id);
+                await this.get_order(id);
             }
         }
         if (name == 'edit') {
             if (id == null) {
-                this.setState({ modal_edit: value, data_customer: {} });
+                this.setState({ modal_edit: value, data_order: {} });
             } else {
                 this.setState({ modal_edit: value });
-                await this.get_customer(id);
+                await this.get_order(id);
             }
         }
     }
@@ -97,7 +98,7 @@ class index extends Component {
         try {
             let data_selected = this.state.data_selected;
             for (const id of data_selected) {
-                let data = await delete_customer(id);
+                let data = await delete_order(id);
                 if (data && data.data && data.data.success == 1) {
                     message.success(`Thành công xóa dòng ID=${id}`);
                 } else {
@@ -119,7 +120,7 @@ class index extends Component {
         if (type == 'page') {
             data_filter.page = value;
         }
-        await this.get_list_customer(data_filter);
+        await this.get_list_order(data_filter);
         this.setState({ data_filter: data_filter })
     }
     open_drawer = (name, value) => {
@@ -130,17 +131,17 @@ class index extends Component {
     on_search = async (value) => {
         let data_filter = this.state.data_filter;
         data_filter.search_query = value;
-        await this.get_list_customer(data_filter);
+        await this.get_list_order(data_filter);
     }
     render() {
         const columns = [
             {
-                title: 'Mã KH', dataIndex: 'code', width: 100, responsive: ['sm'],
+                title: 'Mã ĐH', dataIndex: 'code', width: 100, responsive: ['sm'],
                 render: (code) => <Typography.Text strong className='text-[#0574b8]'>{code}</Typography.Text>,
                 sorter: (a, b) => a.code - b.code,
             },
             {
-                title: 'Thông tin', dataIndex: 'user',
+                title: 'Thông tin KH', dataIndex: 'user',
                 render: (user, item) =>
                     <div className='flex items-center justify-start'>
                         <Avatar size={60} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
@@ -156,14 +157,36 @@ class index extends Component {
                     </div>
             },
             {
-                title: 'Vai trò', dataIndex: 'user', width: 100,
-                render: (user, item) =>
-                    <div className='space-y-[5px]'>
-                        <Tag color="blue">{user.user_type}</Tag>
-                        {item.gender !== null &&
-                            <Tag color="volcano">{item.gender}</Tag>
-                        }
-                    </div>,
+                title: 'Thông tin ĐH', dataIndex: 'id',
+                render: (id, item) =>
+                    <div >
+                        <div className='flex gap-[5px] w-full'>
+                            <div className='w-1/3'>
+                                <Typography.Text className='text-gray-700'>Tổng tiền</Typography.Text>
+                            </div>
+                            <div className='w-2/3 flex items-center justify-between'>
+                                <Typography.Text strong className='text-[#0574b8]'>: {format_number(item.total)} vnđ</Typography.Text>
+                                <Tag color="green">{item.status}</Tag>
+                            </div>
+                        </div>
+                        <div className='flex gap-[5px] w-full'>
+                            <div className='w-1/3'>
+                                <Typography.Text className='text-gray-700'>Khấu trừ</Typography.Text>
+                            </div>
+                            <div className='w-2/3'>
+                                <Typography.Text strong className='text-red-600'>: {format_number(item.total_discount)} vnđ</Typography.Text>
+                            </div>
+                        </div>
+                        <div className='flex gap-[5px] w-full'>
+                            <div className='w-1/3'>
+                                <Typography.Text className='text-gray-700'>Ngày tạo</Typography.Text>
+                            </div>
+                            <div className='w-2/3'>
+                                <Typography.Text italic>: {item.created_at}</Typography.Text>
+                            </div>
+                        </div>
+                    </div>
+
             },
             {
                 title: 'HĐ', width: 80,
@@ -211,7 +234,7 @@ class index extends Component {
                                     <Space>Lọc<AiOutlineMenu /></Space>
                                 </Button>
                             </div>
-                            <div><Input.Search onSearch={(value) => this.on_search(value)} placeholder="Tên, SĐT !" /></div>
+                            <div><Input.Search onSearch={(value) => this.on_search(value)} placeholder="Tên, SĐT, Mã ĐH !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
@@ -234,11 +257,11 @@ class index extends Component {
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider>KHÁCH HÀNG</Divider>
+                            <Divider>ĐƠN HÀNG</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
-                                    columns={columns} dataSource={this.state.data_customers} pagination={false}
-                                    size="middle" bordered scroll={{ x: 600 }} />
+                                    columns={columns} dataSource={this.state.data_orders} pagination={false}
+                                    size="middle" bordered scroll={{ x: 700 }} />
 
                                 <Pagination size={{ xs: 'small', xl: 'defaul', }} current={data_filter.page}
                                     showQuickJumper total={metadata.total * metadata.limit} pageSize={data_filter.limit}
@@ -247,13 +270,13 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                <Modal_create modal_create={this.state.modal_create}
-                    open_modal={this.open_modal} get_list_customer={this.get_list_customer} />
+                {/* <Modal_create modal_create={this.state.modal_create}
+                    open_modal={this.open_modal} get_list_order={this.get_list_order} /> */}
                 <Modal_detail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} data_customer={this.state.data_customer} />
-                <Modal_edit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal} get_list_customer={this.get_list_customer}
-                    data_customer={this.state.data_customer} />
+                    open_modal={this.open_modal} data_order={this.state.data_order} />
+                {/* <Modal_edit modal_edit={this.state.modal_edit}
+                    open_modal={this.open_modal} get_list_order={this.get_list_order}
+                    data_order={this.state.data_order} /> */}
                 <Drawer_filter drawer_filter={this.state.drawer_filter}
                     open_drawer={this.open_drawer} />
             </>

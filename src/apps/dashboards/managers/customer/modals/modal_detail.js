@@ -25,10 +25,18 @@ class modal_detail extends Component {
                 <div className='border-t py-[10px] space-y-[5px]'>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
+                            <Typography.Text className='text-gray-700'>Mã KH</Typography.Text>
+                        </div>
+                        <div className='w-2/3'>
+                            <Typography.Text>: {data_customer.code}</Typography.Text>
+                        </div>
+                    </div>
+                    <div className='flex gap-[5px]'>
+                        <div className='w-1/3'>
                             <Typography.Text className='text-gray-700'>Họ và tên</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.full_name}</Typography.Text>
+                            <Typography.Text>: {data_customer.user && data_customer.user.full_name}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
@@ -36,7 +44,7 @@ class modal_detail extends Component {
                             <Typography.Text className='text-gray-700'>Số điện thoại</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.phone}</Typography.Text>
+                            <Typography.Text>: {data_customer.user && data_customer.user.phone}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
@@ -52,31 +60,31 @@ class modal_detail extends Component {
                             <Typography.Text className='text-gray-700'>Giới tính</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.gender == true ? 'Nam' : 'Nữ'}</Typography.Text>
+                            <Typography.Text>: {data_customer.gender}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Trạng thái</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Vai trò</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.activate == true ? 'Mở' : 'Khóa'}</Typography.Text>
+                            <Typography.Text>: {data_customer.user && data_customer.user.user_type}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Ngày tạo</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Địa chỉ</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.created_at}</Typography.Text>
+                            <Typography.Text>: {data_customer.address}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Ngày sửa</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Ngày sinh</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.updated_at}</Typography.Text>
+                            <Typography.Text>: {data_customer.date_of_birth}</Typography.Text>
                         </div>
                     </div>
                 </div>

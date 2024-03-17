@@ -4,7 +4,7 @@ import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGithub, AiOutlineUser, AiFillGold, AiFillHdd, AiFillFund, AiOutlineUserSwitch, AiFillShop
     , AiFillDropboxSquare, AiFillIdcard, AiFillSliders, AiFillTag, AiFillStar, AiFillAlert, AiFillMobile,
-    AiFillBuild, AiFillSecurityScan, AiFillLayout
+    AiFillBuild, AiFillSecurityScan, AiFillLayout, AiFillContainer, AiFillFileMarkdown
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
 import { get_local_account } from '../../auths/local_storage';
@@ -24,6 +24,7 @@ import Manager_tag from './managers/tag/index';
 import Manager_rating from './managers/rating/index';
 import Manager_location from './managers/location/index';
 import Manager_banner from './managers/banner/index';
+import Manager_order from './managers/order/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -67,6 +68,11 @@ class index extends Component {
                     { key: '', icon: <AiOutlineUser />, label: 'Khách hàng' },
                     { key: 'manager/staff', icon: <AiOutlineUserSwitch />, label: 'Nhân viên' },
                     { key: 'manager/role', icon: <AiFillGold />, label: 'Quyền hạn' },
+                ],
+            },
+            {
+                key: 'order', icon: <AiFillContainer />, label: 'Đơn đặt', children: [
+                    { key: 'manager/order', icon: <AiFillFileMarkdown />, label: 'Đơn hàng' },
                 ],
             },
             {
@@ -133,6 +139,7 @@ class index extends Component {
                                     <Route exact path={`${url}manager/rating`}><Manager_rating /></Route>
                                     <Route exact path={`${url}manager/location`}><Manager_location /></Route>
                                     <Route exact path={`${url}manager/banner`}><Manager_banner /></Route>
+                                    <Route exact path={`${url}manager/order`}><Manager_order /></Route>
                                     <Route ><Not_found /></Route>
 
 

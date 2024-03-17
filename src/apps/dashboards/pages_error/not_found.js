@@ -14,8 +14,8 @@ class not_found extends Component {
             <Result
                 status="404"
                 title="404"
-                subTitle="Sorry, the page you visited does not exist."
-                extra={<Button onClick={() => { this.props.history.push('/dashboard') }} type="default">Back</Button>}
+                subTitle="Xin lỗi, không tìm thấy trang này!!"
+                extra={<Button onClick={() => { this.props.history.push('/dashboard') }} type="default">Quay lại</Button>}
             />
         );
     }

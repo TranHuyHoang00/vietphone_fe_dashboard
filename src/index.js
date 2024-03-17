@@ -6,9 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, } from "react-router-dom";
 import { Provider } from 'react-redux';
 import reduxStore from './store/redux';
-import 'primereact/resources/primereact.css';
-import 'primereact/resources/themes/saga-blue/theme.css';
-import 'primeicons/primeicons.css';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={reduxStore}>
