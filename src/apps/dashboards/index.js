@@ -4,7 +4,7 @@ import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGithub, AiOutlineUser, AiFillGold, AiFillHdd, AiFillFund, AiOutlineUserSwitch, AiFillShop
     , AiFillDropboxSquare, AiFillIdcard, AiFillSliders, AiFillTag, AiFillStar, AiFillAlert, AiFillMobile,
-    AiFillBuild, AiFillSecurityScan, AiFillLayout, AiFillContainer, AiFillFileMarkdown
+    AiFillBuild, AiFillSecurityScan, AiFillLayout, AiFillContainer, AiFillFileMarkdown, AiFillPicture, AiFillAndroid, AiFillDashboard
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
 import { get_local_account } from '../../auths/local_storage';
@@ -25,6 +25,10 @@ import Manager_rating from './managers/rating/index';
 import Manager_location from './managers/location/index';
 import Manager_banner from './managers/banner/index';
 import Manager_order from './managers/order/index';
+import Manager_product from './managers/product/index';
+import Manager_overview_banner from './managers/overview_banner/index';
+
+import Statistic_analysis from './statistics/analysis/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -65,14 +69,14 @@ class index extends Component {
         const items = [
             {
                 key: 'user_role', icon: <AiFillGithub />, label: 'Người dùng', children: [
-                    { key: '', icon: <AiOutlineUser />, label: 'Khách hàng' },
+                    { key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng' },
                     { key: 'manager/staff', icon: <AiOutlineUserSwitch />, label: 'Nhân viên' },
                     { key: 'manager/role', icon: <AiFillGold />, label: 'Quyền hạn' },
                 ],
             },
             {
                 key: 'order', icon: <AiFillContainer />, label: 'Đơn đặt', children: [
-                    { key: 'manager/order', icon: <AiFillFileMarkdown />, label: 'Đơn hàng' },
+                    { key: '', icon: <AiFillFileMarkdown />, label: 'Đơn hàng' },
                 ],
             },
             {
@@ -96,8 +100,14 @@ class index extends Component {
             },
             {
                 key: 'banner', icon: <AiFillBuild />, label: 'Quảng cáo', children: [
-                    { key: 'manager/banner', icon: <AiFillLayout />, label: 'Băng rôn' },
+                    { key: 'manager/overview_banner', icon: <AiFillLayout />, label: 'Tổng quan' },
+                    { key: 'manager/banner', icon: <AiFillPicture />, label: 'Băng rôn' },
                     { key: 'manager/location', icon: <AiFillSecurityScan />, label: 'Vị trí' },
+                ],
+            },
+            {
+                key: 'statistic', icon: <AiFillDashboard />, label: 'Thống kê', children: [
+                    { key: 'statistic/analysis', icon: <AiFillAndroid />, label: 'Số liệu' },
                 ],
             },
         ];
@@ -129,7 +139,7 @@ class index extends Component {
                                 <Switch>
 
                                     <Route exact path={`${url}login`}><Empty /></Route>
-                                    <Route exact path={`${url}`}><Manager_customer /></Route>
+                                    <Route exact path={`${url}manager/customer`}><Manager_customer /></Route>
                                     <Route exact path={`${url}manager/staff`}><Manager_staff /></Route>
                                     <Route exact path={`${url}manager/category_type`}><Manager_category_type /></Route>
                                     <Route exact path={`${url}manager/brand`}><Manager_brand /></Route>
@@ -139,7 +149,12 @@ class index extends Component {
                                     <Route exact path={`${url}manager/rating`}><Manager_rating /></Route>
                                     <Route exact path={`${url}manager/location`}><Manager_location /></Route>
                                     <Route exact path={`${url}manager/banner`}><Manager_banner /></Route>
-                                    <Route exact path={`${url}manager/order`}><Manager_order /></Route>
+                                    <Route exact path={`${url}`}><Manager_order /></Route>
+                                    <Route exact path={`${url}manager/product`}><Manager_product /></Route>
+                                    <Route exact path={`${url}manager/overview_banner`}><Manager_overview_banner /></Route>
+
+                                    <Route exact path={`${url}statistic/analysis`}><Statistic_analysis /></Route>
+
                                     <Route ><Not_found /></Route>
 
 

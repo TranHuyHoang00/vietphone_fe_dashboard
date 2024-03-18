@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Modal, message, Button, Spin, Typography, Input, Image } from 'antd';
+import { Modal, message, Button, Spin, Typography, Input, Image, Select } from 'antd';
 import { edit_brand } from '../../../../../services/brand_service';
 import { image_to_base64 } from '../../../../../utils/base64';
 class modal_edit extends Component {
@@ -10,6 +10,7 @@ class modal_edit extends Component {
             data_brand: {},
             is_loading: false,
             mask_closable: true,
+            is_update_image: false,
         }
     }
     async componentDidMount() {
@@ -38,7 +39,7 @@ class modal_edit extends Component {
     validation = (data) => {
         this.handle_loading(true);
         if (!data.name) {
-            return { mess: "Không được bỏ trống 'Tên loại danh mục' ", code: 1 };
+            return { mess: "Không được bỏ trống 'Tên thương hiệu' ", code: 1 };
         }
         return { code: 0 };
     }
@@ -46,13 +47,14 @@ class modal_edit extends Component {
         let result = this.validation(this.state.data_brand);
         if (result.code == 0) {
             try {
-                let data = await edit_brand(id, this.state.data_brand);
+                let data_brand = this.state.data_brand;
+                if (this.state.is_update_image == false) { delete data_brand.image; }
+                let data = await edit_brand(id, data_brand);
                 if (data && data.data && data.data.success == 1) {
-                    await this.props.get_list_brand();
-                    this.props.open_Form("edit", false);
-                    this.setState({ data_brand: {} });
+                    await this.props.get_list_brand(this.props.data_filter);
+                    this.props.open_modal("edit", false);
+                    this.setState({ data_brand: {}, is_update_image: false });
                     message.success("Thành công");
-
                 } else {
                     message.error('Thất bại');
                 }
@@ -66,7 +68,13 @@ class modal_edit extends Component {
     }
     onchange_image = async (image) => {
         let image_new = await image_to_base64(image);
-        this.handle_onchange_input(image_new, "image", 'select')
+        this.setState({
+            is_update_image: true,
+            data_brand: {
+                ...this.state.data_brand,
+                image: image_new,
+            }
+        })
     }
     render() {
         let data_brand = this.state.data_brand;
@@ -76,11 +84,11 @@ class modal_edit extends Component {
                 maskClosable={this.state.mask_closable}
                 footer={[
                     <>
-                        <Button onClick={() => this.props.open_modal("detail", false)}
-                            className='bg-[#ed1e24] text-white'>
+                        <Button onClick={() => this.props.open_modal("edit", false)}
+                            className='bg-[#e94138] text-white'>
                             Hủy bỏ
                         </Button>
-                        <Button disabled={this.state.is_loading} onClick={() => this.handle_edit()}
+                        <Button disabled={this.state.is_loading} onClick={() => this.handle_edit(data_brand.id)}
                             className='bg-[#0e97ff] text-white'>
                             Xác nhận
                         </Button>
@@ -89,15 +97,15 @@ class modal_edit extends Component {
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
                         <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>Logo</Typography.Text>
+                            <Typography.Text italic strong>Ảnh</Typography.Text>
                             <div className='flex items-center justify-center'>
                                 <div className='space-y-[5px]'>
-                                    <Image width={240} height={80} className='object-cover' src={data_brand.image} />
-                                    <input id="load_file" type="file" accept="image/*" hidden
+                                    <Image width={200} height={100} className='object-cover' src={data_brand.image} />
+                                    <input id="load_file_edit" type="file" accept="image/*" hidden
                                         onChange={(image) => this.onchange_image(image)} />
                                     <div className='text-center'>
-                                        <label htmlFor="load_file"
-                                            className=' border border-gray-800 rounded-[5px] px-[10px] py-[3px] cursor-pointer '>
+                                        <label htmlFor="load_file_edit"
+                                            className='border bg-[#1677ff] text-white px-[10px] py-[3px] cursor-pointer '>
                                             Tải lên
                                         </label>
                                     </div>
@@ -111,19 +119,31 @@ class modal_edit extends Component {
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
                             <Input value={data_brand.name}
-                                onChange={(event) => this.handle_onchange_input(event, "name", 'input')}
-                            />
+                                onChange={(event) => this.handle_onchange_input(event, "name", 'input')} />
+                        </div>
+                        <div className='space-y-[3px]'>
+                            <Typography.Text italic strong>Icon</Typography.Text>
+                            <Input value={data_brand.icon}
+                                onChange={(event) => this.handle_onchange_input(event, "icon", 'input')} />
                         </div>
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>Slug</Typography.Text>
                             <Input value={data_brand.slug}
-                                onChange={(event) => this.handle_onchange_input(event, "slug", 'input')}
-                            />
+                                onChange={(event) => this.handle_onchange_input(event, "slug", 'input')} />
                         </div>
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>Mô tả</Typography.Text>
-                            <Input.TextArea value={data_brand.description} rows="3"
+                            <Input.TextArea value={data_brand.description} rows={3}
                                 onChange={(event) => this.handle_onchange_input(event, "description", 'input')} />
+                        </div>
+                        <div className='space-y-[3px]'>
+                            <div><Typography.Text italic strong>Trạng thái</Typography.Text></div>
+                            <Select style={{ width: 200 }} value={data_brand.is_active}
+                                onChange={(event) => this.handle_onchange_input(event, "is_active", 'select')}
+                                options={[
+                                    { value: true, label: 'Mở' },
+                                    { value: false, label: 'Khóa' },
+                                ]} />
                         </div>
                     </div>
                 </Spin>

@@ -9,6 +9,7 @@ class modal_edit extends Component {
             data_category_type: {},
             is_loading: false,
             mask_closable: true,
+            is_update_image: false,
         }
     }
     async componentDidMount() {
@@ -45,13 +46,14 @@ class modal_edit extends Component {
         let result = this.validation(this.state.data_category_type);
         if (result.code == 0) {
             try {
-                let data = await edit_category_type(id, this.state.data_category_type);
+                let data_category_type = this.state.data_category_type;
+                if (this.state.is_update_image == false) { delete data_category_type.image; }
+                let data = await edit_category_type(id, data_category_type);
                 if (data && data.data && data.data.success == 1) {
-                    await this.props.get_list_category_type();
-                    this.props.open_Form("edit", false);
-                    this.setState({ data_category_type: {} });
+                    await this.props.get_list_category_type(this.props.data_filter);
+                    this.props.open_modal("edit", false);
+                    this.setState({ data_category_type: {}, is_update_image: false });
                     message.success("Thành công");
-
                 } else {
                     message.error('Thất bại');
                 }
@@ -71,11 +73,11 @@ class modal_edit extends Component {
                 maskClosable={this.state.mask_closable}
                 footer={[
                     <>
-                        <Button onClick={() => this.props.open_modal("detail", false)}
-                            className='bg-[#ed1e24] text-white'>
+                        <Button onClick={() => this.props.open_modal("edit", false)}
+                            className='bg-[#e94138] text-white'>
                             Hủy bỏ
                         </Button>
-                        <Button disabled={this.state.is_loading} onClick={() => this.handle_edit()}
+                        <Button disabled={this.state.is_loading} onClick={() => this.handle_edit(data_category_type.id)}
                             className='bg-[#0e97ff] text-white'>
                             Xác nhận
                         </Button>
@@ -83,6 +85,7 @@ class modal_edit extends Component {
                 ]}>
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
+
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>
                                 Tên loại danh mục
@@ -93,7 +96,7 @@ class modal_edit extends Component {
                         </div>
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>Mô tả</Typography.Text>
-                            <Input.TextArea value={data_category_type.description} rows="3"
+                            <Input.TextArea value={data_category_type.description} rows={3}
                                 onChange={(event) => this.handle_onchange_input(event, "description", 'input')} />
                         </div>
                     </div>

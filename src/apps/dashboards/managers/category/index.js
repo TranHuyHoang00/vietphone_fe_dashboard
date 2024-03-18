@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-    Table, Space, Divider, Button, Popconfirm, Tooltip, message, Input,
-    Spin, Pagination, Typography, Dropdown, Tag
+    Table, Space, Divider, Button, Popconfirm, message, Input,
+    Spin, Pagination, Typography, Image, Dropdown, Tag
 } from 'antd';
-import { AiFillEdit, AiFillDelete, AiFillEye, AiOutlinePlus } from "react-icons/ai";
-import { FaLock, FaLockOpen } from "react-icons/fa";
+import { AiOutlineMenu, AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
 import Display_line_number from '../../components/display_line_number';
-import { get_list_category, get_category, delete_category } from '../../../../services/category_service';
+import { get_list_category, get_category, delete_category, edit_category } from '../../../../services/category_service';
 import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
-
+import Drawer_filter from './drawers/drawer_filter';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -25,49 +24,11 @@ class index extends Component {
             data_filter: {
                 page: 1,
                 limit: 5,
+                search_query: ''
             },
             data_category: {},
-            data_categorys: [
-                {
-                    id: 1,
-                    parent_id: null,
-                    category_type_id: null,
-                    name: 'Điện thoại',
-                    icon: 'fa-solid fa-sim-card',
-                    image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
-                    activate: true,
-                    slug: '/dienthoai',
-                    description: 'none',
-                    created_at: '23/12/2023',
-                    updated_at: '26/12/2023',
-                },
-                {
-                    id: 2,
-                    parent_id: null,
-                    category_type_id: null,
-                    name: 'Phụ kiện',
-                    icon: 'fa-solid fa-sim-card',
-                    image: 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg',
-                    activate: false,
-                    slug: '/samsung',
-                    description: 'none',
-                    created_at: '23/12/2023',
-                    updated_at: '26/12/2023',
-                },
-                {
-                    id: 3,
-                    parent_id: { id: 1, name: 'Điện thoại' },
-                    category_type_id: { id: 1, name: 'Nhu cầu' },
-                    name: 'Chụp ảnh',
-                    icon: 'fa-solid fa-sim-card',
-                    image: 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg',
-                    activate: false,
-                    slug: '/chupanh',
-                    description: 'none',
-                    created_at: '23/12/2023',
-                    updated_at: '26/12/2023',
-                },
-            ],
+            data_categorys: [],
+            metadata: {},
         }
     }
     async componentDidMount() {
@@ -76,12 +37,15 @@ class index extends Component {
     handle_loading = (value) => {
         this.setState({ is_loading: value });
     }
-    get_list_category = async () => {
+    get_list_category = async (data_filter) => {
         this.handle_loading(true);
         try {
-            let data = await get_list_category();
+            let data = await get_list_category(data_filter);
             if (data && data.data && data.data.success == 1) {
-                this.setState({ data_categorys: data.data.data });
+                this.setState({
+                    data_categorys: data.data.data.categories,
+                    metadata: data.data.data.metadata,
+                });
             } else {
                 message.error("Lỗi");
             }
@@ -94,26 +58,12 @@ class index extends Component {
     get_category = async (id) => {
         this.handle_loading(true);
         try {
-            let data = {
-                id: 3,
-                parent_id: { id: 1, name: 'Điện thoại' },
-                category_type_id: { id: 1, name: 'Nhu cầu' },
-                name: 'Chụp ảnh',
-                icon: 'fa-solid fa-sim-card',
-                image: 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg',
-                activate: false,
-                slug: '/chupanh',
-                description: 'none',
-                created_at: '23/12/2023',
-                updated_at: '26/12/2023',
-            };
-            this.setState({ data_category: data })
-            // let data = await get_category(id);
-            // if (data && data.data && data.data.success == 1) {
-            //     this.setState({ data_category: data.data.data });
-            // } else {
-            //     message.error("Lỗi");
-            // }
+            let data = await get_category(id);
+            if (data && data.data && data.data.success == 1) {
+                this.setState({ data_category: data.data.data });
+            } else {
+                message.error("Lỗi");
+            }
         } catch (e) {
             message.error("Lỗi hệ thống");
         } finally {
@@ -140,19 +90,22 @@ class index extends Component {
             }
         }
     }
-    handle_delete = async () => {
+    handle_funtion_menu = async () => {
         this.handle_loading(true);
         try {
             let data_selected = this.state.data_selected;
             for (const id of data_selected) {
-                let data = await delete_category(id);
-                if (data && data.data && data.data.success == 1) {
-                    message.success(`Thành công xóa dòng ID=${id}`);
-                } else {
-                    message.error(`Thất bại xóa dòng ID=${id}`);
+                let data;
+                if (this.state.type_menu == 1) { data = await delete_category(id); }
+                if (this.state.type_menu == 2) { data = await edit_category(id, { is_active: false }); }
+                if (this.state.type_menu == 3) { data = await edit_category(id, { is_active: true }); }
+                if (data && data.data && data.data.success !== 1) {
+                    message.error(`Thất bại khi xử lý dòng ID=${id}`);
                 }
             }
-            message.success(`Thành công xóa ${data_selected.length} dòng`)
+            await this.get_list_category(this.state.data_filter);
+            this.setState({ data_selected: [] });
+            message.success(`Thành công xử lý ${data_selected.length} dòng`);
         } catch (e) {
             message.error('Lỗi hệ thống');
         } finally {
@@ -170,6 +123,15 @@ class index extends Component {
         await this.get_list_category(data_filter);
         this.setState({ data_filter: data_filter })
     }
+    open_drawer = (name, value) => {
+        if (name == 'filter') { this.setState({ drawer_filter: value }); }
+    }
+    on_search = async (value) => {
+        let data_filter = this.state.data_filter;
+        data_filter.search_query = value;
+        data_filter.page = 1;
+        await this.get_list_category(data_filter);
+    }
     render() {
         const columns = [
             {
@@ -182,48 +144,30 @@ class index extends Component {
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
             {
-                title: 'Quan hệ', dataIndex: 'parent_id', responsive: ['md'],
-                render: (parent_id) =>
-                    <>
-                        {parent_id == null ?
-                            <Typography.Text ></Typography.Text>
-                            :
-                            <Tag color="volcano">{parent_id.name}</Tag>
-                        }
-                    </>,
+                title: 'Slug', dataIndex: 'slug', responsive: ['lg'],
             },
             {
-                title: 'Loại danh mục', dataIndex: 'category_type_id', responsive: ['md'],
-                render: (category_type_id) =>
-                    <>
-                        {category_type_id == null ?
-                            <Typography.Text></Typography.Text>
-                            :
-                            <Tag color="blue">{category_type_id.name}</Tag>}
-                    </>,
+                title: 'Loại danh mục', dataIndex: 'category_type', responsive: ['md'],
+                render: (category_type) => <Typography.Text strong className='text-[#0574b8]'>{category_type && category_type.name}</Typography.Text>,
             },
             {
-                title: 'Status', dataIndex: 'activate', width: 70,
-                render: (activate) =>
+                title: 'Quan hệ', dataIndex: 'parent', responsive: ['md'],
+                render: (parent) => <Typography.Text strong className='text-[#0574b8]'>{parent && parent.name}</Typography.Text>,
+            },
+            {
+                title: 'Ảnh', dataIndex: 'image', responsive: ['xl'], width: 60,
+                render: (image) => <Image src={image} height={50} width={50} className='object-cover' />
+            },
+            {
+                title: 'Status', dataIndex: 'is_active', width: 70,
+                render: (is_active) =>
                     <div className='flex items-center justify-start'>
-                        {activate == true ?
-                            <FaLock className='text-[20px] text-[#ed1e24]' />
+                        {is_active == true ?
+                            <Tag color='green'>Mở</Tag>
                             :
-                            <FaLockOpen className='text-[20px] text-[#36aa00]' />
+                            <Tag color='red'>Khóa</Tag>
                         }
                     </div>
-            },
-            {
-                title: 'Slug', dataIndex: 'slug', responsive: ['lg'],
-                sorter: (a, b) => a.description.localeCompare(b.description),
-            },
-            {
-                title: 'Ngày tạo', dataIndex: 'created_at', width: 100, responsive: ['lg'],
-                sorter: (a, b) => a.created_at.localeCompare(b.created_at),
-            },
-            {
-                title: 'Ngày sửa', dataIndex: 'updated_at', width: 100, responsive: ['lg'],
-                sorter: (a, b) => a.updated_at.localeCompare(b.updated_at),
             },
             {
                 title: 'HĐ', width: 80,
@@ -241,7 +185,7 @@ class index extends Component {
         const items = [
             { key: '1', label: 'Xóa' },
             { key: '2', label: 'Khóa' },
-            { key: '3', label: 'Mở khóa' },
+            { key: '3', label: 'Mở' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -250,18 +194,24 @@ class index extends Component {
         const row_selection = { data_selected, onChange: onchange_selected };
         let data_filter = this.state.data_filter;
         let type_menu = this.state.type_menu;
+        let metadata = this.state.metadata;
         return (
             <>
                 <Spin size='large' spinning={this.state.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
-                                <Space className='text-white'>
-                                    <AiOutlinePlus />
-                                    Tạo mới
-                                </Space>
-                            </Button>
-                            <div><Input.Search placeholder="Nhập vào đây !" /></div>
+                            <div className='flex items-center gap-[5px]'>
+                                <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
+                                    <Space className='text-white'>
+                                        <AiOutlinePlus />
+                                        Tạo mới
+                                    </Space>
+                                </Button>
+                                <Button disabled onClick={() => { this.setState({ drawer_filter: true }) }} className='bg-white'>
+                                    <Space>Lọc<AiOutlineMenu /></Space>
+                                </Button>
+                            </div>
+                            <div><Input.Search onSearch={(value) => this.on_search(value)} placeholder="Tên danh mục !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
@@ -272,12 +222,12 @@ class index extends Component {
                                 <div>
                                     <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_delete()}>
+                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
                                         <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
                                                 {type_menu == 1 && <span>Xóa</span>}
                                                 {type_menu == 2 && <span>Khóa</span>}
-                                                {type_menu == 3 && <span>Mở khóa</span>}
+                                                {type_menu == 3 && <span>Mở</span>}
                                                 <span> {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
@@ -288,10 +238,9 @@ class index extends Component {
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
                                     columns={columns} dataSource={this.state.data_categorys} pagination={false}
-                                    size="middle" bordered scroll={{ y: 250 }} />
-
-                                <Pagination size={{ xs: 'small', xl: 'defaul', }}
-                                    showQuickJumper defaultCurrent={data_filter.page} total={50} pageSize={data_filter.limit}
+                                    size="middle" bordered scroll={{}} />
+                                <Pagination size={{ xs: 'small', xl: 'defaul', }} current={data_filter.page}
+                                    showQuickJumper total={metadata.total * metadata.limit} pageSize={data_filter.limit}
                                     onChange={(value) => this.onchange_page(value, 'page')} />
                             </div>
                         </div>
@@ -303,7 +252,9 @@ class index extends Component {
                     open_modal={this.open_modal} data_category={this.state.data_category} />
                 <Modal_edit modal_edit={this.state.modal_edit}
                     open_modal={this.open_modal} get_list_category={this.get_list_category}
-                    data_category={this.state.data_category} />
+                    data_category={this.state.data_category} data_filter={this.state.data_filter} />
+                <Drawer_filter drawer_filter={this.state.drawer_filter}
+                    open_drawer={this.open_drawer} />
             </>
         );
     }

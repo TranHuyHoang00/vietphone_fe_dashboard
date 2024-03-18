@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-    Table, Space, Divider, Button, Popconfirm, message, Tooltip,
+    Table, Space, Divider, Button, Popconfirm, message,
     Spin, Pagination, Typography, Dropdown, Input, Carousel, Image
 } from 'antd';
 import { AiOutlineMenu, AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
@@ -259,9 +259,9 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {/* <Modal_create modal_create={this.state.modal_create}
+                <Modal_create modal_create={this.state.modal_create}
                     open_modal={this.open_modal} get_list_banner={this.get_list_banner} />
-                <Modal_detail modal_detail={this.state.modal_detail}
+                {/* <Modal_detail modal_detail={this.state.modal_detail}
                     open_modal={this.open_modal} data_banner={this.state.data_banner} />
                 <Modal_edit modal_edit={this.state.modal_edit}
                     open_modal={this.open_modal} get_list_banner={this.get_list_banner}

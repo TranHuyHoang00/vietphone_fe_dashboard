@@ -18,7 +18,7 @@ class modal_detail extends Component {
                 footer={[
                     <>
                         <Button onClick={() => this.props.open_modal("detail", false)}
-                            className='bg-[#ed1e24] text-white'>
+                            className='bg-[#e94138] text-white'>
                             Hủy bỏ
                         </Button>
                     </>

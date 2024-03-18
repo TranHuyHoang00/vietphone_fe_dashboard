@@ -137,9 +137,9 @@ class index extends Component {
     render() {
         const columns = [
             {
-                title: 'Mã ĐH', dataIndex: 'code', width: 100, responsive: ['sm'],
-                render: (code) => <Typography.Text strong className='text-[#0574b8]'>{code}</Typography.Text>,
-                sorter: (a, b) => a.code - b.code,
+                title: 'Ngày tạo', dataIndex: 'created_at', width: 140, responsive: ['sm'],
+                render: (created_at) => <Typography.Text strong className='text-[#0574b8]'>{created_at}</Typography.Text>,
+                sorter: (a, b) => a.created_at - b.created_at,
             },
             {
                 title: 'Thông tin KH', dataIndex: 'user',
@@ -163,11 +163,19 @@ class index extends Component {
                     <div >
                         <div className='flex gap-[5px] w-full'>
                             <div className='w-1/3'>
-                                <Typography.Text className='text-gray-700'>Tổng tiền</Typography.Text>
+                                <Typography.Text className='text-gray-700'>Mã ĐH</Typography.Text>
                             </div>
                             <div className='w-2/3 flex items-center justify-between'>
-                                <Typography.Text strong className='text-[#0574b8]'>: {format_number(item.total)} vnđ</Typography.Text>
+                                <Typography.Text strong>: {item.code}</Typography.Text>
                                 <Tag color="green">{item.status}</Tag>
+                            </div>
+                        </div>
+                        <div className='flex gap-[5px] w-full'>
+                            <div className='w-1/3'>
+                                <Typography.Text className='text-gray-700'>Tổng tiền</Typography.Text>
+                            </div>
+                            <div className='w-2/3 '>
+                                <Typography.Text strong className='text-[#0574b8]'>: {format_number(item.total)} vnđ</Typography.Text>
                             </div>
                         </div>
                         <div className='flex gap-[5px] w-full'>
@@ -176,14 +184,6 @@ class index extends Component {
                             </div>
                             <div className='w-2/3'>
                                 <Typography.Text strong className='text-red-600'>: {format_number(item.total_discount)} vnđ</Typography.Text>
-                            </div>
-                        </div>
-                        <div className='flex gap-[5px] w-full'>
-                            <div className='w-1/3'>
-                                <Typography.Text className='text-gray-700'>Ngày tạo</Typography.Text>
-                            </div>
-                            <div className='w-2/3'>
-                                <Typography.Text italic>: {item.created_at}</Typography.Text>
                             </div>
                         </div>
                     </div>

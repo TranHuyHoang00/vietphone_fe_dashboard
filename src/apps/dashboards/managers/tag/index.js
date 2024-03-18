@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-    Table, Space, Divider, Button, Popconfirm, Tooltip, message, Input,
-    Spin, Pagination, Typography, Image, Dropdown
+    Table, Space, Divider, Button, Popconfirm, message, Input,
+    Spin, Pagination, Typography, Image, Dropdown, Tag
 } from 'antd';
-import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
-import { FaLock, FaLockOpen } from "react-icons/fa";
+import { AiOutlineMenu, AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
 import Display_line_number from '../../components/display_line_number';
-import { get_list_tag, get_tag, delete_tag } from '../../../../services/tag_service';
+import { get_list_tag, get_tag, delete_tag, edit_tag } from '../../../../services/tag_service';
 import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
-
+import Drawer_filter from './drawers/drawer_filter';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -25,13 +24,11 @@ class index extends Component {
             data_filter: {
                 page: 1,
                 limit: 5,
+                search_query: ''
             },
             data_tag: {},
-            data_tags: [
-                { id: 3, name: 'HOT', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', activate: true, icon: 'fa-solid fa-sim-card', created_at: '23/12/2023', updated_at: '26/12/2023' },
-                { id: 2, name: 'SALE', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', activate: true, icon: 'fa-solid fa-sim-card', created_at: '24/12/2023', updated_at: '27/12/2023' },
-                { id: 1, name: 'NEW', image: null, activate: false, icon: 'fa-solid fa-sim-card', created_at: '25/12/2023', updated_at: '28/12/2023' },
-            ],
+            data_tags: [],
+            metadata: {},
         }
     }
     async componentDidMount() {
@@ -40,12 +37,15 @@ class index extends Component {
     handle_loading = (value) => {
         this.setState({ is_loading: value });
     }
-    get_list_tag = async () => {
+    get_list_tag = async (data_filter) => {
         this.handle_loading(true);
         try {
-            let data = await get_list_tag();
+            let data = await get_list_tag(data_filter);
             if (data && data.data && data.data.success == 1) {
-                this.setState({ data_tags: data.data.data });
+                this.setState({
+                    data_tags: data.data.data.tags,
+                    metadata: data.data.data.metadata,
+                });
             } else {
                 message.error("Lỗi");
             }
@@ -58,14 +58,12 @@ class index extends Component {
     get_tag = async (id) => {
         this.handle_loading(true);
         try {
-            let data = { id: 3, name: 'HOT', image: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg', activate: true, icon: 'fa-solid fa-sim-card', created_at: '23/12/2023', updated_at: '26/12/2023' };
-            this.setState({ data_tag: data })
-            // let data = await get_tag(id);
-            // if (data && data.data && data.data.success == 1) {
-            //     this.setState({ data_tag: data.data.data });
-            // } else {
-            //     message.error("Lỗi");
-            // }
+            let data = await get_tag(id);
+            if (data && data.data && data.data.success == 1) {
+                this.setState({ data_tag: data.data.data });
+            } else {
+                message.error("Lỗi");
+            }
         } catch (e) {
             message.error("Lỗi hệ thống");
         } finally {
@@ -92,19 +90,22 @@ class index extends Component {
             }
         }
     }
-    handle_delete = async () => {
+    handle_funtion_menu = async () => {
         this.handle_loading(true);
         try {
             let data_selected = this.state.data_selected;
             for (const id of data_selected) {
-                let data = await delete_tag(id);
-                if (data && data.data && data.data.success == 1) {
-                    message.success(`Thành công xóa dòng ID=${id}`);
-                } else {
-                    message.error(`Thất bại xóa dòng ID=${id}`);
+                let data;
+                if (this.state.type_menu == 1) { data = await delete_tag(id); }
+                if (this.state.type_menu == 2) { data = await edit_tag(id, { is_active: false }); }
+                if (this.state.type_menu == 3) { data = await edit_tag(id, { is_active: true }); }
+                if (data && data.data && data.data.success !== 1) {
+                    message.error(`Thất bại khi xử lý dòng ID=${id}`);
                 }
             }
-            message.success(`Thành công xóa ${data_selected.length} dòng`)
+            await this.get_list_tag(this.state.data_filter);
+            this.setState({ data_selected: [] });
+            message.success(`Thành công xử lý ${data_selected.length} dòng`);
         } catch (e) {
             message.error('Lỗi hệ thống');
         } finally {
@@ -122,6 +123,15 @@ class index extends Component {
         await this.get_list_tag(data_filter);
         this.setState({ data_filter: data_filter })
     }
+    open_drawer = (name, value) => {
+        if (name == 'filter') { this.setState({ drawer_filter: value }); }
+    }
+    on_search = async (value) => {
+        let data_filter = this.state.data_filter;
+        data_filter.search_query = value;
+        data_filter.page = 1;
+        await this.get_list_tag(data_filter);
+    }
     render() {
         const columns = [
             {
@@ -134,35 +144,28 @@ class index extends Component {
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
             {
-                title: 'Ảnh', dataIndex: 'image', responsive: ['md'],
-                render: (image) =>
-                    <>
-                        {image == null ?
-                            <span></span>
-                            :
-                            <Image src={image} width={30} />
-                        }
-
-                    </>,
+                title: 'Slug', dataIndex: 'slug', responsive: ['md'],
             },
             {
-                title: 'Status', dataIndex: 'activate', width: 70,
-                render: (activate) =>
+                title: 'Icon', dataIndex: 'icon', responsive: ['lg'],
+            },
+            {
+                title: 'Mô tả', dataIndex: 'description', responsive: ['xl'],
+            },
+            {
+                title: 'Ảnh', dataIndex: 'image', responsive: ['md'], width: 60,
+                render: (image) => <Image src={image} height={50} width={50} className='object-cover' />
+            },
+            {
+                title: 'Status', dataIndex: 'is_active', width: 70,
+                render: (is_active) =>
                     <div className='flex items-center justify-start'>
-                        {activate == true ?
-                            <FaLock className='text-[20px] text-[#ed1e24]' />
+                        {is_active == true ?
+                            <Tag color='green'>Mở</Tag>
                             :
-                            <FaLockOpen className='text-[20px] text-[#36aa00]' />
+                            <Tag color='red'>Khóa</Tag>
                         }
                     </div>
-            },
-            {
-                title: 'Ngày tạo', dataIndex: 'created_at', width: 100, responsive: ['lg'],
-                sorter: (a, b) => a.created_at.localeCompare(b.created_at),
-            },
-            {
-                title: 'Ngày sửa', dataIndex: 'updated_at', width: 100, responsive: ['lg'],
-                sorter: (a, b) => a.updated_at.localeCompare(b.updated_at),
             },
             {
                 title: 'HĐ', width: 80,
@@ -180,7 +183,7 @@ class index extends Component {
         const items = [
             { key: '1', label: 'Xóa' },
             { key: '2', label: 'Khóa' },
-            { key: '3', label: 'Mở khóa' },
+            { key: '3', label: 'Mở' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -189,18 +192,24 @@ class index extends Component {
         const row_selection = { data_selected, onChange: onchange_selected };
         let data_filter = this.state.data_filter;
         let type_menu = this.state.type_menu;
+        let metadata = this.state.metadata;
         return (
             <>
                 <Spin size='large' spinning={this.state.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
-                                <Space className='text-white'>
-                                    <AiOutlinePlus />
-                                    Tạo mới
-                                </Space>
-                            </Button>
-                            <div><Input.Search placeholder="Nhập vào đây !" /></div>
+                            <div className='flex items-center gap-[5px]'>
+                                <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
+                                    <Space className='text-white'>
+                                        <AiOutlinePlus />
+                                        Tạo mới
+                                    </Space>
+                                </Button>
+                                <Button disabled onClick={() => { this.setState({ drawer_filter: true }) }} className='bg-white'>
+                                    <Space>Lọc<AiOutlineMenu /></Space>
+                                </Button>
+                            </div>
+                            <div><Input.Search onSearch={(value) => this.on_search(value)} placeholder="Tên tag !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
@@ -211,12 +220,12 @@ class index extends Component {
                                 <div>
                                     <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_delete()}>
+                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
                                         <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
                                                 {type_menu == 1 && <span>Xóa</span>}
                                                 {type_menu == 2 && <span>Khóa</span>}
-                                                {type_menu == 3 && <span>Mở khóa</span>}
+                                                {type_menu == 3 && <span>Mở</span>}
                                                 <span> {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
@@ -227,10 +236,9 @@ class index extends Component {
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
                                     columns={columns} dataSource={this.state.data_tags} pagination={false}
-                                    size="middle" bordered scroll={{ y: 250 }} />
-
-                                <Pagination size={{ xs: 'small', xl: 'defaul', }}
-                                    showQuickJumper defaultCurrent={data_filter.page} total={50} pageSize={data_filter.limit}
+                                    size="middle" bordered scroll={{}} />
+                                <Pagination size={{ xs: 'small', xl: 'defaul', }} current={data_filter.page}
+                                    showQuickJumper total={metadata.total * metadata.limit} pageSize={data_filter.limit}
                                     onChange={(value) => this.onchange_page(value, 'page')} />
                             </div>
                         </div>
@@ -242,7 +250,9 @@ class index extends Component {
                     open_modal={this.open_modal} data_tag={this.state.data_tag} />
                 <Modal_edit modal_edit={this.state.modal_edit}
                     open_modal={this.open_modal} get_list_tag={this.get_list_tag}
-                    data_tag={this.state.data_tag} />
+                    data_tag={this.state.data_tag} data_filter={this.state.data_filter} />
+                <Drawer_filter drawer_filter={this.state.drawer_filter}
+                    open_drawer={this.open_drawer} />
             </>
         );
     }

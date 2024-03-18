@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-    Table, Space, Divider, Button, Popconfirm, Tooltip, message,
-    Spin, Pagination, Avatar, Typography, Tag, Dropdown, Input
+    Table, Space, Divider, Button, Popconfirm, message,
+    Spin, Pagination, Avatar, Typography, Dropdown, Input
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus, AiOutlineMenu } from "react-icons/ai";
-import { FaFemale, FaMale, FaLock, FaLockOpen } from "react-icons/fa";
 import Display_line_number from '../../components/display_line_number';
 import { get_list_customer, get_customer, delete_customer } from '../../../../services/customer_service';
 import Modal_create from './modals/modal_create';
@@ -157,16 +156,6 @@ class index extends Component {
                     </div>
             },
             {
-                title: 'Vai trò', dataIndex: 'user', width: 100,
-                render: (user, item) =>
-                    <div className='space-y-[5px]'>
-                        <Tag color="blue">{user.user_type}</Tag>
-                        {item.gender !== null &&
-                            <Tag color="volcano">{item.gender}</Tag>
-                        }
-                    </div>,
-            },
-            {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
@@ -235,7 +224,7 @@ class index extends Component {
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
                                     columns={columns} dataSource={this.state.data_customers} pagination={false}
-                                    size="middle" bordered scroll={{ x: 600 }} />
+                                    size="middle" bordered scroll={{}} />
 
                                 <Pagination size={{ xs: 'small', xl: 'defaul', }} current={data_filter.page}
                                     showQuickJumper total={metadata.total * metadata.limit} pageSize={data_filter.limit}

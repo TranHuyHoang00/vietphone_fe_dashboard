@@ -229,7 +229,7 @@ class index extends Component {
                             <FaFemale className='text-[30px] text-[#e71e76]' />
                         }
                         {activate == true ?
-                            <FaLock className='text-[20px] text-[#ed1e24]' />
+                            <FaLock className='text-[20px] text-[#e94138]' />
                             :
                             <FaLockOpen className='text-[20px] text-[#36aa00]' />
                         }

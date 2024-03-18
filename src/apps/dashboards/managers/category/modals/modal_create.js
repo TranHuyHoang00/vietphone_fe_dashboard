@@ -3,16 +3,22 @@ import { withRouter } from 'react-router-dom';
 import { Input, Modal, message, Button, Spin, Typography, Image, Select } from 'antd';
 import { create_category } from '../../../../../services/category_service';
 import { image_to_base64 } from '../../../../../utils/base64';
+import Select_category_type from './elements/select_category_type';
+import Select_category from './elements/select_category';
 class modal_create extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data_category: {
-                activate: true,
+                is_active: true,
             },
             is_loading: false,
             mask_closable: true,
-
+            data_filter: {
+                page: 1,
+                limit: 5,
+                search_query: ''
+            },
         }
     }
     async componentDidMount() {
@@ -46,9 +52,9 @@ class modal_create extends Component {
             try {
                 let data = await create_category(this.state.data_category);
                 if (data && data.data && data.data.success == 1) {
-                    await this.props.get_list_category();
-                    this.props.open_Form("create", false);
-                    this.setState({ data_category: {} });
+                    await this.props.get_list_category(this.state.data_filter);
+                    this.props.open_modal("create", false);
+                    this.setState({ data_category: { is_active: true } });
                     message.success("Thành công");
                 } else {
                     message.error('Thất bại');
@@ -63,7 +69,12 @@ class modal_create extends Component {
     }
     onchange_image = async (image) => {
         let image_new = await image_to_base64(image);
-        this.handle_onchange_input(image_new, "image", 'select')
+        this.setState({
+            data_category: {
+                ...this.state.data_category,
+                image: image_new,
+            }
+        });
     }
     render() {
         let data_category = this.state.data_category;
@@ -75,7 +86,7 @@ class modal_create extends Component {
                 footer={[
                     <>
                         <Button onClick={() => this.props.open_modal("create", false)}
-                            className='bg-[#ed1e24] text-white'>
+                            className='bg-[#e94138] text-white'>
                             Hủy bỏ
                         </Button>
                         <Button disabled={this.state.is_loading} onClick={() => this.handle_create()}
@@ -90,13 +101,13 @@ class modal_create extends Component {
                             <Typography.Text italic strong>Ảnh</Typography.Text>
                             <div className='flex items-center justify-center'>
                                 <div className='space-y-[5px]'>
-                                    <Image width={240} height={80} className='object-cover' src={data_category.image} />
-                                    <input id="load_file" type="file" accept="image/*" hidden
+                                    <Image width={100} height={100} className='object-cover' src={data_category.image} />
+                                    <input id="load_file_create" type="file" accept="image/*" hidden
                                         onChange={(image) => this.onchange_image(image)} />
                                     <div className='text-center'>
-                                        <label htmlFor="load_file"
-                                            className=' border border-gray-800 rounded-[5px] px-[10px] py-[3px] cursor-pointer '>
-                                            Tải lên
+                                        <label htmlFor="load_file_create"
+                                            className='border bg-[#1677ff] text-white px-[10px] py-[3px] cursor-pointer '>
+                                            Thêm ảnh
                                         </label>
                                     </div>
                                 </div>
@@ -111,49 +122,36 @@ class modal_create extends Component {
                                 onChange={(event) => this.handle_onchange_input(event, "name", 'input')} />
                         </div>
                         <div className='space-y-[3px]'>
+                            <Typography.Text italic strong>Icon</Typography.Text>
+                            <Input value={data_category.icon}
+                                onChange={(event) => this.handle_onchange_input(event, "icon", 'input')} />
+                        </div>
+                        <div className='space-y-[3px]'>
                             <Typography.Text italic strong>Slug</Typography.Text>
                             <Input value={data_category.slug}
                                 onChange={(event) => this.handle_onchange_input(event, "slug", 'input')} />
                         </div>
                         <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>Icon</Typography.Text>
-                            <Input value={data_category.icon}
-                                onChange={(event) => this.handle_onchange_input(event, "icon", 'input')}
-                            />
-                        </div>
-                        <div className='space-y-[3px]'>
                             <Typography.Text italic strong>Mô tả</Typography.Text>
-                            <Input.TextArea value={data_category.description} rows="3"
+                            <Input.TextArea value={data_category.description} rows={3}
                                 onChange={(event) => this.handle_onchange_input(event, "description", 'input')} />
                         </div>
-                        <div className='flex flex-wrap items-center justify-between gap-[10px]'>
-                            <div className='space-y-[3px]'>
-                                <div><Typography.Text italic strong>Danh mục</Typography.Text></div>
-                                <Select style={{ width: 100 }} value={data_category.parent_id}
-                                    onChange={(event) => this.handle_onchange_input(event, "parent_id", 'select')}
-                                    options={[
-                                        { value: 1, label: 'Điện thoại' },
-                                        { value: 2, label: 'Phụ kiện' },
-                                    ]} />
+                        <Select_category_type handle_onchange_input={this.handle_onchange_input}
+                            category_type={data_category.category_type} />
+                        <Select_category handle_onchange_input={this.handle_onchange_input}
+                            category={data_category.parent} />
+                        <div className='space-y-[3px]'>
+                            <div><Typography.Text italic strong>
+                                Trạng thái
+                                <Typography.Text type="danger" strong> *</Typography.Text>
+                            </Typography.Text>
                             </div>
-                            <div className='space-y-[3px]'>
-                                <div><Typography.Text italic strong>Loại danh mục</Typography.Text></div>
-                                <Select style={{ width: 100 }} value={data_category.category_type_id}
-                                    onChange={(event) => this.handle_onchange_input(event, "category_type_id", 'select')}
-                                    options={[
-                                        { value: 1, label: 'Nhu cầu' },
-                                        { value: 2, label: 'Độ tuổi' },
-                                    ]} />
-                            </div>
-                            <div className='space-y-[3px]'>
-                                <div><Typography.Text italic strong>Trạng thái</Typography.Text></div>
-                                <Select style={{ width: 100 }} value={data_category.activate}
-                                    onChange={(event) => this.handle_onchange_input(event, "activate", 'select')}
-                                    options={[
-                                        { value: true, label: 'Mở' },
-                                        { value: false, label: 'Khóa' },
-                                    ]} />
-                            </div>
+                            <Select style={{ width: 200 }} value={data_category.is_active}
+                                onChange={(event) => this.handle_onchange_input(event, "activate", 'select')}
+                                options={[
+                                    { value: true, label: 'Mở' },
+                                    { value: false, label: 'Khóa' },
+                                ]} />
                         </div>
                     </div>
                 </Spin>

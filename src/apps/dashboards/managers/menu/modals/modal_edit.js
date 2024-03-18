@@ -48,7 +48,7 @@ class modal_edit extends Component {
                 let data = await edit_menu(id, this.state.data_menu);
                 if (data && data.data && data.data.success == 1) {
                     await this.props.get_list_menu();
-                    this.props.open_Form("edit", false);
+                    this.props.open_modal("edit", false);
                     this.setState({ data_menu: {} });
                     message.success("Thành công");
 
@@ -72,7 +72,7 @@ class modal_edit extends Component {
                 footer={[
                     <>
                         <Button onClick={() => this.props.open_modal("detail", false)}
-                            className='bg-[#ed1e24] text-white'>
+                            className='bg-[#e94138] text-white'>
                             Hủy bỏ
                         </Button>
                         <Button disabled={this.state.is_loading} onClick={() => this.handle_edit()}

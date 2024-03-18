@@ -6,10 +6,16 @@ class modal_create extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_category_type: {},
+            data_category_type: {
+                is_active: true,
+            },
             is_loading: false,
             mask_closable: true,
-
+            data_filter: {
+                page: 1,
+                limit: 5,
+                search_query: ''
+            },
         }
     }
     async componentDidMount() {
@@ -43,9 +49,9 @@ class modal_create extends Component {
             try {
                 let data = await create_category_type(this.state.data_category_type);
                 if (data && data.data && data.data.success == 1) {
-                    await this.props.get_list_category_type();
-                    this.props.open_Form("create", false);
-                    this.setState({ data_category_type: {} });
+                    await this.props.get_list_category_type(this.state.data_filter);
+                    this.props.open_modal("create", false);
+                    this.setState({ data_category_type: { is_active: true } });
                     message.success("Thành công");
                 } else {
                     message.error('Thất bại');
@@ -68,7 +74,7 @@ class modal_create extends Component {
                 footer={[
                     <>
                         <Button onClick={() => this.props.open_modal("create", false)}
-                            className='bg-[#ed1e24] text-white'>
+                            className='bg-[#e94138] text-white'>
                             Hủy bỏ
                         </Button>
                         <Button disabled={this.state.is_loading} onClick={() => this.handle_create()}
@@ -85,12 +91,11 @@ class modal_create extends Component {
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
                             <Input value={data_category_type.name}
-                                onChange={(event) => this.handle_onchange_input(event, "name", 'input')}
-                            />
+                                onChange={(event) => this.handle_onchange_input(event, "name", 'input')} />
                         </div>
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>Mô tả</Typography.Text>
-                            <Input.TextArea value={data_category_type.description} rows="3"
+                            <Input.TextArea value={data_category_type.description} rows={3}
                                 onChange={(event) => this.handle_onchange_input(event, "description", 'input')} />
                         </div>
                     </div>

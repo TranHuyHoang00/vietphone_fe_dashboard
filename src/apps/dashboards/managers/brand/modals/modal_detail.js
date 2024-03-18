@@ -17,7 +17,7 @@ class modal_detail extends Component {
                 footer={[
                     <>
                         <Button onClick={() => this.props.open_modal("detail", false)}
-                            className='bg-[#ed1e24] text-white'>
+                            className='bg-[#e94138] text-white'>
                             Hủy bỏ
                         </Button>
                     </>
@@ -25,23 +25,30 @@ class modal_detail extends Component {
                 <div className='border-t py-[10px] space-y-[5px]'>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Logo</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Ảnh</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            {
-                                data_brand.image == null ?
-                                    <Typography.Text>: None</Typography.Text>
-                                    :
-                                    <Image width={30} src={data_brand.image} />
+                            {data_brand.image == null ?
+                                <span>:</span>
+                                :
+                                <Image width={100} height={50} src={data_brand.image} className='object-cover' />
                             }
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Tên loại</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Tên thương hiệu</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.name}</Typography.Text>
+                            <Typography.Text>: {data_brand && data_brand.name}</Typography.Text>
+                        </div>
+                    </div>
+                    <div className='flex gap-[5px]'>
+                        <div className='w-1/3'>
+                            <Typography.Text className='text-gray-700'>Icon</Typography.Text>
+                        </div>
+                        <div className='w-2/3'>
+                            <Typography.Text>: {data_brand && data_brand.icon}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
@@ -49,7 +56,7 @@ class modal_detail extends Component {
                             <Typography.Text className='text-gray-700'>Slug</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.slug}</Typography.Text>
+                            <Typography.Text>: {data_brand && data_brand.slug}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
@@ -57,23 +64,15 @@ class modal_detail extends Component {
                             <Typography.Text className='text-gray-700'>Mô tả</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.description}</Typography.Text>
+                            <Typography.Text>: {data_brand && data_brand.description}</Typography.Text>
                         </div>
                     </div>
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Ngày tạo</Typography.Text>
+                            <Typography.Text className='text-gray-700'>Trạng thái</Typography.Text>
                         </div>
                         <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.created_at}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Ngày sửa</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_brand.updated_at}</Typography.Text>
+                            <Typography.Text>: {data_brand && data_brand.is_active == true ? 'Mở' : 'Khóa'}</Typography.Text>
                         </div>
                     </div>
                 </div>

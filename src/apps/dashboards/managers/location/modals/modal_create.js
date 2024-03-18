@@ -51,7 +51,7 @@ class modal_create extends Component {
                 let data = await create_location(this.state.data_location);
                 if (data && data.data && data.data.success == 1) {
                     await this.props.get_list_location();
-                    this.props.open_Form("create", false);
+                    this.props.open_modal("create", false);
                     this.setState({ data_location: {} });
                     message.success("Thành công");
                 } else {
@@ -75,7 +75,7 @@ class modal_create extends Component {
                 footer={[
                     <>
                         <Button onClick={() => this.props.open_modal("create", false)}
-                            className='bg-[#ed1e24] text-white'>
+                            className='bg-[#e94138] text-white'>
                             Hủy bỏ
                         </Button>
                         <Button disabled={this.state.is_loading} onClick={() => this.handle_create()}
