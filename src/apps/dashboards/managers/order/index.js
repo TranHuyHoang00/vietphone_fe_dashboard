@@ -61,7 +61,6 @@ class index extends Component {
         this.handle_loading(true);
         try {
             let data = await get_order(id);
-            console.log(data);
             if (data && data.data && data.data.success == 1) {
                 this.setState({ data_order: data.data.data });
             } else {
