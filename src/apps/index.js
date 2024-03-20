@@ -15,8 +15,8 @@ class index extends Component {
         return (
             <div>
                 <Switch>
-                    <Route path="/dashboard"><Dashboards /></Route>
-                    <Redirect from="/" exact to="/dashboard" />
+                    <Route path="/admin"><Dashboards /></Route>
+                    <Redirect from="/" exact to="/admin" />
                     <Route ><Not_found /></Route>
                 </Switch>
             </div>

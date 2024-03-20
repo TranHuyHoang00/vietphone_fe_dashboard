@@ -7,7 +7,7 @@ class select_category extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_categorys: [],
+            data_categories: [],
             is_loading: false,
             data_filter: {
                 page: 1,
@@ -29,7 +29,7 @@ class select_category extends Component {
             let data = await get_list_category(data_filter);
             if (data && data.data && data.data.success == 1) {
                 this.setState({
-                    data_categorys: data.data.data.categories,
+                    data_categories: data.data.data.categories,
                     metadata: data.data.data.metadata,
                 });
             } else {
@@ -45,7 +45,7 @@ class select_category extends Component {
         this.props.handle_onchange_input(value, "parent", 'select');
     }
     render() {
-        let data_categorys = this.state.data_categorys;
+        let data_categories = this.state.data_categories;
         return (
             <div className='space-y-[3px]'>
                 <div>
@@ -54,7 +54,7 @@ class select_category extends Component {
                 <Select style={{ width: '100%' }} placement='topRight'
                     onSelect={(value) => this.on_select(value)}
                     value={this.props.category}
-                    options={data_categorys.map((item) => ({
+                    options={data_categories.map((item) => ({
                         label: item.name,
                         value: item.id,
                         disabled: !item.is_active,

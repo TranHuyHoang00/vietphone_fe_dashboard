@@ -19,22 +19,21 @@ import Manager_staff from './managers/staff/index';
 import Manager_category_type from './managers/category_type/index';
 import Manager_brand from './managers/brand/index';
 import Manager_category from './managers/category/index';
-import Manager_menu from './managers/menu/index';
 import Manager_tag from './managers/tag/index';
 import Manager_rating from './managers/rating/index';
 import Manager_location from './managers/location/index';
 import Manager_banner from './managers/banner/index';
 import Manager_order from './managers/order/index';
-import Manager_product from './managers/product/index';
 import Manager_overview_banner from './managers/overview_banner/index';
 
-import Statistic_analysis from './statistics/analysis/index';
+import Manager_product from './managers/product/index';
+import Edit_product from './managers/product/pages/edit';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
             collapsed: false,
-            url: '/dashboard/',
+            url: '/admin/',
             value: {},
             logged_in_db: false,
             is_form_drawer: false,
@@ -51,7 +50,7 @@ class index extends Component {
         this.setState({ collapsed: !this.state.collapsed })
     }
     onClickPage = (value) => {
-        this.props.history.push(`/dashboard/${value.key}`)
+        this.props.history.push(`/admin/${value.key}?page=1&limit=5&search_query=`)
     }
     handle_login_db = () => {
         this.setState({ logged_in_db: true });
@@ -92,7 +91,6 @@ class index extends Component {
             {
                 key: 'brand_category', icon: <AiFillHdd />, label: 'Danh mục', children: [
                     { key: 'manager/tag', icon: <AiFillTag />, label: 'Tag' },
-                    { key: 'manager/menu', icon: <AiFillSliders />, label: 'Menu' },
                     { key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu' },
                     { key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục' },
                     { key: 'manager/category_type', icon: <AiFillFund />, label: 'Loại danh mục' },
@@ -144,17 +142,15 @@ class index extends Component {
                                     <Route exact path={`${url}manager/category_type`}><Manager_category_type /></Route>
                                     <Route exact path={`${url}manager/brand`}><Manager_brand /></Route>
                                     <Route exact path={`${url}manager/category`}><Manager_category /></Route>
-                                    <Route exact path={`${url}manager/menu`}><Manager_menu /></Route>
                                     <Route exact path={`${url}manager/tag`}><Manager_tag /></Route>
                                     <Route exact path={`${url}manager/rating`}><Manager_rating /></Route>
                                     <Route exact path={`${url}manager/location`}><Manager_location /></Route>
                                     <Route exact path={`${url}manager/banner`}><Manager_banner /></Route>
                                     <Route exact path={`${url}`}><Manager_order /></Route>
-                                    <Route exact path={`${url}manager/product`}><Manager_product /></Route>
                                     <Route exact path={`${url}manager/overview_banner`}><Manager_overview_banner /></Route>
 
-                                    <Route exact path={`${url}statistic/analysis`}><Statistic_analysis /></Route>
-
+                                    <Route exact path={`${url}manager/product`}><Manager_product /></Route>
+                                    <Route exact path={`${url}manager/product/edit/:id`}><Edit_product /></Route>
                                     <Route ><Not_found /></Route>
 
 

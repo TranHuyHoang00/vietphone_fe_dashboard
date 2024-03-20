@@ -259,7 +259,7 @@ class index extends Component {
                                     columns={columns} dataSource={this.state.data_orders} pagination={false}
                                     size="middle" bordered scroll={{ x: 700 }} />
 
-                                <Pagination size={{ xs: 'small', xl: 'defaul', }} current={data_filter.page}
+                                <Pagination responsive current={data_filter.page}
                                     showQuickJumper total={metadata.total * metadata.limit} pageSize={data_filter.limit}
                                     onChange={(value) => this.onchange_page(value, 'page')} />
                             </div>

@@ -20,6 +20,7 @@ class index extends Component {
                 defaultValue="5 dòng"
                 style={{ width: 100 }}
                 options={data_line_number}
+                value={this.props.limit}
             />
         );
     }

@@ -11,6 +11,7 @@ import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
 import Drawer_filter from './drawers/drawer_filter';
+import { load_data_url } from '../../../../utils/load_data_url';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -27,12 +28,24 @@ class index extends Component {
                 search_query: ''
             },
             data_category: {},
-            data_categorys: [],
+            data_categories: [],
             metadata: {},
         }
     }
     async componentDidMount() {
-        await this.get_list_category(this.state.data_filter);
+        await this.load_data();
+    }
+    async componentDidUpdate(prevProps) {
+        if (prevProps.location.search !== this.props.location.search) {
+            await this.load_data();
+        }
+    }
+    load_data = async () => {
+        let data_filter = load_data_url(this.state.data_filter, new URLSearchParams(this.props.location.search));
+        await this.get_list_category(data_filter);
+        this.setState({
+            data_filter: data_filter
+        })
     }
     handle_loading = (value) => {
         this.setState({ is_loading: value });
@@ -43,7 +56,7 @@ class index extends Component {
             let data = await get_list_category(data_filter);
             if (data && data.data && data.data.success == 1) {
                 this.setState({
-                    data_categorys: data.data.data.categories,
+                    data_categories: data.data.data.categories,
                     metadata: data.data.data.metadata,
                 });
             } else {
@@ -115,22 +128,18 @@ class index extends Component {
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
         if (type == 'limit') {
-            data_filter.limit = value;
+            this.props.history.push(`/admin/manager/category?page=${data_filter.page}&limit=${value}&search_query=${data_filter.search_query}`);
         }
         if (type == 'page') {
-            data_filter.page = value;
+            this.props.history.push(`/admin/manager/category?page=${value}&limit=${data_filter.limit}&search_query=${data_filter.search_query}`);
         }
-        await this.get_list_category(data_filter);
-        this.setState({ data_filter: data_filter })
     }
     open_drawer = (name, value) => {
         if (name == 'filter') { this.setState({ drawer_filter: value }); }
     }
     on_search = async (value) => {
         let data_filter = this.state.data_filter;
-        data_filter.search_query = value;
-        data_filter.page = 1;
-        await this.get_list_category(data_filter);
+        this.props.history.push(`/admin/manager/category?page=1&limit=${data_filter.limit}&search_query=${value}`);
     }
     render() {
         const columns = [
@@ -237,9 +246,9 @@ class index extends Component {
                             <Divider>DANH MỤC</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
-                                    columns={columns} dataSource={this.state.data_categorys} pagination={false}
+                                    columns={columns} dataSource={this.state.data_categories} pagination={false}
                                     size="middle" bordered scroll={{}} />
-                                <Pagination size={{ xs: 'small', xl: 'defaul', }} current={data_filter.page}
+                                <Pagination responsive current={data_filter.page}
                                     showQuickJumper total={metadata.total * metadata.limit} pageSize={data_filter.limit}
                                     onChange={(value) => this.onchange_page(value, 'page')} />
                             </div>
