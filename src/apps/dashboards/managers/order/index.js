@@ -11,7 +11,7 @@ import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
 import Drawer_filter from './drawers/drawer_filter';
-import { format_number } from '../../../../utils/format_number';
+import { format_money } from '../../../../utils/format_money';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -174,7 +174,7 @@ class index extends Component {
                                 <Typography.Text className='text-gray-700'>Tổng tiền</Typography.Text>
                             </div>
                             <div className='w-2/3 '>
-                                <Typography.Text strong className='text-[#0574b8]'>: {format_number(item.total)} vnđ</Typography.Text>
+                                <Typography.Text strong className='text-[#0574b8]'>: {format_money(item.total)} vnđ</Typography.Text>
                             </div>
                         </div>
                         <div className='flex gap-[5px] w-full'>
@@ -182,7 +182,7 @@ class index extends Component {
                                 <Typography.Text className='text-gray-700'>Khấu trừ</Typography.Text>
                             </div>
                             <div className='w-2/3'>
-                                <Typography.Text strong className='text-red-600'>: {format_number(item.total_discount)} vnđ</Typography.Text>
+                                <Typography.Text strong className='text-red-600'>: {format_money(item.total_discount)} vnđ</Typography.Text>
                             </div>
                         </div>
                     </div>

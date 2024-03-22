@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Button, Typography, Image } from 'antd';
+import { Modal, Button } from 'antd';
+import { table_line_1_3, image_line_1_3 } from '../../../components/table/table_line';
 class modal_detail extends Component {
     constructor(props) {
         super(props);
@@ -23,58 +24,11 @@ class modal_detail extends Component {
                     </>
                 ]}>
                 <div className='border-t py-[10px] space-y-[5px]'>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Ảnh</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            {data_tag.image == null ?
-                                <span>:</span>
-                                :
-                                <Image width={50} height={50} src={data_tag.image} className='object-cover' />
-                            }
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Tên Tag</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_tag && data_tag.name}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Icon</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_tag && data_tag.icon}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Slug</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_tag && data_tag.slug}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Mô tả</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_tag && data_tag.description}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Trạng thái</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_tag && data_tag.is_active == true ? 'Mở' : 'Khóa'}</Typography.Text>
-                        </div>
-                    </div>
+                    {image_line_1_3('Ảnh', data_tag.image, 50, 50)}
+                    {table_line_1_3('Tên Tag', data_tag.name)}
+                    {table_line_1_3('Icon', data_tag.icon)}
+                    {table_line_1_3('Mô tả', data_tag.description)}
+                    {table_line_1_3('Trạng thái', (data_tag && data_tag.is_active == true ? 'Mở' : 'Khóa'))}
                 </div>
             </Modal>
         );

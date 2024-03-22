@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Modal, message, Button, Spin, Typography, Input, Image, Select } from 'antd';
+import { Modal, message, Spin } from 'antd';
 import { edit_brand } from '../../../../../services/brand_service';
-import { image_to_base64 } from '../../../../../utils/base64';
+import Form_input from '../../../components/form/form_input';
+import Form_textare from '../../../components/form/form_textare';
+import Form_select_active from '../../../components/form/form_select_active';
+import Form_select_image from '../../../components/form/form_select_image';
+import Modal_footer from '../../../components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
         super(props);
@@ -43,15 +47,15 @@ class modal_edit extends Component {
         }
         return { code: 0 };
     }
-    handle_edit = async (id) => {
+    handle_edit = async () => {
         let result = this.validation(this.state.data_brand);
         if (result.code == 0) {
             try {
                 let data_brand = this.state.data_brand;
                 if (this.state.is_update_image == false) { delete data_brand.image; }
-                let data = await edit_brand(id, data_brand);
+                let data = await edit_brand(data_brand.id, data_brand);
                 if (data && data.data && data.data.success == 1) {
-                    await this.props.get_list_brand(this.props.data_filter);
+                    await this.props.load_data();
                     this.props.open_modal("edit", false);
                     this.setState({ data_brand: {}, is_update_image: false });
                     message.success("Thành công");
@@ -66,14 +70,13 @@ class modal_edit extends Component {
         }
         this.handle_loading(false);
     }
-    onchange_image = async (image) => {
-        let image_new = await image_to_base64(image);
+    onchange_image = (image) => {
         this.setState({
-            is_update_image: true,
             data_brand: {
                 ...this.state.data_brand,
-                image: image_new,
-            }
+                image: image,
+            },
+            is_update_image: true,
         })
     }
     render() {
@@ -83,68 +86,26 @@ class modal_edit extends Component {
                 onCancel={() => this.props.open_modal("edit", false)} width={400}
                 maskClosable={this.state.mask_closable}
                 footer={[
-                    <>
-                        <Button onClick={() => this.props.open_modal("edit", false)}
-                            className='bg-[#e94138] text-white'>
-                            Hủy bỏ
-                        </Button>
-                        <Button disabled={this.state.is_loading} onClick={() => this.handle_edit(data_brand.id)}
-                            className='bg-[#0e97ff] text-white'>
-                            Xác nhận
-                        </Button>
-                    </>
+                    <Modal_footer open_modal={this.props.open_modal} type={'edit'}
+                        is_loading={this.state.is_loading} handle_funtion={this.handle_edit} />
                 ]}>
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
-                        <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>Ảnh</Typography.Text>
-                            <div className='flex items-center justify-center'>
-                                <div className='space-y-[5px]'>
-                                    <Image width={200} height={100} className='object-cover' src={data_brand.image} />
-                                    <input id="load_file_edit" type="file" accept="image/*" hidden
-                                        onChange={(image) => this.onchange_image(image)} />
-                                    <div className='text-center'>
-                                        <label htmlFor="load_file_edit"
-                                            className='border bg-[#1677ff] text-white px-[10px] py-[3px] cursor-pointer '>
-                                            Tải lên
-                                        </label>
-                                    </div>
+                        <Form_select_image name={'Ảnh'} variable={'image'} value={data_brand.image}
+                            htmlFor={'load_file_edit'} width={200} height={100}
+                            onchange_image={this.onchange_image} />
 
-                                </div>
-                            </div>
-                        </div>
-                        <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>
-                                Tên thương hiệu
-                                <Typography.Text type="danger" strong> *</Typography.Text>
-                            </Typography.Text>
-                            <Input value={data_brand.name}
-                                onChange={(event) => this.handle_onchange_input(event, "name", 'input')} />
-                        </div>
-                        <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>Icon</Typography.Text>
-                            <Input value={data_brand.icon}
-                                onChange={(event) => this.handle_onchange_input(event, "icon", 'input')} />
-                        </div>
-                        <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>Slug</Typography.Text>
-                            <Input value={data_brand.slug}
-                                onChange={(event) => this.handle_onchange_input(event, "slug", 'input')} />
-                        </div>
-                        <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>Mô tả</Typography.Text>
-                            <Input.TextArea value={data_brand.description} rows={3}
-                                onChange={(event) => this.handle_onchange_input(event, "description", 'input')} />
-                        </div>
-                        <div className='space-y-[3px]'>
-                            <div><Typography.Text italic strong>Trạng thái</Typography.Text></div>
-                            <Select style={{ width: 200 }} value={data_brand.is_active}
-                                onChange={(event) => this.handle_onchange_input(event, "is_active", 'select')}
-                                options={[
-                                    { value: true, label: 'Mở' },
-                                    { value: false, label: 'Khóa' },
-                                ]} />
-                        </div>
+                        <Form_input name={'Tên thương hiệu'} variable={'name'} value={data_brand.name} type={'danger'}
+                            handle_onchange_input={this.handle_onchange_input} />
+
+                        <Form_input name={'Icon'} variable={'icon'} value={data_brand.icon}
+                            handle_onchange_input={this.handle_onchange_input} />
+
+                        <Form_textare name={'Mô tả'} variable={'description'} value={data_brand.description}
+                            handle_onchange_input={this.handle_onchange_input} />
+
+                        <Form_select_active name={'Trạng thái'} variable={'is_active'} value={data_brand.is_active}
+                            handle_onchange_input={this.handle_onchange_input} />
                     </div>
                 </Spin>
             </Modal>

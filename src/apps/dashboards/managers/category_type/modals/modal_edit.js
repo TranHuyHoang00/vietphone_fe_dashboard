@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Modal, message, Button, Spin, Typography, Input } from 'antd';
+import { Modal, message, Spin } from 'antd';
 import { edit_category_type } from '../../../../../services/category_type_service';
+import Form_input from '../../../components/form/form_input';
+import Form_textare from '../../../components/form/form_textare';
+import Modal_footer from '../../../components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
         super(props);
@@ -42,17 +45,17 @@ class modal_edit extends Component {
         }
         return { code: 0 };
     }
-    handle_edit = async (id) => {
+    handle_edit = async () => {
         let result = this.validation(this.state.data_category_type);
         if (result.code == 0) {
             try {
                 let data_category_type = this.state.data_category_type;
                 if (this.state.is_update_image == false) { delete data_category_type.image; }
-                let data = await edit_category_type(id, data_category_type);
+                let data = await edit_category_type(data_category_type.id, data_category_type);
                 if (data && data.data && data.data.success == 1) {
-                    await this.props.get_list_category_type(this.props.data_filter);
+                    await this.props.load_data();
                     this.props.open_modal("edit", false);
-                    this.setState({ data_category_type: {}, is_update_image: false });
+                    this.setState({ data_category_type: {} });
                     message.success("Thành công");
                 } else {
                     message.error('Thất bại');
@@ -72,33 +75,18 @@ class modal_edit extends Component {
                 onCancel={() => this.props.open_modal("edit", false)} width={400}
                 maskClosable={this.state.mask_closable}
                 footer={[
-                    <>
-                        <Button onClick={() => this.props.open_modal("edit", false)}
-                            className='bg-[#e94138] text-white'>
-                            Hủy bỏ
-                        </Button>
-                        <Button disabled={this.state.is_loading} onClick={() => this.handle_edit(data_category_type.id)}
-                            className='bg-[#0e97ff] text-white'>
-                            Xác nhận
-                        </Button>
-                    </>
+                    <Modal_footer open_modal={this.props.open_modal} type={'edit'}
+                        is_loading={this.state.is_loading} handle_funtion={this.handle_edit} />
                 ]}>
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
 
-                        <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>
-                                Tên loại danh mục
-                                <Typography.Text type="danger" strong> *</Typography.Text>
-                            </Typography.Text>
-                            <Input value={data_category_type.name}
-                                onChange={(event) => this.handle_onchange_input(event, "name", 'input')} />
-                        </div>
-                        <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>Mô tả</Typography.Text>
-                            <Input.TextArea value={data_category_type.description} rows={3}
-                                onChange={(event) => this.handle_onchange_input(event, "description", 'input')} />
-                        </div>
+                        <Form_input name={'Tên loại danh mục'} variable={'name'} value={data_category_type.name} type={'danger'}
+                            handle_onchange_input={this.handle_onchange_input} />
+
+                        <Form_textare name={'Mô tả'} variable={'description'} value={data_category_type.description}
+                            handle_onchange_input={this.handle_onchange_input} />
+
                     </div>
                 </Spin>
             </Modal>

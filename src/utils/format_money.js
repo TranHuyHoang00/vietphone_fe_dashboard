@@ -1,4 +1,4 @@
-const format_number = (number) => {
+const format_money = (number) => {
     var number_new = parseFloat(number).toLocaleString('en-US', {
         minimumFractionDigits: 0,
         maximumFractionDigits: 3
@@ -6,5 +6,5 @@ const format_number = (number) => {
     return number_new;
 };
 export {
-    format_number
+    format_money
 }

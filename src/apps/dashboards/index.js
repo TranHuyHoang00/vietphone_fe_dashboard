@@ -3,8 +3,9 @@ import { Switch, Route } from "react-router-dom";
 import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGithub, AiOutlineUser, AiFillGold, AiFillHdd, AiFillFund, AiOutlineUserSwitch, AiFillShop
-    , AiFillDropboxSquare, AiFillIdcard, AiFillSliders, AiFillTag, AiFillStar, AiFillAlert, AiFillMobile,
-    AiFillBuild, AiFillSecurityScan, AiFillLayout, AiFillContainer, AiFillFileMarkdown, AiFillPicture, AiFillAndroid, AiFillDashboard
+    , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillStar, AiFillAlert, AiFillMobile,
+    AiFillBuild, AiFillSecurityScan, AiFillLayout, AiFillContainer, AiFillFileMarkdown, AiFillPicture, AiFillAndroid,
+    AiFillDashboard, AiFillFire, AiFillUsb, AiFillRocket
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
 import { get_local_account } from '../../auths/local_storage';
@@ -25,7 +26,9 @@ import Manager_location from './managers/location/index';
 import Manager_banner from './managers/banner/index';
 import Manager_order from './managers/order/index';
 import Manager_overview_banner from './managers/overview_banner/index';
-
+import Manager_group_attribute from './managers/group_attribute/index';
+import Manager_attribute from './managers/attribute/index';
+import Manager_attribute_value from './managers/attribute_value/index';
 import Manager_product from './managers/product/index';
 import Edit_product from './managers/product/pages/edit';
 class index extends Component {
@@ -89,6 +92,13 @@ class index extends Component {
                 ],
             },
             {
+                key: 'specification', icon: <AiFillSetting Shop />, label: 'Thông số', children: [
+                    { key: 'manager/attribute_value', icon: <AiFillRocket />, label: 'Giá trị' },
+                    { key: 'manager/attribute', icon: <AiFillUsb />, label: 'Thông số' },
+                    { key: 'manager/group_attribute', icon: <AiFillFire />, label: 'Loại thông số' },
+                ],
+            },
+            {
                 key: 'brand_category', icon: <AiFillHdd />, label: 'Danh mục', children: [
                     { key: 'manager/tag', icon: <AiFillTag />, label: 'Tag' },
                     { key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu' },
@@ -148,7 +158,9 @@ class index extends Component {
                                     <Route exact path={`${url}manager/banner`}><Manager_banner /></Route>
                                     <Route exact path={`${url}`}><Manager_order /></Route>
                                     <Route exact path={`${url}manager/overview_banner`}><Manager_overview_banner /></Route>
-
+                                    <Route exact path={`${url}manager/group_attribute`}><Manager_group_attribute /></Route>
+                                    <Route exact path={`${url}manager/attribute_value`}><Manager_attribute_value /></Route>
+                                    <Route exact path={`${url}manager/attribute`}><Manager_attribute /></Route>
                                     <Route exact path={`${url}manager/product`}><Manager_product /></Route>
                                     <Route exact path={`${url}manager/product/edit/:id`}><Edit_product /></Route>
                                     <Route ><Not_found /></Route>

@@ -10,7 +10,6 @@ import { get_list_category, get_category, delete_category, edit_category } from 
 import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
-import Drawer_filter from './drawers/drawer_filter';
 import { load_data_url } from '../../../../utils/load_data_url';
 class index extends Component {
     constructor(props) {
@@ -116,8 +115,8 @@ class index extends Component {
                     message.error(`Thất bại khi xử lý dòng ID=${id}`);
                 }
             }
-            await this.get_list_category(this.state.data_filter);
-            this.setState({ data_selected: [] });
+            await this.load_data();
+            if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
             message.success(`Thành công xử lý ${data_selected.length} dòng`);
         } catch (e) {
             message.error('Lỗi hệ thống');
@@ -133,9 +132,6 @@ class index extends Component {
         if (type == 'page') {
             this.props.history.push(`/admin/manager/category?page=${value}&limit=${data_filter.limit}&search_query=${data_filter.search_query}`);
         }
-    }
-    open_drawer = (name, value) => {
-        if (name == 'filter') { this.setState({ drawer_filter: value }); }
     }
     on_search = async (value) => {
         let data_filter = this.state.data_filter;
@@ -153,15 +149,11 @@ class index extends Component {
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
             {
-                title: 'Slug', dataIndex: 'slug', responsive: ['lg'],
+                title: 'Icon', dataIndex: 'icon', responsive: ['lg'],
             },
             {
                 title: 'Loại danh mục', dataIndex: 'category_type', responsive: ['md'],
                 render: (category_type) => <Typography.Text strong className='text-[#0574b8]'>{category_type && category_type.name}</Typography.Text>,
-            },
-            {
-                title: 'Quan hệ', dataIndex: 'parent', responsive: ['md'],
-                render: (parent) => <Typography.Text strong className='text-[#0574b8]'>{parent && parent.name}</Typography.Text>,
             },
             {
                 title: 'Ảnh', dataIndex: 'image', responsive: ['xl'], width: 60,
@@ -209,25 +201,17 @@ class index extends Component {
                 <Spin size='large' spinning={this.state.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <div className='flex items-center gap-[5px]'>
-                                <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
-                                    <Space className='text-white'>
-                                        <AiOutlinePlus />
-                                        Tạo mới
-                                    </Space>
-                                </Button>
-                                <Button disabled onClick={() => { this.setState({ drawer_filter: true }) }} className='bg-white'>
-                                    <Space>Lọc<AiOutlineMenu /></Space>
-                                </Button>
-                            </div>
+                            <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
+                                <Space className='text-white'>
+                                    <AiOutlinePlus />
+                                    Tạo mới
+                                </Space>
+                            </Button>
                             <div><Input.Search onSearch={(value) => this.on_search(value)} placeholder="Tên danh mục !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <Space>
-                                    <span>Hiển thị</span>
-                                    <Display_line_number limit={data_filter.limit} onchange_page={this.onchange_page} />
-                                </Space>
+                                <Display_line_number limit={data_filter.limit} onchange_page={this.onchange_page} />
                                 <div>
                                     <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
@@ -256,14 +240,12 @@ class index extends Component {
                     </div >
                 </Spin>
                 <Modal_create modal_create={this.state.modal_create}
-                    open_modal={this.open_modal} get_list_category={this.get_list_category} />
+                    open_modal={this.open_modal} load_data={this.load_data} />
                 <Modal_detail modal_detail={this.state.modal_detail}
                     open_modal={this.open_modal} data_category={this.state.data_category} />
                 <Modal_edit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal} get_list_category={this.get_list_category}
-                    data_category={this.state.data_category} data_filter={this.state.data_filter} />
-                <Drawer_filter drawer_filter={this.state.drawer_filter}
-                    open_drawer={this.open_drawer} />
+                    open_modal={this.open_modal} load_data={this.load_data}
+                    data_category={this.state.data_category} />
             </>
         );
     }

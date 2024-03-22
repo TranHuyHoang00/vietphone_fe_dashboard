@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, Button, Input, Typography, Select, Collapse } from 'antd';
-import { format_number } from '../../../../../utils/format_number';
+import { format_money } from '../../../../../utils/format_money';
 class modal_detail extends Component {
     constructor(props) {
         super(props);
@@ -83,7 +83,7 @@ class modal_detail extends Component {
                                     <Typography.Text className='text-gray-700'>Tổng tiền</Typography.Text>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Typography.Text strong className='text-[#0574b8]'>: {format_number(data_order.total)} vnđ</Typography.Text>
+                                    <Typography.Text strong className='text-[#0574b8]'>: {format_money(data_order.total)} vnđ</Typography.Text>
                                 </div>
                             </div>
                             <div className='flex gap-[5px]'>
@@ -91,7 +91,7 @@ class modal_detail extends Component {
                                     <Typography.Text className='text-gray-700'>Khấu trừ</Typography.Text>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Typography.Text strong className='text-red-600'>: {format_number(data_order.total_discount)} vnđ</Typography.Text>
+                                    <Typography.Text strong className='text-red-600'>: {format_money(data_order.total_discount)} vnđ</Typography.Text>
                                 </div>
                             </div>
                             <div className='flex gap-[5px]'>
@@ -127,7 +127,7 @@ class modal_detail extends Component {
                                                     <Typography.Text className='text-gray-700'>Giá tiền</Typography.Text>
                                                 </div>
                                                 <div className='w-2/3'>
-                                                    <Typography.Text strong className='text-[#0574b8]'>: {format_number(item.price)} vnđ</Typography.Text>
+                                                    <Typography.Text strong className='text-[#0574b8]'>: {format_money(item.price)} vnđ</Typography.Text>
                                                 </div>
                                             </div>
                                             <div className='flex gap-[5px]'>
@@ -135,7 +135,7 @@ class modal_detail extends Component {
                                                     <Typography.Text className='text-gray-700'>Giá trị chiết khấu</Typography.Text>
                                                 </div>
                                                 <div className='w-2/3'>
-                                                    <Typography.Text strong className='text-red-600'>: {format_number(item.discount_value)} vnđ</Typography.Text>
+                                                    <Typography.Text strong className='text-red-600'>: {format_money(item.discount_value)} vnđ</Typography.Text>
                                                 </div>
                                             </div>
                                             <div className='flex gap-[5px]'>
@@ -143,7 +143,7 @@ class modal_detail extends Component {
                                                     <Typography.Text className='text-gray-700'>Tỉ lệ chiết khấu</Typography.Text>
                                                 </div>
                                                 <div className='w-2/3'>
-                                                    <Typography.Text strong className='text-red-600'>: {format_number(item.discount_rate)} %</Typography.Text>
+                                                    <Typography.Text strong className='text-red-600'>: {format_money(item.discount_rate)} %</Typography.Text>
                                                 </div>
                                             </div>
                                             <div className='flex gap-[5px]'>
@@ -151,7 +151,7 @@ class modal_detail extends Component {
                                                     <Typography.Text className='text-gray-700'>Số tiền chiết khấu</Typography.Text>
                                                 </div>
                                                 <div className='w-2/3'>
-                                                    <Typography.Text strong className='text-red-600'>: {format_number(item.discount_amount)} vnđ</Typography.Text>
+                                                    <Typography.Text strong className='text-red-600'>: {format_money(item.discount_amount)} vnđ</Typography.Text>
                                                 </div>
                                             </div>
                                         </Collapse.Panel>
