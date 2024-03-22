@@ -9,7 +9,7 @@ class card_attribute_value extends Component {
         this.state = {
             modal_attribute_value: false,
             data_attribute_value_ids: [],
-            data_raw: [
+            data_raw_atbvls: [
                 {
                     id: 1, value: "6.8 inches",
                     attribute: {
@@ -44,13 +44,11 @@ class card_attribute_value extends Component {
                     }
                 }
             ],
-            data_attribute_values: [
-
-            ],
+            data_attribute_values: [],
         }
     }
     async componentDidMount() {
-        this.handle_data(this.state.data_raw);
+        this.handle_data(this.state.data_raw_atbvls);
     }
 
     handle_data = async (original_data) => {
@@ -74,6 +72,12 @@ class card_attribute_value extends Component {
     }
     open_modal = async (name, value, id) => {
         if (name == 'attribute_value') { this.setState({ modal_attribute_value: value }); }
+    }
+    handle_delete_atbvl = (id) => {
+        let data_raw_atbvls = this.state.data_raw_atbvls;
+        var filteredArr = data_raw_atbvls.filter(function (obj) {
+            return obj.id !== 1;
+        });
     }
     render() {
         let data_attribute_values = this.state.data_attribute_values;

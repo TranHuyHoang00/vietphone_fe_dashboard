@@ -15,7 +15,7 @@ class not_logged extends Component {
                 status="404"
                 title="404"
                 subTitle="Làm ơn đăng nhập để sử dụng"
-                extra={<Button onClick={() => { this.props.history.push('/dashboard/login') }} type="default">Đăng nhập ngay</Button>}
+                extra={<Button onClick={() => { this.props.history.push('/admin/login') }} type="default">Đăng nhập ngay</Button>}
             />
         );
     }
