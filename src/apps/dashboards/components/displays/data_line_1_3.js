@@ -1,6 +1,6 @@
 import { Typography, Image } from 'antd';
 
-const table_line_1_3 = (name, value) => {
+const text_line_1_3 = (name, value) => {
     return (
         <div className='flex gap-[5px]'>
             <div className='w-1/3 flex justify-between space-x-[5px]'>
@@ -31,5 +31,5 @@ const image_line_1_3 = (name, value, width, height) => {
     )
 }
 export {
-    table_line_1_3, image_line_1_3
+    text_line_1_3, image_line_1_3
 }

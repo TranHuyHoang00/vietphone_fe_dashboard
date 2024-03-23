@@ -109,15 +109,16 @@ class card_product extends Component {
                 </div>
                 <div className='lg:grid grid-cols-2 gap-[10px] space-y-[10px] lg:space-y-0'>
                     <Card title="Thông tin sản phẩm">
-                        <Card_introduce is_edit={this.state.is_edit} data_product={this.state.data_product}
-                            handle_onchange_input={this.handle_onchange_input} />
+                        <div className='space-y-[10px]'>
+                            <Card_introduce is_edit={this.state.is_edit} data_product={this.state.data_product}
+                                handle_onchange_input={this.handle_onchange_input} />
+                            <Card_media is_edit={this.state.is_edit} data_product={this.state.data_product}
+                                handle_get_media={this.handle_get_media} />
+                        </div>
                     </Card>
-                    {/* <Card_attribute_value data_product={this.state.data_product} /> */}
-                    <Card title="Hình ảnh sản phẩm">
-                        <Card_media is_edit={this.state.is_edit} data_product={this.state.data_product}
-                            handle_onchange_input={this.handle_onchange_input}
-                            handle_get_media={this.handle_get_media} />
-                    </Card>
+                    <Card_attribute_value is_edit={this.state.is_edit}
+                        data_product={this.state.data_product}
+                        handle_onchange_input={this.handle_onchange_input} />
                 </div>
             </div>
         );

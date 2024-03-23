@@ -6,13 +6,13 @@ const create_group_attribute = (data) => {
     return api_admin.post(`/product/api/v1/create-group-attribute`, data);
 }
 const get_group_attribute = (id) => {
-    return api_admin.get(`/product/api/v1/group-attribute/${id}`);
+    return api_admin.get(`/product/api/v1/get-group-attribute/${id}`);
 }
 const delete_group_attribute = (id) => {
-    return api_admin.delete(`/product/api/v1/group-attribute/${id}`);
+    return api_admin.delete(`/product/api/v1/delete-group-attribute/${id}`);
 }
 const edit_group_attribute = (id, data) => {
-    return api_admin.put(`/product/api/v1/group-attribute/${id}`, data);
+    return api_admin.put(`/product/api/v1/update-group-attribute/${id}`, data);
 }
 export {
     get_list_group_attribute, create_group_attribute, get_group_attribute, delete_group_attribute, edit_group_attribute

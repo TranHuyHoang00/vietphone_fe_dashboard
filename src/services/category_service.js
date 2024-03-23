@@ -6,13 +6,13 @@ const create_category = (data) => {
     return api_admin.post(`/product/api/v1/create-category`, data);
 }
 const get_category = (id) => {
-    return api_admin.get(`/product/api/v1/category/${id}`);
+    return api_admin.get(`/product/api/v1/get-category/${id}`);
 }
 const delete_category = (id) => {
-    return api_admin.delete(`/product/api/v1/category/${id}`);
+    return api_admin.delete(`/product/api/v1/delete-category/${id}`);
 }
 const edit_category = (id, data) => {
-    return api_admin.put(`/product/api/v1/category/${id}`, data);
+    return api_admin.put(`/product/api/v1/update-category/${id}`, data);
 }
 export {
     get_list_category, create_category, get_category, delete_category, edit_category

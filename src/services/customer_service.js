@@ -6,7 +6,7 @@ const create_customer = (data) => {
     return api_admin.post(`/auth/api/v1/create-customer`, data,);
 }
 const get_customer = (id) => {
-    return api_admin.get(`/account/api/v1/customer/${id}`,);
+    return api_admin.get(`/account/api/v1/get-customer/${id}`,);
 }
 const delete_customer = (id) => {
     return api_admin.delete(`/auth/api/v1/delete-customer/${id}`,);

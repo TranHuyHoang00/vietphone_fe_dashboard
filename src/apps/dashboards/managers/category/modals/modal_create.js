@@ -3,10 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { Modal, message, Spin } from 'antd';
 import { create_category } from '../../../../../services/category_service';
 import Select_category_type from '../elements/select_category_type';
-import Form_input from '../../../components/form/form_input';
-import Form_textare from '../../../components/form/form_textare';
-import Form_select_active from '../../../components/form/form_select_active';
-import Form_select_image from '../../../components/form/form_select_image';
+import Form_input from '../../../components/inputs/form_input';
+import Form_textare from '../../../components/inputs/form_textare';
+import Form_image from '../../../components/inputs/form_image';
+import Form_select_input from '../../../components/selects/form_select_input';
 import Modal_footer from '../../../components/modal/modal_footer';
 class modal_create extends Component {
     constructor(props) {
@@ -78,24 +78,35 @@ class modal_create extends Component {
                 ]}>
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
-                        <Form_select_image name={'Ảnh'} variable={'image'} value={data_category.image}
+
+                        <Form_image name={'Ảnh'} variable={'image'} value={data_category.image}
+                            important={true} type={'select'}
                             htmlFor={'load_file_create'} width={100} height={100}
                             handle_onchange_input={this.handle_onchange_input} />
 
-                        <Form_input name={'Tên danh mục'} variable={'name'} value={data_category.name} type={'danger'}
+                        <Form_input name={'Tên danh mục'} variable={'name'} value={data_category.name}
+                            important={true} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                         <Form_input name={'Icon'} variable={'icon'} value={data_category.icon}
+                            important={false} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                         <Form_textare name={'Mô tả'} variable={'description'} value={data_category.description}
+                            important={false} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                         <Select_category_type value={data_category.category_type}
                             handle_onchange_input={this.handle_onchange_input} />
 
-                        <Form_select_active name={'Trạng thái'} variable={'is_active'} value={data_category.is_active}
+                        <Form_select_input name={'Trạng thái'} variable={'is_active'} value={data_category.is_active}
+                            important={false} type={'select'} width={'100%'}
+                            options={[
+                                { value: true, label: 'Mở' },
+                                { value: false, label: 'Khóa' },
+                            ]}
                             handle_onchange_input={this.handle_onchange_input} />
+
                     </div>
                 </Spin>
             </Modal>

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, message, Spin } from 'antd';
 import { edit_category_type } from '../../../../../services/category_type_service';
-import Form_input from '../../../components/form/form_input';
-import Form_textare from '../../../components/form/form_textare';
+import Form_input from '../../../components/inputs/form_input';
+import Form_textare from '../../../components/inputs/form_textare';
 import Modal_footer from '../../../components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
@@ -12,7 +12,6 @@ class modal_edit extends Component {
             data_category_type: {},
             is_loading: false,
             mask_closable: true,
-            is_update_image: false,
         }
     }
     async componentDidMount() {
@@ -50,7 +49,6 @@ class modal_edit extends Component {
         if (result.code == 0) {
             try {
                 let data_category_type = this.state.data_category_type;
-                if (this.state.is_update_image == false) { delete data_category_type.image; }
                 let data = await edit_category_type(data_category_type.id, data_category_type);
                 if (data && data.data && data.data.success == 1) {
                     await this.props.load_data();
@@ -81,10 +79,12 @@ class modal_edit extends Component {
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
 
-                        <Form_input name={'Tên loại danh mục'} variable={'name'} value={data_category_type.name} type={'danger'}
+                        <Form_input name={'Tên loại danh mục'} variable={'name'} value={data_category_type.name}
+                            important={true} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                         <Form_textare name={'Mô tả'} variable={'description'} value={data_category_type.description}
+                            important={false} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                     </div>

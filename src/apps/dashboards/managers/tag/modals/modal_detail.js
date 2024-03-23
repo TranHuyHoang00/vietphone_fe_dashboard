@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, Button } from 'antd';
-import { table_line_1_3, image_line_1_3 } from '../../../components/table/table_line';
+import { text_line_1_3, image_line_1_3 } from '../../../components/displays/data_line_1_3';
 class modal_detail extends Component {
     constructor(props) {
         super(props);
@@ -25,10 +25,10 @@ class modal_detail extends Component {
                 ]}>
                 <div className='border-t py-[10px] space-y-[5px]'>
                     {image_line_1_3('Ảnh', data_tag.image, 50, 50)}
-                    {table_line_1_3('Tên Tag', data_tag.name)}
-                    {table_line_1_3('Icon', data_tag.icon)}
-                    {table_line_1_3('Mô tả', data_tag.description)}
-                    {table_line_1_3('Trạng thái', (data_tag && data_tag.is_active == true ? 'Mở' : 'Khóa'))}
+                    {text_line_1_3('Tên Tag', data_tag.name)}
+                    {text_line_1_3('Icon', data_tag.icon)}
+                    {text_line_1_3('Mô tả', data_tag.description)}
+                    {text_line_1_3('Trạng thái', (data_tag && data_tag.is_active == true ? 'Mở' : 'Khóa'))}
                 </div>
             </Modal>
         );

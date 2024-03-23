@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { Modal, message, Spin } from 'antd';
 import { edit_attribute } from '../../../../../services/attribute_service';
 import Select_group_attribute from '../elements/select_group_attribute';
-import Form_input from '../../../components/form/form_input';
-import Form_textare from '../../../components/form/form_textare';
+import Form_input from '../../../components/inputs/form_input';
+import Form_textare from '../../../components/inputs/form_textare';
 import Modal_footer from '../../../components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
@@ -82,13 +82,15 @@ class modal_edit extends Component {
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
 
-                        <Form_input name={'Tên loại danh mục'} variable={'name'} value={data_attribute.name} type={'danger'}
+                        <Form_input name={'Tên thông số'} variable={'name'} value={data_attribute.name}
+                            important={true} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                         <Select_group_attribute value={data_attribute.group_attribute}
                             handle_onchange_input={this.handle_onchange_input} />
 
                         <Form_textare name={'Mô tả'} variable={'description'} value={data_attribute.description}
+                            important={false} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                     </div>

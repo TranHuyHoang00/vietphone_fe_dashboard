@@ -6,13 +6,13 @@ const create_category_type = (data) => {
     return api_admin.post(`/product/api/v1/create-category-type`, data);
 }
 const get_category_type = (id) => {
-    return api_admin.get(`/product/api/v1/category-type/${id}`);
+    return api_admin.get(`/product/api/v1/get-category-type/${id}`);
 }
 const delete_category_type = (id) => {
-    return api_admin.delete(`/product/api/v1/category-type/${id}`);
+    return api_admin.delete(`/product/api/v1/delete-category-type/${id}`);
 }
 const edit_category_type = (id, data) => {
-    return api_admin.put(`/product/api/v1/category-type/${id}`, data);
+    return api_admin.put(`/product/api/v1/update-category-type/${id}`, data);
 }
 export {
     get_list_category_type, create_category_type, get_category_type, delete_category_type, edit_category_type

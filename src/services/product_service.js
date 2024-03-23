@@ -6,10 +6,10 @@ const create_product = (data) => {
     return api_admin.post(`/product/api/v1/create-product`, data);
 }
 const get_product = (id) => {
-    return api_admin.get(`/product/api/v1/detail-product/${id}`);
+    return api_admin.get(`/product/api/v1/get-product/${id}`);
 }
 const delete_product = (id) => {
-    return api_admin.delete(`/product/api/v1/product/${id}`);
+    return api_admin.delete(`/product/api/v1/delete-product/${id}`);
 }
 const edit_product = (id, data) => {
     return api_admin.put(`/product/api/v1/update-product/${id}`, data);

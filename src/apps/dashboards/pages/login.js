@@ -55,7 +55,7 @@ class login extends Component {
                 let data = await Login(this.state.phone, this.state.password);
                 if (data && data.data && data.data.success == 1) {
                     set_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
-                    this.props.history.push(`/dashboard`);
+                    this.props.history.push(`/admin`);
                     this.props.handle_login_db();
                 }
                 else {

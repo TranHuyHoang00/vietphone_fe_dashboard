@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, Button } from 'antd';
-import { table_line_1_3 } from '../../../components/table/table_line';
+import { text_line_1_3 } from '../../../components/displays/data_line_1_3';
 class modal_detail extends Component {
     constructor(props) {
         super(props);
@@ -24,8 +24,8 @@ class modal_detail extends Component {
                     </>
                 ]}>
                 <div className='border-t py-[10px] space-y-[5px]'>
-                    {table_line_1_3('Tên loại danh mục', data_category_type.name)}
-                    {table_line_1_3('Mô tả', data_category_type.description)}
+                    {text_line_1_3('Tên loại danh mục', data_category_type.name)}
+                    {text_line_1_3('Mô tả', data_category_type.description)}
                 </div>
             </Modal>
         );

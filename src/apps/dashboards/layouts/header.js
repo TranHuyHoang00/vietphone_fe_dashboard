@@ -20,7 +20,7 @@ class header extends Component {
     handle_logout = () => {
         this.props.handle_logout_db();
         remove_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
-        this.props.history.push(`/dashboard/login`);
+        this.props.history.push(`/admin/login`);
     }
     render() {
         let data_user = this.state.data_user;

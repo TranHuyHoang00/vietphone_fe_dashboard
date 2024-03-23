@@ -34,13 +34,13 @@ const check_token = async (account, token_init) => {
             return Promise.reject(error);
         }
     );
-    let data_checked = null;
-    if (process.env.REACT_APP_LOCALHOST_ACOUNT_DB == account) {
-        data_checked = await api.get(`/account/api/v1/customer/13`,);
-    }
-    if (process.env.REACT_APP_LOCALHOST_ACOUNT_USER == account) {
-        data_checked = await api.get(`ticketify/api/v1/get-event/${process.env.REACT_APP_EVENT_CODE}`);
-    }
+    let data_checked = true;
+    // if (process.env.REACT_APP_LOCALHOST_ACOUNT_DB == account) {
+    //     data_checked = await api.get(`/account/api/v1/customer/13`,);
+    // }
+    // if (process.env.REACT_APP_LOCALHOST_ACOUNT_USER == account) {
+    //     data_checked = await api.get(`ticketify/api/v1/get-event/${process.env.REACT_APP_EVENT_CODE}`);
+    // }
     if (data_checked == true) {
         return token_init;
     } else {

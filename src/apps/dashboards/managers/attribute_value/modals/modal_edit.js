@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, message, Spin } from 'antd';
-import { edit_attribute } from '../../../../../services/attribute_service';
+import { edit_attribute_value } from '../../../../../services/attribute_value_service';
 import Select_attribute from '../elements/select_attribute';
-import Form_input from '../../../components/form/form_input';
-import Form_textare from '../../../components/form/form_textare';
+import Form_input from '../../../components/inputs/form_input';
+import Form_textare from '../../../components/inputs/form_textare';
 import Modal_footer from '../../../components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
@@ -53,7 +53,7 @@ class modal_edit extends Component {
         if (result.code == 0) {
             try {
                 let data_attribute_value = this.state.data_attribute_value;
-                let data = await edit_attribute(data_attribute_value.id, data_attribute_value);
+                let data = await edit_attribute_value(data_attribute_value.id, data_attribute_value);
                 if (data && data.data && data.data.success == 1) {
                     await this.props.load_data();
                     this.props.open_modal("edit", false);

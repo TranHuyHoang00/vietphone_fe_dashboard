@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, message, Spin } from 'antd';
 import { create_tag } from '../../../../../services/tag_service';
-import Form_input from '../../../components/form/form_input';
-import Form_textare from '../../../components/form/form_textare';
-import Form_select_active from '../../../components/form/form_select_active';
-import Form_select_image from '../../../components/form/form_select_image';
+import Form_input from '../../../components/inputs/form_input';
+import Form_textare from '../../../components/inputs/form_textare';
+import Form_image from '../../../components/inputs/form_image';
+import Form_select_input from '../../../components/selects/form_select_input';
 import Modal_footer from '../../../components/modal/modal_footer';
 class modal_create extends Component {
     constructor(props) {
@@ -40,6 +40,9 @@ class modal_create extends Component {
         this.handle_loading(true);
         if (!data.name) {
             return { mess: "Không được bỏ trống 'Tên Tag' ", code: 1 };
+        }
+        if (!data.icon) {
+            return { mess: "Không được bỏ trống 'Icon' ", code: 1 };
         }
         return { code: 0 };
     }
@@ -77,20 +80,30 @@ class modal_create extends Component {
                 ]}>
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
-                        <Form_select_image name={'Ảnh'} variable={'image'} value={data_tag.image}
+
+                        <Form_image name={'Ảnh'} variable={'image'} value={data_tag.image}
+                            important={true} type={'select'}
                             htmlFor={'load_file_create'} width={100} height={100}
                             handle_onchange_input={this.handle_onchange_input} />
 
-                        <Form_input name={'Tên Tag'} variable={'name'} value={data_tag.name} type={'danger'}
+                        <Form_input name={'Tên Tag'} variable={'name'} value={data_tag.name}
+                            important={true} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                         <Form_input name={'Icon'} variable={'icon'} value={data_tag.icon}
+                            important={false} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                         <Form_textare name={'Mô tả'} variable={'description'} value={data_tag.description}
+                            important={false} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
-                        <Form_select_active name={'Trạng thái'} variable={'is_active'} value={data_tag.is_active}
+                        <Form_select_input name={'Trạng thái'} variable={'is_active'} value={data_tag.is_active}
+                            important={false} type={'select'} width={'100%'}
+                            options={[
+                                { value: true, label: 'Mở' },
+                                { value: false, label: 'Khóa' },
+                            ]}
                             handle_onchange_input={this.handle_onchange_input} />
                     </div>
                 </Spin>

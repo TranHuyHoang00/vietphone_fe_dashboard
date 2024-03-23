@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, message, Spin } from 'antd';
 import { create_category_type } from '../../../../../services/category_type_service';
-import Form_input from '../../../components/form/form_input';
-import Form_textare from '../../../components/form/form_textare';
+import Form_input from '../../../components/inputs/form_input';
+import Form_textare from '../../../components/inputs/form_textare';
 import Modal_footer from '../../../components/modal/modal_footer';
 class modal_create extends Component {
     constructor(props) {
@@ -76,10 +76,12 @@ class modal_create extends Component {
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
 
-                        <Form_input name={'Tên loại danh mục'} variable={'name'} value={data_category_type.name} type={'danger'}
+                        <Form_input name={'Tên loại danh mục'} variable={'name'} value={data_category_type.name}
+                            important={true} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                         <Form_textare name={'Mô tả'} variable={'description'} value={data_category_type.description}
+                            important={false} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
                     </div>

@@ -48,7 +48,6 @@ class card_media extends Component {
             message.error("Lỗi hệ thống");
         }
     }
-
     onchange_image = async (event, type, index, id) => {
         let data_medias = this.state.data_medias;
         let data_media_ids = this.state.data_media_ids;

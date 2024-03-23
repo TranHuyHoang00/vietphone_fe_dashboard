@@ -14,10 +14,10 @@ class form_textare extends Component {
             <div className='space-y-[3px]'>
                 <Typography.Text italic strong>
                     {this.props.name}
-                    {this.props.type == 'danger' && <Typography.Text type="danger" strong> *</Typography.Text>}
+                    {this.props.important == true && <Typography.Text type="danger" strong> *</Typography.Text>}
                 </Typography.Text>
                 <Input.TextArea rows={3} value={this.props.value}
-                    onChange={(event) => this.props.handle_onchange_input(event, this.props.variable, 'input')} />
+                    onChange={(event) => this.props.handle_onchange_input(event, this.props.variable, this.props.type)} />
             </div>
         );
     }

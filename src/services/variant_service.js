@@ -6,10 +6,10 @@ const create_variant = (data) => {
     return api_admin.post(`/product/api/v1/create-variant`, data);
 }
 const get_variant = (id) => {
-    return api_admin.get(`/product/api/v1/detail-product-variant/${id}`);
+    return api_admin.get(`/product/api/v1/get-product-variant/${id}`);
 }
 const delete_variant = (id) => {
-    return api_admin.delete(`/product/api/v1/variant/${id}`);
+    return api_admin.delete(`/product/api/v1/delete-variant/${id}`);
 }
 const edit_variant = (id, data) => {
     return api_admin.put(`/product/api/v1/update-product-variant/${id}`, data);

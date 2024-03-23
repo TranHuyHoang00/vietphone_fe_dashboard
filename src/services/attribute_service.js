@@ -6,13 +6,13 @@ const create_attribute = (data) => {
     return api_admin.post(`/product/api/v1/create-attribute`, data);
 }
 const get_attribute = (id) => {
-    return api_admin.get(`/product/api/v1/attribute/${id}`);
+    return api_admin.get(`/product/api/v1/get-attribute/${id}`);
 }
 const delete_attribute = (id) => {
-    return api_admin.delete(`/product/api/v1/attribute/${id}`);
+    return api_admin.delete(`/product/api/v1/delete-attribute/${id}`);
 }
 const edit_attribute = (id, data) => {
-    return api_admin.put(`/product/api/v1/attribute/${id}`, data);
+    return api_admin.put(`/product/api/v1/update-attribute/${id}`, data);
 }
 export {
     get_list_attribute, create_attribute, get_attribute, delete_attribute, edit_attribute

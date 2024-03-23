@@ -32,16 +32,6 @@ class card_introduce extends Component {
                     </div>
                     <div className='flex items-center gap-[5px]'>
                         <div className='w-1/4 flex items-center justify-between'>
-                            <span>Slug</span>
-                            <span>:</span>
-                        </div>
-                        <div className='w-3/4'>
-                            <Input disabled={!is_edit} value={data_product.slug}
-                                onChange={(event) => this.props.handle_onchange_input(event, "slug", 'input')} />
-                        </div>
-                    </div>
-                    <div className='flex items-center gap-[5px]'>
-                        <div className='w-1/4 flex items-center justify-between'>
                             <span>Thương hiệu</span>
                             <span>:</span>
                         </div>
