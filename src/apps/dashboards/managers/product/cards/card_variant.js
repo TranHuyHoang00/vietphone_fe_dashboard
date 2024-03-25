@@ -3,9 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { Button, message, Space, Card } from 'antd';
 import { get_variant, edit_variant } from '../../../../../services/variant_service';
 import { create_media } from '../../../../../services/media_service';
-import Card_variant_introduce from './card_variant_introduce';
-import Card_variant_overview from './card_variant_overview';
-import Select_image from './select_image';
+import Variant_introduce from '../elements/variant_introduce';
+import Variant_overview from '../elements/variant_overview';
+import Select_image from '../components/selects/select_image';
+import Card_attribute_value from '../cards/card_attribute_value';
 class card_variant extends Component {
     constructor(props) {
         super(props);
@@ -71,7 +72,7 @@ class card_variant extends Component {
             try {
                 let data = await edit_variant(data_variant.id, data_variant);
                 if (data && data.data && data.data.success == 1) {
-                    await this.props.get_product(data_variant.id);
+                    await this.props.get_product(this.props.product_id);
                     message.success("Thành công");
                 } else {
                     message.error('Thất bại');
@@ -115,6 +116,16 @@ class card_variant extends Component {
             message.error('Lỗi hệ thống');
         }
     }
+    handle_onchange_input = (event, id, type) => {
+        let copyState = { ...this.state.data_variant };
+        if (type == 'input') { copyState[id] = event.target.value; }
+        if (type == 'select') { copyState[id] = event; }
+        this.setState({
+            data_variant: {
+                ...copyState
+            }
+        });
+    }
     render() {
         return (
             <>
@@ -132,18 +143,19 @@ class card_variant extends Component {
                             </Button>
                         </Space>
                     </div>
-                    <div className='grid grid-cols-3 gap-[10px] '>
+                    <div className='lg:grid grid-cols-3 gap-[10px] space-y-[10px] lg:space-y-0 '>
                         <div>
                             <div className='bg-white '>
-                                <Card_variant_overview data_variants={this.state.data_variants}
-                                    handle_select_variant={this.handle_select_variant} active_variant={this.state.active_variant} />
+                                <Variant_overview data_variants={this.state.data_variants}
+                                    handle_select_variant={this.handle_select_variant}
+                                    active_variant={this.state.active_variant} />
                             </div>
                         </div>
                         <div className='col-span-2 space-y-[10px]'>
                             <Card title="Chi tiết phiên bản">
-                                <div className='grid grid-cols-3'>
+                                <div className='md:grid grid-cols-3 space-y-[10px] md:space-y-0'>
                                     <div className='col-span-2'>
-                                        <Card_variant_introduce data_variant={this.state.data_variant} />
+                                        <Variant_introduce data_variant={this.state.data_variant} />
                                     </div>
                                     <div>
                                         <Select_image is_edit={this.state.is_edit} data_variant={this.state.data_variant}
@@ -151,6 +163,10 @@ class card_variant extends Component {
                                     </div>
                                 </div>
                             </Card>
+                            <Card_attribute_value is_edit={this.state.is_edit} type_handle={'variant'}
+                                data_attributes={this.state.data_variant.attribute_values}
+                                handle_onchange_input={this.handle_onchange_input}
+                                variant_attribute_group={this.props.variant_attribute_group} />
                         </div>
                     </div>
                 </div>

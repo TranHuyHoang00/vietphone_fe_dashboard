@@ -4,7 +4,7 @@ import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGithub, AiOutlineUser, AiFillHdd, AiFillFund, AiFillShop
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile,
-    AiFillContainer, AiFillFileMarkdown,
+    AiFillContainer, AiFillFileMarkdown, AiFillCrown,
     AiFillFire, AiFillUsb, AiFillRocket
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
@@ -26,6 +26,7 @@ import Manager_attribute from './managers/attribute/index';
 import Manager_attribute_value from './managers/attribute_value/index';
 import Manager_product from './managers/product/index';
 import Edit_product from './managers/product/pages/edit';
+import Manager_variant_attribute_group from './managers/variant_attribute_group';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -84,6 +85,7 @@ class index extends Component {
                     { key: 'manager/attribute_value', icon: <AiFillRocket />, label: 'Giá trị' },
                     { key: 'manager/attribute', icon: <AiFillUsb />, label: 'Thông số' },
                     { key: 'manager/group_attribute', icon: <AiFillFire />, label: 'Loại thông số' },
+                    { key: 'manager/variant_attribute_group', icon: <AiFillCrown />, label: 'Loại TS-SP' },
                 ],
             },
             {
@@ -134,6 +136,7 @@ class index extends Component {
                                     <Route exact path={`${url}manager/attribute`}><Manager_attribute /></Route>
                                     <Route exact path={`${url}manager/product`}><Manager_product /></Route>
                                     <Route exact path={`${url}manager/product/edit/:id`}><Edit_product /></Route>
+                                    <Route exact path={`${url}manager/variant_attribute_group`}><Manager_variant_attribute_group /></Route>
                                     <Route ><Not_found /></Route>
 
 

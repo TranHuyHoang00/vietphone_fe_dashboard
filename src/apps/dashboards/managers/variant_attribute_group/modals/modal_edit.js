@@ -1,34 +1,32 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, message, Spin } from 'antd';
-import { edit_attribute } from '../../../../../services/attribute_service';
-import Select_group_attribute from '../elements/select_group_attribute';
+import { edit_variant_attribute_group } from '../../../../../services/variant_attribute_group_service';
+import Select_attribute from '../elements/select_attribute';
 import Form_input from '../../../components/inputs/form_input';
-import Form_textare from '../../../components/inputs/form_textare';
 import Modal_footer from '../../../components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_attribute: {},
+            data_variant_attribute_group: {},
             is_loading: false,
             mask_closable: true,
-            is_update_image: false,
         }
     }
     async componentDidMount() {
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.data_attribute !== this.props.data_attribute) {
-            this.setState({ data_attribute: this.props.data_attribute });
+        if (prevProps.data_variant_attribute_group !== this.props.data_variant_attribute_group) {
+            this.setState({ data_variant_attribute_group: this.props.data_variant_attribute_group });
         }
     }
     handle_onchange_input = (event, id, type) => {
-        let copyState = { ...this.state.data_attribute };
+        let copyState = { ...this.state.data_variant_attribute_group };
         if (type == 'input') { copyState[id] = event.target.value; }
         if (type == 'select') { copyState[id] = event; }
         this.setState({
-            data_attribute: {
+            data_variant_attribute_group: {
                 ...copyState
             }
         });
@@ -44,22 +42,19 @@ class modal_edit extends Component {
         if (!data.name) {
             return { mess: "Không được bỏ trống 'Tên thông số' ", code: 1 };
         }
-        if (!data.code) {
-            return { mess: "Không được bỏ trống 'CODE' ", code: 1 };
-        }
         return { code: 0 };
     }
     handle_edit = async () => {
-        let result = this.validation(this.state.data_attribute);
+        let result = this.validation(this.state.data_variant_attribute_group);
         if (result.code == 0) {
             try {
-                let data_attribute = this.state.data_attribute;
-                if (this.state.is_update_image == false) { delete data_attribute.image; }
-                let data = await edit_attribute(data_attribute.id, data_attribute);
+                let data_variant_attribute_group = this.state.data_variant_attribute_group;
+                if (this.state.is_update_image == false) { delete data_variant_attribute_group.image; }
+                let data = await edit_variant_attribute_group(data_variant_attribute_group.id, data_variant_attribute_group);
                 if (data && data.data && data.data.success == 1) {
                     await this.props.load_data();
                     this.props.open_modal("edit", false);
-                    this.setState({ data_attribute: {} });
+                    this.setState({ data_variant_attribute_group: {} });
                     message.success("Thành công");
                 } else {
                     message.error('Thất bại');
@@ -73,7 +68,7 @@ class modal_edit extends Component {
         this.handle_loading(false);
     }
     render() {
-        let data_attribute = this.state.data_attribute;
+        let data_variant_attribute_group = this.state.data_variant_attribute_group;
         return (
             <Modal title="CHỈNH SỬA" open={this.props.modal_edit}
                 onCancel={() => this.props.open_modal("edit", false)} width={400}
@@ -85,19 +80,11 @@ class modal_edit extends Component {
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
 
-                        <Form_input name={'CODE'} variable={'code'} value={data_attribute.code}
+                        <Form_input name={'Tên loại TT-SP'} variable={'name'} value={data_variant_attribute_group.name}
                             important={true} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
-                        <Form_input name={'Tên thông số'} variable={'name'} value={data_attribute.name}
-                            important={true} type={'input'}
-                            handle_onchange_input={this.handle_onchange_input} />
-
-                        <Select_group_attribute value={data_attribute.group_attribute}
-                            handle_onchange_input={this.handle_onchange_input} />
-
-                        <Form_textare name={'Mô tả'} variable={'description'} value={data_attribute.description}
-                            important={false} type={'input'}
+                        <Select_attribute value={data_variant_attribute_group.attribute}
                             handle_onchange_input={this.handle_onchange_input} />
 
                     </div>

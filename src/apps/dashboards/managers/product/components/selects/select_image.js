@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Select, message, Input, Space, Button, Divider, Spin, Carousel, Image } from 'antd';
-import { get_media } from '../../../../../services/media_service';
-import { image_to_base64 } from '../../../../../utils/base64';
+import { message, Button, Carousel, Image } from 'antd';
+import { get_media } from '../../../../../../services/media_service';
+import { image_to_base64 } from '../../../../../../utils/base64';
+import { DeleteOutlined } from '@ant-design/icons';
+
 class select_image extends Component {
     constructor(props) {
         super(props);
@@ -66,7 +68,15 @@ class select_image extends Component {
                 <Carousel>
                     {data_medias && data_medias.map((item, index) => {
                         return (
-                            <Image height={150} width={150} src={item.image} className='object-cover' />
+                            <div className='relative'>
+                                <Image height={150} width={150} src={item.image} className='object-cover' />
+                                <div className='absolute top-0 left-0'>
+                                    <Button disabled={!is_edit} onClick={() => this.onchange_image(null, 'delete', index, item.id)}
+                                        className='bg-[#e94138] text-white' icon={<DeleteOutlined />}
+                                    ></Button>
+                                </div>
+                            </div>
+
                         )
                     })}
                 </Carousel>

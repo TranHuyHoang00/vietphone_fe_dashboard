@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Card } from 'antd';
-import Table_line from './table_line';
+import Table_line from '../displays/table_line';
 class table_attribute_value extends Component {
     constructor(props) {
         super(props);
@@ -11,14 +11,14 @@ class table_attribute_value extends Component {
     async componentDidMount() {
     }
     render() {
-        let data_atbvl_uniques = this.props.data_atbvl_uniques;
-        let data_atbvl_raws = this.props.data_atbvl_raws;
+        let data_attribute_value_uniques = this.props.data_attribute_value_uniques;
+        let data_attribute_value_raws = this.props.data_attribute_value_raws;
         return (
-            <Card title={`${data_atbvl_uniques.name}`} size='small'>
+            <Card title={`${data_attribute_value_uniques.name}`} size='small'>
                 <div className='space-y-[5px]'>
-                    {data_atbvl_raws && data_atbvl_raws.map((item, index) => {
+                    {data_attribute_value_raws && data_attribute_value_raws.map((item, index) => {
                         return (
-                            <Table_line key={index} data={item} id={data_atbvl_uniques.id}
+                            <Table_line key={index} data={item} id={data_attribute_value_uniques.id}
                                 handle_delete_atbvl={this.props.handle_delete_atbvl}
                                 is_edit={this.props.is_edit} />
                         )

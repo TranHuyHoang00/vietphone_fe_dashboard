@@ -1,0 +1,6 @@
+const data_react_quill =
+    `
+    <h1><strong>BẢN GỢI Ý</strong></h1><p><strong>Xiaomi đã giới thiệu đến người tiêu dùng tại các thị trường toàn cầu một mẫu điện thoại 5G giá rẻ mới có tên Xiaomi Redmi 10 5G. Thiết bị mới được trang bị màn hình 90 Hz, bộ vi xử lý MediaTek Dimensity, camera kép ở mặt lưng và pin lớn 5000 mAh.</strong></p><p><br></p><p><strong>Màn hình 90 Hz mượt mà</strong></p><p><br></p><p>Redmi 10 5G sở hữu màn hình IPS LCD kích thước lớn 6.58 inch độ phân giải Full HD+ và hỗ trợ tốc độ làm tươi 90 Hz. Tốc độ làm mới khung hình cao cho phép thiết bị hiển thị mượt mà hơn các nội dung có diễn biến nhanh, đồng thời cũng tạo ra cảm giác trơn khu khi sử dụng thông thường.</p><p><img src="https://cdn2.cellphones.com.vn/insecure/rs:fill:0:0/q:90/plain/https://cellphones.com.vn/media/wysiwyg/mobile/apple/IPHONE-13-1.jpg"></p><p>Màn hình của Redmi 10 5G có một notch hình giọt nước để chứa camera selfie. Thiết bị cũng có tính năng hỗ trợ hiển thị rõ nét khi sử dụng dưới ánh sáng mặt trời.</p>
+    `;
+
+export default data_react_quill;

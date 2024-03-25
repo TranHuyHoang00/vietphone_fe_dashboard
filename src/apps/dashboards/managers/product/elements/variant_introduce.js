@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { text_line_1_3 } from '../../../components/displays/data_line_1_3';
 import { format_money } from '../../../../../utils/format_money';
-class card_variant_introduce extends Component {
+class variant_introduce extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,4 +30,4 @@ class card_variant_introduce extends Component {
     }
 
 }
-export default withRouter(card_variant_introduce);
+export default withRouter(variant_introduce);

@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
     Table, Space, Divider, Button, Popconfirm, message, Input,
-    Spin, Pagination, Typography, Dropdown, Tag, Image
+    Spin, Pagination, Typography, Dropdown, Tag
 } from 'antd';
-import { AiOutlineMenu, AiOutlinePlus } from "react-icons/ai";
+import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
 import Display_line_number from '../../components/display_line_number';
-import { get_list_product, delete_product, edit_product } from '../../../../services/product_service';
-import Drawer_filter from './drawers/drawer_filter';
+import { get_list_variant_attribute_group, get_variant_attribute_group, delete_variant_attribute_group } from '../../../../services/variant_attribute_group_service';
+import Modal_create from './modals/modal_create';
+// import Modal_detail from './modals/modal_detail';
+import Modal_edit from './modals/modal_edit';
 import { load_data_url } from '../../../../utils/load_data_url';
 class index extends Component {
     constructor(props) {
@@ -16,13 +18,16 @@ class index extends Component {
             is_loading: false,
             type_menu: 1,
             data_selected: [],
+            modal_detail: false,
+            modal_create: false,
+            modal_edit: false,
             data_filter: {
-                page: '',
-                limit: '',
+                page: 1,
+                limit: 5,
                 search_query: ''
             },
-            data_product: {},
-            data_products: [],
+            data_variant_attribute_group: {},
+            data_variant_attribute_groups: [],
             metadata: {},
         }
     }
@@ -36,7 +41,7 @@ class index extends Component {
     }
     load_data = async () => {
         let data_filter = load_data_url(this.state.data_filter, new URLSearchParams(this.props.location.search));
-        await this.get_list_product(data_filter);
+        await this.get_list_variant_attribute_group(data_filter);
         this.setState({
             data_filter: data_filter
         })
@@ -44,13 +49,13 @@ class index extends Component {
     handle_loading = (value) => {
         this.setState({ is_loading: value });
     }
-    get_list_product = async (data_filter) => {
+    get_list_variant_attribute_group = async (data_filter) => {
         this.handle_loading(true);
         try {
-            let data = await get_list_product(data_filter);
+            let data = await get_list_variant_attribute_group(data_filter);
             if (data && data.data && data.data.success == 1) {
                 this.setState({
-                    data_products: data.data.data.products,
+                    data_variant_attribute_groups: data.data.data.varriant_attribute_groups,
                     metadata: data.data.data.metadata,
                 });
             } else {
@@ -62,21 +67,53 @@ class index extends Component {
             this.handle_loading(false);
         }
     }
+    get_variant_attribute_group = async (id) => {
+        this.handle_loading(true);
+        try {
+            let data = await get_variant_attribute_group(id);
+            if (data && data.data && data.data.success == 1) {
+                this.setState({ data_variant_attribute_group: data.data.data });
+            } else {
+                message.error("Lỗi");
+            }
+        } catch (e) {
+            message.error("Lỗi hệ thống");
+        } finally {
+            this.handle_loading(false);
+        }
 
+    }
+    open_modal = async (name, value, id) => {
+        if (name == 'create') { this.setState({ modal_create: value }); }
+        if (name == 'detail') {
+            if (id == null) {
+                this.setState({ modal_detail: value, data_variant_attribute_group: {} });
+            } else {
+                this.setState({ modal_detail: value });
+                await this.get_variant_attribute_group(id);
+            }
+        }
+        if (name == 'edit') {
+            if (id == null) {
+                this.setState({ modal_edit: value, data_variant_attribute_group: {} });
+            } else {
+                this.setState({ modal_edit: value });
+                await this.get_variant_attribute_group(id);
+            }
+        }
+    }
     handle_funtion_menu = async () => {
         this.handle_loading(true);
         try {
             let data_selected = this.state.data_selected;
             for (const id of data_selected) {
                 let data;
-                if (this.state.type_menu == 1) { data = await delete_product(id); }
-                if (this.state.type_menu == 2) { data = await edit_product(id, { is_active: false }); }
-                if (this.state.type_menu == 3) { data = await edit_product(id, { is_active: true }); }
+                if (this.state.type_menu == 1) { data = await delete_variant_attribute_group(id); }
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Thất bại khi xử lý dòng ID=${id}`);
                 }
             }
-            await this.load_data(this.state.data_filter);
+            await this.load_data();
             if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
             message.success(`Thành công xử lý ${data_selected.length} dòng`);
         } catch (e) {
@@ -88,18 +125,15 @@ class index extends Component {
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
         if (type == 'limit') {
-            this.props.history.push(`/admin/manager/product?page=${data_filter.page}&limit=${value}&search_query=${data_filter.search_query}`);
+            this.props.history.push(`/admin/manager/variant_attribute_group?page=${data_filter.page}&limit=${value}&search_query=${data_filter.search_query}`);
         }
         if (type == 'page') {
-            this.props.history.push(`/admin/manager/product?page=${value}&limit=${data_filter.limit}&search_query=${data_filter.search_query}`);
+            this.props.history.push(`/admin/manager/variant_attribute_group?page=${value}&limit=${data_filter.limit}&search_query=${data_filter.search_query}`);
         }
-    }
-    open_drawer = (name, value) => {
-        if (name == 'filter') { this.setState({ drawer_filter: value }); }
     }
     on_search = async (value) => {
         let data_filter = this.state.data_filter;
-        this.props.history.push(`/admin/manager/product?page=1&limit=${data_filter.limit}&search_query=${value}`);
+        this.props.history.push(`/admin/manager/variant_attribute_group?page=1&limit=${data_filter.limit}&search_query=${value}`);
     }
     render() {
         const columns = [
@@ -108,72 +142,42 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'Ảnh', dataIndex: 'media', width: 90, responsive: ['sm'],
-                render: (media) =>
-                    <>
-                        {(media && media.length !== 0) &&
-                            <Image width={80} height={80} src={media[0].image} className='object-cover' />
-                        }
-
-                    </>
-            },
-            {
-                title: 'Tên sản phẩm', dataIndex: 'name',
-                render: (name, item) =>
-                    <a className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product/edit/${item.id}`)}>
-                        <Typography.Text className='text-[#0574b8]'>{name}</Typography.Text>
-                    </a>,
+                title: 'Tên TS-SP', dataIndex: 'name',
+                render: (name) => <Typography.Text strong className='text-[#0574b8]'>{name}</Typography.Text>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
             {
-                title: 'Thương hiệu', dataIndex: 'product_brand', responsive: ['lg'],
-                render: (product_brand) =>
+                title: 'Thông số', dataIndex: 'attribute', responsive: ['md'],
+                render: (attribute) =>
                     <>
-                        {(product_brand && product_brand.name) ?
-                            <Tag key={index} color='green'>{product_brand && product_brand.name}</Tag>
+                        {(attribute && attribute.length !== 0) ?
+                            <>
+                                {attribute && attribute.map((item, index) => {
+                                    return (
+                                        <Tag color='blue'>{item.name}</Tag>
+                                    )
+                                })}
+                            </>
                             :
-                            <span   ></span>
+                            <span></span>
                         }
                     </>
             },
             {
-                title: 'Tag', dataIndex: 'tags', responsive: ['lg'],
-                render: (tags) =>
-                    <div className='space-y-[5px]'>
-                        {tags && tags.map((item, index) => {
-                            return (
-                                <Tag key={index} color='orange'>{item.name}</Tag>
-                            )
-                        })}
-                    </div>,
+                title: 'HĐ', width: 80,
+                render: (_, item) => (
+                    <Space size="middle" >
+                        <a onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></a>
+                        <a onClick={() => this.open_modal('edit', true, item.id)}>
+                            <AiFillEdit />
+                        </a>
+                    </Space >
+                ),
             },
-            {
-                title: 'Danh mục', dataIndex: 'categories', responsive: ['lg'],
-                render: (categories) =>
-                    <div className='space-y-[5px]'>
-                        {categories && categories.map((item, index) => {
-                            return (
-                                <Tag key={index} color='blue'>{item.name}</Tag>
-                            )
-                        })}
-                    </div>,
-            },
-            {
-                title: 'Status', dataIndex: 'is_active', width: 70,
-                render: (is_active) =>
-                    <div className='flex items-center justify-start'>
-                        {is_active == true ?
-                            <Tag color='green'>Mở</Tag>
-                            :
-                            <Tag color='red'>Khóa</Tag>
-                        }
-                    </div>
-            },
+
         ];
         const items = [
             { key: '1', label: 'Xóa' },
-            { key: '2', label: 'Khóa' },
-            { key: '3', label: 'Mở' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -188,25 +192,17 @@ class index extends Component {
                 <Spin size='large' spinning={this.state.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <div className='flex items-center gap-[5px]'>
-                                <Button disabled className='bg-[#0e97ff]'>
-                                    <Space className='text-white'>
-                                        <AiOutlinePlus />
-                                        Tạo mới
-                                    </Space>
-                                </Button>
-                                <Button disabled onClick={() => { this.setState({ drawer_filter: true }) }} className='bg-white'>
-                                    <Space>Lọc<AiOutlineMenu /></Space>
-                                </Button>
-                            </div>
-                            <div><Input.Search onSearch={(value) => this.on_search(value)} placeholder="Tên sản phẩm !" /></div>
+                            <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
+                                <Space className='text-white'>
+                                    <AiOutlinePlus />
+                                    Tạo mới
+                                </Space>
+                            </Button>
+                            <div><Input.Search onSearch={(value) => this.on_search(value)} placeholder="Tên thông số !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <Space>
-                                    <span>Hiển thị</span>
-                                    <Display_line_number limit={data_filter.limit} onchange_page={this.onchange_page} />
-                                </Space>
+                                <Display_line_number limit={data_filter.limit} onchange_page={this.onchange_page} />
                                 <div>
                                     <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
@@ -214,18 +210,16 @@ class index extends Component {
                                         <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
                                                 {type_menu == 1 && <span>Xóa</span>}
-                                                {type_menu == 2 && <span>Khóa</span>}
-                                                {type_menu == 3 && <span>Mở</span>}
                                                 <span> {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider>DANH SÁCH SẢN PHẨM</Divider>
+                            <Divider>LOẠI TS-SP</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
-                                    columns={columns} dataSource={this.state.data_products} pagination={false}
+                                    columns={columns} dataSource={this.state.data_variant_attribute_groups} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={data_filter.page}
                                     showQuickJumper total={metadata.total * metadata.limit} pageSize={data_filter.limit}
@@ -234,8 +228,13 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {/* <Drawer_filter drawer_filter={this.state.drawer_filter}
-                    open_drawer={this.open_drawer} /> */}
+                <Modal_create modal_create={this.state.modal_create}
+                    open_modal={this.open_modal} load_data={this.load_data} />
+                {/* <Modal_detail modal_detail={this.state.modal_detail}
+                    open_modal={this.open_modal} data_variant_attribute_group={this.state.data_variant_attribute_group} /> */}
+                <Modal_edit modal_edit={this.state.modal_edit}
+                    open_modal={this.open_modal} load_data={this.load_data}
+                    data_variant_attribute_group={this.state.data_variant_attribute_group} />
             </>
         );
     }

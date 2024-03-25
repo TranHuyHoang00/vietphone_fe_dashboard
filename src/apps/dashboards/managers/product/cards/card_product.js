@@ -3,9 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { Button, message, Typography, Card, Space } from 'antd';
 import { edit_product } from '../../../../../services/product_service';
 import { create_media } from '../../../../../services/media_service';
-import Card_introduce from '../elements/card_introduce';
-import Card_media from '../elements/card_media';
-import Card_attribute_value from './card_attribute_value';
+import Product_media from '../elements/product_media';
+import Product_introduce from '../elements/product_introduce';
+import Card_attribute_value from '../cards/card_attribute_value';
+import Card_content from '../cards/card_content';
 class card_product extends Component {
     constructor(props) {
         super(props);
@@ -89,6 +90,9 @@ class card_product extends Component {
             message.error('Lỗi hệ thống');
         }
     }
+
+
+
     render() {
         let data_product = this.state.data_product;
         return (
@@ -110,16 +114,22 @@ class card_product extends Component {
                 <div className='lg:grid grid-cols-2 gap-[10px] space-y-[10px] lg:space-y-0'>
                     <Card title="Thông tin sản phẩm">
                         <div className='space-y-[10px]'>
-                            <Card_introduce is_edit={this.state.is_edit} data_product={this.state.data_product}
+
+                            <Product_introduce is_edit={this.state.is_edit} data_product={this.state.data_product}
                                 handle_onchange_input={this.handle_onchange_input} />
-                            <Card_media is_edit={this.state.is_edit} data_product={this.state.data_product}
+
+                            <Product_media is_edit={this.state.is_edit} data_product={this.state.data_product}
                                 handle_get_media={this.handle_get_media} />
+
                         </div>
                     </Card>
                     <Card_attribute_value is_edit={this.state.is_edit}
-                        data_product={this.state.data_product}
+                        type_handle={'product'}
+                        data_attributes={this.state.data_product.attribute_values}
                         handle_onchange_input={this.handle_onchange_input} />
                 </div>
+                <Card_content is_edit={this.state.is_edit} data_product={this.state.data_product}
+                    handle_onchange_input={this.handle_onchange_input} />
             </div>
         );
     }

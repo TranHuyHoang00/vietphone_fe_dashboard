@@ -1,32 +1,32 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Select, message, Input, Space, Button, Divider, Spin } from 'antd';
-import { get_list_category, create_category } from '../../../../../services/category_service';
+import { get_list_attribute, create_attribute } from '../../../../../services/attribute_service';
 import { PlusOutlined } from '@ant-design/icons';
-class select_category extends Component {
+class select_attribute extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_categories: [],
-            data_category: { is_active: true },
+            data_attributes: [],
+            data_attribute: { is_active: true },
             is_loading: false,
             data_filter: {
                 page: 1,
-                limit: 5,
+                limit: 50,
                 search_query: ''
             },
             metadata: {},
         }
     }
     async componentDidMount() {
-        await this.get_list_category(this.state.data_filter);
+        await this.get_list_attribute(this.state.data_filter);
     }
     handle_onchange_input = (event, id, type) => {
-        let copyState = { ...this.state.data_category };
+        let copyState = { ...this.state.data_attribute };
         if (type == 'input') { copyState[id] = event.target.value; }
         if (type == 'select') { copyState[id] = event; }
         this.setState({
-            data_category: {
+            data_attribute: {
                 ...copyState
             }
         });
@@ -34,13 +34,13 @@ class select_category extends Component {
     handle_loading = (value) => {
         this.setState({ is_loading: value });
     }
-    get_list_category = async (data_filter) => {
+    get_list_attribute = async (data_filter) => {
         this.handle_loading(true);
         try {
-            let data = await get_list_category(data_filter);
+            let data = await get_list_attribute(data_filter);
             if (data && data.data && data.data.success == 1) {
                 this.setState({
-                    data_categories: data.data.data.categories,
+                    data_attributes: data.data.data.attributes,
                     metadata: data.data.data.metadata,
                 });
             } else {
@@ -56,23 +56,23 @@ class select_category extends Component {
         let data_filter = this.state.data_filter;
         data_filter.search_query = value;
         data_filter.page = 1;
-        await this.get_list_category(data_filter);
+        await this.get_list_attribute(data_filter);
     }
     validation = (data) => {
         this.handle_loading(true);
         if (!data.name) {
-            return { mess: "Không được bỏ trống 'Tên danh mục' ", code: 1 };
+            return { mess: "Không được bỏ trống 'Tên attribute' ", code: 1 };
         }
         return { code: 0 };
     }
     handle_create = async () => {
-        let result = this.validation(this.state.data_category);
+        let result = this.validation(this.state.data_attribute);
         if (result.code == 0) {
             try {
-                let data = await create_category(this.state.data_category);
+                let data = await create_attribute(this.state.data_attribute);
                 if (data && data.data && data.data.success == 1) {
-                    await this.get_list_category(this.state.data_filter);
-                    this.setState({ data_category: { is_active: true } });
+                    await this.get_list_attribute(this.state.data_filter);
+                    this.setState({ data_attribute: { is_active: true } });
                     message.success("Thành công");
                 } else {
                     message.error('Thất bại');
@@ -86,30 +86,29 @@ class select_category extends Component {
         this.handle_loading(false);
     }
     render() {
-        let data_categories = this.state.data_categories;
+        let data_attributes = this.state.data_attributes;
         return (
             <>
                 <Spin size='large' spinning={this.state.is_loading}>
-                    <Select disabled={!this.props.is_edit} style={{ width: '100%' }} placement='topRight' mode="multiple"
-                        onChange={(value) => this.props.handle_onchange_input(value, "categories", 'select')}
-                        value={this.props.categories}
+                    <Select style={{ width: '100%' }} placement='topRight' mode="multiple"
+                        onChange={(value) => this.props.handle_onchange_input(value, "attribute", 'select')}
+                        value={this.props.value}
                         dropdownRender={(menu) => (
                             <div className='p-[5px]'>
                                 {menu}
                                 <Divider />
                                 <Space>
                                     <Input.Search onChange={(event) => this.handle_onchange_input(event, "name", 'input')}
-                                        onSearch={(value) => this.on_search(value)} placeholder="Tên thương hiệu !" />
+                                        onSearch={(value) => this.on_search(value)} placeholder="Tên attribute !" />
 
                                     <Button onClick={() => this.handle_create()}
                                         className='bg-[#0e97ff] text-white' icon={<PlusOutlined />}></Button>
                                 </Space>
                             </div>
                         )}
-                        options={data_categories.map((item) => ({
+                        options={data_attributes.map((item) => ({
                             label: item.name,
                             value: item.id,
-                            disabled: !item.is_active,
                         }))}
                     />
                 </Spin>
@@ -118,4 +117,4 @@ class select_category extends Component {
     }
 
 }
-export default withRouter(select_category);
+export default withRouter(select_attribute);

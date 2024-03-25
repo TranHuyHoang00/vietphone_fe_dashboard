@@ -142,6 +142,10 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
+                title: 'CODE', dataIndex: 'code', width: 100, responsive: ['sm'],
+                sorter: (a, b) => a.code - b.code,
+            },
+            {
                 title: 'Tên', dataIndex: 'name',
                 render: (name) => <Typography.Text strong className='text-[#0574b8]'>{name}</Typography.Text>,
                 sorter: (a, b) => a.name.localeCompare(b.name),

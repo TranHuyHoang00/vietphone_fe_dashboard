@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Select, message, Input, Space, Button, Divider, Spin } from 'antd';
-import { get_list_tag, create_tag } from '../../../../../services/tag_service';
+import { get_list_brand, create_brand } from '../../../../../../services/brand_service';
 import { PlusOutlined } from '@ant-design/icons';
-class select_tag extends Component {
+class select_brand extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_tags: [],
-            data_tag: { is_active: true },
+            data_brands: [],
+            data_brand: { is_active: true },
             is_loading: false,
             data_filter: {
                 page: 1,
@@ -19,14 +19,14 @@ class select_tag extends Component {
         }
     }
     async componentDidMount() {
-        await this.get_list_tag(this.state.data_filter);
+        await this.get_list_brand(this.state.data_filter);
     }
     handle_onchange_input = (event, id, type) => {
-        let copyState = { ...this.state.data_tag };
+        let copyState = { ...this.state.data_brand };
         if (type == 'input') { copyState[id] = event.target.value; }
         if (type == 'select') { copyState[id] = event; }
         this.setState({
-            data_tag: {
+            data_brand: {
                 ...copyState
             }
         });
@@ -34,13 +34,13 @@ class select_tag extends Component {
     handle_loading = (value) => {
         this.setState({ is_loading: value });
     }
-    get_list_tag = async (data_filter) => {
+    get_list_brand = async (data_filter) => {
         this.handle_loading(true);
         try {
-            let data = await get_list_tag(data_filter);
+            let data = await get_list_brand(data_filter);
             if (data && data.data && data.data.success == 1) {
                 this.setState({
-                    data_tags: data.data.data.tags,
+                    data_brands: data.data.data.brands,
                     metadata: data.data.data.metadata,
                 });
             } else {
@@ -56,23 +56,23 @@ class select_tag extends Component {
         let data_filter = this.state.data_filter;
         data_filter.search_query = value;
         data_filter.page = 1;
-        await this.get_list_tag(data_filter);
+        await this.get_list_brand(data_filter);
     }
     validation = (data) => {
         this.handle_loading(true);
         if (!data.name) {
-            return { mess: "Không được bỏ trống 'Tên tag' ", code: 1 };
+            return { mess: "Không được bỏ trống 'Tên brand' ", code: 1 };
         }
         return { code: 0 };
     }
     handle_create = async () => {
-        let result = this.validation(this.state.data_tag);
+        let result = this.validation(this.state.data_brand);
         if (result.code == 0) {
             try {
-                let data = await create_tag(this.state.data_tag);
+                let data = await create_brand(this.state.data_brand);
                 if (data && data.data && data.data.success == 1) {
-                    await this.get_list_tag(this.state.data_filter);
-                    this.setState({ data_tag: { is_active: true } });
+                    await this.get_list_brand(this.state.data_filter);
+                    this.setState({ data_brand: { is_active: true } });
                     message.success("Thành công");
                 } else {
                     message.error('Thất bại');
@@ -86,27 +86,26 @@ class select_tag extends Component {
         this.handle_loading(false);
     }
     render() {
-        let data_tags = this.state.data_tags;
+        let data_brands = this.state.data_brands;
         return (
             <>
                 <Spin size='large' spinning={this.state.is_loading}>
-                    <Select disabled={!this.props.is_edit} style={{ width: '100%' }} placement='topRight' mode="multiple"
-                        onChange={(value) => this.props.handle_onchange_input(value, "tags", 'select')}
-                        value={this.props.tags}
+                    <Select disabled={!this.props.is_edit} style={{ width: '100%' }} placement='topRight'
+                        onChange={(value) => this.props.handle_onchange_input(value, "product_brand", 'select')}
+                        value={this.props.product_brand}
                         dropdownRender={(menu) => (
                             <div className='p-[5px]'>
                                 {menu}
                                 <Divider />
                                 <Space>
                                     <Input.Search onChange={(event) => this.handle_onchange_input(event, "name", 'input')}
-                                        onSearch={(value) => this.on_search(value)} placeholder="Tên tag !" />
-
+                                        onSearch={(value) => this.on_search(value)} placeholder="Tên brand !" />
                                     <Button onClick={() => this.handle_create()}
                                         className='bg-[#0e97ff] text-white' icon={<PlusOutlined />}></Button>
                                 </Space>
                             </div>
                         )}
-                        options={data_tags.map((item) => ({
+                        options={data_brands.map((item) => ({
                             label: item.name,
                             value: item.id,
                             disabled: !item.is_active,
@@ -118,4 +117,4 @@ class select_tag extends Component {
     }
 
 }
-export default withRouter(select_tag);
+export default withRouter(select_brand);

@@ -7,7 +7,7 @@ import Carousel from "react-multi-carousel";
 import { image_to_base64 } from '../../../../../utils/base64';
 import { get_media } from '../../../../../services/media_service';
 import Modal_video from '../modals/modal_video';
-class card_media extends Component {
+class product_media extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -138,4 +138,4 @@ class card_media extends Component {
     }
 
 }
-export default withRouter(card_media);
+export default withRouter(product_media);

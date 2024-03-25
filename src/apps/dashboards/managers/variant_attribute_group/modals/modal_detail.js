@@ -24,7 +24,6 @@ class modal_detail extends Component {
                     </>
                 ]}>
                 <div className='border-t py-[10px] space-y-[5px]'>
-                    {text_line_1_3('CODE', data_attribute.code)}
                     {text_line_1_3('Tên thông số', data_attribute.name)}
                     {text_line_1_3('Mô tả', data_attribute.description)}
                 </div>

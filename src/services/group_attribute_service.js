@@ -9,7 +9,7 @@ const get_group_attribute = (id) => {
     return api_admin.get(`/product/api/v1/get-group-attribute/${id}`);
 }
 const delete_group_attribute = (id) => {
-    return api_admin.delete(`/product/api/v1/delete-group-attribute/${id}`);
+    return api_admin.delete(`/product/api/v1/update-group-attribute/${id}`);
 }
 const edit_group_attribute = (id, data) => {
     return api_admin.put(`/product/api/v1/update-group-attribute/${id}`, data);

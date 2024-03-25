@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button, message, Spin } from 'antd';
 import { get_product } from '../../../../../services/product_service';
-import Card_product from '../elements/card_product';
-import Card_variant from '../elements/card_variant';
+import Card_product from '../cards/card_product';
+import Card_variant from '../cards/card_variant';
 class edit extends Component {
     constructor(props) {
         super(props);
@@ -30,7 +30,8 @@ class edit extends Component {
         try {
             let data = await get_product(id);
             if (data && data.data && data.data.success == 1) {
-                this.setState({ data_product: data.data.data });
+                let data_product = data.data.data;
+                this.setState({ data_product: data_product });
             } else {
                 message.error("Lỗi");
             }
@@ -41,6 +42,7 @@ class edit extends Component {
         }
 
     }
+
     render() {
         let data_product = this.state.data_product;
         return (
@@ -51,10 +53,13 @@ class edit extends Component {
                         Quay lại
                     </Button>
                 </div>
+
                 <Card_product get_product={this.get_product} data_product={data_product}
                     handle_loading={this.handle_loading} />
+
                 <Card_variant get_product={this.get_product} data_variant={data_product.variants}
-                    handle_loading={this.handle_loading} />
+                    handle_loading={this.handle_loading} product_id={this.state.product_id}
+                    variant_attribute_group={this.state.data_product.variant_attribute_group} />
             </Spin>
         );
     }
