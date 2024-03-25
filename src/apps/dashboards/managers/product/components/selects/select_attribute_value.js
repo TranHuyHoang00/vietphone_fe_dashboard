@@ -256,8 +256,8 @@ class select_attribute_value extends Component {
                         />
                     </div>
                 </div>
-                <div className='flex flex-wrap items-end justify-between gap-[5px]'>
-                    <div className='w-5/6'>
+                <div className='flex items-end gap-[5px]'>
+                    <div className='w-3/4'>
                         <Form_select_data disabled={this.state.disabled_attribute_value} name={'Giá trị'}
                             width={'100%'} name_funtion={'attribute_value'} type={'input'} variable={'value'}
                             get_data_api={this.get_data_api} value={this.state.data_attribute_value.id}
@@ -270,9 +270,9 @@ class select_attribute_value extends Component {
                             }))}
                         />
                     </div>
-                    <div className='w-1/6'>
-                        <Button onClick={() => this.props.add_data(this.state.data_attribute_value)}
-                            disabled={this.state.disabled_button}>Thêm vào</Button>
+                    <div className='w-1/4'>
+                        <Button className='w-full' onClick={() => this.props.add_data(this.state.data_attribute_value)}
+                            disabled={this.state.disabled_button}>Thêm </Button>
                     </div>
                 </div>
             </>

@@ -107,7 +107,7 @@ class card_attribute_value extends Component {
 
             <>
                 <Card title="Thông số kỹ thuật">
-                    <div className='space-y-[10px]'>
+                    <div className='space-y-[10px] '>
                         <Select_attribute_value is_edit={is_edit} add_data={this.add_data}
                             type_handle={this.props.type_handle}
                             variant_attribute_group={this.props.variant_attribute_group} />
