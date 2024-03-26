@@ -21,8 +21,11 @@ class product extends Component {
         let data_product = this.props.data_product;
         if (this.props.is_edit == false) { this.props.click_edit_product() };
         if (this.props.is_edit == true) {
-            let media = await this.handle_create_media(this.state.data_medias);
-            data_product.media = media;
+
+            if (this.state.data_medias.length !== 0) {
+                let media = await this.handle_create_media(this.state.data_medias);
+                data_product.media = media;
+            }
             await this.props.edit_product(data_product.id, data_product);
             await this.props.get_product(data_product.id);
             this.props.click_edit_product();

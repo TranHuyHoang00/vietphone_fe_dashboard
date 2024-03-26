@@ -72,8 +72,10 @@ class variant extends Component {
         let data_variant = this.props.data_variant;
         if (this.props.is_edit == false) { this.props.click_edit_variant() };
         if (this.props.is_edit == true) {
-            let media = await this.handle_create_media(this.state.data_medias);
-            data_variant.media = media;
+            if (this.state.data_medias.length !== 0) {
+                let media = await this.handle_create_media(this.state.data_medias);
+                data_variant.media = media;
+            }
             await this.props.edit_variant(data_variant.id, data_variant);
             await this.props.get_variant(data_variant.id);
             this.props.click_edit_variant();
