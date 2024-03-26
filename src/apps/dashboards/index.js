@@ -25,7 +25,7 @@ import Manager_group_attribute from './managers/group_attribute/index';
 import Manager_attribute from './managers/attribute/index';
 import Manager_attribute_value from './managers/attribute_value/index';
 import Manager_product from './managers/product/index';
-import Edit_product from './managers/product/pages/edit';
+import Edit_product from './managers/product/pages/edit/index';
 import Manager_variant_attribute_group from './managers/variant_attribute_group';
 class index extends Component {
     constructor(props) {

@@ -15,20 +15,19 @@ class product_media extends Component {
             type_menu: 1,
             data_medias: [],
             data_media_ids: [],
-            data_product: [],
+            data_product: {},
             modal_video: false,
         }
     }
     async componentDidMount() {
+        let data_product = this.props.data_product;
+        this.setState({ data_product: data_product, data_media_ids: data_product.media });
+        if (data_product.media && data_product.media.length !== 0) {
+            await this.get_list_media(data_product.media);
+        }
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.data_product !== this.props.data_product) {
-            let data_product = this.props.data_product;
-            this.setState({ data_product: data_product, data_media_ids: data_product.media });
-            if (data_product.media && data_product.media.length !== 0) {
-                await this.get_list_media(data_product.media);
-            }
-        }
+
     }
     get_list_media = async (media) => {
         let data_medias = [];

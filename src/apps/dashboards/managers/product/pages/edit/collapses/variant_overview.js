@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Card, Image, Typography, Radio, Carousel } from 'antd';
+import { Collapse, Typography, Radio } from 'antd';
 class variant_overview extends Component {
     constructor(props) {
         super(props);
@@ -10,18 +10,17 @@ class variant_overview extends Component {
     }
     async componentDidMount() {
     }
-    async componentDidUpdate() {
-    }
     render() {
         let data_variants = this.props.data_variants;
         return (
-            <>
-                <Card title="Phiên bản">
-                    <Radio.Group className='w-full' value={this.props.active_variant} onChange={(value) => this.props.handle_select_variant(value, 'radio')}>
-                        <div className='space-y-[5px] '>
+            <Collapse defaultActiveKey={['1']}>
+                <Collapse.Panel header="Phiên bản" key="1">
+                    <Radio.Group className='w-full' value={this.props.active_variant}
+                        onChange={(value) => this.props.select_variant(value.target.value)}>
+                        <div className='space-y-[10px] '>
                             {data_variants && data_variants.map((item, index) => {
                                 return (
-                                    <div onClick={() => this.props.handle_select_variant(index, 'button')}
+                                    <div onClick={() => this.props.select_variant(index)}
                                         className='flex gap-[10px] cursor-pointer '>
                                         <Radio value={index}></Radio>
                                         <div>
@@ -33,8 +32,8 @@ class variant_overview extends Component {
                             })}
                         </div>
                     </Radio.Group>
-                </Card>
-            </>
+                </Collapse.Panel>
+            </Collapse>
         );
     }
 
