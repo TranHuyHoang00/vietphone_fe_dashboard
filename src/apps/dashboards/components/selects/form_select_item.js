@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Typography, Select, Divider, Space, Input, Button } from 'antd';
+import { Select, Divider, Space, Input, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 class form_select_item extends Component {
@@ -21,9 +21,11 @@ class form_select_item extends Component {
                         {menu}
                         <Divider />
                         <Space>
-                            <Input.Search placeholder={this.props.placeholder} disabled={this.props.disabled_search}
+                            <Input.Search placeholder={this.props.placeholder}
+                                disabled={this.props.disabled_search}
                                 onChange={(value) => this.props.on_change_input(value, this.props.variable_input, this.props.type_input)}
                                 onSearch={(value) => this.props.on_search(value, this.props.form_name)} />
+
                             <Button disabled={this.props.disabled_button}
                                 onClick={() => this.props.handle_create(this.props.form_name)}
                                 className='bg-[#0e97ff] text-white' icon={<PlusOutlined />}></Button>

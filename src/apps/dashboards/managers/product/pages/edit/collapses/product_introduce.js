@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../../../store/actions';
-import { Collapse } from 'antd';
+import { Collapse, Select } from 'antd';
 import { text_line_1_3 } from '../../../../../components/displays/data_line_1_3';
 import Form_select_item from '../../../../../components/selects/form_select_item';
 class product_introduce extends Component {
@@ -164,6 +164,20 @@ class product_introduce extends Component {
                                     handle_create={this.handle_create}
                                 />
 
+                            </div>
+                        </div>
+                        <div className='flex items-center gap-[5px]'>
+                            <div className='w-1/3 flex items-center justify-between'>
+                                <span>Trạng thái</span>
+                                <span>:</span>
+                            </div>
+                            <div className='w-2/3'>
+                                <Select disabled={!this.props.is_edit} style={{ width: '100%' }} value={this.props.data_product.is_active}
+                                    onChange={(event) => this.props.on_change_product(event, 'is_active', 'select')}
+                                    options={[
+                                        { value: true, label: 'Mở' },
+                                        { value: false, label: 'Khóa' },
+                                    ]} />
                             </div>
                         </div>
                     </div>
