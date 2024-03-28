@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Button, Input, Typography, Select, Collapse } from 'antd';
+import { connect } from 'react-redux';
+import * as actions from '../../../../../store/actions';
+import { Modal, Button, Collapse } from 'antd';
 import { format_money } from '../../../../../utils/format_money';
+import { text_line_1_3 } from '../../../components/displays/data_line_1_3';
 class modal_detail extends Component {
     constructor(props) {
         super(props);
@@ -26,134 +29,31 @@ class modal_detail extends Component {
                 <Collapse defaultActiveKey={1}>
                     <Collapse.Panel header="THÔNG TIN KHÁCH HÀNG" key="1">
                         <div className='space-y-[5px]'>
-                            <div className='flex gap-[5px]'>
-                                <div className='w-1/3'>
-                                    <Typography.Text className='text-gray-700'>Họ và tên</Typography.Text>
-                                </div>
-                                <div className='w-2/3'>
-                                    <Typography.Text strong className='text-[#0574b8]'>: {data_order.user && data_order.user.full_name}</Typography.Text>
-                                </div>
-                            </div>
-                            <div className='flex gap-[5px]'>
-                                <div className='w-1/3'>
-                                    <Typography.Text className='text-gray-700'>Số điện thoại</Typography.Text>
-                                </div>
-                                <div className='w-2/3'>
-                                    <Typography.Text strong italic >: {data_order.user && data_order.user.phone}</Typography.Text>
-                                </div>
-                            </div>
-                            <div className='flex gap-[5px]'>
-                                <div className='w-1/3'>
-                                    <Typography.Text className='text-gray-700'>Email</Typography.Text>
-                                </div>
-                                <div className='w-2/3'>
-                                    <Typography.Text>: {data_order.email}</Typography.Text>
-                                </div>
-                            </div>
+                            {text_line_1_3('Họ và tên', (data_order.user && data_order.user.full_name))}
+                            {text_line_1_3('Số điện thoại', (data_order.user && data_order.user.phone))}
+                            {text_line_1_3('Email', (data_order.email))}
                         </div>
                     </Collapse.Panel>
                     <Collapse.Panel header="THÔNG TIN ĐƠN HÀNG" key="2">
                         <div className='space-y-[5px]'>
-                            <div className='flex gap-[5px]'>
-                                <div className='w-1/3'>
-                                    <Typography.Text className='text-gray-700'>Mã đơn hàng</Typography.Text>
-                                </div>
-                                <div className='w-2/3'>
-                                    <Typography.Text strong>: {data_order.code}</Typography.Text>
-                                </div>
-                            </div>
-                            <div className='flex gap-[5px]'>
-                                <div className='w-1/3'>
-                                    <Typography.Text className='text-gray-700'>Trạng thái</Typography.Text>
-                                </div>
-                                <div className='w-2/3'>
-                                    <Typography.Text>: {data_order.status}</Typography.Text>
-                                </div>
-                            </div>
-                            <div className='flex gap-[5px]'>
-                                <div className='w-1/3'>
-                                    <Typography.Text className='text-gray-700'>Địa chỉ giao </Typography.Text>
-                                </div>
-                                <div className='w-2/3'>
-                                    <Typography.Text>: {data_order.shipping_address}</Typography.Text>
-                                </div>
-                            </div>
-                            <div className='flex gap-[5px]'>
-                                <div className='w-1/3'>
-                                    <Typography.Text className='text-gray-700'>Tổng tiền</Typography.Text>
-                                </div>
-                                <div className='w-2/3'>
-                                    <Typography.Text strong className='text-[#0574b8]'>: {format_money(data_order.total)} vnđ</Typography.Text>
-                                </div>
-                            </div>
-                            <div className='flex gap-[5px]'>
-                                <div className='w-1/3'>
-                                    <Typography.Text className='text-gray-700'>Khấu trừ</Typography.Text>
-                                </div>
-                                <div className='w-2/3'>
-                                    <Typography.Text strong className='text-red-600'>: {format_money(data_order.total_discount)} vnđ</Typography.Text>
-                                </div>
-                            </div>
-                            <div className='flex gap-[5px]'>
-                                <div className='w-1/3'>
-                                    <Typography.Text className='text-gray-700'>Ngày tạo</Typography.Text>
-                                </div>
-                                <div className='w-2/3'>
-                                    <Typography.Text>: {data_order.created_at}</Typography.Text>
-                                </div>
-                            </div>
+                            {text_line_1_3('Mã đơn hàng', (data_order.code))}
+                            {text_line_1_3('Trạng thái', (data_order.status))}
+                            {text_line_1_3('Tổng tiền', format_money(data_order.total))}
+                            {text_line_1_3('Khấu trừ', format_money(data_order.total_discount))}
+                            {text_line_1_3('Địa chỉ giao', (data_order.shipping_address))}
+                            {text_line_1_3('Ngày tạo', (data_order.created_at))}
                             {data_order.order_lines && data_order.order_lines.map((item, index) => {
                                 return (
                                     <Collapse key={index}>
                                         <Collapse.Panel header={`${item.product_name}`} key="1">
-                                            <div className='flex gap-[5px]'>
-                                                <div className='w-1/3'>
-                                                    <Typography.Text className='text-gray-700'>ID</Typography.Text>
-                                                </div>
-                                                <div className='w-2/3'>
-                                                    <Typography.Text strong>: {item.id}</Typography.Text>
-                                                </div>
-                                            </div>
-                                            <div className='flex gap-[5px]'>
-                                                <div className='w-1/3'>
-                                                    <Typography.Text className='text-gray-700'>Số lượng</Typography.Text>
-                                                </div>
-                                                <div className='w-2/3'>
-                                                    <Typography.Text>: {item.quantity} cái</Typography.Text>
-                                                </div>
-                                            </div>
-                                            <div className='flex gap-[5px]'>
-                                                <div className='w-1/3'>
-                                                    <Typography.Text className='text-gray-700'>Giá tiền</Typography.Text>
-                                                </div>
-                                                <div className='w-2/3'>
-                                                    <Typography.Text strong className='text-[#0574b8]'>: {format_money(item.price)} vnđ</Typography.Text>
-                                                </div>
-                                            </div>
-                                            <div className='flex gap-[5px]'>
-                                                <div className='w-1/3'>
-                                                    <Typography.Text className='text-gray-700'>Giá trị chiết khấu</Typography.Text>
-                                                </div>
-                                                <div className='w-2/3'>
-                                                    <Typography.Text strong className='text-red-600'>: {format_money(item.discount_value)} vnđ</Typography.Text>
-                                                </div>
-                                            </div>
-                                            <div className='flex gap-[5px]'>
-                                                <div className='w-1/3'>
-                                                    <Typography.Text className='text-gray-700'>Tỉ lệ chiết khấu</Typography.Text>
-                                                </div>
-                                                <div className='w-2/3'>
-                                                    <Typography.Text strong className='text-red-600'>: {format_money(item.discount_rate)} %</Typography.Text>
-                                                </div>
-                                            </div>
-                                            <div className='flex gap-[5px]'>
-                                                <div className='w-1/3'>
-                                                    <Typography.Text className='text-gray-700'>Số tiền chiết khấu</Typography.Text>
-                                                </div>
-                                                <div className='w-2/3'>
-                                                    <Typography.Text strong className='text-red-600'>: {format_money(item.discount_amount)} vnđ</Typography.Text>
-                                                </div>
-                                            </div>
+                                            {text_line_1_3('ID', (item.id))}
+                                            {text_line_1_3('Số lượng', (item.quantity))}
+                                            {text_line_1_3('Giá tiền', format_money(item.price))}
+                                            {text_line_1_3('Giá trị chiết khấu', format_money(item.discount_value))}
+                                            {text_line_1_3('Giá trị chiết khấu', format_money(item.discount_value))}
+                                            {text_line_1_3('Tỉ lệ chiết khấu', `${(item.discount_rate)} %`)}
+                                            {text_line_1_3('Số tiền chiết khấu', format_money(item.discount_amount))}
+
                                         </Collapse.Panel>
                                     </Collapse>
                                 )
@@ -169,4 +69,13 @@ class modal_detail extends Component {
     }
 
 }
-export default withRouter(modal_detail);
+const mapStateToProps = state => {
+    return {
+        data_order: state.order.data_order,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(modal_detail));

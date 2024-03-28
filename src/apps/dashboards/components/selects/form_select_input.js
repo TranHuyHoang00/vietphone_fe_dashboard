@@ -19,7 +19,7 @@ class form_select_input extends Component {
                     </Typography.Text>
                 </div>
                 <Select style={{ width: this.props.width }} value={this.props.value}
-                    onChange={(event) => this.props.handle_onchange_input(event, this.props.variable, this.props.type)}
+                    onChange={(event) => this.props.handle_onchange_input(event, this.props.variable)}
                     options={this.props.options} />
             </div>
         );

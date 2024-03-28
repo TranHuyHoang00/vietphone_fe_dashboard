@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../../../store/actions';
 import { Modal, message, Spin } from 'antd';
-import { edit_tag } from '../../../../../services/tag_service';
 import Form_input from '../../../components/inputs/form_input';
 import Form_textare from '../../../components/inputs/form_textare';
 import Form_image from '../../../components/inputs/form_image';
@@ -11,114 +12,76 @@ class modal_edit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_tag: {},
-            is_loading: false,
-            mask_closable: true,
             is_update_image: false,
         }
     }
     async componentDidMount() {
     }
-    async componentDidUpdate(prevProps) {
-        if (prevProps.data_tag !== this.props.data_tag) {
-            this.setState({ data_tag: this.props.data_tag });
-        }
-    }
-    handle_onchange_input = (event, id, type) => {
-        let copyState = { ...this.state.data_tag };
-        if (type == 'input') { copyState[id] = event.target.value; }
-        if (type == 'select') { copyState[id] = event; }
-        this.setState({
-            data_tag: {
-                ...copyState
-            }
-        });
-    }
-    handle_loading = (value) => {
-        this.setState({
-            is_loading: value,
-            mask_closable: !value
-        });
-    }
     validation = (data) => {
-        this.handle_loading(true);
         if (!data.name) {
-            return { mess: "Không được bỏ trống 'Tên Tag' ", code: 1 };
-        }
-        if (!data.icon) {
-            return { mess: "Không được bỏ trống 'Icon' ", code: 1 };
+            return { mess: "Không được bỏ trống 'Tên tag' ", code: 1 };
         }
         return { code: 0 };
     }
     handle_edit = async () => {
-        let result = this.validation(this.state.data_tag);
+        let result = this.validation(this.props.data_tag);
         if (result.code == 0) {
-            try {
-                let data_tag = this.state.data_tag;
-                if (this.state.is_update_image == false) { delete data_tag.image; }
-                let data = await edit_tag(data_tag.id, data_tag);
-                if (data && data.data && data.data.success == 1) {
-                    await this.props.load_data();
-                    this.props.open_modal("edit", false);
-                    this.setState({ data_tag: {}, is_update_image: false });
-                    message.success("Thành công");
-                } else {
-                    message.error('Thất bại');
-                }
-            } catch (e) {
-                message.error('Lỗi hệ thống');
+            let data_tag = this.props.data_tag;
+            if (this.state.is_update_image == false) {
+                delete data_tag.image;
+            }
+            await this.props.edit_tag(data_tag.id, data_tag);
+            let is_result = this.props.is_result;
+            if (is_result == true) {
+                await this.props.get_list_tag(this.props.data_filter);
+                this.props.open_modal("edit", false);
             }
         } else {
             message.error(result.mess);
         }
-        this.handle_loading(false);
     }
     onchange_image = (image) => {
-        this.setState({
-            data_tag: {
-                ...this.state.data_tag,
-                image: image,
-            },
-            is_update_image: true,
-        })
+        this.setState({ is_update_image: true, })
+        this.props.on_change_tag(image, 'image');
     }
     render() {
-        let data_tag = this.state.data_tag;
+        let data_tag = this.props.data_tag;
+        let is_loading = this.props.is_loading;
         return (
             <Modal title="CHỈNH SỬA" open={this.props.modal_edit}
                 onCancel={() => this.props.open_modal("edit", false)} width={400}
-                maskClosable={this.state.mask_closable}
+                maskClosable={!is_loading}
                 footer={[
                     <Modal_footer open_modal={this.props.open_modal} type={'edit'}
-                        is_loading={this.state.is_loading} handle_funtion={this.handle_edit} />
+                        is_loading={is_loading} handle_funtion={this.handle_edit} />
                 ]}>
-                <Spin spinning={this.state.is_loading}>
+                <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
 
                         <Form_image name={'Ảnh'} variable={'image'} value={data_tag.image}
-                            important={true} type={'select'}
-                            htmlFor={'load_file_edit'} width={100} height={100}
+                            important={true}
+                            htmlFor={'load_file_edit'} width={200} height={100}
                             onchange_image={this.onchange_image} />
 
-                        <Form_input name={'Tên Tag'} variable={'name'} value={data_tag.name}
-                            important={true} type={'input'}
-                            handle_onchange_input={this.handle_onchange_input} />
+                        <Form_input name={'Tên tag'} variable={'name'} value={data_tag.name}
+                            important={true}
+                            handle_onchange_input={this.props.on_change_tag} />
 
                         <Form_input name={'Icon'} variable={'icon'} value={data_tag.icon}
-                            important={false} type={'input'}
-                            handle_onchange_input={this.handle_onchange_input} />
+                            important={false}
+                            handle_onchange_input={this.props.on_change_tag} />
 
                         <Form_textare name={'Mô tả'} variable={'description'} value={data_tag.description}
-                            important={false} type={'input'}
-                            handle_onchange_input={this.handle_onchange_input} />
+                            important={false}
+                            handle_onchange_input={this.props.on_change_tag} />
 
                         <Form_select_input name={'Trạng thái'} variable={'is_active'} value={data_tag.is_active}
-                            important={false} type={'select'} width={'100%'}
+                            important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },
                                 { value: false, label: 'Khóa' },
                             ]}
-                            handle_onchange_input={this.handle_onchange_input} />
+                            handle_onchange_input={this.props.on_change_tag} />
                     </div>
                 </Spin>
             </Modal>
@@ -126,4 +89,18 @@ class modal_edit extends Component {
     }
 
 }
-export default withRouter(modal_edit);
+const mapStateToProps = state => {
+    return {
+        data_tag: state.tag.data_tag,
+        is_loading: state.tag.is_loading,
+        is_result: state.tag.is_result,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        get_list_tag: (data_filter) => dispatch(actions.get_list_tag_redux(data_filter)),
+        edit_tag: (id, data) => dispatch(actions.edit_tag_redux(id, data)),
+        on_change_tag: (id, value) => dispatch(actions.on_change_tag_redux(id, value)),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(modal_edit));

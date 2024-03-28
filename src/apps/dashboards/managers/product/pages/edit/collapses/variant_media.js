@@ -13,7 +13,6 @@ class variant_media extends Component {
         this.state = {
             data_medias: [],
             data_media_ids: [],
-
             data_variant: {},
         }
     }
@@ -54,7 +53,7 @@ class variant_media extends Component {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
                 let image_new = await image_to_base64(event, i);
-                data_medias.push({ image: image_new, media_type: 'image', alt: this.state.data_variant.name });
+                data_medias.push({ image: image_new, media_type: 'image', alt: this.props.data_variant.name });
             }
         }
         if (type == 'delete') {
@@ -75,7 +74,7 @@ class variant_media extends Component {
                         <Carousel>
                             {data_medias && data_medias.map((item, index) => {
                                 return (
-                                    <div >
+                                    <div key={index}>
                                         <Image height={150} width={150} src={item.image} className='object-cover' />
                                         <div >
                                             <Button disabled={!this.props.is_edit} onClick={() => this.onchange_image(null, 'delete', index, item.id)}
@@ -90,7 +89,7 @@ class variant_media extends Component {
                         <input id="media_variant" type="file" accept="image/*" hidden
                             onChange={(event) => this.onchange_image(event, 'create')} />
                         <Button disabled={!this.props.is_edit}>
-                            <label htmlFor="media_variant">Thêm ảnh</label>
+                            <label className='w-full h-full' htmlFor="media_variant">Thêm ảnh</label>
                         </Button>
                     </div>
                 </Collapse.Panel>

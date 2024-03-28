@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../../../store/actions';
 import { Modal, Button } from 'antd';
-import { text_line_1_3 } from '../../../components/displays/data_line_1_3';
+import { text_line_1_3, image_line_1_3 } from '../../../components/displays/data_line_1_3';
+
 class modal_detail extends Component {
     constructor(props) {
         super(props);
@@ -32,4 +35,13 @@ class modal_detail extends Component {
     }
 
 }
-export default withRouter(modal_detail);
+const mapStateToProps = state => {
+    return {
+        data_group_attribute: state.group_attribute.data_group_attribute,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(modal_detail));

@@ -33,7 +33,6 @@ class product_content extends Component {
 }
 const mapStateToProps = state => {
     return {
-        is_edit: state.product.is_edit,
         data_product: state.product.data_product,
     };
 };
@@ -46,21 +45,21 @@ export default connect(mapStateToProps, mapDispatchToProps)(withRouter(product_c
 
 product_content.modules = {
     toolbar: [
-        ['bold', 'italic', 'underline', 'strike'],
-        ['blockquote', 'code-block'],
-        ['link', 'image', 'video', 'formula'],
+        [{ 'font': [] }],
+        [{ 'size': ['small', 'large', 'huge'] }],
 
-        [{ 'header': 1 }, { 'header': 2 }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+
+        ['link', 'image', 'video'],
+
         [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
+
         [{ 'script': 'sub' }, { 'script': 'super' }],
         [{ 'indent': '-1' }, { 'indent': '+1' }],
-        [{ 'direction': 'rtl' }],
 
-        [{ 'size': ['small', false, 'large', 'huge'] }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'header': [1, 2, 3, 4, 5, 6] }],
 
         [{ 'color': [] }, { 'background': [] }],
-        [{ 'font': [] }],
         [{ 'align': [] }],
 
         ['clean']
@@ -71,8 +70,10 @@ product_content.modules = {
 }
 
 product_content.formats = [
-    'header', 'font', 'size',
+    'font', 'size',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video'
+    'list', 'link', 'image', 'video',
+
+    'header', 'indent', 'script',
+    'color', 'background', 'align', 'clean'
 ]

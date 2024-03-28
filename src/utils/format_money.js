@@ -3,7 +3,7 @@ const format_money = (number) => {
         minimumFractionDigits: 0,
         maximumFractionDigits: 3
     });
-    return number_new;
+    return `${number_new} vnđ`;
 };
 export {
     format_money

@@ -1,100 +1,75 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../../../store/actions';
 import { Modal, message, Spin } from 'antd';
-import { create_attribute } from '../../../../../services/attribute_service';
-import Select_group_attribute from '../elements/select_group_attribute';
 import Form_input from '../../../components/inputs/form_input';
 import Form_textare from '../../../components/inputs/form_textare';
+import Form_select_input from '../../../components/selects/form_select_input';
 import Modal_footer from '../../../components/modal/modal_footer';
 class modal_create extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_attribute: {
-                is_active: true,
-            },
-            is_loading: false,
-            mask_closable: true,
         }
     }
     async componentDidMount() {
-    }
-    handle_onchange_input = (event, id, type) => {
-        let copyState = { ...this.state.data_attribute };
-        if (type == 'input') { copyState[id] = event.target.value; }
-        if (type == 'select') { copyState[id] = event; }
-        this.setState({
-            data_attribute: {
-                ...copyState
-            }
-        });
-    }
-    handle_loading = (value) => {
-        this.setState({
-            is_loading: value,
-            mask_closable: !value
-        });
+        this.props.get_list_group_attribute({ page: 1, limit: 100, search_query: '' });
     }
     validation = (data) => {
-        this.handle_loading(true);
         if (!data.name) {
             return { mess: "Không được bỏ trống 'Tên thông số' ", code: 1 };
-        }
-        if (!data.code) {
-            return { mess: "Không được bỏ trống 'CODE' ", code: 1 };
         }
         return { code: 0 };
     }
     handle_create = async () => {
-        let result = this.validation(this.state.data_attribute);
+        let result = this.validation(this.props.data_attribute);
         if (result.code == 0) {
-            try {
-                let data = await create_attribute(this.state.data_attribute);
-                if (data && data.data && data.data.success == 1) {
-                    await this.props.load_data();
-                    this.props.open_modal("create", false);
-                    this.setState({ data_attribute: { is_active: true } });
-                    message.success("Thành công");
-                } else {
-                    message.error('Thất bại');
-                }
-            } catch (e) {
-                message.error('Lỗi hệ thống');
+            await this.props.create_attribute(this.props.data_attribute);
+            let is_result = this.props.is_result;
+            if (is_result == true) {
+                await this.props.get_list_attribute(this.props.data_filter);
+                this.props.open_modal("create", false);
             }
         } else {
             message.error(result.mess);
         }
-        this.handle_loading(false);
     }
     render() {
-        let data_attribute = this.state.data_attribute;
+        let data_attribute = this.props.data_attribute;
+        let data_group_attributes = this.props.data_group_attributes;
+        let is_loading = this.props.is_loading;
         return (
 
             <Modal title="TẠO MỚI" open={this.props.modal_create}
                 onCancel={() => this.props.open_modal("create", false)} width={400}
-                maskClosable={this.state.mask_closable}
+                maskClosable={!is_loading}
                 footer={[
                     <Modal_footer open_modal={this.props.open_modal} type={'create'}
-                        is_loading={this.state.is_loading} handle_funtion={this.handle_create} />
+                        is_loading={is_loading} handle_funtion={this.handle_create} />
                 ]}>
-                <Spin spinning={this.state.is_loading}>
+                <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
 
                         <Form_input name={'CODE'} variable={'code'} value={data_attribute.code}
-                            important={true} type={'input'}
-                            handle_onchange_input={this.handle_onchange_input} />
+                            important={false}
+                            handle_onchange_input={this.props.on_change_attribute} />
 
                         <Form_input name={'Tên thông số'} variable={'name'} value={data_attribute.name}
-                            important={true} type={'input'}
-                            handle_onchange_input={this.handle_onchange_input} />
-
-                        <Select_group_attribute value={data_attribute.group_attribute}
-                            handle_onchange_input={this.handle_onchange_input} />
+                            important={true}
+                            handle_onchange_input={this.props.on_change_attribute} />
 
                         <Form_textare name={'Mô tả'} variable={'description'} value={data_attribute.description}
-                            important={false} type={'input'}
-                            handle_onchange_input={this.handle_onchange_input} />
+                            important={false}
+                            handle_onchange_input={this.props.on_change_attribute} />
 
+                        <Form_select_input name={'Loại thông số'} variable={'group_attribute'} value={data_attribute.group_attribute}
+                            important={true} width={'100%'}
+                            options={data_group_attributes.map((item) => ({
+                                label: item.name,
+                                value: item.id,
+                            }))}
+                            handle_onchange_input={this.props.on_change_attribute} />
                     </div>
                 </Spin>
             </Modal>
@@ -102,4 +77,21 @@ class modal_create extends Component {
     }
 
 }
-export default withRouter(modal_create);
+const mapStateToProps = state => {
+    return {
+        data_attribute: state.attribute.data_attribute,
+        is_loading: state.attribute.is_loading,
+        is_result: state.attribute.is_result,
+        data_group_attributes: state.group_attribute.data_group_attributes,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        get_list_attribute: (data_filter) => dispatch(actions.get_list_attribute_redux(data_filter)),
+        create_attribute: (data) => dispatch(actions.create_attribute_redux(data)),
+        on_change_attribute: (id, value) => dispatch(actions.on_change_attribute_redux(id, value)),
+        get_list_group_attribute: (data_filter) => dispatch(actions.get_list_group_attribute_redux(data_filter)),
+
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(modal_create));

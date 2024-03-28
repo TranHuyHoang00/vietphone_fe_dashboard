@@ -1,85 +1,77 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Modal, message, Spin } from 'antd';
-import { create_variant_attribute_group } from '../../../../../services/variant_attribute_group_service';
-import Select_attribute from '../elements/select_attribute';
+import { connect } from 'react-redux';
+import * as actions from '../../../../../store/actions';
+import { Modal, message, Spin, Typography } from 'antd';
 import Form_input from '../../../components/inputs/form_input';
 import Modal_footer from '../../../components/modal/modal_footer';
+import Form_select_item from '../../../components/selects/form_select_item';
+
 class modal_create extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_variant_attribute_group: {},
-            is_loading: false,
-            mask_closable: true,
         }
     }
     async componentDidMount() {
-    }
-    handle_onchange_input = (event, id, type) => {
-        let copyState = { ...this.state.data_variant_attribute_group };
-        if (type == 'input') { copyState[id] = event.target.value; }
-        if (type == 'select') { copyState[id] = event; }
-        this.setState({
-            data_variant_attribute_group: {
-                ...copyState
-            }
-        });
-    }
-    handle_loading = (value) => {
-        this.setState({
-            is_loading: value,
-            mask_closable: !value
-        });
+        this.props.get_list_attribute({ page: 1, limit: 100, search_query: '' })
     }
     validation = (data) => {
-        this.handle_loading(true);
         if (!data.name) {
-            return { mess: "Không được bỏ trống 'Tên TS-SP' ", code: 1 };
+            return { mess: "Không được bỏ trống 'TS-SP' ", code: 1 };
         }
         return { code: 0 };
     }
     handle_create = async () => {
-        let result = this.validation(this.state.data_variant_attribute_group);
+        let result = this.validation(this.props.data_variant_attribute_group);
         if (result.code == 0) {
-            try {
-                let data = await create_variant_attribute_group(this.state.data_variant_attribute_group);
-                if (data && data.data && data.data.success == 1) {
-                    await this.props.load_data();
-                    this.props.open_modal("create", false);
-                    this.setState({ data_variant_attribute_group: {} });
-                    message.success("Thành công");
-                } else {
-                    message.error('Thất bại');
-                }
-            } catch (e) {
-                message.error('Lỗi hệ thống');
+            await this.props.create_variant_attribute_group(this.props.data_variant_attribute_group);
+            let is_result = this.props.is_result;
+            if (is_result == true) {
+                await this.props.get_list_variant_attribute_group(this.props.data_filter);
+                this.props.open_modal("create", false);
             }
         } else {
             message.error(result.mess);
         }
-        this.handle_loading(false);
     }
     render() {
-        let data_variant_attribute_group = this.state.data_variant_attribute_group;
+        let data_variant_attribute_group = this.props.data_variant_attribute_group;
+        let is_loading = this.props.is_loading;
+        let data_attributes = this.props.data_attributes;
         return (
 
             <Modal title="TẠO MỚI" open={this.props.modal_create}
                 onCancel={() => this.props.open_modal("create", false)} width={400}
-                maskClosable={this.state.mask_closable}
+                maskClosable={!is_loading}
                 footer={[
                     <Modal_footer open_modal={this.props.open_modal} type={'create'}
-                        is_loading={this.state.is_loading} handle_funtion={this.handle_create} />
+                        is_loading={is_loading} handle_funtion={this.handle_create} />
                 ]}>
-                <Spin spinning={this.state.is_loading}>
+                <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
 
-                        <Form_input name={'Tên loại TT-SP'} variable={'name'} value={data_variant_attribute_group.name}
-                            important={true} type={'input'}
-                            handle_onchange_input={this.handle_onchange_input} />
+                        <Form_input name={'Tên TS-SP'} variable={'name'} value={data_variant_attribute_group.name}
+                            important={true}
+                            handle_onchange_input={this.props.on_change_variant_attribute_group} />
 
-                        <Select_attribute value={data_variant_attribute_group.attribute}
-                            handle_onchange_input={this.handle_onchange_input} />
+                        <div className='space-y-[3px]'>
+                            <Typography.Text italic strong>Thông số
+                                <Typography.Text type="danger" strong> *</Typography.Text>
+                            </Typography.Text>
+                            <Form_select_item width={'100%'} mode={'multiple'}
+                                variable_select={'attribute'}
+                                value={data_variant_attribute_group.variant_attribute_group}
+                                on_change_select={this.props.on_change_variant_attribute_group}
+                                options={data_attributes.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                }))}
+                                disabled_select={false}
+                                disabled_button={true}
+                                disabled_search={true}
+                            />
+                        </div>
 
                     </div>
                 </Spin>
@@ -88,4 +80,20 @@ class modal_create extends Component {
     }
 
 }
-export default withRouter(modal_create);
+const mapStateToProps = state => {
+    return {
+        data_variant_attribute_group: state.variant_attribute_group.data_variant_attribute_group,
+        is_loading: state.variant_attribute_group.is_loading,
+        is_result: state.variant_attribute_group.is_result,
+        data_attributes: state.attribute.data_attributes,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        get_list_variant_attribute_group: (data_filter) => dispatch(actions.get_list_variant_attribute_group_redux(data_filter)),
+        create_variant_attribute_group: (data) => dispatch(actions.create_variant_attribute_group_redux(data)),
+        on_change_variant_attribute_group: (id, value) => dispatch(actions.on_change_variant_attribute_group_redux(id, value)),
+        get_list_attribute: (data_filter) => dispatch(actions.get_list_attribute_redux(data_filter)),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(modal_create));

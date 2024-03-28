@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../../store/actions';
 import {
-    Table, Space, Divider, Button, Popconfirm, message, Input,
-    Spin, Pagination, Typography, Dropdown
+    Table, Space, Divider, Button, Popconfirm, Input,
+    Spin, Pagination, Typography, Image, Dropdown, Tag
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
-import Display_line_number from '../../components/display_line_number';
-import { get_list_attribute, get_attribute, delete_attribute } from '../../../../services/attribute_service';
+import Form_select_page from '../../components/selects/form_select_page';
 import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
-import { load_data_url } from '../../../../utils/load_data_url';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            is_loading: false,
             type_menu: 1,
             data_selected: [],
             modal_detail: false,
@@ -26,71 +25,22 @@ class index extends Component {
                 limit: 5,
                 search_query: ''
             },
-            data_attribute: {},
-            data_attributes: [],
-            metadata: {},
         }
     }
     async componentDidMount() {
-        await this.load_data();
-    }
-    async componentDidUpdate(prevProps) {
-        if (prevProps.location.search !== this.props.location.search) {
-            await this.load_data();
-        }
-    }
-    load_data = async () => {
-        let data_filter = load_data_url(this.state.data_filter, new URLSearchParams(this.props.location.search));
-        await this.get_list_attribute(data_filter);
-        this.setState({
-            data_filter: data_filter
-        })
-    }
-    handle_loading = (value) => {
-        this.setState({ is_loading: value });
-    }
-    get_list_attribute = async (data_filter) => {
-        this.handle_loading(true);
-        try {
-            let data = await get_list_attribute(data_filter);
-            if (data && data.data && data.data.success == 1) {
-                this.setState({
-                    data_attributes: data.data.data.attributes,
-                    metadata: data.data.data.metadata,
-                });
-            } else {
-                message.error("Lỗi");
-            }
-        } catch (e) {
-            message.error("Lỗi hệ thống");
-        } finally {
-            this.handle_loading(false);
-        }
-    }
-    get_attribute = async (id) => {
-        this.handle_loading(true);
-        try {
-            let data = await get_attribute(id);
-            if (data && data.data && data.data.success == 1) {
-                this.setState({ data_attribute: data.data.data });
-            } else {
-                message.error("Lỗi");
-            }
-        } catch (e) {
-            message.error("Lỗi hệ thống");
-        } finally {
-            this.handle_loading(false);
-        }
-
+        this.props.get_list_attribute(this.state.data_filter);
     }
     open_modal = async (name, value, id) => {
-        if (name == 'create') { this.setState({ modal_create: value }); }
+        if (name == 'create') {
+            this.setState({ modal_create: value });
+            this.props.set_data_attribute({});
+        }
         if (name == 'detail') {
             if (id == null) {
                 this.setState({ modal_detail: value, data_attribute: {} });
             } else {
                 this.setState({ modal_detail: value });
-                await this.get_attribute(id);
+                await this.props.get_attribute(id);
             }
         }
         if (name == 'edit') {
@@ -98,42 +48,23 @@ class index extends Component {
                 this.setState({ modal_edit: value, data_attribute: {} });
             } else {
                 this.setState({ modal_edit: value });
-                await this.get_attribute(id);
+                await this.props.get_attribute(id);
             }
         }
     }
     handle_funtion_menu = async () => {
-        this.handle_loading(true);
-        try {
-            let data_selected = this.state.data_selected;
-            for (const id of data_selected) {
-                let data;
-                if (this.state.type_menu == 1) { data = await delete_attribute(id); }
-                if (data && data.data && data.data.success !== 1) {
-                    message.error(`Thất bại khi xử lý dòng ID=${id}`);
-                }
-            }
-            await this.load_data();
-            if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
-            message.success(`Thành công xử lý ${data_selected.length} dòng`);
-        } catch (e) {
-            message.error('Lỗi hệ thống');
-        } finally {
-            this.handle_loading(false);
-        }
+        let data_selected = this.state.data_selected;
+        if (this.state.type_menu == 1) { await this.props.delete_list_attribute(data_selected); }
+        await this.props.get_list_attribute(this.state.data_filter);
+        if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
     }
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
-        if (type == 'limit') {
-            this.props.history.push(`/admin/manager/attribute?page=${data_filter.page}&limit=${value}&search_query=${data_filter.search_query}`);
-        }
-        if (type == 'page') {
-            this.props.history.push(`/admin/manager/attribute?page=${value}&limit=${data_filter.limit}&search_query=${data_filter.search_query}`);
-        }
-    }
-    on_search = async (value) => {
-        let data_filter = this.state.data_filter;
-        this.props.history.push(`/admin/manager/attribute?page=1&limit=${data_filter.limit}&search_query=${value}`);
+        if (type == 'limit') { data_filter.limit = value; }
+        if (type == 'page') { data_filter.page = value; }
+        if (type == 'search') { data_filter.search_query = value; data_filter.page = 1; }
+        this.setState({ data_filter: data_filter })
+        await this.props.get_list_attribute(data_filter);
     }
     render() {
         const columns = [
@@ -143,7 +74,6 @@ class index extends Component {
             },
             {
                 title: 'CODE', dataIndex: 'code', width: 100, responsive: ['sm'],
-                sorter: (a, b) => a.code - b.code,
             },
             {
                 title: 'Tên', dataIndex: 'name',
@@ -180,10 +110,9 @@ class index extends Component {
         const row_selection = { data_selected, onChange: onchange_selected };
         let data_filter = this.state.data_filter;
         let type_menu = this.state.type_menu;
-        let metadata = this.state.metadata;
         return (
             <>
-                <Spin size='large' spinning={this.state.is_loading}>
+                <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
@@ -192,11 +121,11 @@ class index extends Component {
                                     Tạo mới
                                 </Space>
                             </Button>
-                            <div><Input.Search onSearch={(value) => this.on_search(value)} placeholder="Tên thông số !" /></div>
+                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên thông số !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <Display_line_number limit={data_filter.limit} onchange_page={this.onchange_page} />
+                                <Form_select_page limit={data_filter.limit} onchange_page={this.onchange_page} />
                                 <div>
                                     <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
@@ -213,25 +142,44 @@ class index extends Component {
                             <Divider>THÔNG SỐ</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
-                                    columns={columns} dataSource={this.state.data_attributes} pagination={false}
+                                    columns={columns} dataSource={this.props.data_attributes} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={data_filter.page}
-                                    showQuickJumper total={metadata.total * metadata.limit} pageSize={data_filter.limit}
+                                    showQuickJumper total={this.props.data_meta.total * this.props.data_meta.limit} pageSize={data_filter.limit}
                                     onChange={(value) => this.onchange_page(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
                 <Modal_create modal_create={this.state.modal_create}
-                    open_modal={this.open_modal} load_data={this.load_data} />
+                    open_modal={this.open_modal}
+                    data_filter={this.state.data_filter} />
                 <Modal_detail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} data_attribute={this.state.data_attribute} />
+                    open_modal={this.open_modal} />
                 <Modal_edit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal} load_data={this.load_data}
-                    data_attribute={this.state.data_attribute} />
+                    open_modal={this.open_modal}
+                    data_filter={this.state.data_filter} />
             </>
         );
     }
 
 }
-export default withRouter(index);
+const mapStateToProps = state => {
+    return {
+        data_attributes: state.attribute.data_attributes,
+        data_attribute: state.attribute.data_attribute,
+        data_meta: state.attribute.data_meta,
+        is_loading: state.attribute.is_loading,
+        is_result: state.attribute.is_result,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        get_list_attribute: (data_filter) => dispatch(actions.get_list_attribute_redux(data_filter)),
+        get_attribute: (id) => dispatch(actions.get_attribute_redux(id)),
+        edit_list_attribute: (id, data) => dispatch(actions.edit_list_attribute_redux(id, data)),
+        delete_list_attribute: (id) => dispatch(actions.delete_list_attribute_redux(id)),
+        set_data_attribute: (id) => dispatch(actions.set_data_attribute_redux(id)),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

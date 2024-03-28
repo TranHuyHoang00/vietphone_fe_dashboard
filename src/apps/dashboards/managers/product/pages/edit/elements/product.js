@@ -21,7 +21,6 @@ class product extends Component {
         let data_product = this.props.data_product;
         if (this.props.is_edit == false) { this.props.click_edit_product() };
         if (this.props.is_edit == true) {
-
             if (this.state.data_medias.length !== 0) {
                 let media = await this.handle_create_media(this.state.data_medias);
                 data_product.media = media;
@@ -72,7 +71,8 @@ class product extends Component {
                     <div className='lg:grid grid-cols-2 gap-[10px] space-y-[10px] lg:space-y-0'>
                         <div className='space-y-[10px]'>
                             <Product_introduce />
-                            <Product_media handle_get_media={this.handle_get_media} />
+                            <Product_media handle_get_media={this.handle_get_media}
+                                data_media_ids={this.props.data_product.media} />
                         </div>
                         <div>
                             <Product_attribute_value />

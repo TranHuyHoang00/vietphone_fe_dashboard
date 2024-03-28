@@ -48,6 +48,7 @@ class select_attribute_value extends Component {
                 disabled_attribute: true,
                 disabled_attribute_value: true,
                 disabled_button: true,
+                data_group_attribute: {},
             })
         }
     }
@@ -83,11 +84,11 @@ class select_attribute_value extends Component {
             this.handle_loading(false);
         }
     }
-    get_data_api = async (id, name) => {
+    get_data_api = async (id, name_funtion) => {
         this.handle_loading(true);
         try {
             let data = {};
-            if (name == 'group_attribute') {
+            if (name_funtion == 'group_attribute') {
                 if (this.props.type_handle == 'variant') {
                     data = await get_variant_attribute_group(id);
                 }
@@ -95,12 +96,12 @@ class select_attribute_value extends Component {
                     data = await get_group_attribute(id);
                 }
             }
-            if (name == 'attribute') { data = await get_attribute(id); }
-            if (name == 'attribute_value') { data = await get_attribute_value(id); }
+            if (name_funtion == 'attribute') { data = await get_attribute(id); }
+            if (name_funtion == 'attribute_value') { data = await get_attribute_value(id); }
 
             if (data && data.data && data.data.success == 1) {
                 let data_raw = data.data.data;
-                if (name == 'group_attribute') {
+                if (name_funtion == 'group_attribute') {
                     if (this.props.type_handle == 'variant') {
                         this.setState({
                             data_group_attribute: data_raw,
@@ -119,7 +120,7 @@ class select_attribute_value extends Component {
                     }
 
                 }
-                if (name == 'attribute') {
+                if (name_funtion == 'attribute') {
                     this.setState({
                         data_attribute: data_raw,
                         data_attribute_values: data_raw.attribute_values,
@@ -127,7 +128,7 @@ class select_attribute_value extends Component {
                         disabled_attribute_value: false,
                     });
                 }
-                if (name == 'attribute_value') {
+                if (name_funtion == 'attribute_value') {
                     this.setState({
                         data_attribute_value: data_raw,
                         disabled_button: false
@@ -149,46 +150,47 @@ class select_attribute_value extends Component {
         data_filter.page = 1;
         if (name == 'group_attribute') { await this.get_list_group_attribute(data_filter); }
     }
-    validation = (data, name) => {
+    validation = (data, name_funtion) => {
         this.handle_loading(true);
-        if (name == 'group_attribute') {
+        if (name_funtion == 'group_attribute') {
             if (!data.name) {
                 return { mess: "Không được bỏ trống 'Tên loại thông số' ", code: 1 };
             }
         }
-        if (name == 'attribute') {
+        if (name_funtion == 'attribute') {
             if (!data.name) {
                 return { mess: "Không được bỏ trống 'Tên thông số' ", code: 1 };
             }
         }
-        if (name == 'attribute_value') {
+        if (name_funtion == 'attribute_value') {
             if (!data.value) {
                 return { mess: "Không được bỏ trống 'Giá trị' ", code: 1 };
             }
         }
         return { code: 0 };
     }
-    handle_create = async (name) => {
+    handle_create = async (name_funtion) => {
         let data_create;
-        if (name == 'group_attribute') { data_create = this.state.data_group_attribute }
-        if (name == 'attribute') { data_create = this.state.data_attribute }
-        if (name == 'attribute_value') { data_create = this.state.data_attribute_value }
-        let result = this.validation(data_create, name);
+        if (name_funtion == 'group_attribute') { data_create = this.state.data_group_attribute }
+        if (name_funtion == 'attribute') { data_create = this.state.data_attribute }
+        if (name_funtion == 'attribute_value') { data_create = this.state.data_attribute_value }
+        let result = this.validation(data_create, name_funtion);
         if (result.code == 0) {
             try {
                 let data;
-                if (name == 'group_attribute') { data = await create_group_attribute(data_create); }
-                if (name == 'attribute') { data = await create_attribute(data_create); }
-                if (name == 'attribute_value') { data = await create_attribute_value(data_create); }
+                if (name_funtion == 'group_attribute') { data = await create_group_attribute(data_create); }
+                if (name_funtion == 'attribute') { data = await create_attribute(data_create); }
+                if (name_funtion == 'attribute_value') { data = await create_attribute_value(data_create); }
+
                 if (data && data.data && data.data.success == 1) {
-                    if (name == 'group_attribute') {
+                    if (name_funtion == 'group_attribute') {
                         await this.get_list_group_attribute(this.state.data_filter);
-                        this.setState({ data_group_attribute: { is_active: true } });
+                        this.setState({ data_group_attribute: {} });
                     }
-                    if (name == 'attribute') {
+                    if (name_funtion == 'attribute') {
                         await this.get_data_api(this.state.data_group_attribute.id, 'group_attribute');
                     }
-                    if (name == 'attribute_value') {
+                    if (name_funtion == 'attribute_value') {
                         await this.get_data_api(this.state.data_attribute.id, 'attribute');
                     }
                     message.success("Thành công");

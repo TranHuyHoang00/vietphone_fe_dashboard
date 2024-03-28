@@ -17,11 +17,15 @@ class index extends Component {
             if (product_id) { this.props.get_product(product_id); }
         }
     }
+    handle_go_back = () => {
+        this.props.history.push(`/admin/manager/product`)
+    }
     render() {
+
         return (
             <Spin size='large' spinning={this.props.is_loading}>
                 <div className='p-[10px] space-y-[10px]'>
-                    <Button onClick={() => this.props.history.goBack()}
+                    <Button onClick={() => this.handle_go_back()}
                         className='bg-[#e94138] text-white'>
                         Quay lại
                     </Button>

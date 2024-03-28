@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../../../store/actions';
-import { Button, Space, message } from 'antd';
+import { Button, Space, message, Spin } from 'antd';
 import Variant_overview from '../collapses/variant_overview';
 import Variant_introduce from '../collapses/variant_introduce';
 import Variant_media from '../collapses/variant_media';
@@ -83,40 +83,42 @@ class variant extends Component {
     }
     render() {
         return (
-            <div className=" space-y-[10px]">
-                <div className='flex items-center justify-end'>
-                    <Space>
-                        {this.props.is_edit == true &&
-                            <Button onClick={() => this.props.click_edit_variant()}
-                                className='bg-[#e94138] text-white'>
-                                Hủy
+            <Spin size='large' spinning={this.props.is_loading}>
+                <div className=" space-y-[10px]">
+                    <div className='flex items-center justify-end'>
+                        <Space>
+                            {this.props.is_edit == true &&
+                                <Button onClick={() => this.props.click_edit_variant()}
+                                    className='bg-[#e94138] text-white'>
+                                    Hủy
+                                </Button>
+                            }
+                            <Button onClick={() => this.handle_edit_variant()} className='bg-[#0e97ff] text-white'>
+                                {this.props.is_edit == false ? 'Chỉnh sửa' : 'Lưu'}
                             </Button>
-                        }
-                        <Button onClick={() => this.handle_edit_variant()} className='bg-[#0e97ff] text-white'>
-                            {this.props.is_edit == false ? 'Chỉnh sửa' : 'Lưu'}
-                        </Button>
-                    </Space>
-                </div>
-                <div className='lg:grid grid-cols-3 gap-[10px] space-y-[10px] lg:space-y-0 '>
-                    <div>
-                        <Variant_overview data_variants={this.state.data_variants}
-                            select_variant={this.select_variant}
-                            active_variant={this.state.active_variant} />
+                        </Space>
                     </div>
-                    <div className='col-span-2 space-y-[10px]'>
-                        <div className='md:grid grid-cols-3 gap-[10px] space-y-[10px] md:space-y-0'>
-                            <div className='col-span-2 '>
-                                <Variant_introduce data_variant={this.props.data_variant} />
-                            </div>
-                            <div>
-                                <Variant_media data_variant={this.props.data_variant}
-                                    handle_data_media={this.handle_data_media} />
-                            </div>
+                    <div className='lg:grid grid-cols-3 gap-[10px] space-y-[10px] lg:space-y-0 '>
+                        <div>
+                            <Variant_overview data_variants={this.state.data_variants}
+                                select_variant={this.select_variant}
+                                active_variant={this.state.active_variant} />
                         </div>
-                        <Variant_attribute_value />
+                        <div className='col-span-2 space-y-[10px]'>
+                            <div className='md:grid grid-cols-3 gap-[10px] space-y-[10px] md:space-y-0'>
+                                <div className='col-span-2 '>
+                                    <Variant_introduce data_variant={this.props.data_variant} />
+                                </div>
+                                <div>
+                                    <Variant_media data_variant={this.props.data_variant}
+                                        handle_data_media={this.handle_data_media} />
+                                </div>
+                            </div>
+                            <Variant_attribute_value />
+                        </div>
                     </div>
                 </div>
-            </div>
+            </Spin>
         );
     }
 }

@@ -16,7 +16,6 @@ import Not_found from './pages_error/not_found';
 import Empty from './pages/empty';
 
 import Manager_customer from './managers/customer/index';
-import Manager_category_type from './managers/category_type/index';
 import Manager_brand from './managers/brand/index';
 import Manager_category from './managers/category/index';
 import Manager_tag from './managers/tag/index';
@@ -49,7 +48,7 @@ class index extends Component {
         this.setState({ collapsed: !this.state.collapsed })
     }
     onClickPage = (value) => {
-        this.props.history.push(`/admin/${value.key}?page=1&limit=5&search_query=`)
+        this.props.history.push(`/admin/${value.key}`)
     }
     handle_login_db = () => {
         this.setState({ logged_in_db: true });
@@ -93,7 +92,6 @@ class index extends Component {
                     { key: 'manager/tag', icon: <AiFillTag />, label: 'Tag' },
                     { key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu' },
                     { key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục' },
-                    { key: 'manager/category_type', icon: <AiFillFund />, label: 'Loại danh mục' },
                 ],
             },
         ];
@@ -126,7 +124,6 @@ class index extends Component {
 
                                     <Route exact path={`${url}login`}><Empty /></Route>
                                     <Route exact path={`${url}manager/customer`}><Manager_customer /></Route>
-                                    <Route exact path={`${url}manager/category_type`}><Manager_category_type /></Route>
                                     <Route exact path={`${url}manager/brand`}><Manager_brand /></Route>
                                     <Route exact path={`${url}manager/category`}><Manager_category /></Route>
                                     <Route exact path={`${url}manager/tag`}><Manager_tag /></Route>

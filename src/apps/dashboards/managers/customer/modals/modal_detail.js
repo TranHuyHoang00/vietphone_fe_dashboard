@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Modal, Button, Input, Typography, Select } from 'antd';
+import { connect } from 'react-redux';
+import * as actions from '../../../../../store/actions';
+import { Modal, Button, Typography } from 'antd';
+import { format_money } from '../../../../../utils/format_money';
+import { text_line_1_3 } from '../../../components/displays/data_line_1_3';
 class modal_detail extends Component {
     constructor(props) {
         super(props);
@@ -13,7 +17,7 @@ class modal_detail extends Component {
         let data_customer = this.props.data_customer;
         return (
             <Modal title="CHI TIẾT" open={this.props.modal_detail}
-                onCancel={() => this.props.open_modal("detail", false)} width={400}
+                onCancel={() => this.props.open_modal("detail", false)} width={600}
                 footer={[
                     <>
                         <Button onClick={() => this.props.open_modal("detail", false)}
@@ -23,74 +27,28 @@ class modal_detail extends Component {
                     </>
                 ]}>
                 <div className='border-t py-[10px] space-y-[5px]'>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Mã KH</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.code}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Họ và tên</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.user && data_customer.user.full_name}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Số điện thoại</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.user && data_customer.user.phone}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Email</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.email}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Giới tính</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.gender}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Vai trò</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.user && data_customer.user.user_type}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Địa chỉ</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.address}</Typography.Text>
-                        </div>
-                    </div>
-                    <div className='flex gap-[5px]'>
-                        <div className='w-1/3'>
-                            <Typography.Text className='text-gray-700'>Ngày sinh</Typography.Text>
-                        </div>
-                        <div className='w-2/3'>
-                            <Typography.Text>: {data_customer.date_of_birth}</Typography.Text>
-                        </div>
-                    </div>
+                    {text_line_1_3('Mã KH', data_customer.code)}
+                    {text_line_1_3('Họ và tên', (data_customer.user && data_customer.user.full_name))}
+                    {text_line_1_3('Số điện thoại', (data_customer.user && data_customer.user.phone))}
+                    {text_line_1_3('Email', data_customer.email)}
+                    {text_line_1_3('Giới tính', data_customer.gender)}
+                    {text_line_1_3('Vai trò', (data_customer.user && data_customer.user.user_type))}
+                    {text_line_1_3('Địa chỉ', data_customer.address)}
+                    {text_line_1_3('Ngày sinh', data_customer.date_of_birth)}
+
                 </div>
             </Modal>
         );
     }
 
 }
-export default withRouter(modal_detail);
+const mapStateToProps = state => {
+    return {
+        data_customer: state.customer.data_customer,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(modal_detail));

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../../../store/actions';
 import { Modal, message, Spin } from 'antd';
-import { edit_group_attribute } from '../../../../../services/group_attribute_service';
 import Form_input from '../../../components/inputs/form_input';
 import Form_textare from '../../../components/inputs/form_textare';
 import Modal_footer from '../../../components/modal/modal_footer';
@@ -9,84 +10,51 @@ class modal_edit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_group_attribute: {},
-            is_loading: false,
-            mask_closable: true,
         }
     }
     async componentDidMount() {
     }
-    async componentDidUpdate(prevProps) {
-        if (prevProps.data_group_attribute !== this.props.data_group_attribute) {
-            this.setState({ data_group_attribute: this.props.data_group_attribute });
-        }
-    }
-    handle_onchange_input = (event, id, type) => {
-        let copyState = { ...this.state.data_group_attribute };
-        if (type == 'input') { copyState[id] = event.target.value; }
-        if (type == 'select') { copyState[id] = event; }
-        this.setState({
-            data_group_attribute: {
-                ...copyState
-            }
-        });
-    }
-    handle_loading = (value) => {
-        this.setState({
-            is_loading: value,
-            mask_closable: !value
-        });
-    }
     validation = (data) => {
-        this.handle_loading(true);
         if (!data.name) {
             return { mess: "Không được bỏ trống 'Tên loại thông số' ", code: 1 };
         }
         return { code: 0 };
     }
     handle_edit = async () => {
-        let result = this.validation(this.state.data_group_attribute);
+        let result = this.validation(this.props.data_group_attribute);
         if (result.code == 0) {
-            try {
-                let data_group_attribute = this.state.data_group_attribute;
-                let data = await edit_group_attribute(data_group_attribute.id, data_group_attribute);
-                if (data && data.data && data.data.success == 1) {
-                    await this.props.load_data();
-                    this.props.open_modal("edit", false);
-                    this.setState({ data_group_attribute: {} });
-                    message.success("Thành công");
-                } else {
-                    message.error('Thất bại');
-                }
-            } catch (e) {
-                message.error('Lỗi hệ thống');
+            let data_group_attribute = this.props.data_group_attribute;
+            await this.props.edit_group_attribute(data_group_attribute.id, data_group_attribute);
+            let is_result = this.props.is_result;
+            if (is_result == true) {
+                await this.props.get_list_group_attribute(this.props.data_filter);
+                this.props.open_modal("edit", false);
             }
         } else {
             message.error(result.mess);
         }
-        this.handle_loading(false);
     }
     render() {
-        let data_group_attribute = this.state.data_group_attribute;
+        let data_group_attribute = this.props.data_group_attribute;
+        let is_loading = this.props.is_loading;
         return (
             <Modal title="CHỈNH SỬA" open={this.props.modal_edit}
                 onCancel={() => this.props.open_modal("edit", false)} width={400}
-                maskClosable={this.state.mask_closable}
+                maskClosable={!is_loading}
                 footer={[
                     <Modal_footer open_modal={this.props.open_modal} type={'edit'}
-                        is_loading={this.state.is_loading} handle_funtion={this.handle_edit} />
+                        is_loading={is_loading} handle_funtion={this.handle_edit} />
                 ]}>
-                <Spin spinning={this.state.is_loading}>
+                <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
 
                         <Form_input name={'Tên loại thông số'} variable={'name'} value={data_group_attribute.name}
-                            important={true} type={'input'}
-                            handle_onchange_input={this.handle_onchange_input} />
+                            important={true}
+                            handle_onchange_input={this.props.on_change_group_attribute} />
 
                         <Form_textare name={'Mô tả'} variable={'description'} value={data_group_attribute.description}
-                            important={false} type={'input'}
-                            handle_onchange_input={this.handle_onchange_input} />
-
+                            important={false}
+                            handle_onchange_input={this.props.on_change_group_attribute} />
                     </div>
                 </Spin>
             </Modal>
@@ -94,4 +62,18 @@ class modal_edit extends Component {
     }
 
 }
-export default withRouter(modal_edit);
+const mapStateToProps = state => {
+    return {
+        data_group_attribute: state.group_attribute.data_group_attribute,
+        is_loading: state.group_attribute.is_loading,
+        is_result: state.group_attribute.is_result,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        get_list_group_attribute: (data_filter) => dispatch(actions.get_list_group_attribute_redux(data_filter)),
+        edit_group_attribute: (id, data) => dispatch(actions.edit_group_attribute_redux(id, data)),
+        on_change_group_attribute: (id, value) => dispatch(actions.on_change_group_attribute_redux(id, value)),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(modal_edit));

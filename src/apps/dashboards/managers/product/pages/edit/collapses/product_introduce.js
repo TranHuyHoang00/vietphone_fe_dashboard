@@ -54,6 +54,7 @@ class product_introduce extends Component {
                 <Collapse.Panel header="THông tin sản phẩm" key="1">
                     <div className='space-y-[5px]'>
                         {text_line_1_3('Tên sản phẩm', data_product.name)}
+
                         <div className='flex items-center gap-[5px]'>
                             <div className='w-1/3 flex items-center justify-between'>
                                 <span>Thương hiệu</span>
@@ -70,11 +71,11 @@ class product_introduce extends Component {
                                     disabled_select={!this.props.is_edit}
                                     disabled_button={true}
                                     disabled_search={true}
+
                                     on_search={this.on_search}
-                                    type_select={'select'}
                                     variable_select={'product_brand'}
                                     on_change_select={this.props.on_change_product}
-                                    type_input={'input'}
+
                                     variable_input={'name'}
                                     on_change_input={this.props.on_change_brand}
                                     handle_create={this.handle_create}
@@ -99,10 +100,8 @@ class product_introduce extends Component {
                                     disabled_button={true}
                                     disabled_search={true}
                                     on_search={this.on_search}
-                                    type_select={'select'}
                                     variable_select={'tags'}
                                     on_change_select={this.props.on_change_product}
-                                    type_input={'input'}
                                     variable_input={'name'}
                                     on_change_input={this.props.on_change_tag}
                                     handle_create={this.handle_create}
@@ -127,10 +126,8 @@ class product_introduce extends Component {
                                     disabled_button={true}
                                     disabled_search={true}
                                     on_search={this.on_search}
-                                    type_select={'select'}
                                     variable_select={'categories'}
                                     on_change_select={this.props.on_change_product}
-                                    type_input={'input'}
                                     variable_input={'name'}
                                     on_change_input={this.props.on_change_category}
                                     handle_create={this.handle_create}
@@ -155,10 +152,8 @@ class product_introduce extends Component {
                                     disabled_button={true}
                                     disabled_search={true}
                                     on_search={this.on_search}
-                                    type_select={'select'}
                                     variable_select={'variant_attribute_group'}
                                     on_change_select={this.props.on_change_product}
-                                    type_input={'input'}
                                     variable_input={'name'}
                                     on_change_input={this.props.on_change_variant_attribute_group}
                                     handle_create={this.handle_create}

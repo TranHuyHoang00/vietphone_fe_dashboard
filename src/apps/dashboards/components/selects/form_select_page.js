@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Select, Space } from 'antd';
-import data_line_number from '../datas/line_number';
+import data_line_number from '../../datas/line_number';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -10,15 +10,12 @@ class index extends Component {
     }
     async componentDidMount() {
     }
-    onchange_select = (value) => {
-        this.props.onchange_page(value, 'limit');
-    }
     render() {
         return (
             <Space>
                 <span>Hiển thị</span>
                 <Select
-                    onChange={(value) => this.onchange_select(value)}
+                    onChange={(value) => this.props.onchange_page(value, 'limit')}
                     defaultValue="5 dòng"
                     style={{ width: 100 }}
                     options={data_line_number}

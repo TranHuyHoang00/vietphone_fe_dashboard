@@ -1,83 +1,83 @@
 import action_types from '../actions/action_types';
 
 const initialState = {
-    data_categorys: [],
-    data_category: {},
+    data_group_attributes: [],
+    data_group_attribute: {},
     data_meta: {},
     is_loading: false,
     is_result: false,
 }
 
-const category_reducers = (state = initialState, action) => {
+const group_attribute_reducers = (state = initialState, action) => {
     switch (action.type) {
-        case action_types.CATEGORY_START:
+        case action_types.GROUP_ATTRIBUTE_START:
             return {
                 ...state,
                 is_loading: true,
                 is_result: false,
             }
-        case action_types.CATEGORY_SUCCESS:
+        case action_types.GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
             }
-        case action_types.CATEGORY_FAIDED:
+        case action_types.GROUP_ATTRIBUTE_FAIDED:
             return {
                 ...state,
                 is_loading: false,
                 is_result: false,
             }
-        case action_types.GET_LIST_CATEGORY_SUCCESS:
+        case action_types.GET_LIST_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
-                data_categorys: action.data.categories,
+                data_group_attributes: action.data.group_attributes,
                 data_meta: action.data.metadata
             }
-        case action_types.GET_CATEGORY_SUCCESS:
+        case action_types.GET_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
-                data_category: action.data
+                data_group_attribute: action.data
             }
-        case action_types.CREATE_CATEGORY_SUCCESS:
-            return {
-                ...state,
-                is_loading: false,
-                is_result: true,
-            }
-        case action_types.EDIT_CATEGORY_SUCCESS:
+        case action_types.CREATE_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
             }
-        case action_types.EDIT_LIST_CATEGORY_SUCCESS:
+        case action_types.EDIT_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
             }
-        case action_types.DELETE_LIST_CATEGORY_SUCCESS:
+        case action_types.EDIT_LIST_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
             }
-        case action_types.SET_DATA_CATEGORY:
+        case action_types.DELETE_LIST_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                data_category: action.data,
+                is_loading: false,
+                is_result: true,
             }
-        case action_types.ON_CHANGE_CATEGORY:
-            let copyState = { ...state.data_category };
+        case action_types.SET_DATA_GROUP_ATTRIBUTE:
+            return {
+                ...state,
+                data_group_attribute: action.data,
+            }
+        case action_types.ON_CHANGE_GROUP_ATTRIBUTE:
+            let copyState = { ...state.data_group_attribute };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_category: {
+                data_group_attribute: {
                     ...copyState,
                 }
             }
@@ -86,4 +86,4 @@ const category_reducers = (state = initialState, action) => {
     }
 }
 
-export default category_reducers;
+export default group_attribute_reducers;

@@ -20,7 +20,7 @@ class variant_overview extends Component {
                         <div className='space-y-[10px] '>
                             {data_variants && data_variants.map((item, index) => {
                                 return (
-                                    <div onClick={() => this.props.select_variant(index)}
+                                    <div key={index} onClick={() => this.props.select_variant(index)}
                                         className='flex gap-[10px] cursor-pointer '>
                                         <Radio value={index}></Radio>
                                         <div>

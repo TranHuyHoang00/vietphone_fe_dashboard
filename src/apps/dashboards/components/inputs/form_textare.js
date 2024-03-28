@@ -17,7 +17,7 @@ class form_textare extends Component {
                     {this.props.important == true && <Typography.Text type="danger" strong> *</Typography.Text>}
                 </Typography.Text>
                 <Input.TextArea rows={3} value={this.props.value}
-                    onChange={(event) => this.props.handle_onchange_input(event, this.props.variable, this.props.type)} />
+                    onChange={(event) => this.props.handle_onchange_input(event.target.value, this.props.variable, this.props.type)} />
             </div>
         );
     }

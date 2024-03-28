@@ -16,7 +16,7 @@ class form_input extends Component {
                     {this.props.name}
                     {this.props.important == true && <Typography.Text type="danger" strong> *</Typography.Text>}
                 </Typography.Text>
-                <Input value={this.props.value} onChange={(event) => this.props.handle_onchange_input(event, this.props.variable, this.props.type)} />
+                <Input value={this.props.value} onChange={(event) => this.props.handle_onchange_input(event.target.value, this.props.variable)} />
             </div>
         );
     }

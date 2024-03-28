@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../../store/actions';
 import {
-    Table, Space, Divider, Button, Popconfirm, message,
-    Spin, Pagination, Avatar, Typography, Dropdown, Input
+    Table, Space, Divider, Button, Popconfirm, Input,
+    Spin, Pagination, Typography, Dropdown, Avatar
 } from 'antd';
-import { AiFillEdit, AiFillEye, AiOutlinePlus, AiOutlineMenu } from "react-icons/ai";
-import Display_line_number from '../../components/display_line_number';
-import { get_list_customer, get_customer, delete_customer } from '../../../../services/customer_service';
+import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
+import Form_select_page from '../../components/selects/form_select_page';
+import { format_money } from '../../../../utils/format_money';
+import { text_line_1_3 } from '../../components/displays/data_line_1_3';
+
 import Modal_create from './modals/modal_create';
 import Modal_detail from './modals/modal_detail';
 import Modal_edit from './modals/modal_edit';
-import Drawer_filter from './drawers/drawer_filter';
-import { load_data_url } from '../../../../utils/load_data_url';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            is_loading: false,
-            drawer_filter: false,
             type_menu: 1,
             data_selected: [],
             modal_detail: false,
@@ -28,71 +28,22 @@ class index extends Component {
                 limit: 5,
                 search_query: ''
             },
-            data_customer: {},
-            data_customers: [],
-            metadata: {},
         }
     }
     async componentDidMount() {
-        await this.load_data();
-    }
-    async componentDidUpdate(prevProps) {
-        if (prevProps.location.search !== this.props.location.search) {
-            await this.load_data();
-        }
-    }
-    load_data = async () => {
-        let data_filter = load_data_url(this.state.data_filter, new URLSearchParams(this.props.location.search));
-        await this.get_list_customer(data_filter);
-        this.setState({
-            data_filter: data_filter
-        })
-    }
-    handle_loading = (value) => {
-        this.setState({ is_loading: value });
-    }
-    get_list_customer = async (data_filter) => {
-        this.handle_loading(true);
-        try {
-            let data = await get_list_customer(data_filter);
-            if (data && data.data && data.data.success == 1) {
-                this.setState({
-                    data_customers: data.data.data.customers,
-                    metadata: data.data.data.metadata,
-                });
-            } else {
-                message.error("Lỗi");
-            }
-        } catch (e) {
-            message.error("Lỗi hệ thống");
-        } finally {
-            this.handle_loading(false);
-        }
-    }
-    get_customer = async (id) => {
-        this.handle_loading(true);
-        try {
-            let data = await get_customer(id);
-            if (data && data.data && data.data.success == 1) {
-                this.setState({ data_customer: data.data.data });
-            } else {
-                message.error("Lỗi");
-            }
-        } catch (e) {
-            message.error("Lỗi hệ thống");
-        } finally {
-            this.handle_loading(false);
-        }
-
+        this.props.get_list_customer(this.state.data_filter);
     }
     open_modal = async (name, value, id) => {
-        if (name == 'create') { this.setState({ modal_create: value }); }
+        if (name == 'create') {
+            this.setState({ modal_create: value });
+            this.props.set_data_customer({});
+        }
         if (name == 'detail') {
             if (id == null) {
                 this.setState({ modal_detail: value, data_customer: {} });
             } else {
                 this.setState({ modal_detail: value });
-                await this.get_customer(id);
+                await this.props.get_customer(id);
             }
         }
         if (name == 'edit') {
@@ -100,44 +51,25 @@ class index extends Component {
                 this.setState({ modal_edit: value, data_customer: {} });
             } else {
                 this.setState({ modal_edit: value });
-                await this.get_customer(id);
+                await this.props.get_customer(id);
             }
         }
     }
-    handle_delete = async () => {
-        this.handle_loading(true);
-        try {
-            let data_selected = this.state.data_selected;
-            for (const id of data_selected) {
-                let data = await delete_customer(id);
-                if (data && data.data && data.data.success == 1) {
-                    message.success(`Thành công xóa dòng ID=${id}`);
-                } else {
-                    message.error(`Thất bại xóa dòng ID=${id}`);
-                }
-            }
-            message.success(`Thành công xóa ${data_selected.length} dòng`)
-        } catch (e) {
-            message.error('Lỗi hệ thống');
-        } finally {
-            this.handle_loading(false);
-        }
+    handle_funtion_menu = async () => {
+        let data_selected = this.state.data_selected;
+        if (this.state.type_menu == 1) { await this.props.delete_list_customer(data_selected); }
+        if (this.state.type_menu == 2) { await this.props.edit_list_customer(data_selected, { is_active: false }); }
+        if (this.state.type_menu == 3) { await this.props.edit_list_customer(data_selected, { is_active: true }); }
+        await this.props.get_list_customer(this.state.data_filter);
+        if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
     }
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
-        if (type == 'limit') {
-            this.props.history.push(`/admin/manager/customer?page=${data_filter.page}&limit=${value}&search_query=${data_filter.search_query}`);
-        }
-        if (type == 'page') {
-            this.props.history.push(`/admin/manager/customer?page=${value}&limit=${data_filter.limit}&search_query=${data_filter.search_query}`);
-        }
-    }
-    open_drawer = (name, value) => {
-        if (name == 'filter') { this.setState({ drawer_filter: value }); }
-    }
-    on_search = async (value) => {
-        let data_filter = this.state.data_filter;
-        this.props.history.push(`/admin/manager/customer?page=1&limit=${data_filter.limit}&search_query=${value}`);
+        if (type == 'limit') { data_filter.limit = value; }
+        if (type == 'page') { data_filter.page = value; }
+        if (type == 'search') { data_filter.search_query = value; data_filter.page = 1; }
+        this.setState({ data_filter: data_filter })
+        await this.props.get_list_customer(data_filter);
     }
     render() {
         const columns = [
@@ -178,7 +110,7 @@ class index extends Component {
         const items = [
             { key: '1', label: 'Xóa' },
             { key: '2', label: 'Khóa' },
-            { key: '3', label: 'Mở khóa' },
+            { key: '3', label: 'Mở' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -187,40 +119,31 @@ class index extends Component {
         const row_selection = { data_selected, onChange: onchange_selected };
         let data_filter = this.state.data_filter;
         let type_menu = this.state.type_menu;
-        let metadata = this.state.metadata;
         return (
             <>
-                <Spin size='large' spinning={this.state.is_loading}>
+                <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
-                        <div className='flex items-center justify-between gap-[5px]'>
-                            <div className='flex items-center gap-[5px]'>
-                                <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
-                                    <Space className='text-white'>
-                                        <AiOutlinePlus />
-                                        Tạo mới
-                                    </Space>
-                                </Button>
-                                <Button onClick={() => { this.setState({ drawer_filter: true }) }} className='bg-white'>
-                                    <Space>Lọc<AiOutlineMenu /></Space>
-                                </Button>
-                            </div>
-                            <div><Input.Search onSearch={(value) => this.on_search(value)} placeholder="Tên, Mã KH, SĐT !" /></div>
-                        </div>
-                        <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
-                            <div className='flex items-center justify-between gap-[10px]'>
-                                <Space>
-                                    <span>Hiển thị</span>
-                                    <Display_line_number limit={data_filter.limit} onchange_page={this.onchange_page} />
+                        <div className='flex items-center justify-between gap-[10px]'>
+                            <Button disabled={true} onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
+                                <Space className='text-white'>
+                                    <AiOutlinePlus />
+                                    Tạo mới
                                 </Space>
+                            </Button>
+                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên, Mã KH, SĐT !" /></div>
+                        </div>
+                        <div className='bg-white p-[10px] rounded-[10px] shadow-sm bcustomer'>
+                            <div className='flex items-center justify-between gap-[10px]'>
+                                <Form_select_page limit={data_filter.limit} onchange_page={this.onchange_page} />
                                 <div>
-                                    <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
+                                    <Popconfirm disabled={true}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_delete()}>
-                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
+                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
+                                        <Dropdown.Button disabled={true} menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
                                                 {type_menu == 1 && <span>Xóa</span>}
                                                 {type_menu == 2 && <span>Khóa</span>}
-                                                {type_menu == 3 && <span>Mở khóa</span>}
+                                                {type_menu == 3 && <span>Mở</span>}
                                                 <span> {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
@@ -230,28 +153,44 @@ class index extends Component {
                             <Divider>KHÁCH HÀNG</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
-                                    columns={columns} dataSource={this.state.data_customers} pagination={false}
-                                    size="middle" bordered scroll={{}} />
-
+                                    columns={columns} dataSource={this.props.data_customers} pagination={false}
+                                    size="middle" bcustomered scroll={{}} />
                                 <Pagination responsive current={data_filter.page}
-                                    showQuickJumper total={metadata.total * metadata.limit} pageSize={data_filter.limit}
+                                    showQuickJumper total={this.props.data_meta.total * this.props.data_meta.limit} pageSize={data_filter.limit}
                                     onChange={(value) => this.onchange_page(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                <Modal_create modal_create={this.state.modal_create}
-                    open_modal={this.open_modal} get_list_customer={this.get_list_customer} />
+                {/* <Modal_create modal_create={this.state.modal_create}
+                    open_modal={this.open_modal}
+                    data_filter={this.state.data_filter} /> */}
                 <Modal_detail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} data_customer={this.state.data_customer} />
-                <Modal_edit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal} get_list_customer={this.get_list_customer}
-                    data_customer={this.state.data_customer} />
-                <Drawer_filter drawer_filter={this.state.drawer_filter}
-                    open_drawer={this.open_drawer} />
+                    open_modal={this.open_modal} />
+                {/* <Modal_edit modal_edit={this.state.modal_edit}
+                    open_modal={this.open_modal}
+                    data_filter={this.state.data_filter} /> */}
             </>
         );
     }
 
 }
-export default withRouter(index);
+const mapStateToProps = state => {
+    return {
+        data_customers: state.customer.data_customers,
+        data_customer: state.customer.data_customer,
+        data_meta: state.customer.data_meta,
+        is_loading: state.customer.is_loading,
+        is_result: state.customer.is_result,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        get_list_customer: (data_filter) => dispatch(actions.get_list_customer_redux(data_filter)),
+        get_customer: (id) => dispatch(actions.get_customer_redux(id)),
+        edit_list_customer: (id, data) => dispatch(actions.edit_list_customer_redux(id, data)),
+        delete_list_customer: (id) => dispatch(actions.delete_list_customer_redux(id)),
+        set_data_customer: (id) => dispatch(actions.set_data_customer_redux(id)),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

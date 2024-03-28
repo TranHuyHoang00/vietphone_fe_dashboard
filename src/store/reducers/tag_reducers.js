@@ -2,8 +2,10 @@ import action_types from '../actions/action_types';
 
 const initialState = {
     data_tags: [],
-    data_tag: { is_active: true },
+    data_tag: {},
+    data_meta: {},
     is_loading: false,
+    is_result: false,
 }
 
 const tag_reducers = (state = initialState, action) => {
@@ -11,28 +13,68 @@ const tag_reducers = (state = initialState, action) => {
         case action_types.TAG_START:
             return {
                 ...state,
-                is_loading: true
+                is_loading: true,
+                is_result: false,
             }
         case action_types.TAG_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
+                is_result: true,
             }
         case action_types.TAG_FAIDED:
             return {
                 ...state,
                 is_loading: false,
+                is_result: false,
             }
         case action_types.GET_LIST_TAG_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
-                data_tags: action.data
+                is_result: true,
+                data_tags: action.data.tags,
+                data_meta: action.data.metadata
+            }
+        case action_types.GET_TAG_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+                data_tag: action.data
+            }
+        case action_types.CREATE_TAG_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+            }
+        case action_types.EDIT_TAG_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+            }
+        case action_types.EDIT_LIST_TAG_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+            }
+        case action_types.DELETE_LIST_TAG_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+            }
+        case action_types.SET_DATA_TAG:
+            return {
+                ...state,
+                data_tag: action.data,
             }
         case action_types.ON_CHANGE_TAG:
             let copyState = { ...state.data_tag };
-            if (action.type_onchange == 'input') { copyState[action.id] = action.event.target.value; }
-            if (action.type_onchange == 'select') { copyState[action.id] = action.event; }
+            copyState[action.id] = action.value;
             return {
                 ...state,
                 data_tag: {

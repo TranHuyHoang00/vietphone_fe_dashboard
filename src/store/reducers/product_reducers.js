@@ -1,9 +1,17 @@
 import action_types from '../actions/action_types';
 
 const initialState = {
+    data_products: [],
     data_product: {},
+    data_meta: {},
     is_loading: false,
+    is_result: false,
     is_edit: false,
+    data_filter: {
+        page: 1,
+        limit: 5,
+        search_query: ''
+    },
 }
 
 const product_reducers = (state = initialState, action) => {
@@ -11,28 +19,68 @@ const product_reducers = (state = initialState, action) => {
         case action_types.PRODUCT_START:
             return {
                 ...state,
-                is_loading: true
+                is_loading: true,
+                is_result: false,
             }
         case action_types.PRODUCT_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
+                is_result: true,
             }
         case action_types.PRODUCT_FAIDED:
             return {
                 ...state,
                 is_loading: false,
+                is_result: false,
+            }
+        case action_types.GET_LIST_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+                data_products: action.data.products,
+                data_meta: action.data.metadata
             }
         case action_types.GET_PRODUCT_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
+                is_result: true,
                 data_product: action.data
+            }
+        case action_types.CREATE_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+            }
+        case action_types.EDIT_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+            }
+        case action_types.EDIT_LIST_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+            }
+        case action_types.DELETE_LIST_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+            }
+        case action_types.SET_DATA_PRODUCT:
+            return {
+                ...state,
+                data_product: action.data,
             }
         case action_types.ON_CHANGE_PRODUCT:
             let copyState = { ...state.data_product };
-            if (action.type_onchange == 'input') { copyState[action.id] = action.event.target.value; }
-            if (action.type_onchange == 'select') { copyState[action.id] = action.event; }
+            copyState[action.id] = action.value;
             return {
                 ...state,
                 data_product: {
@@ -43,6 +91,11 @@ const product_reducers = (state = initialState, action) => {
             return {
                 ...state,
                 is_edit: !state.is_edit
+            }
+        case action_types.SET_DATA_FILTER_PRODUCT:
+            return {
+                ...state,
+                data_filter: action.data,
             }
         default:
             return state;

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../../../store/actions';
 import { Modal, Button } from 'antd';
 import { text_line_1_3, image_line_1_3 } from '../../../components/displays/data_line_1_3';
+
 class modal_detail extends Component {
     constructor(props) {
         super(props);
@@ -25,7 +28,7 @@ class modal_detail extends Component {
                 ]}>
                 <div className='border-t py-[10px] space-y-[5px]'>
                     {image_line_1_3('Ảnh', data_brand.image, 100, 50)}
-                    {text_line_1_3('Tên thương hiệu', data_brand.name)}
+                    {text_line_1_3('Tên danh mục', data_brand.name)}
                     {text_line_1_3('Icon', data_brand.icon)}
                     {text_line_1_3('Mô tả', data_brand.description)}
                     {text_line_1_3('Trạng thái', (data_brand && data_brand.is_active == true ? 'Mở' : 'Khóa'))}
@@ -35,4 +38,13 @@ class modal_detail extends Component {
     }
 
 }
-export default withRouter(modal_detail);
+const mapStateToProps = state => {
+    return {
+        data_brand: state.brand.data_brand,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(modal_detail));

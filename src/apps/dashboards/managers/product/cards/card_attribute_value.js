@@ -56,14 +56,14 @@ class card_attribute_value extends Component {
         if (data.length !== 0) {
             let unique_ids = new Set();
             let unique_datas = [];
-            data.forEach(obj => {
+            for (const obj of data) {
                 if (obj && obj.attribute && obj.attribute.group_attribute && obj.attribute.group_attribute.id) {
                     if (!unique_ids.has(obj.attribute.group_attribute.id)) {
                         unique_ids.add(obj.attribute.group_attribute.id);
                         unique_datas.push(obj.attribute.group_attribute);
                     }
                 }
-            });
+            }
             this.setState({ data_attribute_value_uniques: unique_datas });
         }
     }
@@ -77,27 +77,12 @@ class card_attribute_value extends Component {
             data_attribute_value_ids: data_ids
         });
     }
-    check_exist = (data, value) => {
-
-        for (const item of data) {
-            if (item == value) {
-                return true
-            } else {
-                return false
-            }
-        }
-    }
     add_data = async (value) => {
         let data_attribute_value_ids = this.state.data_attribute_value_ids;
-        let check_exist = this.check_exist(data_attribute_value_ids, value.id);
-        if (check_exist == true) {
-            message.error('Đã tồn tại thuộc tính này');
-        } else {
-            data_attribute_value_ids.push(value.id);
-            await this.get_list_attribute_value(data_attribute_value_ids);
-            await this.handle_data(this.state.data_attribute_value_raws);
-            this.props.handle_onchange_input(data_attribute_value_ids, 'attribute_values', 'select');
-        }
+        data_attribute_value_ids.push(value.id);
+        await this.get_list_attribute_value(data_attribute_value_ids);
+        await this.handle_data(this.state.data_attribute_value_raws);
+        this.props.handle_onchange_input(data_attribute_value_ids, 'attribute_values', 'select');
 
     }
     render() {

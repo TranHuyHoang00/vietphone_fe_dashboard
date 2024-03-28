@@ -1,105 +1,65 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../../store/actions';
 import {
-    Table, Space, Divider, Button, Popconfirm, message, Input,
+    Table, Space, Divider, Button, Popconfirm, Input,
     Spin, Pagination, Typography, Dropdown, Tag, Image
 } from 'antd';
-import { AiOutlineMenu, AiOutlinePlus } from "react-icons/ai";
-import Display_line_number from '../../components/display_line_number';
-import { get_list_product, delete_product, edit_product } from '../../../../services/product_service';
-import Drawer_filter from './drawers/drawer_filter';
-import { load_data_url } from '../../../../utils/load_data_url';
+import { AiOutlinePlus } from "react-icons/ai";
+import Form_select_page from '../../components/selects/form_select_page';
+
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            is_loading: false,
             type_menu: 1,
             data_selected: [],
-            data_filter: {
-                page: '',
-                limit: '',
-                search_query: ''
-            },
-            data_product: {},
-            data_products: [],
-            metadata: {},
+            modal_detail: false,
+            modal_create: false,
+            modal_edit: false,
         }
     }
     async componentDidMount() {
-        await this.load_data();
+        this.props.get_list_product(this.props.data_filter);
     }
-    async componentDidUpdate(prevProps) {
-        if (prevProps.location.search !== this.props.location.search) {
-            await this.load_data();
+    open_modal = async (name, value, id) => {
+        if (name == 'create') {
+            this.setState({ modal_create: value });
+            this.props.set_data_product({});
         }
-    }
-    load_data = async () => {
-        let data_filter = load_data_url(this.state.data_filter, new URLSearchParams(this.props.location.search));
-        await this.get_list_product(data_filter);
-        this.setState({
-            data_filter: data_filter
-        })
-    }
-    handle_loading = (value) => {
-        this.setState({ is_loading: value });
-    }
-    get_list_product = async (data_filter) => {
-        this.handle_loading(true);
-        try {
-            let data = await get_list_product(data_filter);
-            if (data && data.data && data.data.success == 1) {
-                this.setState({
-                    data_products: data.data.data.products,
-                    metadata: data.data.data.metadata,
-                });
+        if (name == 'detail') {
+            if (id == null) {
+                this.setState({ modal_detail: value, data_product: {} });
             } else {
-                message.error("Lỗi");
+                this.setState({ modal_detail: value });
+                await this.props.get_product(id);
             }
-        } catch (e) {
-            message.error("Lỗi hệ thống");
-        } finally {
-            this.handle_loading(false);
+        }
+        if (name == 'edit') {
+            if (id == null) {
+                this.setState({ modal_edit: value, data_product: {} });
+            } else {
+                this.setState({ modal_edit: value });
+                await this.props.get_product(id);
+            }
         }
     }
-
     handle_funtion_menu = async () => {
-        this.handle_loading(true);
-        try {
-            let data_selected = this.state.data_selected;
-            for (const id of data_selected) {
-                let data;
-                if (this.state.type_menu == 1) { data = await delete_product(id); }
-                if (this.state.type_menu == 2) { data = await edit_product(id, { is_active: false }); }
-                if (this.state.type_menu == 3) { data = await edit_product(id, { is_active: true }); }
-                if (data && data.data && data.data.success !== 1) {
-                    message.error(`Thất bại khi xử lý dòng ID=${id}`);
-                }
-            }
-            await this.load_data(this.state.data_filter);
-            if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
-            message.success(`Thành công xử lý ${data_selected.length} dòng`);
-        } catch (e) {
-            message.error('Lỗi hệ thống');
-        } finally {
-            this.handle_loading(false);
-        }
+        let data_selected = this.state.data_selected;
+        if (this.state.type_menu == 1) { await this.props.delete_list_product(data_selected); }
+        if (this.state.type_menu == 2) { await this.props.edit_list_product(data_selected, { is_active: false }); }
+        if (this.state.type_menu == 3) { await this.props.edit_list_product(data_selected, { is_active: true }); }
+        await this.props.get_list_product(this.state.data_filter);
+        if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
     }
     onchange_page = async (value, type) => {
-        let data_filter = this.state.data_filter;
-        if (type == 'limit') {
-            this.props.history.push(`/admin/manager/product?page=${data_filter.page}&limit=${value}&search_query=${data_filter.search_query}`);
-        }
-        if (type == 'page') {
-            this.props.history.push(`/admin/manager/product?page=${value}&limit=${data_filter.limit}&search_query=${data_filter.search_query}`);
-        }
-    }
-    open_drawer = (name, value) => {
-        if (name == 'filter') { this.setState({ drawer_filter: value }); }
-    }
-    on_search = async (value) => {
-        let data_filter = this.state.data_filter;
-        this.props.history.push(`/admin/manager/product?page=1&limit=${data_filter.limit}&search_query=${value}`);
+        let data_filter = this.props.data_filter;
+        if (type == 'limit') { data_filter.limit = value; }
+        if (type == 'page') { data_filter.page = value; }
+        if (type == 'search') { data_filter.search_query = value; data_filter.page = 1; }
+        await this.props.get_list_product(data_filter);
+        this.props.set_data_filter_product(data_filter);
     }
     render() {
         const columns = [
@@ -180,33 +140,23 @@ class index extends Component {
             this.setState({ data_selected: data_new })
         };
         const row_selection = { data_selected, onChange: onchange_selected };
-        let data_filter = this.state.data_filter;
         let type_menu = this.state.type_menu;
-        let metadata = this.state.metadata;
         return (
             <>
-                <Spin size='large' spinning={this.state.is_loading}>
+                <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <div className='flex items-center gap-[5px]'>
-                                <Button disabled className='bg-[#0e97ff]'>
-                                    <Space className='text-white'>
-                                        <AiOutlinePlus />
-                                        Tạo mới
-                                    </Space>
-                                </Button>
-                                <Button disabled onClick={() => { this.setState({ drawer_filter: true }) }} className='bg-white'>
-                                    <Space>Lọc<AiOutlineMenu /></Space>
-                                </Button>
-                            </div>
-                            <div><Input.Search onSearch={(value) => this.on_search(value)} placeholder="Tên sản phẩm !" /></div>
+                            <Button disabled onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
+                                <Space className='text-white'>
+                                    <AiOutlinePlus />
+                                    Tạo mới
+                                </Space>
+                            </Button>
+                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên thông số !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <Space>
-                                    <span>Hiển thị</span>
-                                    <Display_line_number limit={data_filter.limit} onchange_page={this.onchange_page} />
-                                </Space>
+                                <Form_select_page limit={this.props.data_filter.limit} onchange_page={this.onchange_page} />
                                 <div>
                                     <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
@@ -222,23 +172,42 @@ class index extends Component {
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider>DANH SÁCH SẢN PHẨM</Divider>
+                            <Divider>THÔNG SỐ</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
-                                    columns={columns} dataSource={this.state.data_products} pagination={false}
+                                    columns={columns} dataSource={this.props.data_products} pagination={false}
                                     size="middle" bordered scroll={{}} />
-                                <Pagination responsive current={data_filter.page}
-                                    showQuickJumper total={metadata.total * metadata.limit} pageSize={data_filter.limit}
+                                <Pagination responsive current={this.props.data_filter.page}
+                                    showQuickJumper total={this.props.data_meta.total * this.props.data_meta.limit} pageSize={this.props.data_filter.limit}
                                     onChange={(value) => this.onchange_page(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {/* <Drawer_filter drawer_filter={this.state.drawer_filter}
-                    open_drawer={this.open_drawer} /> */}
             </>
         );
     }
 
 }
-export default withRouter(index);
+const mapStateToProps = state => {
+    return {
+        data_products: state.product.data_products,
+        data_product: state.product.data_product,
+        data_meta: state.product.data_meta,
+        is_loading: state.product.is_loading,
+        is_result: state.product.is_result,
+        data_filter: state.product.data_filter,
+
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        get_list_product: (data_filter) => dispatch(actions.get_list_product_redux(data_filter)),
+        get_product: (id) => dispatch(actions.get_product_redux(id)),
+        edit_list_product: (id, data) => dispatch(actions.edit_list_product_redux(id, data)),
+        delete_list_product: (id) => dispatch(actions.delete_list_product_redux(id)),
+        set_data_product: (id) => dispatch(actions.set_data_product_redux(id)),
+        set_data_filter_product: (data) => dispatch(actions.set_data_filter_product_redux(data)),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));
