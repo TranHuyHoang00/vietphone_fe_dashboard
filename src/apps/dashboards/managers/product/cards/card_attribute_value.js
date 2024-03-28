@@ -30,7 +30,11 @@ class card_attribute_value extends Component {
                 await this.get_list_attribute_value(data_attributes);
                 await this.handle_data(this.state.data_attribute_value_raws);
             } else {
-                this.setState({ data_attribute_value_uniques: [] })
+                this.setState({
+                    data_attribute_value_uniques: [],
+                    data_attribute_value_ids: [],
+                    data_attribute_value_raws: [],
+                })
             }
         }
     }

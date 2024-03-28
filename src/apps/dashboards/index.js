@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route } from "react-router-dom";
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions';
 import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGithub, AiOutlineUser, AiFillHdd, AiFillFund, AiFillShop
@@ -35,6 +37,11 @@ class index extends Component {
             value: {},
             logged_in_db: false,
             is_form_drawer: false,
+            data_filter: {
+                page: 1,
+                limit: 5,
+                search_query: ''
+            },
 
         }
     }
@@ -48,7 +55,7 @@ class index extends Component {
         this.setState({ collapsed: !this.state.collapsed })
     }
     onClickPage = (value) => {
-        this.props.history.push(`/admin/${value.key}`)
+        this.props.history.push(`/admin/${value.key}`);
     }
     handle_login_db = () => {
         this.setState({ logged_in_db: true });
@@ -157,4 +164,13 @@ class index extends Component {
     }
 
 }
-export default withRouter(index);
+const mapStateToProps = state => {
+    return {
+
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

@@ -16,7 +16,7 @@ class variant extends Component {
             data_variant_ids: [],
             data_variants: [],
             data_variant: {},
-            active_variant: 0,
+            active_variant: '',
 
             data_medias: [],
             data_media_ids: [],
@@ -30,7 +30,6 @@ class variant extends Component {
             if (data_variant_ids && data_variant_ids.length !== 0) {
                 this.setState({ data_variant_ids: data_variant_ids });
                 await this.get_list_variant(data_variant_ids);
-                await this.props.get_variant(data_variant_ids[0]);
             }
         }
     }
@@ -41,7 +40,7 @@ class variant extends Component {
             let data_variant = this.props.data_variant;
             data_variants.push(data_variant);
         }
-        this.setState({ data_variants: data_variants });
+        this.setState({ data_variants: data_variants, active_variant: (data_variants.length) - 1 });
     }
     select_variant = async (index) => {
         let data_variants = this.state.data_variants;
@@ -110,7 +109,7 @@ class variant extends Component {
                                     <Variant_introduce data_variant={this.props.data_variant} />
                                 </div>
                                 <div>
-                                    <Variant_media data_variant={this.props.data_variant}
+                                    <Variant_media data_medias={this.props.data_variant.media}
                                         handle_data_media={this.handle_data_media} />
                                 </div>
                             </div>

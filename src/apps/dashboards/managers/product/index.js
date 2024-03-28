@@ -152,7 +152,7 @@ class index extends Component {
                                     Tạo mới
                                 </Space>
                             </Button>
-                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên thông số !" /></div>
+                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên sản phẩm !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>

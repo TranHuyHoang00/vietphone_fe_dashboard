@@ -13,15 +13,14 @@ class variant_media extends Component {
         this.state = {
             data_medias: [],
             data_media_ids: [],
-            data_variant: {},
         }
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.data_variant !== this.props.data_variant) {
-            let data_variant = this.props.data_variant;
-            this.setState({ data_variant: data_variant, data_media_ids: data_variant.media });
-            if (data_variant.media && data_variant.media.length !== 0) {
-                await this.get_list_media(data_variant.media);
+        if (prevProps.data_medias !== this.props.data_medias) {
+            let data_medias = this.props.data_medias;
+            this.setState({ data_media_ids: data_medias });
+            if (data_medias && data_medias.length !== 0) {
+                await this.get_list_media(data_medias);
             } else {
                 this.setState({ data_medias: [] })
             }
@@ -101,6 +100,7 @@ class variant_media extends Component {
 const mapStateToProps = state => {
     return {
         is_edit: state.variant.is_edit,
+        data_variant: state.variant.data_variant,
     };
 };
 const mapDispatchToProps = dispatch => {
