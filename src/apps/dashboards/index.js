@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import { Layout, Menu, Drawer } from 'antd';
 import {
-    AiFillGithub, AiOutlineUser, AiFillHdd, AiFillFund, AiFillShop
+    AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown,
-    AiFillFire, AiFillUsb, AiFillRocket
+    AiFillFire, AiFillUsb, AiFillRocket, AiFillControl
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
 import { get_local_account } from '../../auths/local_storage';
@@ -27,7 +27,8 @@ import Manager_attribute from './managers/attribute/index';
 import Manager_attribute_value from './managers/attribute_value/index';
 import Manager_product from './managers/product/index';
 import Edit_product from './managers/product/pages/edit/index';
-import Manager_variant_attribute_group from './managers/variant_attribute_group';
+import Manager_variant_attribute_group from './managers/variant_attribute_group/index';
+import Manager_sync_data from './managers/sync_data/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -101,6 +102,11 @@ class index extends Component {
                     { key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục' },
                 ],
             },
+            {
+                key: 'system', icon: <AiFillAndroid />, label: 'Hệ thống', children: [
+                    { key: 'manager/sync_data', icon: <AiFillControl />, label: 'Đồng bộ' },
+                ],
+            },
         ];
         let url = this.state.url;
         let logged_in_db = this.state.logged_in_db;
@@ -141,6 +147,8 @@ class index extends Component {
                                     <Route exact path={`${url}manager/product`}><Manager_product /></Route>
                                     <Route exact path={`${url}manager/product/edit/:id`}><Edit_product /></Route>
                                     <Route exact path={`${url}manager/variant_attribute_group`}><Manager_variant_attribute_group /></Route>
+                                    <Route exact path={`${url}manager/sync_data`}><Manager_sync_data /></Route>
+
                                     <Route ><Not_found /></Route>
 
 

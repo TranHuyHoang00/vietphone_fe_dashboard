@@ -78,6 +78,9 @@ class index extends Component {
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
             {
+                title: 'Ưu tiên', dataIndex: 'priority',
+            },
+            {
                 title: 'Mô tả', dataIndex: 'description', responsive: ['md'],
             },
             {
@@ -132,7 +135,7 @@ class index extends Component {
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider>THƯƠNG HIỆU</Divider>
+                            <Divider>LOẠI DANH MỤC</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
                                     columns={columns} dataSource={this.props.data_group_attributes} pagination={false}
