@@ -15,7 +15,11 @@ export const theme = Object.freeze({
         },
         Input: {
             colorBorder: '#ced4da'
-
-        }
+        },
+        Result: {
+            extraMargin: '14px 0 0 0',
+            iconFontSize: 50,
+            titleFontSize: 20
+        },
     }
 });
