@@ -110,7 +110,7 @@ class index extends Component {
                                 </Spin>
                             </div>
                             <div>
-                                <Spin tip="Đang tải" spinning={this.state.loading_sync_product} size="large">
+                                <Spin tip="Đang tải" spinning={false} size="large">
                                     <Card title="Đơn hàng" className='shadow-md'
                                         extra={
                                             <Form_popconfirm title={"Đồng bộ sản phẩm"}
@@ -120,15 +120,11 @@ class index extends Component {
                                                 disabled={true}
                                                 onConfirm={this.handle_sync} />
                                         }>
-                                        {this.state.sync_product == null && <></>}
-                                        {this.state.sync_product == false && <>{failed('sản phẩm')}</>}
-                                        {this.state.sync_product == true && <> {suscess('sản phẩm', this.state.data_sync_product)}</>}
-
                                     </Card>
                                 </Spin>
                             </div>
                             <div>
-                                <Spin tip="Đang tải" spinning={this.state.loading_sync_product} size="large">
+                                <Spin tip="Đang tải" spinning={false} size="large">
                                     <Card title="Khách hàng" className='shadow-md'
                                         extra={
                                             <Form_popconfirm title={"Đồng bộ sản phẩm"}
@@ -138,15 +134,10 @@ class index extends Component {
                                                 disabled={true}
                                                 onConfirm={this.handle_sync} />
                                         }>
-                                        {this.state.sync_product == null && <></>}
-                                        {this.state.sync_product == false && <>{failed('sản phẩm')}</>}
-                                        {this.state.sync_product == true && <> {suscess('sản phẩm', this.state.data_sync_product)}</>}
 
                                     </Card>
                                 </Spin>
                             </div>
-
-
                         </div>
                     </div>
                 </div >
