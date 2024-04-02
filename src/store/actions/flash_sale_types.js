@@ -7,7 +7,7 @@ export const get_list_flash_sale_redux = (data_filter) => {
         try {
             dispatch(flash_sale_start());
             let data = await get_list_flash_sale(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_flash_sale_success(data.data.data));
             } else {
                 dispatch(flash_sale_faided());
@@ -24,7 +24,7 @@ export const get_flash_sale_redux = (id) => {
         try {
             dispatch(flash_sale_start());
             let data = await get_flash_sale(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_flash_sale_success(data.data.data));
             } else {
                 dispatch(flash_sale_faided());
@@ -41,7 +41,7 @@ export const create_flash_sale_redux = (data_flash_sale) => {
         try {
             dispatch(flash_sale_start());
             let data = await create_flash_sale(data_flash_sale);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(flash_sale_success());
                 message.success('Thành công');
             } else {
@@ -50,7 +50,7 @@ export const create_flash_sale_redux = (data_flash_sale) => {
             }
         } catch (error) {
             dispatch(flash_sale_faided());
-            if (error.response && error.response.status == 400) {
+            if (error.response && error.response.status === 400) {
                 message.error('Khoảng thời gian này đã tồn tại Flash sale');
                 return;
             }
@@ -99,7 +99,7 @@ export const edit_flash_sale_redux = (id, data_flash_sale) => {
         try {
             dispatch(flash_sale_start());
             let data = await edit_flash_sale(id, data_flash_sale);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(flash_sale_success());
                 message.success('Thành công');
             } else {

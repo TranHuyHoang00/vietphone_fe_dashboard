@@ -26,7 +26,7 @@ class header extends Component {
         let data_user = this.state.data_user;
         const items = [
             {
-                label: <a onClick={() => this.handle_logout()}>Đăng xuất</a>,
+                label: <span onClick={() => this.handle_logout()}>Đăng xuất</span>,
                 key: '1',
                 icon: <LogoutOutlined />,
             },

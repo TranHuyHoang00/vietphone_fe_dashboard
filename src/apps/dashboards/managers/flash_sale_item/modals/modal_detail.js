@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../store/actions';
 import { Modal, Button } from 'antd';
 import { text_line_1_3 } from '../../../components/displays/data_line_1_3';
 import moment from 'moment';
@@ -31,7 +30,7 @@ class modal_detail extends Component {
                     {text_line_1_3('Tên flash sale', data_flash_sale.name)}
                     {text_line_1_3('Ngày bắt đầu', moment(data_flash_sale.start_time).format('HH:mm DD/MM/YYYY '))}
                     {text_line_1_3('Ngày kết thúc', moment(data_flash_sale.end_time).format('HH:mm DD/MM/YYYY '))}
-                    {text_line_1_3('Trạng thái', (data_flash_sale && data_flash_sale.is_active == true ? 'Mở' : 'Khóa'))}
+                    {text_line_1_3('Trạng thái', (data_flash_sale && data_flash_sale.is_active === true ? 'Mở' : 'Khóa'))}
                     {text_line_1_3('Mô tả', data_flash_sale.description)}
                 </div>
             </Modal>

@@ -7,7 +7,7 @@ export const get_list_attribute_value_redux = (data_filter) => {
         try {
             dispatch(attribute_value_start());
             let data = await get_list_attribute_value(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_attribute_value_success(data.data.data));
             } else {
                 dispatch(attribute_value_faided());
@@ -24,7 +24,7 @@ export const get_attribute_value_redux = (id) => {
         try {
             dispatch(attribute_value_start());
             let data = await get_attribute_value(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_attribute_value_success(data.data.data));
             } else {
                 dispatch(attribute_value_faided());
@@ -41,7 +41,7 @@ export const create_attribute_value_redux = (data_attribute_value) => {
         try {
             dispatch(attribute_value_start());
             let data = await create_attribute_value(data_attribute_value);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(attribute_value_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_attribute_value_redux = (id, data_attribute_value) => {
         try {
             dispatch(attribute_value_start());
             let data = await edit_attribute_value(id, data_attribute_value);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(attribute_value_success());
                 message.success('Thành công');
             } else {

@@ -7,7 +7,7 @@ export const get_list_group_attribute_redux = (data_filter) => {
         try {
             dispatch(group_attribute_start());
             let data = await get_list_group_attribute(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_group_attribute_success(data.data.data));
             } else {
                 dispatch(group_attribute_faided());
@@ -24,7 +24,7 @@ export const get_group_attribute_redux = (id) => {
         try {
             dispatch(group_attribute_start());
             let data = await get_group_attribute(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_group_attribute_success(data.data.data));
             } else {
                 dispatch(group_attribute_faided());
@@ -41,7 +41,7 @@ export const create_group_attribute_redux = (data_group_attribute) => {
         try {
             dispatch(group_attribute_start());
             let data = await create_group_attribute(data_group_attribute);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(group_attribute_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_group_attribute_redux = (id, data_group_attribute) => {
         try {
             dispatch(group_attribute_start());
             let data = await edit_group_attribute(id, data_group_attribute);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(group_attribute_success());
                 message.success('Thành công');
             } else {

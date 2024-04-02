@@ -7,13 +7,8 @@ import {
     Spin, Pagination, Typography, Dropdown, Avatar
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
-import Form_select_page from '../../components/selects/form_select_page';
-import { format_money } from '../../../../utils/format_money';
-import { text_line_1_3 } from '../../components/displays/data_line_1_3';
-
-import Modal_create from './modals/modal_create';
-import Modal_detail from './modals/modal_detail';
-import Modal_edit from './modals/modal_edit';
+import FormSelectPage from '../../components/selects/form_select_page';
+import ModalDetail from './modals/modal_detail';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -34,20 +29,20 @@ class index extends Component {
         this.props.get_list_customer(this.state.data_filter);
     }
     open_modal = async (name, value, id) => {
-        if (name == 'create') {
+        if (name === 'create') {
             this.setState({ modal_create: value });
             this.props.set_data_customer({});
         }
-        if (name == 'detail') {
-            if (id == null) {
+        if (name === 'detail') {
+            if (id === undefined) {
                 this.setState({ modal_detail: value, data_customer: {} });
             } else {
                 this.setState({ modal_detail: value });
                 await this.props.get_customer(id);
             }
         }
-        if (name == 'edit') {
-            if (id == null) {
+        if (name === 'edit') {
+            if (id === undefined) {
                 this.setState({ modal_edit: value, data_customer: {} });
             } else {
                 this.setState({ modal_edit: value });
@@ -57,17 +52,17 @@ class index extends Component {
     }
     handle_funtion_menu = async () => {
         let data_selected = this.state.data_selected;
-        if (this.state.type_menu == 1) { await this.props.delete_list_customer(data_selected); }
-        if (this.state.type_menu == 2) { await this.props.edit_list_customer(data_selected, { is_active: false }); }
-        if (this.state.type_menu == 3) { await this.props.edit_list_customer(data_selected, { is_active: true }); }
+        if (this.state.type_menu === 1) { await this.props.delete_list_customer(data_selected); }
+        if (this.state.type_menu === 2) { await this.props.edit_list_customer(data_selected, { is_active: false }); }
+        if (this.state.type_menu === 3) { await this.props.edit_list_customer(data_selected, { is_active: true }); }
         await this.props.get_list_customer(this.state.data_filter);
-        if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
+        if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
     }
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
-        if (type == 'limit') { data_filter.limit = value; }
-        if (type == 'page') { data_filter.page = value; }
-        if (type == 'search') { data_filter.search_query = value; data_filter.page = 1; }
+        if (type === 'limit') { data_filter.limit = value; }
+        if (type === 'page') { data_filter.page = value; }
+        if (type === 'search') { data_filter.search_query = value; data_filter.page = 1; }
         this.setState({ data_filter: data_filter })
         await this.props.get_list_customer(data_filter);
     }
@@ -86,7 +81,7 @@ class index extends Component {
                         <div>
                             <Typography.Text strong className='text-[#0574b8]'>{user.full_name}</Typography.Text><br />
                             <Typography.Text italic strong>{user.phone}</Typography.Text><br />
-                            {item.email == '' || item.email == null ?
+                            {item.email === '' || item.email === null ?
                                 <Typography.Text italic>none@gmail.com</Typography.Text>
                                 :
                                 <Typography.Text italic>{item.email}</Typography.Text>
@@ -98,10 +93,10 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <a onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></a>
-                        <a onClick={() => this.open_modal('edit', true, item.id)}>
+                        <span onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></span>
+                        <span onClick={() => this.open_modal('edit', true, item.id)}>
                             <AiFillEdit />
-                        </a>
+                        </span>
                     </Space >
                 ),
             },
@@ -134,17 +129,17 @@ class index extends Component {
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm bcustomer'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <Form_select_page limit={data_filter.limit} onchange_page={this.onchange_page} />
+                                <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
                                 <div>
                                     <Popconfirm disabled={true}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
                                         <Dropdown.Button disabled={true} menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
-                                                {type_menu == 1 && <span>Xóa</span>}
-                                                {type_menu == 2 && <span>Khóa</span>}
-                                                {type_menu == 3 && <span>Mở</span>}
-                                                <span> {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
+                                                {type_menu === 1 && <span>Xóa</span>}
+                                                {type_menu === 2 && <span>Khóa</span>}
+                                                {type_menu === 3 && <span>Mở</span>}
+                                                <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
                                     </Popconfirm>
@@ -162,12 +157,12 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {/* <Modal_create modal_create={this.state.modal_create}
+                {/* <ModalCreate modal_create={this.state.modal_create}
                     open_modal={this.open_modal}
                     data_filter={this.state.data_filter} /> */}
-                <Modal_detail modal_detail={this.state.modal_detail}
+                <ModalDetail modal_detail={this.state.modal_detail}
                     open_modal={this.open_modal} />
-                {/* <Modal_edit modal_edit={this.state.modal_edit}
+                {/* <ModalEdit modal_edit={this.state.modal_edit}
                     open_modal={this.open_modal}
                     data_filter={this.state.data_filter} /> */}
             </>

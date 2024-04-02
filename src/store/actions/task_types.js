@@ -7,7 +7,7 @@ export const get_list_task_redux = (data_filter) => {
         try {
             dispatch(task_start());
             let data = await get_list_task(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_task_success(data.data.data));
             } else {
                 dispatch(task_faided());
@@ -24,7 +24,7 @@ export const get_task_redux = (id) => {
         try {
             dispatch(task_start());
             let data = await get_task(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_task_success(data.data.data));
             } else {
                 dispatch(task_faided());
@@ -41,7 +41,7 @@ export const create_task_redux = (data_task) => {
         try {
             dispatch(task_start());
             let data = await create_task(data_task);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(task_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_task_redux = (id, data_task) => {
         try {
             dispatch(task_start());
             let data = await edit_task(id, data_task);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(task_success());
                 message.success('Thành công');
             } else {

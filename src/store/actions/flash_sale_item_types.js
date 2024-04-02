@@ -7,7 +7,7 @@ export const get_list_flash_sale_item_redux = (data_filter) => {
         try {
             dispatch(flash_sale_item_start());
             let data = await get_list_flash_sale_item(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_flash_sale_item_success(data.data.data));
             } else {
                 dispatch(flash_sale_item_faided());
@@ -24,7 +24,7 @@ export const get_flash_sale_item_redux = (id) => {
         try {
             dispatch(flash_sale_item_start());
             let data = await get_flash_sale_item(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_flash_sale_item_success(data.data.data));
             } else {
                 dispatch(flash_sale_item_faided());
@@ -41,7 +41,7 @@ export const create_flash_sale_item_redux = (data_flash_sale_item) => {
         try {
             dispatch(flash_sale_item_start());
             let data = await create_flash_sale_item(data_flash_sale_item);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(flash_sale_item_success());
                 message.success('Thành công');
             } else {
@@ -112,7 +112,7 @@ export const edit_flash_sale_item_redux = (id, data_flash_sale_item) => {
         try {
             dispatch(flash_sale_item_start());
             let data = await edit_flash_sale_item(id, data_flash_sale_item);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(flash_sale_item_success());
                 message.success('Thành công');
             } else {

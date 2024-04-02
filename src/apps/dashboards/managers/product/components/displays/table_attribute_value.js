@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Card } from 'antd';
-import Table_line from '../displays/table_line';
+import TableLine from '../displays/table_line';
 class table_attribute_value extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +18,7 @@ class table_attribute_value extends Component {
                 <div className='space-y-[5px]'>
                     {data_attribute_value_raws && data_attribute_value_raws.map((item, index) => {
                         return (
-                            <Table_line key={index} data={item} id={data_attribute_value_uniques.id}
+                            <TableLine key={index} data={item} id={data_attribute_value_uniques.id}
                                 handle_delete_atbvl={this.props.handle_delete_atbvl}
                                 is_edit={this.props.is_edit} />
                         )

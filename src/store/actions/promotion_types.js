@@ -7,7 +7,7 @@ export const get_list_promotion_redux = (data_filter) => {
         try {
             dispatch(promotion_start());
             let data = await get_list_promotion(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_promotion_success(data.data.data));
             } else {
                 dispatch(promotion_faided());
@@ -24,7 +24,7 @@ export const get_promotion_redux = (id) => {
         try {
             dispatch(promotion_start());
             let data = await get_promotion(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_promotion_success(data.data.data));
             } else {
                 dispatch(promotion_faided());
@@ -41,7 +41,7 @@ export const create_promotion_redux = (data_promotion) => {
         try {
             dispatch(promotion_start());
             let data = await create_promotion(data_promotion);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(promotion_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_promotion_redux = (id, data_promotion) => {
         try {
             dispatch(promotion_start());
             let data = await edit_promotion(id, data_promotion);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(promotion_success());
                 message.success('Thành công');
             } else {

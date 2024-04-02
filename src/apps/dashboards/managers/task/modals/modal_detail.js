@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../store/actions';
 import { Modal, Button } from 'antd';
 import { text_line_1_3 } from '../../../components/displays/data_line_1_3';
 

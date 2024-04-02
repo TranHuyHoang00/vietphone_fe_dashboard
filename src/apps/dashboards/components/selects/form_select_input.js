@@ -15,7 +15,7 @@ class form_select_input extends Component {
                 <div>
                     <Typography.Text italic strong>
                         {this.props.name}
-                        {this.props.important == true && <Typography.Text type="danger" strong> *</Typography.Text>}
+                        {this.props.important === true && <Typography.Text type="danger" strong> *</Typography.Text>}
                     </Typography.Text>
                 </div>
                 <Select style={{ width: this.props.width }} value={this.props.value}

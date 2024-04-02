@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../../../store/actions';
 import { Collapse } from 'antd';
-import Card_attribute_value from '../../../cards/card_attribute_value';
+import CardAttributeValue from '../../../cards/card_attribute_value';
 class product_attribute_value extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +15,7 @@ class product_attribute_value extends Component {
         return (
             <Collapse defaultActiveKey={['1']} >
                 <Collapse.Panel header="Thông số kĩ thuật" key="1">
-                    <Card_attribute_value
+                    <CardAttributeValue
                         is_edit={this.props.is_edit}
                         type_handle={'product'}
                         data_attributes={this.props.data_product.attribute_values}

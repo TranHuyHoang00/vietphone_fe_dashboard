@@ -16,7 +16,7 @@ class table_line extends Component {
         let is_edit = this.props.is_edit;
         return (
             <>
-                {(data && data.attribute && data.attribute.group_attribute && data.attribute.group_attribute.id == id) &&
+                {(data && data.attribute && data.attribute.group_attribute && data.attribute.group_attribute.id === id) &&
                     <div className='flex gap-[5px]'>
                         <div className='w-1/3 flex justify-between space-x-[5px]'>
                             <Typography.Text type="secondary">{data.attribute && data.attribute.name}</Typography.Text>

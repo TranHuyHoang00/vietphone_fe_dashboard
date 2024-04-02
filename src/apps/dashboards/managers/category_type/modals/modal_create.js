@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, message, Spin } from 'antd';
 import { create_category_type } from '../../../../../services/category_type_service';
-import Form_input from '../../../components/inputs/form_input';
-import Form_textare from '../../../components/inputs/form_textare';
-import Modal_footer from '../../../components/modal/modal_footer';
+import FormInput from '../../../components/inputs/form_input';
+import FormTextare from '../../../components/inputs/form_textare';
+import ModalFooter from '../../../components/modal/modal_footer';
 class modal_create extends Component {
     constructor(props) {
         super(props);
@@ -20,8 +20,8 @@ class modal_create extends Component {
     }
     handle_onchange_input = (event, id, type) => {
         let copyState = { ...this.state.data_category_type };
-        if (type == 'input') { copyState[id] = event.target.value; }
-        if (type == 'select') { copyState[id] = event; }
+        if (type === 'input') { copyState[id] = event.target.value; }
+        if (type === 'select') { copyState[id] = event; }
         this.setState({
             data_category_type: {
                 ...copyState
@@ -43,10 +43,10 @@ class modal_create extends Component {
     }
     handle_create = async () => {
         let result = this.validation(this.state.data_category_type);
-        if (result.code == 0) {
+        if (result.code === 0) {
             try {
                 let data = await create_category_type(this.state.data_category_type);
-                if (data && data.data && data.data.success == 1) {
+                if (data && data.data && data.data.success === 1) {
                     await this.props.load_data();
                     this.props.open_modal("create", false);
                     this.setState({ data_category_type: { is_active: true } });
@@ -70,17 +70,17 @@ class modal_create extends Component {
                 onCancel={() => this.props.open_modal("create", false)} width={400}
                 maskClosable={this.state.mask_closable}
                 footer={[
-                    <Modal_footer open_modal={this.props.open_modal} type={'create'}
+                    <ModalFooter open_modal={this.props.open_modal} type={'create'}
                         is_loading={this.state.is_loading} handle_funtion={this.handle_create} />
                 ]}>
                 <Spin spinning={this.state.is_loading}>
                     <div className="space-y-[10px]">
 
-                        <Form_input name={'Tên loại danh mục'} variable={'name'} value={data_category_type.name}
+                        <FormInput name={'Tên loại danh mục'} variable={'name'} value={data_category_type.name}
                             important={true} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 
-                        <Form_textare name={'Mô tả'} variable={'description'} value={data_category_type.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={data_category_type.description}
                             important={false} type={'input'}
                             handle_onchange_input={this.handle_onchange_input} />
 

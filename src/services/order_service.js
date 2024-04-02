@@ -1,6 +1,6 @@
 import api_admin from '../auths/api_admin';
 const get_list_order = (date_filter) => {
-    return api_admin.get(`/order/api/v1/list-order?page=${date_filter.page}&limit=${date_filter.limit}${(date_filter.search_query == null || date_filter.search_query == '') ? '' : `&search_query=${date_filter.search_query}`}`);
+    return api_admin.get(`/order/api/v1/list-order?page=${date_filter.page}&limit=${date_filter.limit}${(date_filter.search_query === null || date_filter.search_query === '') ? '' : `&search_query=${date_filter.search_query}`}`);
 }
 const create_order = (data) => {
     return api_admin.post(`/auth/api/v1/create-order`, data,);

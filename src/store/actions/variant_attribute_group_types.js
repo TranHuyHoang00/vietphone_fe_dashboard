@@ -7,7 +7,7 @@ export const get_list_variant_attribute_group_redux = (data_filter) => {
         try {
             dispatch(variant_attribute_group_start());
             let data = await get_list_variant_attribute_group(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_variant_attribute_group_success(data.data.data));
             } else {
                 dispatch(variant_attribute_group_faided());
@@ -24,7 +24,7 @@ export const get_variant_attribute_group_redux = (id) => {
         try {
             dispatch(variant_attribute_group_start());
             let data = await get_variant_attribute_group(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_variant_attribute_group_success(data.data.data));
             } else {
                 dispatch(variant_attribute_group_faided());
@@ -41,7 +41,7 @@ export const create_variant_attribute_group_redux = (data_variant_attribute_grou
         try {
             dispatch(variant_attribute_group_start());
             let data = await create_variant_attribute_group(data_variant_attribute_group);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(variant_attribute_group_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_variant_attribute_group_redux = (id, data_variant_attribute_gr
         try {
             dispatch(variant_attribute_group_start());
             let data = await edit_variant_attribute_group(id, data_variant_attribute_group);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(variant_attribute_group_success());
                 message.success('Thành công');
             } else {

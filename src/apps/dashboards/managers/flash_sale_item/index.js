@@ -3,14 +3,13 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../store/actions';
 import {
-    Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown, Image
+    Table, Space, Divider, Button, Popconfirm,
+    Spin, Typography, Dropdown, Image
 } from 'antd';
-import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
-import Modal_create from './modals/modal_create';
-import Modal_detail from './modals/modal_detail';
-import Modal_edit from './modals/modal_edit';
-import Form_select_input from '../../components/selects/form_select_input';
+import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
+import ModalCreate from './modals/modal_create';
+import ModalEdit from './modals/modal_edit';
+import FormSelectInput from '../../components/selects/form_select_input';
 import { format_money } from '../../../../utils/format_money';
 
 class index extends Component {
@@ -33,19 +32,19 @@ class index extends Component {
         this.props.get_list_flash_sale(this.state.data_filter);
     }
     open_modal = async (name, value, id) => {
-        if (name == 'create') {
+        if (name === 'create') {
             this.setState({ modal_create: value });
         }
-        if (name == 'detail') {
-            if (id == null) {
+        if (name === 'detail') {
+            if (id === undefined) {
                 this.setState({ modal_detail: value });
             } else {
                 this.setState({ modal_detail: value });
                 await this.props.get_flash_sale_item(id);
             }
         }
-        if (name == 'edit') {
-            if (id == null) {
+        if (name === 'edit') {
+            if (id === undefined) {
                 this.setState({ modal_edit: value });
             } else {
                 this.setState({ modal_edit: value });
@@ -56,9 +55,9 @@ class index extends Component {
     }
     handle_funtion_menu = async () => {
         let data_selected = this.state.data_selected;
-        if (this.state.type_menu == 1) { await this.props.delete_list_flash_sale_item(data_selected); }
+        if (this.state.type_menu === 1) { await this.props.delete_list_flash_sale_item(data_selected); }
         await this.props.get_flash_sale(this.props.data_flash_sale.id);
-        if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
+        if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
     }
     render() {
         const columns = [
@@ -91,10 +90,10 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        {/* <a onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></a> */}
-                        <a onClick={() => this.open_modal('edit', true, item.id)}>
+                        {/* <span onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></span> */}
+                        <span onClick={() => this.open_modal('edit', true, item.id)}>
                             <AiFillEdit />
-                        </a>
+                        </span>
                     </Space >
                 ),
             },
@@ -125,7 +124,7 @@ class index extends Component {
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-end justify-between gap-[10px]'>
                                 <div className='w-[200px] sm:w-[300px] md:w-[500px]'>
-                                    <Form_select_input name={'Flash sale'}
+                                    <FormSelectInput name={'Flash sale'}
                                         important={true} width={'100%'}
                                         variable={'id'} value={this.props.data_flash_sale.id}
                                         options={this.props.data_flash_sales.map((item) => ({
@@ -136,13 +135,13 @@ class index extends Component {
                                     />
                                 </div>
                                 <div>
-                                    <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
+                                    <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
                                         <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
-                                                {type_menu == 1 && <span>Xóa</span>}
-                                                <span> {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
+                                                {type_menu === 1 && <span>Xóa</span>}
+                                                <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
                                     </Popconfirm>
@@ -157,11 +156,11 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                <Modal_create modal_create={this.state.modal_create}
+                <ModalCreate modal_create={this.state.modal_create}
                     open_modal={this.open_modal} />
-                {/* <Modal_detail modal_detail={this.state.modal_detail}
+                {/* <ModalDetail modal_detail={this.state.modal_detail}
                     open_modal={this.open_modal} /> */}
-                <Modal_edit modal_edit={this.state.modal_edit}
+                <ModalEdit modal_edit={this.state.modal_edit}
                     open_modal={this.open_modal} />
             </>
         );

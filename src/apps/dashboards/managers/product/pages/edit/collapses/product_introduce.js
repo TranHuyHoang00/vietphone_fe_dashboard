@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../../../../../../store/actions';
 import { Collapse, Select } from 'antd';
 import { text_line_1_3 } from '../../../../../components/displays/data_line_1_3';
-import Form_select_item from '../../../../../components/selects/form_select_item';
+import FormSelectItem from '../../../../../components/selects/form_select_item';
 class product_introduce extends Component {
     constructor(props) {
         super(props);
@@ -21,25 +21,25 @@ class product_introduce extends Component {
     on_search = (value, form_name) => {
         let data_filter = this.state.data_filter;
         data_filter.search_query = value;
-        if (form_name == 'brand') { this.props.get_list_brand(data_filter); }
-        if (form_name == 'tag') { this.props.get_list_tag(data_filter); }
-        if (form_name == 'category') { this.props.get_list_category(data_filter); }
-        if (form_name == 'variant_attribute_group') { this.props.get_list_variant_attribute_group(data_filter); }
+        if (form_name === 'brand') { this.props.get_list_brand(data_filter); }
+        if (form_name === 'tag') { this.props.get_list_tag(data_filter); }
+        if (form_name === 'category') { this.props.get_list_category(data_filter); }
+        if (form_name === 'variant_attribute_group') { this.props.get_list_variant_attribute_group(data_filter); }
     }
     handle_create = async (form_name) => {
-        if (form_name == 'brand') {
+        if (form_name === 'brand') {
             await this.props.create_brand(this.props.data_brand);
             await this.props.get_list_brand(this.state.data_filter);
         }
-        if (form_name == 'tag') {
+        if (form_name === 'tag') {
             await this.props.create_tag(this.props.data_brand);
             await this.props.get_list_tag(this.state.data_filter);
         }
-        if (form_name == 'category') {
+        if (form_name === 'category') {
             await this.props.create_category(this.props.data_category);
             await this.props.get_list_category(this.state.data_filter);
         }
-        if (form_name == 'variant_attribute_group') {
+        if (form_name === 'variant_attribute_group') {
             await this.props.get_list_variant_attribute_group(this.state.data_filter);
         }
     }
@@ -61,7 +61,7 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Form_select_item width={'100%'} placeholder={'Tên thương hiệu'}
+                                <FormSelectItem width={'100%'} placeholder={'Tên thương hiệu'}
                                     form_name={'brand'}
                                     value={data_product.product_brand}
                                     options={data_brands.map((item) => ({
@@ -89,7 +89,7 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Form_select_item width={'100%'} placeholder={'Tên tag'}
+                                <FormSelectItem width={'100%'} placeholder={'Tên tag'}
                                     form_name={'tag'} mode={'multiple'}
                                     value={data_product.tags}
                                     options={data_tags.map((item) => ({
@@ -115,7 +115,7 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Form_select_item width={'100%'} placeholder={'Tên danh mục'}
+                                <FormSelectItem width={'100%'} placeholder={'Tên danh mục'}
                                     form_name={'category'} mode={'multiple'}
                                     value={data_product.categories}
                                     options={data_categorys.map((item) => ({
@@ -141,7 +141,7 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Form_select_item width={'100%'} placeholder={'Tên SP-TS'}
+                                <FormSelectItem width={'100%'} placeholder={'Tên SP-TS'}
                                     form_name={'variant_attribute_group'}
                                     value={data_product.variant_attribute_group}
                                     options={data_variant_attribute_groups.map((item) => ({

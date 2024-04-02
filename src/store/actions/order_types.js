@@ -7,7 +7,7 @@ export const get_list_order_redux = (data_filter) => {
         try {
             dispatch(order_start());
             let data = await get_list_order(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_order_success(data.data.data));
             } else {
                 dispatch(order_faided());
@@ -24,7 +24,7 @@ export const get_order_redux = (id) => {
         try {
             dispatch(order_start());
             let data = await get_order(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_order_success(data.data.data));
             } else {
                 dispatch(order_faided());
@@ -41,7 +41,7 @@ export const create_order_redux = (data_order) => {
         try {
             dispatch(order_start());
             let data = await create_order(data_order);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(order_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_order_redux = (id, data_order) => {
         try {
             dispatch(order_start());
             let data = await edit_order(id, data_order);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(order_success());
                 message.success('Thành công');
             } else {

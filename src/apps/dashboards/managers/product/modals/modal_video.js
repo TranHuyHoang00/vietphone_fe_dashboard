@@ -16,7 +16,7 @@ class modal_vide0 extends Component {
     }
     handle_create_video = () => {
         let link_video = this.state.link_video;
-        if (link_video == null) {
+        if (link_video === null) {
             message.error("Không được bỏ trống 'Link video");
         } else {
             this.props.onchange_video(link_video);
@@ -25,7 +25,7 @@ class modal_vide0 extends Component {
     }
     onclick_show_video = () => {
         let link_video = this.state.link_video;
-        if (link_video == null) {
+        if (link_video === null) {
             message.error("Không được bỏ trống 'Link video");
         } else {
             this.setState({ is_hide_video: true });
@@ -57,9 +57,9 @@ class modal_vide0 extends Component {
                             <Input onChange={(event) => this.handle_onchange_input(event)} />
                             <Button onClick={() => this.onclick_show_video()}>Xem trước</Button>
                         </div>
-                        {this.state.is_hide_video == true &&
+                        {this.state.is_hide_video === true &&
                             <div className='flex items-center justify-center'>
-                                <iframe
+                                <iframe title='video_product'
                                     width="100%"
                                     height="250"
                                     src={this.state.link_video}

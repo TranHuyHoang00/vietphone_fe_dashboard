@@ -12,10 +12,10 @@ class form_image extends Component {
     }
     onchange_image = async (image) => {
         let image_new = await image_to_base64(image);
-        if (this.props.htmlFor == 'load_file_create') {
+        if (this.props.htmlFor === 'load_file_create') {
             this.props.handle_onchange_input(image_new, this.props.variable)
         }
-        if (this.props.htmlFor == 'load_file_edit') {
+        if (this.props.htmlFor === 'load_file_edit') {
             this.props.onchange_image(image_new);
         }
     }
@@ -24,7 +24,7 @@ class form_image extends Component {
             <div className='space-y-[3px]'>
                 <Typography.Text italic strong>
                     {this.props.name}
-                    {this.props.important == true && <Typography.Text type="danger" strong> *</Typography.Text>}
+                    {this.props.important === true && <Typography.Text type="danger" strong> *</Typography.Text>}
                 </Typography.Text>
                 <div className='flex items-center justify-center'>
                     <div className='space-y-[5px]'>

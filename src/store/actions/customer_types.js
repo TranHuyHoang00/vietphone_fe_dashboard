@@ -7,7 +7,7 @@ export const get_list_customer_redux = (data_filter) => {
         try {
             dispatch(customer_start());
             let data = await get_list_customer(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_customer_success(data.data.data));
             } else {
                 dispatch(customer_faided());
@@ -24,7 +24,7 @@ export const get_customer_redux = (id) => {
         try {
             dispatch(customer_start());
             let data = await get_customer(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_customer_success(data.data.data));
             } else {
                 dispatch(customer_faided());
@@ -41,7 +41,7 @@ export const create_customer_redux = (data_customer) => {
         try {
             dispatch(customer_start());
             let data = await create_customer(data_customer);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(customer_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_customer_redux = (id, data_customer) => {
         try {
             dispatch(customer_start());
             let data = await edit_customer(id, data_customer);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(customer_success());
                 message.success('Thành công');
             } else {

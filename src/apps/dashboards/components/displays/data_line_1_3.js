@@ -21,7 +21,7 @@ const image_line_1_3 = (name, value, width, height) => {
                 <span>:</span>
             </div>
             <div className='w-2/3'>
-                {value == null ?
+                {value === null ?
                     <span></span>
                     :
                     <Image width={width} height={height} src={value} className='object-cover' />

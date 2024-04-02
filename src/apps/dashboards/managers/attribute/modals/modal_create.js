@@ -3,10 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../store/actions';
 import { Modal, message, Spin } from 'antd';
-import Form_input from '../../../components/inputs/form_input';
-import Form_textare from '../../../components/inputs/form_textare';
-import Form_select_input from '../../../components/selects/form_select_input';
-import Modal_footer from '../../../components/modal/modal_footer';
+import FormInput from '../../../components/inputs/form_input';
+import FormTextare from '../../../components/inputs/form_textare';
+import FormSelectInput from '../../../components/selects/form_select_input';
+import ModalFooter from '../../../components/modal/modal_footer';
 class modal_create extends Component {
     constructor(props) {
         super(props);
@@ -24,10 +24,10 @@ class modal_create extends Component {
     }
     handle_create = async () => {
         let result = this.validation(this.props.data_attribute);
-        if (result.code == 0) {
+        if (result.code === 0) {
             await this.props.create_attribute(this.props.data_attribute);
             let is_result = this.props.is_result;
-            if (is_result == true) {
+            if (is_result === true) {
                 await this.props.get_list_attribute(this.props.data_filter);
                 this.props.open_modal("create", false);
             }
@@ -45,25 +45,25 @@ class modal_create extends Component {
                 onCancel={() => this.props.open_modal("create", false)} width={400}
                 maskClosable={!is_loading}
                 footer={[
-                    <Modal_footer open_modal={this.props.open_modal} type={'create'}
+                    <ModalFooter open_modal={this.props.open_modal} type={'create'}
                         is_loading={is_loading} handle_funtion={this.handle_create} />
                 ]}>
                 <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
 
-                        <Form_input name={'CODE'} variable={'code'} value={data_attribute.code}
+                        <FormInput name={'CODE'} variable={'code'} value={data_attribute.code}
                             important={false}
                             handle_onchange_input={this.props.on_change_attribute} />
 
-                        <Form_input name={'Tên thông số'} variable={'name'} value={data_attribute.name}
+                        <FormInput name={'Tên thông số'} variable={'name'} value={data_attribute.name}
                             important={true}
                             handle_onchange_input={this.props.on_change_attribute} />
 
-                        <Form_textare name={'Mô tả'} variable={'description'} value={data_attribute.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={data_attribute.description}
                             important={false}
                             handle_onchange_input={this.props.on_change_attribute} />
 
-                        <Form_select_input name={'Loại thông số'} variable={'group_attribute'} value={data_attribute.group_attribute}
+                        <FormSelectInput name={'Loại thông số'} variable={'group_attribute'} value={data_attribute.group_attribute}
                             important={true} width={'100%'}
                             options={data_group_attributes.map((item) => ({
                                 label: item.name,

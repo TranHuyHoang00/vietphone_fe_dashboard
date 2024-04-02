@@ -7,9 +7,9 @@ import {
 import { AiOutlineMenu, AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
 import Display_line_number from '../../components/display_line_number';
 import { get_list_category_type, get_category_type, delete_category_type } from '../../../../services/category_type_service';
-import Modal_create from './modals/modal_create';
-import Modal_detail from './modals/modal_detail';
-import Modal_edit from './modals/modal_edit';
+import ModalCreate from './modals/modal_create';
+import ModalDetail from './modals/modal_detail';
+import ModalEdit from './modals/modal_edit';
 import { load_data_url } from '../../../../utils/load_data_url';
 class index extends Component {
     constructor(props) {
@@ -53,7 +53,7 @@ class index extends Component {
         this.handle_loading(true);
         try {
             let data = await get_list_category_type(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 this.setState({
                     data_category_types: data.data.data.categorie_types,
                     metadata: data.data.data.metadata,
@@ -71,7 +71,7 @@ class index extends Component {
         this.handle_loading(true);
         try {
             let data = await get_category_type(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 this.setState({ data_category_type: data.data.data });
             } else {
                 message.error("Lỗi");
@@ -84,17 +84,17 @@ class index extends Component {
 
     }
     open_modal = async (name, value, id) => {
-        if (name == 'create') { this.setState({ modal_create: value }); }
-        if (name == 'detail') {
-            if (id == null) {
+        if (name === 'create') { this.setState({ modal_create: value }); }
+        if (name === 'detail') {
+            if (id === undefined) {
                 this.setState({ modal_detail: value, data_category_type: {} });
             } else {
                 this.setState({ modal_detail: value });
                 await this.get_category_type(id);
             }
         }
-        if (name == 'edit') {
-            if (id == null) {
+        if (name === 'edit') {
+            if (id === undefined) {
                 this.setState({ modal_edit: value, data_category_type: {} });
             } else {
                 this.setState({ modal_edit: value });
@@ -108,13 +108,13 @@ class index extends Component {
             let data_selected = this.state.data_selected;
             for (const id of data_selected) {
                 let data;
-                if (this.state.type_menu == 1) { data = await delete_category_type(id); }
+                if (this.state.type_menu === 1) { data = await delete_category_type(id); }
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Thất bại khi xử lý dòng ID=${id}`);
                 }
             }
             await this.load_data();
-            if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
+            if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
             message.success(`Thành công xử lý ${data_selected.length} dòng`);
         } catch (e) {
             message.error('Lỗi hệ thống');
@@ -124,10 +124,10 @@ class index extends Component {
     }
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
-        if (type == 'limit') {
+        if (type === 'limit') {
             this.props.history.push(`/admin/manager/category_type?page=${data_filter.page}&limit=${value}&search_query=${data_filter.search_query}`);
         }
-        if (type == 'page') {
+        if (type === 'page') {
             this.props.history.push(`/admin/manager/category_type?page=${value}&limit=${data_filter.limit}&search_query=${data_filter.search_query}`);
         }
     }
@@ -153,10 +153,10 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <a onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></a>
-                        <a onClick={() => this.open_modal('edit', true, item.id)}>
+                        <span onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></span>
+                        <span onClick={() => this.open_modal('edit', true, item.id)}>
                             <AiFillEdit />
-                        </a>
+                        </span>
                     </Space >
                 ),
             },
@@ -190,13 +190,13 @@ class index extends Component {
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <Display_line_number limit={data_filter.limit} onchange_page={this.onchange_page} />
                                 <div>
-                                    <Popconfirm disabled={(data_selected && data_selected.length == 0 ? true : false)}
+                                    <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
                                         <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
-                                                {type_menu == 1 && <span>Xóa</span>}
-                                                <span> {data_selected && data_selected.length == 0 ? '' : `(${data_selected.length})`}</span>
+                                                {type_menu === 1 && <span>Xóa</span>}
+                                                <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
                                     </Popconfirm>
@@ -214,11 +214,11 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                <Modal_create modal_create={this.state.modal_create}
+                <ModalCreate modal_create={this.state.modal_create}
                     open_modal={this.open_modal} load_data={this.load_data} />
-                <Modal_detail modal_detail={this.state.modal_detail}
+                <ModalDetail modal_detail={this.state.modal_detail}
                     open_modal={this.open_modal} data_category_type={this.state.data_category_type} />
-                <Modal_edit modal_edit={this.state.modal_edit}
+                <ModalEdit modal_edit={this.state.modal_edit}
                     open_modal={this.open_modal} load_data={this.load_data}
                     data_category_type={this.state.data_category_type} />
             </>

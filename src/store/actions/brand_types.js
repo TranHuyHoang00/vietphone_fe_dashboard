@@ -7,7 +7,7 @@ export const get_list_brand_redux = (data_filter) => {
         try {
             dispatch(brand_start());
             let data = await get_list_brand(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_brand_success(data.data.data));
             } else {
                 dispatch(brand_faided());
@@ -24,7 +24,7 @@ export const get_brand_redux = (id) => {
         try {
             dispatch(brand_start());
             let data = await get_brand(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_brand_success(data.data.data));
             } else {
                 dispatch(brand_faided());
@@ -41,7 +41,7 @@ export const create_brand_redux = (data_brand) => {
         try {
             dispatch(brand_start());
             let data = await create_brand(data_brand);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(brand_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_brand_redux = (id, data_brand) => {
         try {
             dispatch(brand_start());
             let data = await edit_brand(id, data_brand);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(brand_success());
                 message.success('Thành công');
             } else {

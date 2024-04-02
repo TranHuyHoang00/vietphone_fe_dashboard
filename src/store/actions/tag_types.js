@@ -7,7 +7,7 @@ export const get_list_tag_redux = (data_filter) => {
         try {
             dispatch(tag_start());
             let data = await get_list_tag(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_tag_success(data.data.data));
             } else {
                 dispatch(tag_faided());
@@ -24,7 +24,7 @@ export const get_tag_redux = (id) => {
         try {
             dispatch(tag_start());
             let data = await get_tag(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_tag_success(data.data.data));
             } else {
                 dispatch(tag_faided());
@@ -41,7 +41,7 @@ export const create_tag_redux = (data_tag) => {
         try {
             dispatch(tag_start());
             let data = await create_tag(data_tag);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(tag_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_tag_redux = (id, data_tag) => {
         try {
             dispatch(tag_start());
             let data = await edit_tag(id, data_tag);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(tag_success());
                 message.success('Thành công');
             } else {

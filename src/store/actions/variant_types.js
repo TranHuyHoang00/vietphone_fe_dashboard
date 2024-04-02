@@ -7,7 +7,7 @@ export const get_list_variant_redux = (data_filter) => {
         try {
             dispatch(variant_start());
             let data = await get_list_variant(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_variant_success(data.data.data));
             } else {
                 dispatch(variant_faided());
@@ -24,7 +24,7 @@ export const get_variant_redux = (id) => {
         try {
             dispatch(variant_start());
             let data = await get_variant(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_variant_success(data.data.data));
             } else {
                 dispatch(variant_faided());
@@ -41,7 +41,7 @@ export const create_variant_redux = (data_variant) => {
         try {
             dispatch(variant_start());
             let data = await create_variant(data_variant);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(variant_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_variant_redux = (id, data_variant) => {
         try {
             dispatch(variant_start());
             let data = await edit_variant(id, data_variant);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(variant_success());
                 message.success('Thành công');
             } else {

@@ -7,7 +7,7 @@ export const get_list_category_redux = (data_filter) => {
         try {
             dispatch(category_start());
             let data = await get_list_category(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_category_success(data.data.data));
             } else {
                 dispatch(category_faided());
@@ -24,7 +24,7 @@ export const get_category_redux = (id) => {
         try {
             dispatch(category_start());
             let data = await get_category(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(get_category_success(data.data.data));
             } else {
                 dispatch(category_faided());
@@ -41,7 +41,7 @@ export const create_category_redux = (data_category) => {
         try {
             dispatch(category_start());
             let data = await create_category(data_category);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(category_success());
                 message.success('Thành công');
             } else {
@@ -95,7 +95,7 @@ export const edit_category_redux = (id, data_category) => {
         try {
             dispatch(category_start());
             let data = await edit_category(id, data_category);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 dispatch(category_success());
                 message.success('Thành công');
             } else {

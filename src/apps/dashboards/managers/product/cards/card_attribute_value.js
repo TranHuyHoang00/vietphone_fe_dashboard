@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { message } from 'antd';
 import { get_attribute_value_detail } from '../../../../../services/attribute_value_service';
-import Table_attribute_value from '../components/displays/table_attribute_value';
-import Select_attribute_value from '../components/selects/select_attribute_value';
+import TableAttributeValue from '../components/displays/table_attribute_value';
+import SelectAttributeValue from '../components/selects/select_attribute_value';
 
 class card_attribute_value extends Component {
     constructor(props) {
@@ -49,7 +49,7 @@ class card_attribute_value extends Component {
     get_attribute_value_detail = async (id) => {
         try {
             let data = await get_attribute_value_detail(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 return data.data.data
             }
         } catch (e) {
@@ -96,13 +96,13 @@ class card_attribute_value extends Component {
         return (
 
             <div className='space-y-[10px] '>
-                <Select_attribute_value is_edit={is_edit} add_data={this.add_data}
+                <SelectAttributeValue is_edit={is_edit} add_data={this.add_data}
                     type_handle={this.props.type_handle}
                     variant_attribute_group={this.props.variant_attribute_group} />
 
                 {data_attribute_value_uniques && data_attribute_value_uniques.map((item, index) => {
                     return (
-                        <Table_attribute_value key={index}
+                        <TableAttributeValue key={index}
                             data_attribute_value_raws={data_attribute_value_raws} data_attribute_value_uniques={item}
                             handle_delete_atbvl={this.handle_delete_atbvl}
                             is_edit={this.props.is_edit} />

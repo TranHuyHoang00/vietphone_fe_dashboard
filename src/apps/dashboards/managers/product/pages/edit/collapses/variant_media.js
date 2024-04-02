@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../../store/actions';
 import { message, Button, Carousel, Image, Collapse } from 'antd';
 import { get_media } from '../../../../../../../services/media_service';
 import { image_to_base64 } from '../../../../../../../utils/base64';
@@ -37,7 +36,7 @@ class variant_media extends Component {
     get_media = async (id) => {
         try {
             let data = await get_media(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 return data.data.data
             }
         } catch (e) {
@@ -48,14 +47,14 @@ class variant_media extends Component {
     onchange_image = async (event, type, index, id) => {
         let data_medias = this.state.data_medias;
         let data_media_ids = this.state.data_media_ids;
-        if (type == 'create') {
+        if (type === 'create') {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
                 let image_new = await image_to_base64(event, i);
                 data_medias.push({ image: image_new, media_type: 'image', alt: this.props.data_variant.name });
             }
         }
-        if (type == 'delete') {
+        if (type === 'delete') {
             if (id !== undefined) {
                 data_media_ids = data_media_ids.filter(item => item !== id);
             }

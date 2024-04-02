@@ -35,23 +35,23 @@ class login extends Component {
     }
     validation = (phone, password) => {
         this.handle_loading(true);
-        if (this.isCheckEmpty(phone) == 0) {
+        if (this.isCheckEmpty(phone) === 0) {
             return { mess: "Số điện thoại không được bỏ trống!", code: 1 };
         }
         if (!this.validation_phone(phone)) {
             return { mess: "Số điện thoại sai định dạng", code: 1 };
         }
-        if (this.isCheckEmpty(password) == 0) {
+        if (this.isCheckEmpty(password) === 0) {
             return { mess: "Mật khẩu không được bỏ trống!", code: 1 };
         }
         return { code: 0 };
     }
     handle_login = async () => {
         let result = this.validation(this.state.phone, this.state.password);
-        if (result.code == 0) {
+        if (result.code === 0) {
             try {
                 let data = await Login(this.state.phone, this.state.password);
-                if (data && data.data && data.data.success == 1) {
+                if (data && data.data && data.data.success === 1) {
                     set_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
                     this.props.history.push(`/admin`);
                     this.props.handle_login_db();
@@ -95,10 +95,10 @@ class login extends Component {
                                     </label>
                                     <div className='relative'>
                                         <input class="w-full content-center text-base px-4 py-2 border border-gray-600 rounded-full focus:outline-none focus:border-green-400"
-                                            type={this.state.is_show_password == false ? 'password' : 'text'} placeholder="Nhập mật khẩu" onChange={(event) => this.onchange_password(event)} />
+                                            type={this.state.is_show_password === false ? 'password' : 'text'} placeholder="Nhập mật khẩu" onChange={(event) => this.onchange_password(event)} />
                                         <div onClick={() => this.handle_show_password()}
                                             className='absolute top-[12px] right-[12px] cursor-pointer'>
-                                            {this.state.is_show_password == false ?
+                                            {this.state.is_show_password === false ?
                                                 <AiFillEye className='text-gray-700' />
                                                 :
                                                 <AiFillEyeInvisible className='text-gray-700' />

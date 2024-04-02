@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../store/actions';
+
 import { Divider, Card, Spin, message } from 'antd';
-import Form_popconfirm from '../../components/popconfirms/form_popconfirm';
+import FormPopconfirm from '../../components/popconfirms/form_popconfirm';
 import { sync_all_products, get_task } from '../../../../services/task_service';
 class index extends Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class index extends Component {
     async componentDidMount() {
     }
     handle_loading = (funtion_name, value, result) => {
-        if (funtion_name == 'sync_product') {
+        if (funtion_name === 'sync_product') {
             this.setState({
                 loading_sync_product: value,
                 sync_product: result,
@@ -28,8 +28,8 @@ class index extends Component {
     get_task = async (id, funtion_name) => {
         try {
             let data = await get_task(id);
-            if (data && data.data && data.data.success == 1) {
-                if (funtion_name == 'sync_product') {
+            if (data && data.data && data.data.success === 1) {
+                if (funtion_name === 'sync_product') {
                     clearInterval(this.state.interval_task_product);
                     this.setState({ data_sync_product: data.data.data, })
                 }
@@ -42,7 +42,7 @@ class index extends Component {
 
     }
     check_task = async (id, funtion_name) => {
-        if (funtion_name == 'sync_product') {
+        if (funtion_name === 'sync_product') {
             const interval_task_product = setInterval(() => { this.get_task(id, funtion_name) }, 2000);
             this.setState({ interval_task_product });
             return () => clearInterval(interval_task_product);
@@ -52,8 +52,8 @@ class index extends Component {
         this.handle_loading(funtion_name, true, null);
         try {
             let data;
-            if (funtion_name == 'sync_product') { data = await sync_all_products(); }
-            if (data && data.data && data.data.success == 1) {
+            if (funtion_name === 'sync_product') { data = await sync_all_products(); }
+            if (data && data.data && data.data.success === 1) {
                 let task_id = data.data.data.task_id;
                 if (task_id) {
                     this.check_task(task_id, funtion_name);
@@ -95,16 +95,16 @@ class index extends Component {
                                 <Spin tip="Đang tải" spinning={this.state.loading_sync_product} size="large">
                                     <Card title="Sản phẩm" className='shadow-md'
                                         extra={
-                                            <Form_popconfirm title={"Đồng bộ sản phẩm"}
+                                            <FormPopconfirm title={"Đồng bộ sản phẩm"}
                                                 description={"Bạn có chắn chắn muốn đồng bộ sản phẩm"}
                                                 okText={"Đồng ý"} cancelText={"Hủy bỏ"}
                                                 funtion_name={'sync_product'}
                                                 disabled={false}
                                                 onConfirm={this.handle_sync} />
                                         }>
-                                        {this.state.sync_product == null && <></>}
-                                        {this.state.sync_product == false && <>{failed('sản phẩm')}</>}
-                                        {this.state.sync_product == true && <> {suscess('sản phẩm', this.state.data_sync_product)}</>}
+                                        {this.state.sync_product === null && <></>}
+                                        {this.state.sync_product === false && <>{failed('sản phẩm')}</>}
+                                        {this.state.sync_product === true && <> {suscess('sản phẩm', this.state.data_sync_product)}</>}
 
                                     </Card>
                                 </Spin>
@@ -113,7 +113,7 @@ class index extends Component {
                                 <Spin tip="Đang tải" spinning={false} size="large">
                                     <Card title="Đơn hàng" className='shadow-md'
                                         extra={
-                                            <Form_popconfirm title={"Đồng bộ sản phẩm"}
+                                            <FormPopconfirm title={"Đồng bộ sản phẩm"}
                                                 description={"Bạn có chắn chắn muốn đồng bộ sản phẩm"}
                                                 okText={"Đồng ý"} cancelText={"Hủy bỏ"}
                                                 funtion_name={'sync_product'}
@@ -127,7 +127,7 @@ class index extends Component {
                                 <Spin tip="Đang tải" spinning={false} size="large">
                                     <Card title="Khách hàng" className='shadow-md'
                                         extra={
-                                            <Form_popconfirm title={"Đồng bộ sản phẩm"}
+                                            <FormPopconfirm title={"Đồng bộ sản phẩm"}
                                                 description={"Bạn có chắn chắn muốn đồng bộ sản phẩm"}
                                                 okText={"Đồng ý"} cancelText={"Hủy bỏ"}
                                                 funtion_name={'sync_product'}

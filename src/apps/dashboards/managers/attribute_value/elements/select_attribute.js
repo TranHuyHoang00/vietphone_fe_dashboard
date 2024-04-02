@@ -23,8 +23,8 @@ class select_attribute extends Component {
     }
     handle_onchange_input = (event, id, type) => {
         let copyState = { ...this.state.data_attribute };
-        if (type == 'input') { copyState[id] = event.target.value; }
-        if (type == 'select') { copyState[id] = event; }
+        if (type === 'input') { copyState[id] = event.target.value; }
+        if (type === 'select') { copyState[id] = event; }
         this.setState({
             data_attribute: {
                 ...copyState
@@ -38,7 +38,7 @@ class select_attribute extends Component {
         this.handle_loading(true);
         try {
             let data = await get_list_attribute(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 this.setState({
                     data_attributes: data.data.data.attributes,
                     metadata: data.data.data.metadata,
@@ -67,10 +67,10 @@ class select_attribute extends Component {
     }
     handle_create = async () => {
         let result = this.validation(this.state.data_attribute);
-        if (result.code == 0) {
+        if (result.code === 0) {
             try {
                 let data = await create_attribute(this.state.data_attribute);
-                if (data && data.data && data.data.success == 1) {
+                if (data && data.data && data.data.success === 1) {
                     await this.get_list_attribute(this.state.data_filter);
                     this.setState({ data_attribute: { is_active: true } });
                     message.success("Thành công");

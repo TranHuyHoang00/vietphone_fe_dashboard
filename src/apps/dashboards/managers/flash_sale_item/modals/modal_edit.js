@@ -3,13 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../store/actions';
 import { Modal, message, Spin } from 'antd';
-import Form_input from '../../../components/inputs/form_input';
-import Form_textare from '../../../components/inputs/form_textare';
-import Form_date from '../../../components/inputs/form_date';
-import Form_select_input from '../../../components/selects/form_select_input';
-import Modal_footer from '../../../components/modal/modal_footer';
-import dayjs from 'dayjs';
-
+import FormInput from '../../../components/inputs/form_input';
+import ModalFooter from '../../../components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
         super(props);
@@ -23,12 +18,12 @@ class modal_edit extends Component {
     }
     handle_edit = async () => {
         let result = this.validation(this.props.data_flash_sale_item);
-        if (result.code == 0) {
+        if (result.code === 0) {
             let data_flash_sale_item = this.props.data_flash_sale_item;
             let data_flash_sale = this.props.data_flash_sale;
             await this.props.edit_flash_sale_item(data_flash_sale_item.id, data_flash_sale_item);
             let is_result = this.props.is_result;
-            if (is_result == true) {
+            if (is_result === true) {
                 await this.props.get_flash_sale(data_flash_sale.id);
                 this.props.open_modal("edit", false);
             }
@@ -44,13 +39,13 @@ class modal_edit extends Component {
                 onCancel={() => this.props.open_modal("edit", false)} width={400}
                 maskClosable={!is_loading}
                 footer={[
-                    <Modal_footer open_modal={this.props.open_modal} type={'edit'}
+                    <ModalFooter open_modal={this.props.open_modal} type={'edit'}
                         is_loading={is_loading} handle_funtion={this.handle_edit} />
                 ]}>
                 <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
 
-                        <Form_input name={'Giá khuyến mãi'} variable={'discount_price'} value={data_flash_sale_item.discount_price}
+                        <FormInput name={'Giá khuyến mãi'} variable={'discount_price'} value={data_flash_sale_item.discount_price}
                             important={true}
                             handle_onchange_input={this.props.on_change_flash_sale_item}
                         />

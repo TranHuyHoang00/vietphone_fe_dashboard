@@ -3,9 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../store/actions';
 import { Modal, message, Spin, Typography } from 'antd';
-import Form_input from '../../../components/inputs/form_input';
-import Modal_footer from '../../../components/modal/modal_footer';
-import Form_select_item from '../../../components/selects/form_select_item';
+import FormInput from '../../../components/inputs/form_input';
+import ModalFooter from '../../../components/modal/modal_footer';
+import FormSelectItem from '../../../components/selects/form_select_item';
 
 class modal_create extends Component {
     constructor(props) {
@@ -24,10 +24,10 @@ class modal_create extends Component {
     }
     handle_create = async () => {
         let result = this.validation(this.props.data_variant_attribute_group);
-        if (result.code == 0) {
+        if (result.code === 0) {
             await this.props.create_variant_attribute_group(this.props.data_variant_attribute_group);
             let is_result = this.props.is_result;
-            if (is_result == true) {
+            if (is_result === true) {
                 await this.props.get_list_variant_attribute_group(this.props.data_filter);
                 this.props.open_modal("create", false);
             }
@@ -45,13 +45,13 @@ class modal_create extends Component {
                 onCancel={() => this.props.open_modal("create", false)} width={400}
                 maskClosable={!is_loading}
                 footer={[
-                    <Modal_footer open_modal={this.props.open_modal} type={'create'}
+                    <ModalFooter open_modal={this.props.open_modal} type={'create'}
                         is_loading={is_loading} handle_funtion={this.handle_create} />
                 ]}>
                 <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
 
-                        <Form_input name={'Tên TS-SP'} variable={'name'} value={data_variant_attribute_group.name}
+                        <FormInput name={'Tên TS-SP'} variable={'name'} value={data_variant_attribute_group.name}
                             important={true}
                             handle_onchange_input={this.props.on_change_variant_attribute_group} />
 
@@ -59,7 +59,7 @@ class modal_create extends Component {
                             <Typography.Text italic strong>Thông số
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
-                            <Form_select_item width={'100%'} mode={'multiple'}
+                            <FormSelectItem width={'100%'} mode={'multiple'}
                                 variable_select={'attribute'}
                                 value={data_variant_attribute_group.variant_attribute_group}
                                 on_change_select={this.props.on_change_variant_attribute_group}

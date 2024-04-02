@@ -3,10 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../../../store/actions';
 import { Button, Space, message, Spin } from 'antd';
-import Variant_overview from '../collapses/variant_overview';
-import Variant_introduce from '../collapses/variant_introduce';
-import Variant_media from '../collapses/variant_media';
-import Variant_attribute_value from '../collapses/variant_attribute_value';
+import VariantOverview from '../collapses/variant_overview';
+import VariantIntroduce from '../collapses/variant_introduce';
+import VariantMedia from '../collapses/variant_media';
+import VariantAttributeValue from '../collapses/variant_attribute_value';
 import { create_media } from '../../../../../../../services/media_service';
 class variant extends Component {
     constructor(props) {
@@ -57,7 +57,7 @@ class variant extends Component {
             for (const item of data_medias) {
                 if (!item.id) {
                     let data = await create_media(item);
-                    if (data && data.data && data.data.success == 1) {
+                    if (data && data.data && data.data.success === 1) {
                         data_media_ids_new.push(data.data.data.id);
                     }
                 }
@@ -69,8 +69,8 @@ class variant extends Component {
     }
     handle_edit_variant = async () => {
         let data_variant = this.props.data_variant;
-        if (this.props.is_edit == false) { this.props.click_edit_variant() };
-        if (this.props.is_edit == true) {
+        if (this.props.is_edit === false) { this.props.click_edit_variant() };
+        if (this.props.is_edit === true) {
             if (this.state.data_medias.length !== 0) {
                 let media = await this.handle_create_media(this.state.data_medias);
                 data_variant.media = media;
@@ -86,34 +86,34 @@ class variant extends Component {
                 <div className=" space-y-[10px]">
                     <div className='flex items-center justify-end'>
                         <Space>
-                            {this.props.is_edit == true &&
+                            {this.props.is_edit === true &&
                                 <Button onClick={() => this.props.click_edit_variant()}
                                     className='bg-[#e94138] text-white'>
                                     Hủy
                                 </Button>
                             }
                             <Button onClick={() => this.handle_edit_variant()} className='bg-[#0e97ff] text-white'>
-                                {this.props.is_edit == false ? 'Chỉnh sửa' : 'Lưu'}
+                                {this.props.is_edit === false ? 'Chỉnh sửa' : 'Lưu'}
                             </Button>
                         </Space>
                     </div>
                     <div className='lg:grid grid-cols-3 gap-[10px] space-y-[10px] lg:space-y-0 '>
                         <div>
-                            <Variant_overview data_variants={this.state.data_variants}
+                            <VariantOverview data_variants={this.state.data_variants}
                                 select_variant={this.select_variant}
                                 active_variant={this.state.active_variant} />
                         </div>
                         <div className='col-span-2 space-y-[10px]'>
                             <div className='md:grid grid-cols-3 gap-[10px] space-y-[10px] md:space-y-0'>
                                 <div className='col-span-2 '>
-                                    <Variant_introduce data_variant={this.props.data_variant} />
+                                    <VariantIntroduce data_variant={this.props.data_variant} />
                                 </div>
                                 <div>
-                                    <Variant_media data_medias={this.props.data_variant.media}
+                                    <VariantMedia data_medias={this.props.data_variant.media}
                                         handle_data_media={this.handle_data_media} />
                                 </div>
                             </div>
-                            <Variant_attribute_value />
+                            <VariantAttributeValue />
                         </div>
                     </div>
                 </div>

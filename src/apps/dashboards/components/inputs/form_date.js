@@ -14,7 +14,7 @@ class form_date extends Component {
             <div className='space-y-[3px]'>
                 <Typography.Text italic strong>
                     {this.props.name}
-                    {this.props.important == true && <Typography.Text type="danger" strong> *</Typography.Text>}
+                    {this.props.important === true && <Typography.Text type="danger" strong> *</Typography.Text>}
                 </Typography.Text>
                 <div>
                     <DatePicker className='w-full' allowClear showTime needConfirm={true}

@@ -3,11 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../store/actions';
 import { Modal, message, Spin } from 'antd';
-import Form_input from '../../../components/inputs/form_input';
-import Form_textare from '../../../components/inputs/form_textare';
-import Form_image from '../../../components/inputs/form_image';
-import Form_select_input from '../../../components/selects/form_select_input';
-import Modal_footer from '../../../components/modal/modal_footer';
+import FormInput from '../../../components/inputs/form_input';
+import FormTextare from '../../../components/inputs/form_textare';
+import FormSelectInput from '../../../components/selects/form_select_input';
+import ModalFooter from '../../../components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
         super(props);
@@ -24,11 +23,11 @@ class modal_edit extends Component {
     }
     handle_edit = async () => {
         let result = this.validation(this.props.data_attribute_value);
-        if (result.code == 0) {
+        if (result.code === 0) {
             let data_attribute_value = this.props.data_attribute_value;
             await this.props.edit_attribute_value(data_attribute_value.id, data_attribute_value);
             let is_result = this.props.is_result;
-            if (is_result == true) {
+            if (is_result === true) {
                 await this.props.get_list_attribute_value(this.props.data_filter);
                 this.props.open_modal("edit", false);
             }
@@ -45,21 +44,21 @@ class modal_edit extends Component {
                 onCancel={() => this.props.open_modal("edit", false)} width={400}
                 maskClosable={!is_loading}
                 footer={[
-                    <Modal_footer open_modal={this.props.open_modal} type={'edit'}
+                    <ModalFooter open_modal={this.props.open_modal} type={'edit'}
                         is_loading={is_loading} handle_funtion={this.handle_edit} />
                 ]}>
                 <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
 
-                        <Form_input name={'Giá trị'} variable={'value'} value={data_attribute_value.value}
+                        <FormInput name={'Giá trị'} variable={'value'} value={data_attribute_value.value}
                             important={true}
                             handle_onchange_input={this.props.on_change_attribute_value} />
 
-                        <Form_textare name={'Mô tả'} variable={'description'} value={data_attribute_value.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={data_attribute_value.description}
                             important={false}
                             handle_onchange_input={this.props.on_change_attribute_value} />
 
-                        <Form_select_input name={'Thông số'} variable={'attribute'} value={data_attribute_value.attribute}
+                        <FormSelectInput name={'Thông số'} variable={'attribute'} value={data_attribute_value.attribute}
                             important={true} width={'100%'}
                             options={data_attributes.map((item) => ({
                                 label: item.name,

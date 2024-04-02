@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route } from "react-router-dom";
 import { connect } from 'react-redux';
-import * as actions from '../../store/actions';
 import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher
@@ -12,26 +11,26 @@ import {
 import { withRouter } from 'react-router-dom';
 import { get_local_account } from '../../auths/local_storage';
 import HeaderDB from './layouts/header';
-import Login_DB from './pages/login';
-import Not_logged from './pages_error/not_logged';
-import Not_found from './pages_error/not_found';
+import LoginDB from './pages/login';
+import NotLogged from './pages_error/not_logged';
+import NotFound from './pages_error/not_found';
 import Empty from './pages/empty';
 
-import Manager_customer from './managers/customer/index';
-import Manager_brand from './managers/brand/index';
-import Manager_category from './managers/category/index';
-import Manager_tag from './managers/tag/index';
-import Manager_order from './managers/order/index';
-import Manager_group_attribute from './managers/group_attribute/index';
-import Manager_attribute from './managers/attribute/index';
-import Manager_attribute_value from './managers/attribute_value/index';
-import Manager_product from './managers/product/index';
-import Edit_product from './managers/product/pages/edit/index';
-import Manager_variant_attribute_group from './managers/variant_attribute_group/index';
-import Manager_sync_data from './managers/sync_data/index';
-import Manager_flash_sale from './managers/flash_sale/index';
-import Manager_flash_sale_item from './managers/flash_sale_item/index';
-import Manager_task from './managers/task/index';
+import ManagerCustomer from './managers/customer/index';
+import ManagerBrand from './managers/brand/index';
+import ManagerCategory from './managers/category/index';
+import ManagerTag from './managers/tag/index';
+import ManagerOrder from './managers/order/index';
+import ManagerGroupAttribute from './managers/group_attribute/index';
+import ManagerAttribute from './managers/attribute/index';
+import ManagerAttributeValue from './managers/attribute_value/index';
+import ManagerProduct from './managers/product/index';
+import EditProduct from './managers/product/pages/edit/index';
+import ManagerVariantAttributeGroup from './managers/variant_attribute_group/index';
+import ManagerSyncData from './managers/sync_data/index';
+import ManagerFlashSale from './managers/flash_sale/index';
+import ManagerFlashSaleItem from './managers/flash_sale_item/index';
+import ManagerTask from './managers/task/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -86,7 +85,7 @@ class index extends Component {
                 ],
             },
             {
-                key: 'specification', icon: <AiFillSetting Shop />, label: 'Thông số', children: [
+                key: 'specification', icon: <AiFillSetting />, label: 'Thông số', children: [
                     { key: 'manager/attribute_value', icon: <AiFillRocket />, label: 'Giá trị' },
                     { key: 'manager/attribute', icon: <AiFillUsb />, label: 'Thông số' },
                     { key: 'manager/group_attribute', icon: <AiFillFire />, label: 'Loại thông số' },
@@ -114,7 +113,7 @@ class index extends Component {
         return (
 
             <>
-                {logged_in_db == true ?
+                {logged_in_db === true ?
                     <Layout hasSider style={{ minHeight: '100vh', }} >
                         <Layout.Sider className='overflow-y-auto h-screen md:block hidden'
                             collapsible collapsed={this.state.collapsed} breakpoint="lg"
@@ -137,23 +136,23 @@ class index extends Component {
                                 <Switch>
 
                                     <Route exact path={`${url}login`}><Empty /></Route>
-                                    <Route exact path={`${url}manager/customer`}><Manager_customer /></Route>
-                                    <Route exact path={`${url}manager/brand`}><Manager_brand /></Route>
-                                    <Route exact path={`${url}manager/category`}><Manager_category /></Route>
-                                    <Route exact path={`${url}manager/tag`}><Manager_tag /></Route>
-                                    <Route exact path={`${url}`}><Manager_order /></Route>
-                                    <Route exact path={`${url}manager/group_attribute`}><Manager_group_attribute /></Route>
-                                    <Route exact path={`${url}manager/attribute_value`}><Manager_attribute_value /></Route>
-                                    <Route exact path={`${url}manager/attribute`}><Manager_attribute /></Route>
-                                    <Route exact path={`${url}manager/product`}><Manager_product /></Route>
-                                    <Route exact path={`${url}manager/product/edit/:id`}><Edit_product /></Route>
-                                    <Route exact path={`${url}manager/variant_attribute_group`}><Manager_variant_attribute_group /></Route>
-                                    <Route exact path={`${url}manager/sync_data`}><Manager_sync_data /></Route>
-                                    <Route exact path={`${url}manager/flash_sale`}><Manager_flash_sale /></Route>
-                                    <Route exact path={`${url}manager/flash_sale_item`}><Manager_flash_sale_item /></Route>
-                                    <Route exact path={`${url}manager/task`}><Manager_task /></Route>
+                                    <Route exact path={`${url}manager/customer`}><ManagerCustomer /></Route>
+                                    <Route exact path={`${url}manager/brand`}><ManagerBrand /></Route>
+                                    <Route exact path={`${url}manager/category`}><ManagerCategory /></Route>
+                                    <Route exact path={`${url}manager/tag`}><ManagerTag /></Route>
+                                    <Route exact path={`${url}`}><ManagerOrder /></Route>
+                                    <Route exact path={`${url}manager/group_attribute`}><ManagerGroupAttribute /></Route>
+                                    <Route exact path={`${url}manager/attribute_value`}><ManagerAttributeValue /></Route>
+                                    <Route exact path={`${url}manager/attribute`}><ManagerAttribute /></Route>
+                                    <Route exact path={`${url}manager/product`}><ManagerProduct /></Route>
+                                    <Route exact path={`${url}manager/product/edit/:id`}><EditProduct /></Route>
+                                    <Route exact path={`${url}manager/variant_attribute_group`}><ManagerVariantAttributeGroup /></Route>
+                                    <Route exact path={`${url}manager/sync_data`}><ManagerSyncData /></Route>
+                                    <Route exact path={`${url}manager/flash_sale`}><ManagerFlashSale /></Route>
+                                    <Route exact path={`${url}manager/flash_sale_item`}><ManagerFlashSaleItem /></Route>
+                                    <Route exact path={`${url}manager/task`}><ManagerTask /></Route>
 
-                                    <Route ><Not_found /></Route>
+                                    <Route ><NotFound /></Route>
 
 
                                 </Switch>
@@ -163,11 +162,11 @@ class index extends Component {
                     :
                     <>
                         <Switch>
-                            <Route exact path={`${url}`}><Not_logged /></Route>
+                            <Route exact path={`${url}`}><NotLogged /></Route>
                             <Route exact path={`${url}login`}>
-                                <Login_DB handle_login_db={this.handle_login_db} />
+                                <LoginDB handle_login_db={this.handle_login_db} />
                             </Route>
-                            <Route ><Not_found /></Route>
+                            <Route ><NotFound /></Route>
                         </Switch>
                     </>
                 }

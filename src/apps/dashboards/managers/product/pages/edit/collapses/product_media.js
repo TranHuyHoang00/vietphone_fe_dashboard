@@ -8,7 +8,7 @@ import "react-multi-carousel/lib/styles.css";
 import Carousel from "react-multi-carousel";
 import { image_to_base64 } from '../../../../../../../utils/base64';
 import { get_media } from '../../../../../../../services/media_service';
-import Modal_video from '../../../modals/modal_video';
+import ModalVideo from '../../../modals/modal_video';
 class product_media extends Component {
     constructor(props) {
         super(props);
@@ -41,7 +41,7 @@ class product_media extends Component {
     get_media = async (id) => {
         try {
             let data = await get_media(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 return data.data.data
             }
         } catch (e) {
@@ -52,14 +52,14 @@ class product_media extends Component {
     onchange_image = async (event, type, index, id) => {
         let data_medias = this.state.data_medias;
         let data_media_ids = this.state.data_media_ids;
-        if (type == 'create') {
+        if (type === 'create') {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
                 let image_new = await image_to_base64(event, i);
                 data_medias.push({ image: image_new, media_type: 'image', alt: this.props.data_product.name });
             }
         }
-        if (type == 'delete') {
+        if (type === 'delete') {
             if (id !== undefined) {
                 data_media_ids = data_media_ids.filter(item => item !== id);
             }
@@ -69,7 +69,7 @@ class product_media extends Component {
         this.props.handle_get_media(data_medias, data_media_ids);
     }
     open_modal = async (name, value) => {
-        if (name == 'video') { this.setState({ modal_video: value }); }
+        if (name === 'video') { this.setState({ modal_video: value }); }
     }
     onchange_video = (value) => {
         let data_medias = this.state.data_medias;
@@ -99,8 +99,8 @@ class product_media extends Component {
                                 onChange={(event) => this.onchange_image(event, 'create')} />
                             <Dropdown.Button disabled={!is_edit} menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                 <div>
-                                    {type_menu == 1 && <label htmlFor="media_product">Thêm ảnh</label>}
-                                    {type_menu == 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
+                                    {type_menu === 1 && <label htmlFor="media_product">Thêm ảnh</label>}
+                                    {type_menu === 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
                                 </div>
                             </Dropdown.Button>
                             <Carousel responsive={responsive} swipeable={true} draggable={true}
@@ -110,11 +110,11 @@ class product_media extends Component {
                                         <div key={index} className="slider" >
                                             <div className='space-y-[5px]'>
                                                 <div className='w-[140px] h-[140px] flex items-center justify-center'>
-                                                    {item.media_type == 'image' &&
+                                                    {item.media_type === 'image' &&
                                                         <Image width={140} height={140} className='object-cover' src={item.image} />
                                                     }
-                                                    {item.media_type == 'video' &&
-                                                        <iframe
+                                                    {item.media_type === 'video' &&
+                                                        <iframe title='product_media'
                                                             width="140"
                                                             height="140"
                                                             src={item.external_url}
@@ -136,7 +136,7 @@ class product_media extends Component {
                         </div>
                     </Collapse.Panel>
                 </Collapse>
-                <Modal_video modal_video={this.state.modal_video} open_modal={this.open_modal}
+                <ModalVideo modal_video={this.state.modal_video} open_modal={this.open_modal}
                     onchange_video={this.onchange_video} />
             </>
         );

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { message, Button } from 'antd';
-import Form_select_data from '../../../../components/selects/form_select_data';
+import FormSelectData from '../../../../components/selects/form_select_data';
 
 import { get_list_group_attribute, create_group_attribute, get_group_attribute } from '../../../../../../services/group_attribute_service';
 import { get_variant_attribute_group } from '../../../../../../services/variant_attribute_group_service';
@@ -35,10 +35,10 @@ class select_attribute_value extends Component {
     }
     async componentDidUpdate(prevProps) {
         if (prevProps.is_edit !== this.props.is_edit) {
-            if (this.props.type_handle == 'product') {
+            if (this.props.type_handle === 'product') {
                 await this.get_list_group_attribute(this.state.data_filter);
             }
-            if (this.props.type_handle == 'variant') {
+            if (this.props.type_handle === 'variant') {
                 if (this.props.variant_attribute_group !== null) {
                     await this.get_variant_attribute_group(this.props.variant_attribute_group)
                 }
@@ -54,16 +54,16 @@ class select_attribute_value extends Component {
     }
     handle_onchange_input = (event, id, type, name) => {
         let copyState;
-        if (name == 'group_attribute') { copyState = { ...this.state.data_group_attribute }; }
-        if (name == 'attribute') { copyState = { ...this.state.data_attribute }; }
-        if (name == 'attribute_value') { copyState = { ...this.state.data_attribute_value }; }
-        if (type == 'input') { copyState[id] = event.target.value; }
+        if (name === 'group_attribute') { copyState = { ...this.state.data_group_attribute }; }
+        if (name === 'attribute') { copyState = { ...this.state.data_attribute }; }
+        if (name === 'attribute_value') { copyState = { ...this.state.data_attribute_value }; }
+        if (type === 'input') { copyState[id] = event.target.value; }
 
-        if (type == 'select') { copyState[id] = event; }
+        if (type === 'select') { copyState[id] = event; }
 
-        if (name == 'group_attribute') { this.setState({ data_group_attribute: { ...copyState } }); }
-        if (name == 'attribute') { this.setState({ data_attribute: { ...copyState } }); }
-        if (name == 'attribute_value') { this.setState({ data_attribute_value: { ...copyState } }); }
+        if (name === 'group_attribute') { this.setState({ data_group_attribute: { ...copyState } }); }
+        if (name === 'attribute') { this.setState({ data_attribute: { ...copyState } }); }
+        if (name === 'attribute_value') { this.setState({ data_attribute_value: { ...copyState } }); }
 
     }
     handle_loading = (value) => {
@@ -73,7 +73,7 @@ class select_attribute_value extends Component {
         this.handle_loading(true);
         try {
             let data = await get_list_group_attribute(data_filter);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 this.setState({ data_group_attributes: data.data.data.group_attributes });
             } else {
                 message.error("Lỗi");
@@ -88,21 +88,21 @@ class select_attribute_value extends Component {
         this.handle_loading(true);
         try {
             let data = {};
-            if (name_funtion == 'group_attribute') {
-                if (this.props.type_handle == 'variant') {
+            if (name_funtion === 'group_attribute') {
+                if (this.props.type_handle === 'variant') {
                     data = await get_variant_attribute_group(id);
                 }
-                if (this.props.type_handle == 'product') {
+                if (this.props.type_handle === 'product') {
                     data = await get_group_attribute(id);
                 }
             }
-            if (name_funtion == 'attribute') { data = await get_attribute(id); }
-            if (name_funtion == 'attribute_value') { data = await get_attribute_value(id); }
+            if (name_funtion === 'attribute') { data = await get_attribute(id); }
+            if (name_funtion === 'attribute_value') { data = await get_attribute_value(id); }
 
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 let data_raw = data.data.data;
-                if (name_funtion == 'group_attribute') {
-                    if (this.props.type_handle == 'variant') {
+                if (name_funtion === 'group_attribute') {
+                    if (this.props.type_handle === 'variant') {
                         this.setState({
                             data_group_attribute: data_raw,
                             data_attributes: data_raw.attribute,
@@ -110,7 +110,7 @@ class select_attribute_value extends Component {
                             disabled_attribute: false,
                         });
                     }
-                    if (this.props.type_handle == 'product') {
+                    if (this.props.type_handle === 'product') {
                         this.setState({
                             data_group_attribute: data_raw,
                             data_attributes: data_raw.attributes,
@@ -120,7 +120,7 @@ class select_attribute_value extends Component {
                     }
 
                 }
-                if (name_funtion == 'attribute') {
+                if (name_funtion === 'attribute') {
                     this.setState({
                         data_attribute: data_raw,
                         data_attribute_values: data_raw.attribute_values,
@@ -128,7 +128,7 @@ class select_attribute_value extends Component {
                         disabled_attribute_value: false,
                     });
                 }
-                if (name_funtion == 'attribute_value') {
+                if (name_funtion === 'attribute_value') {
                     this.setState({
                         data_attribute_value: data_raw,
                         disabled_button: false
@@ -148,21 +148,21 @@ class select_attribute_value extends Component {
         let data_filter = this.state.data_filter;
         data_filter.search_query = value;
         data_filter.page = 1;
-        if (name == 'group_attribute') { await this.get_list_group_attribute(data_filter); }
+        if (name === 'group_attribute') { await this.get_list_group_attribute(data_filter); }
     }
     validation = (data, name_funtion) => {
         this.handle_loading(true);
-        if (name_funtion == 'group_attribute') {
+        if (name_funtion === 'group_attribute') {
             if (!data.name) {
                 return { mess: "Không được bỏ trống 'Tên loại thông số' ", code: 1 };
             }
         }
-        if (name_funtion == 'attribute') {
+        if (name_funtion === 'attribute') {
             if (!data.name) {
                 return { mess: "Không được bỏ trống 'Tên thông số' ", code: 1 };
             }
         }
-        if (name_funtion == 'attribute_value') {
+        if (name_funtion === 'attribute_value') {
             if (!data.value) {
                 return { mess: "Không được bỏ trống 'Giá trị' ", code: 1 };
             }
@@ -171,26 +171,26 @@ class select_attribute_value extends Component {
     }
     handle_create = async (name_funtion) => {
         let data_create;
-        if (name_funtion == 'group_attribute') { data_create = this.state.data_group_attribute }
-        if (name_funtion == 'attribute') { data_create = this.state.data_attribute }
-        if (name_funtion == 'attribute_value') { data_create = this.state.data_attribute_value }
+        if (name_funtion === 'group_attribute') { data_create = this.state.data_group_attribute }
+        if (name_funtion === 'attribute') { data_create = this.state.data_attribute }
+        if (name_funtion === 'attribute_value') { data_create = this.state.data_attribute_value }
         let result = this.validation(data_create, name_funtion);
-        if (result.code == 0) {
+        if (result.code === 0) {
             try {
                 let data;
-                if (name_funtion == 'group_attribute') { data = await create_group_attribute(data_create); }
-                if (name_funtion == 'attribute') { data = await create_attribute(data_create); }
-                if (name_funtion == 'attribute_value') { data = await create_attribute_value(data_create); }
+                if (name_funtion === 'group_attribute') { data = await create_group_attribute(data_create); }
+                if (name_funtion === 'attribute') { data = await create_attribute(data_create); }
+                if (name_funtion === 'attribute_value') { data = await create_attribute_value(data_create); }
 
-                if (data && data.data && data.data.success == 1) {
-                    if (name_funtion == 'group_attribute') {
+                if (data && data.data && data.data.success === 1) {
+                    if (name_funtion === 'group_attribute') {
                         await this.get_list_group_attribute(this.state.data_filter);
                         this.setState({ data_group_attribute: {} });
                     }
-                    if (name_funtion == 'attribute') {
+                    if (name_funtion === 'attribute') {
                         await this.get_data_api(this.state.data_group_attribute.id, 'group_attribute');
                     }
-                    if (name_funtion == 'attribute_value') {
+                    if (name_funtion === 'attribute_value') {
                         await this.get_data_api(this.state.data_attribute.id, 'attribute');
                     }
                     message.success("Thành công");
@@ -208,7 +208,7 @@ class select_attribute_value extends Component {
     get_variant_attribute_group = async (id) => {
         try {
             let data = await get_variant_attribute_group(id);
-            if (data && data.data && data.data.success == 1) {
+            if (data && data.data && data.data.success === 1) {
                 let x = data.data.data;
                 let y = [];
                 y.push(x);
@@ -228,7 +228,7 @@ class select_attribute_value extends Component {
             <>
                 <div className='flex items-center gap-[5px]'>
                     <div className='w-1/2'>
-                        <Form_select_data disabled={this.state.disabled_group_attribute} name={'Loại thông số'}
+                        <FormSelectData disabled={this.state.disabled_group_attribute} name={'Loại thông số'}
                             width={'100%'} name_funtion={'group_attribute'} type={'input'} variable={'name'}
                             get_data_api={this.get_data_api} value={this.state.data_group_attribute.id}
                             on_search_data_api={this.on_search_data_api}
@@ -238,12 +238,12 @@ class select_attribute_value extends Component {
                                 label: item.name,
                                 value: item.id,
                             }))}
-                            disabled_search={this.props.type_handle == 'variant' ? true : false}
-                            disabled_create={this.props.type_handle == 'variant' ? true : false}
+                            disabled_search={this.props.type_handle === 'variant' ? true : false}
+                            disabled_create={this.props.type_handle === 'variant' ? true : false}
                         />
                     </div>
                     <div className='w-1/2'>
-                        <Form_select_data disabled={this.state.disabled_attribute} name={'Thông số'}
+                        <FormSelectData disabled={this.state.disabled_attribute} name={'Thông số'}
                             width={'100%'} name_funtion={'attribute'} type={'input'} variable={'name'}
                             get_data_api={this.get_data_api} value={this.state.data_attribute.id}
                             on_search_data_api={this.on_search_data_api}
@@ -253,14 +253,14 @@ class select_attribute_value extends Component {
                                 label: item.name,
                                 value: item.id,
                             }))}
-                            disabled_search={this.props.type_handle == 'variant' ? true : false}
-                            disabled_create={this.props.type_handle == 'variant' ? true : false}
+                            disabled_search={this.props.type_handle === 'variant' ? true : false}
+                            disabled_create={this.props.type_handle === 'variant' ? true : false}
                         />
                     </div>
                 </div>
                 <div className='flex items-end gap-[5px]'>
                     <div className='w-3/4'>
-                        <Form_select_data disabled={this.state.disabled_attribute_value} name={'Giá trị'}
+                        <FormSelectData disabled={this.state.disabled_attribute_value} name={'Giá trị'}
                             width={'100%'} name_funtion={'attribute_value'} type={'input'} variable={'value'}
                             get_data_api={this.get_data_api} value={this.state.data_attribute_value.id}
                             on_search_data_api={this.on_search_data_api}

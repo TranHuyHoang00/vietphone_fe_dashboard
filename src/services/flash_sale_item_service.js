@@ -1,6 +1,6 @@
 import api_admin from '../auths/api_admin';
 const get_list_flash_sale_item = (date_filter) => {
-    return api_admin.get(`/promotion/api/v1/list-flash-sale-item?page=${date_filter.page}&limit=${date_filter.limit}${(date_filter.search_query == null || date_filter.search_query == '') ? '' : `&search_query=${date_filter.search_query}`}`);
+    return api_admin.get(`/promotion/api/v1/list-flash-sale-item?page=${date_filter.page}&limit=${date_filter.limit}${(date_filter.search_query === null || date_filter.search_query === '') ? '' : `&search_query=${date_filter.search_query}`}`);
 }
 const create_flash_sale_item = (data) => {
     return api_admin.post(`/promotion/api/v1/create-flash-sale-item`, data);

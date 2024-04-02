@@ -30,7 +30,7 @@ api_admin.interceptors.response.use(
             }
             try {
                 let data = await axios.post(`${process.env.REACT_APP_API}/auth/api/v1/token/refresh`, { refresh: refresh });
-                if (data && data.data && data.data.success == 1) {
+                if (data && data.data && data.data.success === 1) {
                     token = data.data.data.access;
                     originalConfig.headers.Authorization = `Bearer ${token}`;
                     data_account.data.access = token;
