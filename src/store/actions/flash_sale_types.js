@@ -50,6 +50,10 @@ export const create_flash_sale_redux = (data_flash_sale) => {
             }
         } catch (error) {
             dispatch(flash_sale_faided());
+            if (error.response && error.response.status == 400) {
+                message.error('Khoảng thời gian này đã tồn tại Flash sale');
+                return;
+            }
             message.error('Lỗi hệ thống');
         }
     }

@@ -27,7 +27,6 @@ class index extends Component {
                 limit: 5,
                 search_query: ''
             },
-            data_edit: {},
         }
     }
     async componentDidMount() {

@@ -12,6 +12,7 @@ export * from './variant_attribute_group_types';
 export * from './promotion_types';
 export * from './flash_sale_types';
 export * from './flash_sale_item_types';
+export * from './task_types';
 
 
 

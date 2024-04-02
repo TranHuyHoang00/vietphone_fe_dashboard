@@ -13,6 +13,7 @@ import customer_reducers from './customer_reducers';
 import promotion_reducers from './promotion_reducers';
 import flash_sale_reducers from './flash_sale_reducers';
 import flash_sale_item_reducers from './flash_sale_item_reducers';
+import task_reducers from './task_reducers';
 export default combineReducers({
     product: product_reducers,
     customer: customer_reducers,
@@ -28,5 +29,6 @@ export default combineReducers({
     promotion: promotion_reducers,
     flash_sale: flash_sale_reducers,
     flash_sale_item: flash_sale_item_reducers,
+    task: task_reducers,
 
 })

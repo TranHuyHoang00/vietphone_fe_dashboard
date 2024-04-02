@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import { Layout, Menu, Drawer } from 'antd';
 import {
-    AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop
+    AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect
@@ -31,6 +31,7 @@ import Manager_variant_attribute_group from './managers/variant_attribute_group/
 import Manager_sync_data from './managers/sync_data/index';
 import Manager_flash_sale from './managers/flash_sale/index';
 import Manager_flash_sale_item from './managers/flash_sale_item/index';
+import Manager_task from './managers/task/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -40,12 +41,6 @@ class index extends Component {
             value: {},
             logged_in_db: false,
             is_form_drawer: false,
-            data_filter: {
-                page: 1,
-                limit: 5,
-                search_query: ''
-            },
-
         }
     }
     async componentDidMount() {
@@ -110,6 +105,7 @@ class index extends Component {
             {
                 key: 'system', icon: <AiFillAndroid />, label: 'Hệ thống', children: [
                     { key: 'manager/sync_data', icon: <AiFillControl />, label: 'Đồng bộ' },
+                    { key: 'manager/task', icon: <AiFillSwitcher />, label: 'Lịch sử' },
                 ],
             },
         ];
@@ -155,6 +151,8 @@ class index extends Component {
                                     <Route exact path={`${url}manager/sync_data`}><Manager_sync_data /></Route>
                                     <Route exact path={`${url}manager/flash_sale`}><Manager_flash_sale /></Route>
                                     <Route exact path={`${url}manager/flash_sale_item`}><Manager_flash_sale_item /></Route>
+                                    <Route exact path={`${url}manager/task`}><Manager_task /></Route>
+
                                     <Route ><Not_found /></Route>
 
 

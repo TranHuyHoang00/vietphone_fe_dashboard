@@ -5,8 +5,6 @@ import { Login } from '../../../services/login_services';
 import { message, Spin } from 'antd';
 import bg from '../../../assets/images/bg.jpg';
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import axios from 'axios';
-
 class login extends Component {
     constructor(props) {
         super(props);
