@@ -6,8 +6,8 @@ import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile,
-    AiFillContainer, AiFillFileMarkdown, AiFillCrown,
-    AiFillFire, AiFillUsb, AiFillRocket, AiFillControl
+    AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle,
+    AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
 import { get_local_account } from '../../auths/local_storage';
@@ -29,6 +29,8 @@ import Manager_product from './managers/product/index';
 import Edit_product from './managers/product/pages/edit/index';
 import Manager_variant_attribute_group from './managers/variant_attribute_group/index';
 import Manager_sync_data from './managers/sync_data/index';
+import Manager_flash_sale from './managers/flash_sale/index';
+import Manager_flash_sale_item from './managers/flash_sale_item/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -85,6 +87,7 @@ class index extends Component {
             {
                 key: 'store', icon: <AiFillShop />, label: 'Cửa hàng', children: [
                     { key: 'manager/product', icon: <AiFillMobile />, label: 'Sản phẩm' },
+                    { key: 'manager/flash_sale_item', icon: <AiFillPayCircle />, label: 'Flash sale' },
                 ],
             },
             {
@@ -100,6 +103,8 @@ class index extends Component {
                     { key: 'manager/tag', icon: <AiFillTag />, label: 'Tag' },
                     { key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu' },
                     { key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục' },
+                    { key: 'manager/flash_sale', icon: <AiFillMoneyCollect />, label: 'Flash_sale' },
+
                 ],
             },
             {
@@ -148,7 +153,8 @@ class index extends Component {
                                     <Route exact path={`${url}manager/product/edit/:id`}><Edit_product /></Route>
                                     <Route exact path={`${url}manager/variant_attribute_group`}><Manager_variant_attribute_group /></Route>
                                     <Route exact path={`${url}manager/sync_data`}><Manager_sync_data /></Route>
-
+                                    <Route exact path={`${url}manager/flash_sale`}><Manager_flash_sale /></Route>
+                                    <Route exact path={`${url}manager/flash_sale_item`}><Manager_flash_sale_item /></Route>
                                     <Route ><Not_found /></Route>
 
 

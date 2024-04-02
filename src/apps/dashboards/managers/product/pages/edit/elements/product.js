@@ -15,10 +15,13 @@ class product extends Component {
         this.state = {
             data_medias: [],
             data_media_ids: [],
+
+            description: '',
         }
     }
     handle_edit_product = async () => {
         let data_product = this.props.data_product;
+        data_product.description = this.state.description;
         if (this.props.is_edit == false) { this.props.click_edit_product() };
         if (this.props.is_edit == true) {
             if (this.state.data_medias.length !== 0) {
@@ -50,6 +53,12 @@ class product extends Component {
             message.error('Lỗi hệ thống');
         }
     }
+
+    onchange_content = (description) => {
+        this.setState({
+            description: description,
+        })
+    }
     render() {
         return (
             <div className='space-y-[10px]'>
@@ -78,7 +87,8 @@ class product extends Component {
                             <Product_attribute_value />
                         </div>
                     </div>
-                    <Product_content />
+                    <Product_content onchange_content={this.onchange_content}
+                        value={this.props.data_product.description} />
                 </div>
             </div>
         );

@@ -22,8 +22,8 @@ class product_content extends Component {
                         modules={product_content.modules}
                         formats={product_content.formats}
                         bounds={'.app'}
-                        value={this.props.data_product.description}
-                        onChange={(event) => this.props.on_change_product(event, 'description', 'select')}
+                        value={this.props.value}
+                        onChange={(value) => this.props.onchange_content(value)}
                     />
                 </Collapse.Panel>
             </Collapse>
@@ -57,7 +57,7 @@ product_content.modules = {
         [{ 'script': 'sub' }, { 'script': 'super' }],
         [{ 'indent': '-1' }, { 'indent': '+1' }],
 
-        [{ 'header': [1, 2, 3, 4, 5, 6] }],
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
         [{ 'color': [] }, { 'background': [] }],
         [{ 'align': [] }],

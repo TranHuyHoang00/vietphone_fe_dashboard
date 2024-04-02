@@ -52,7 +52,7 @@ class modal_create extends Component {
                             important={true}
                             handle_onchange_input={this.props.on_change_group_attribute} />
 
-                        <Form_input name={'Thứ tự'} variable={'prioritize'} value={data_group_attribute.prioritize}
+                        <Form_input name={'Thứ tự'} variable={'priority'} value={data_group_attribute.priority}
                             important={false}
                             handle_onchange_input={this.props.on_change_group_attribute} />
 
