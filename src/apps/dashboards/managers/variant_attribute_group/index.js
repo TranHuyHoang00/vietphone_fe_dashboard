@@ -85,7 +85,7 @@ class index extends Component {
                             <>
                                 {attribute && attribute.map((item, index) => {
                                     return (
-                                        <Tag color='blue'>{item.name}</Tag>
+                                        <Tag key={item.id} color='blue'>{item.name}</Tag>
                                     )
                                 })}
                             </>

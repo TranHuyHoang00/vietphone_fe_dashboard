@@ -172,7 +172,7 @@ class index extends Component {
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider>THÔNG SỐ</Divider>
+                            <Divider>SẢN PHẨM</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
                                     columns={columns} dataSource={this.props.data_products} pagination={false}

@@ -43,7 +43,7 @@ class modal_detail extends Component {
                             {text_line_1_3('Ngày tạo', (data_order.created_at))}
                             {data_order.order_lines && data_order.order_lines.map((item, index) => {
                                 return (
-                                    <Collapse key={index}>
+                                    <Collapse key={item.id}>
                                         <Collapse.Panel header={`${item.product_name}`} key="1">
                                             {text_line_1_3('ID', (item.id))}
                                             {text_line_1_3('Số lượng', (item.quantity))}
