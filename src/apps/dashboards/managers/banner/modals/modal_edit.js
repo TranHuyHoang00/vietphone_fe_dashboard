@@ -101,6 +101,7 @@ class modal_edit extends Component {
             let data_media_ids = this.state.data_media_ids;
             for (const item of data_medias) {
                 if (!item.id) {
+                    item.alt = this.props.data_banner.name;
                     let data = await create_media_base(item);
                     if (data && data.data && data.data.success === 1) {
                         data_media_ids_new.push(data.data.data.id);
