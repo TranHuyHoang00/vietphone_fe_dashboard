@@ -11,7 +11,7 @@ class select_attribute_value extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_filter: { page: 1, limit: 100, search_query: '' },
+            data_filter: { page: 1, limit: 100, search: '' },
 
             data_group_attributes: [],
             data_group_attribute: { is_active: true },
@@ -146,7 +146,7 @@ class select_attribute_value extends Component {
     }
     on_search_data_api = async (value, name) => {
         let data_filter = this.state.data_filter;
-        data_filter.search_query = value;
+        data_filter.search = value;
         data_filter.page = 1;
         if (name === 'group_attribute') { await this.get_list_group_attribute(data_filter); }
     }

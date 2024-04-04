@@ -1,105 +1,89 @@
 import action_types from '../actions/action_types';
 
 const initialState = {
-    data_products: [],
-    data_product: {},
+    data_locations: [],
+    data_location: {},
     data_meta: {},
     is_loading: false,
     is_result: false,
-    is_edit: false,
-    data_filter: {
-        page: 1,
-        limit: 5,
-        search: ''
-    },
 }
 
-const product_reducers = (state = initialState, action) => {
+const location_reducers = (state = initialState, action) => {
     switch (action.type) {
-        case action_types.PRODUCT_START:
+        case action_types.LOCATION_START:
             return {
                 ...state,
                 is_loading: true,
                 is_result: false,
             }
-        case action_types.PRODUCT_SUCCESS:
+        case action_types.LOCATION_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
             }
-        case action_types.PRODUCT_FAIDED:
+        case action_types.LOCATION_FAIDED:
             return {
                 ...state,
                 is_loading: false,
                 is_result: false,
             }
-        case action_types.GET_LIST_PRODUCT_SUCCESS:
+        case action_types.GET_LIST_LOCATION_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
-                data_products: action.data.products,
+                data_locations: action.data.locations,
                 data_meta: action.data.metadata
             }
-        case action_types.GET_PRODUCT_SUCCESS:
+        case action_types.GET_LOCATION_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
-                data_product: action.data
+                data_location: action.data
             }
-        case action_types.CREATE_PRODUCT_SUCCESS:
-            return {
-                ...state,
-                is_loading: false,
-                is_result: true,
-            }
-        case action_types.EDIT_PRODUCT_SUCCESS:
+        case action_types.CREATE_LOCATION_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
             }
-        case action_types.EDIT_LIST_PRODUCT_SUCCESS:
+        case action_types.EDIT_LOCATION_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
             }
-        case action_types.DELETE_LIST_PRODUCT_SUCCESS:
+        case action_types.EDIT_LIST_LOCATION_SUCCESS:
             return {
                 ...state,
                 is_loading: false,
                 is_result: true,
             }
-        case action_types.SET_DATA_PRODUCT:
+        case action_types.DELETE_LIST_LOCATION_SUCCESS:
             return {
                 ...state,
-                data_product: action.data,
+                is_loading: false,
+                is_result: true,
             }
-        case action_types.ON_CHANGE_PRODUCT:
-            let copyState = { ...state.data_product };
+        case action_types.SET_DATA_LOCATION:
+            return {
+                ...state,
+                data_location: action.data,
+            }
+        case action_types.ON_CHANGE_LOCATION:
+            let copyState = { ...state.data_location };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_product: {
+                data_location: {
                     ...copyState,
                 }
-            }
-        case action_types.CLICK_EDIT_PRODUCT:
-            return {
-                ...state,
-                is_edit: !state.is_edit
-            }
-        case action_types.SET_DATA_FILTER_PRODUCT:
-            return {
-                ...state,
-                data_filter: action.data,
             }
         default:
             return state;
     }
 }
 
-export default product_reducers;
+export default location_reducers;

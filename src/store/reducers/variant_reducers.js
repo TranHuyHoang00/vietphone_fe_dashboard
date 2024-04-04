@@ -10,7 +10,7 @@ const initialState = {
     data_filter: {
         page: 1,
         limit: 5,
-        search_query: ''
+        search: ''
     },
 }
 

@@ -84,8 +84,8 @@ class product_media extends Component {
             mobile: { breakpoint: { max: 640, min: 300 }, items: 2, slidesToSlide: 1 }
         };
         const items = [
-            { key: '1', label: 'Thêm ảnh' },
-            { key: '2', label: 'Thêm video' },
+            { key: 1, label: 'Thêm ảnh' },
+            { key: 2, label: 'Thêm video' },
         ];
         let is_edit = this.props.is_edit;
         let data_medias = this.state.data_medias;
@@ -99,8 +99,8 @@ class product_media extends Component {
                                 onChange={(event) => this.onchange_image(event, 'create')} />
                             <Dropdown.Button disabled={!is_edit} menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                 <div>
-                                    {type_menu === 1 && <label htmlFor="media_product">Thêm ảnh</label>}
-                                    {type_menu === 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
+                                    {type_menu == 1 && <label htmlFor="media_product">Thêm ảnh</label>}
+                                    {type_menu == 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
                                 </div>
                             </Dropdown.Button>
                             <Carousel responsive={responsive} swipeable={true} draggable={true}
@@ -152,7 +152,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         on_change_product: (event, id, type) => dispatch(actions.on_change_product_redux(event, id, type)),
-
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(product_media));

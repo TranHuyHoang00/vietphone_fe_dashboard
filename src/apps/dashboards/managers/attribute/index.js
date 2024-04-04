@@ -23,7 +23,7 @@ class index extends Component {
             data_filter: {
                 page: 1,
                 limit: 5,
-                search_query: ''
+                search: ''
             },
         }
     }
@@ -54,15 +54,15 @@ class index extends Component {
     }
     handle_funtion_menu = async () => {
         let data_selected = this.state.data_selected;
-        if (this.state.type_menu === 1) { await this.props.delete_list_attribute(data_selected); }
+        if (this.state.type_menu == 1) { await this.props.delete_list_attribute(data_selected); }
         await this.props.get_list_attribute(this.state.data_filter);
-        if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
+        if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
     }
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
         if (type === 'limit') { data_filter.limit = value; }
         if (type === 'page') { data_filter.page = value; }
-        if (type === 'search') { data_filter.search_query = value; data_filter.page = 1; }
+        if (type === 'search') { data_filter.search = value; data_filter.page = 1; }
         this.setState({ data_filter: data_filter })
         await this.props.get_list_attribute(data_filter);
     }
@@ -101,7 +101,7 @@ class index extends Component {
 
         ];
         const items = [
-            { key: '1', label: 'Xóa' },
+            { key: 1, label: 'Xóa' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -132,7 +132,7 @@ class index extends Component {
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
                                         <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
-                                                {type_menu === 1 && <span>Xóa</span>}
+                                                {type_menu == 1 && <span>Xóa</span>}
                                                 <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

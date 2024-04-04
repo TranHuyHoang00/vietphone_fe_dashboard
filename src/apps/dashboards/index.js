@@ -3,10 +3,10 @@ import { Switch, Route } from "react-router-dom";
 import { connect } from 'react-redux';
 import { Layout, Menu, Drawer } from 'antd';
 import {
-    AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher
+    AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher, AiFillBehanceSquare
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile,
-    AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle,
-    AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect
+    AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject,
+    AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
 import { get_local_account } from '../../auths/local_storage';
@@ -31,6 +31,9 @@ import ManagerSyncData from './managers/sync_data/index';
 import ManagerFlashSale from './managers/flash_sale/index';
 import ManagerFlashSaleItem from './managers/flash_sale_item/index';
 import ManagerTask from './managers/task/index';
+import ManagerLocation from './managers/location/index';
+import ManagerBanner from './managers/banner/index';
+
 class index extends Component {
     constructor(props) {
         super(props);
@@ -82,6 +85,12 @@ class index extends Component {
                 key: 'store', icon: <AiFillShop />, label: 'Cửa hàng', children: [
                     { key: 'manager/product', icon: <AiFillMobile />, label: 'Sản phẩm' },
                     { key: 'manager/flash_sale_item', icon: <AiFillPayCircle />, label: 'Flash sale' },
+                ],
+            },
+            {
+                key: 'advertisement', icon: <AiFillProject />, label: 'Quảng cáo', children: [
+                    { key: 'manager/banner', icon: <AiFillBehanceSquare />, label: 'Băng rôn' },
+                    { key: 'manager/location', icon: <AiFillEnvironment />, label: 'Vị trí' },
                 ],
             },
             {
@@ -151,7 +160,8 @@ class index extends Component {
                                     <Route exact path={`${url}manager/flash_sale`}><ManagerFlashSale /></Route>
                                     <Route exact path={`${url}manager/flash_sale_item`}><ManagerFlashSaleItem /></Route>
                                     <Route exact path={`${url}manager/task`}><ManagerTask /></Route>
-
+                                    <Route exact path={`${url}manager/location`}><ManagerLocation /></Route>
+                                    <Route exact path={`${url}manager/banner`}><ManagerBanner /></Route>
                                     <Route ><NotFound /></Route>
 
 

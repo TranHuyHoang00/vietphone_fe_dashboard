@@ -14,7 +14,7 @@ class modal_create extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_attribute({ page: 1, limit: 100, search_query: '' });
+        this.props.get_list_attribute({ page: 1, limit: 100, search: '' });
     }
     validation = (data) => {
         if (!data.value) {

@@ -24,7 +24,7 @@ class index extends Component {
             data_filter: {
                 page: 1,
                 limit: 5,
-                search_query: ''
+                search: ''
             },
             data_category_type: {},
             data_category_types: [],
@@ -108,13 +108,13 @@ class index extends Component {
             let data_selected = this.state.data_selected;
             for (const id of data_selected) {
                 let data;
-                if (this.state.type_menu === 1) { data = await delete_category_type(id); }
+                if (this.state.type_menu == 1) { data = await delete_category_type(id); }
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Thất bại khi xử lý dòng ID=${id}`);
                 }
             }
             await this.load_data();
-            if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
+            if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
             message.success(`Thành công xử lý ${data_selected.length} dòng`);
         } catch (e) {
             message.error('Lỗi hệ thống');
@@ -125,15 +125,15 @@ class index extends Component {
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
         if (type === 'limit') {
-            this.props.history.push(`/admin/manager/category_type?page=${data_filter.page}&limit=${value}&search_query=${data_filter.search_query}`);
+            this.props.history.push(`/admin/manager/category_type?page=${data_filter.page}&limit=${value}&search=${data_filter.search}`);
         }
         if (type === 'page') {
-            this.props.history.push(`/admin/manager/category_type?page=${value}&limit=${data_filter.limit}&search_query=${data_filter.search_query}`);
+            this.props.history.push(`/admin/manager/category_type?page=${value}&limit=${data_filter.limit}&search=${data_filter.search}`);
         }
     }
     on_search = async (value) => {
         let data_filter = this.state.data_filter;
-        this.props.history.push(`/admin/manager/category_type?page=1&limit=${data_filter.limit}&search_query=${value}`);
+        this.props.history.push(`/admin/manager/category_type?page=1&limit=${data_filter.limit}&search=${value}`);
     }
     render() {
         const columns = [
@@ -163,7 +163,7 @@ class index extends Component {
 
         ];
         const items = [
-            { key: '1', label: 'Xóa' },
+            { key: 1, label: 'Xóa' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -195,7 +195,7 @@ class index extends Component {
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
                                         <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
-                                                {type_menu === 1 && <span>Xóa</span>}
+                                                {type_menu == 1 && <span>Xóa</span>}
                                                 <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

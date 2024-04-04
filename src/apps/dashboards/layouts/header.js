@@ -27,7 +27,7 @@ class header extends Component {
         const items = [
             {
                 label: <span onClick={() => this.handle_logout()}>Đăng xuất</span>,
-                key: '1',
+                key: 1,
                 icon: <LogoutOutlined />,
             },
         ];

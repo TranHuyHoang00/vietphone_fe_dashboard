@@ -9,7 +9,7 @@ class product_introduce extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_filter: { page: 1, limit: 100, search_query: '' },
+            data_filter: { page: 1, limit: 100, search: '' },
         }
     }
     async componentDidMount() {
@@ -20,7 +20,7 @@ class product_introduce extends Component {
     }
     on_search = (value, form_name) => {
         let data_filter = this.state.data_filter;
-        data_filter.search_query = value;
+        data_filter.search = value;
         if (form_name === 'brand') { this.props.get_list_brand(data_filter); }
         if (form_name === 'tag') { this.props.get_list_tag(data_filter); }
         if (form_name === 'category') { this.props.get_list_category(data_filter); }

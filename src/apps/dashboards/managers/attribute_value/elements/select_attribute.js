@@ -13,7 +13,7 @@ class select_attribute extends Component {
             data_filter: {
                 page: 1,
                 limit: 10,
-                search_query: ''
+                search: ''
             },
             metadata: {},
         }
@@ -54,7 +54,7 @@ class select_attribute extends Component {
     }
     on_search = async (value) => {
         let data_filter = this.state.data_filter;
-        data_filter.search_query = value;
+        data_filter.search = value;
         data_filter.page = 1;
         await this.get_list_attribute(data_filter);
     }

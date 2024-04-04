@@ -17,7 +17,7 @@ class modal_create extends Component {
             data_filter: {
                 page: 1,
                 limit: 5,
-                search_query: ''
+                search: ''
             },
         }
     }
@@ -27,7 +27,7 @@ class modal_create extends Component {
     handle_funtion_menu = async () => {
         let data_selected = this.state.data_selected;
         let data_flash_sale = this.props.data_flash_sale;
-        if (this.state.type_menu === 1) {
+        if (this.state.type_menu == 1) {
             if (data_flash_sale.id) {
                 await this.props.create_list_flash_sale_item(data_flash_sale.id, data_selected);
             }
@@ -35,14 +35,14 @@ class modal_create extends Component {
         if (this.props.is_result === true) {
             await this.props.get_flash_sale(data_flash_sale.id);
             this.props.open_modal("create", false);
-            if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
+            if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
         }
     }
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
         if (type === 'limit') { data_filter.limit = value; }
         if (type === 'page') { data_filter.page = value; }
-        if (type === 'search') { data_filter.search_query = value; data_filter.page = 1; }
+        if (type === 'search') { data_filter.search = value; data_filter.page = 1; }
         this.setState({ data_filter: data_filter })
         await this.props.get_list_variant(data_filter);
     }
@@ -60,7 +60,7 @@ class modal_create extends Component {
             },
         ];
         const items = [
-            { key: '1', label: 'Thêm' },
+            { key: 1, label: 'Thêm' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -91,7 +91,7 @@ class modal_create extends Component {
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
                                         <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
-                                                {type_menu === 1 && <span>Thêm</span>}
+                                                {type_menu == 1 && <span>Thêm</span>}
                                                 <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
