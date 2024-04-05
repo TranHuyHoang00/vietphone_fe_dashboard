@@ -56,8 +56,6 @@ class index extends Component {
     handle_funtion_menu = async () => {
         let data_selected = this.state.data_selected;
         if (this.state.type_menu == 1) { await this.props.delete_list_order(data_selected); }
-        if (this.state.type_menu == 2) { await this.props.edit_list_order(data_selected, { is_active: false }); }
-        if (this.state.type_menu == 3) { await this.props.edit_list_order(data_selected, { is_active: true }); }
         await this.props.get_list_order(this.state.data_filter);
         if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
     }
@@ -97,7 +95,7 @@ class index extends Component {
                 render: (id, item) =>
                     <div >
                         {text_line_1_3('Mã ĐH', item.code)}
-                        {text_line_1_3('Mã ĐH', format_money(item.total))}
+                        {text_line_1_3('Tổng tiền', format_money(item.total))}
                         {text_line_1_3('Khấu trừ', format_money(item.total_discount))}
 
                     </div>
@@ -118,8 +116,6 @@ class index extends Component {
         ];
         const items = [
             { key: 1, label: 'Xóa' },
-            { key: 2, label: 'Khóa' },
-            { key: 3, label: 'Mở' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -151,8 +147,6 @@ class index extends Component {
                                         <Dropdown.Button disabled={true} menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
                                             <div>
                                                 {type_menu == 1 && <span>Xóa</span>}
-                                                {type_menu == 2 && <span>Khóa</span>}
-                                                {type_menu == 3 && <span>Mở</span>}
                                                 <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
