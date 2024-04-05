@@ -58,11 +58,11 @@ class modal_edit extends Component {
                 <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
 
-                        <FormDate name={'Ngày bắt đầu'} variable={'start_time'} value={dayjs(data_flash_sale.start_time)}
+                        <FormDate name={'Ngày bắt đầu'} variable={'start_time'} value={data_flash_sale.start_time}
                             important={true}
                             handle_onchange_input={this.props.on_change_flash_sale} />
 
-                        <FormDate name={'Ngày kết thúc'} variable={'end_time'} value={dayjs(data_flash_sale.end_time)}
+                        <FormDate name={'Ngày kết thúc'} variable={'end_time'} value={data_flash_sale.end_time}
                             important={true}
                             handle_onchange_input={this.props.on_change_flash_sale} />
 

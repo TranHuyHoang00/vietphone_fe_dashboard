@@ -43,6 +43,7 @@ class modal_create extends Component {
             await this.props.create_banner(data_banner);
             let is_result = this.props.is_result;
             if (is_result === true) {
+                this.setState({ data_medias: [], data_media_ids: [] })
                 await this.props.get_list_banner(this.props.data_filter);
                 this.props.open_modal("create", false);
             }

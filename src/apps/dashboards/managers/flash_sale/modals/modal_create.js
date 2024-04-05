@@ -17,14 +17,14 @@ class modal_create extends Component {
     async componentDidMount() {
     }
     validation = (data) => {
-        if (!data.name) {
-            return { mess: "Không được bỏ trống 'Tên flash sale' ", code: 1 };
-        }
         if (!data.start_time) {
             return { mess: "Không được bỏ trống 'Ngày bắt đầu' ", code: 1 };
         }
         if (!data.end_time) {
             return { mess: "Không được bỏ trống 'Ngày kết thúc' ", code: 1 };
+        }
+        if (!data.name) {
+            return { mess: "Không được bỏ trống 'Tên flash sale' ", code: 1 };
         }
         return { code: 0 };
     }

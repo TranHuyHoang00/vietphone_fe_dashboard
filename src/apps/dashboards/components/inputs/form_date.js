@@ -17,8 +17,9 @@ class form_date extends Component {
                     {this.props.important === true && <Typography.Text type="danger" strong> *</Typography.Text>}
                 </Typography.Text>
                 <div>
-                    <DatePicker className='w-full' allowClear showTime needConfirm={true}
-                        value={this.props.value} onChange={(event) => this.props.handle_onchange_input(event, this.props.variable)} />
+                    <input className='border w-full h-[35px] px-[5px]'
+                        type='datetime-local' value={this.props.value}
+                        onChange={(event) => this.props.handle_onchange_input(event.target.value, this.props.variable)} />
                 </div>
             </div>
         );

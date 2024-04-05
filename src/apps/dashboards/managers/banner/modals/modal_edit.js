@@ -70,6 +70,7 @@ class modal_edit extends Component {
             await this.props.edit_banner(data_banner.id, data_banner);
             let is_result = this.props.is_result;
             if (is_result === true) {
+                this.setState({ data_medias: [], data_media_ids: [] })
                 await this.props.get_list_banner(this.props.data_filter);
                 this.props.open_modal("edit", false);
             }
