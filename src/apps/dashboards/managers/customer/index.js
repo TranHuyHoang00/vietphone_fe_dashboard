@@ -3,17 +3,17 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../store/actions';
 import {
-    Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown, Avatar
+    Table, Space, Divider, Input,
+    Spin, Pagination, Typography, Avatar
 } from 'antd';
-import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
+import { AiFillEye } from "react-icons/ai";
 import FormSelectPage from '../../components/selects/form_select_page';
 import ModalDetail from './modals/modal_detail';
+
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type_menu: 1,
             data_selected: [],
             modal_detail: false,
             modal_create: false,
@@ -51,12 +51,6 @@ class index extends Component {
         }
     }
     handle_funtion_menu = async () => {
-        let data_selected = this.state.data_selected;
-        if (this.state.type_menu == 1) { await this.props.delete_list_customer(data_selected); }
-        if (this.state.type_menu == 2) { await this.props.edit_list_customer(data_selected, { is_active: false }); }
-        if (this.state.type_menu == 3) { await this.props.edit_list_customer(data_selected, { is_active: true }); }
-        await this.props.get_list_customer(this.state.data_filter);
-        if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
     }
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
@@ -69,7 +63,7 @@ class index extends Component {
     render() {
         const columns = [
             {
-                title: 'Mã KH', dataIndex: 'code', width: 100, responsive: ['sm'],
+                title: 'Mã KH', dataIndex: 'code', width: 120, responsive: ['sm'],
                 render: (code) => <Typography.Text strong className='text-[#0574b8]'>{code}</Typography.Text>,
                 sorter: (a, b) => a.code - b.code,
             },
@@ -94,18 +88,10 @@ class index extends Component {
                 render: (_, item) => (
                     <Space size="middle" >
                         <span onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></span>
-                        <span onClick={() => this.open_modal('edit', true, item.id)}>
-                            <AiFillEdit />
-                        </span>
                     </Space >
                 ),
             },
 
-        ];
-        const items = [
-            { key: 1, label: 'Xóa' },
-            { key: 2, label: 'Khóa' },
-            { key: 3, label: 'Mở' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -113,37 +99,19 @@ class index extends Component {
         };
         const row_selection = { data_selected, onChange: onchange_selected };
         let data_filter = this.state.data_filter;
-        let type_menu = this.state.type_menu;
         return (
             <>
                 <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button disabled={true} onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
-                                <Space className='text-white'>
-                                    <AiOutlinePlus />
-                                    Tạo mới
-                                </Space>
-                            </Button>
+                            <div>
+
+                            </div>
                             <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên, Mã KH, SĐT !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm bcustomer'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
-                                <div>
-                                    <Popconfirm disabled={true}
-                                        title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
-                                        <Dropdown.Button disabled={true} menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
-                                            <div>
-                                                {type_menu == 1 && <span>Xóa</span>}
-                                                {type_menu == 2 && <span>Khóa</span>}
-                                                {type_menu == 3 && <span>Mở</span>}
-                                                <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
-                                            </div>
-                                        </Dropdown.Button>
-                                    </Popconfirm>
-                                </div>
                             </div>
                             <Divider>KHÁCH HÀNG</Divider>
                             <div className='space-y-[20px]'>
@@ -157,14 +125,9 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {/* <ModalCreate modal_create={this.state.modal_create}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} /> */}
-                <ModalDetail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} />
-                {/* <ModalEdit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} /> */}
+                {this.state.modal_detail == true &&
+                    <ModalDetail modal_detail={this.state.modal_detail}
+                        open_modal={this.open_modal} />}
             </>
         );
     }

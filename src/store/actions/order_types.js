@@ -15,6 +15,10 @@ export const get_list_order_redux = (data_filter) => {
             }
         } catch (error) {
             dispatch(order_faided());
+            if (error.response && error.response.status === 400) {
+                message.error('Không có đơn hàng nào cho mục này');
+                return;
+            }
             message.error('Lỗi hệ thống');
         }
     }

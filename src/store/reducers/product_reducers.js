@@ -10,7 +10,12 @@ const initialState = {
     data_filter: {
         page: 1,
         limit: 5,
-        search: ''
+        search: '',
+        product_brand: '',
+        category: '',
+        tag: '',
+        is_active: '',
+        category: '',
     },
 }
 

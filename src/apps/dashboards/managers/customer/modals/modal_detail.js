@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Modal, Button, } from 'antd';
+import { Modal, Button, Spin } from 'antd';
 import { text_line_1_3 } from '../../../components/displays/data_line_1_3';
 class modal_detail extends Component {
     constructor(props) {
@@ -13,6 +13,7 @@ class modal_detail extends Component {
     }
     render() {
         let data_customer = this.props.data_customer;
+        let is_loading = this.props.is_loading;
         return (
             <Modal title="CHI TIẾT" open={this.props.modal_detail}
                 onCancel={() => this.props.open_modal("detail", false)} width={600}
@@ -24,17 +25,18 @@ class modal_detail extends Component {
                         </Button>
                     </>
                 ]}>
-                <div className='border-t py-[10px] space-y-[5px]'>
-                    {text_line_1_3('Mã KH', data_customer.code)}
-                    {text_line_1_3('Họ và tên', (data_customer.user && data_customer.user.full_name))}
-                    {text_line_1_3('Số điện thoại', (data_customer.user && data_customer.user.phone))}
-                    {text_line_1_3('Email', data_customer.email)}
-                    {text_line_1_3('Giới tính', data_customer.gender)}
-                    {text_line_1_3('Vai trò', (data_customer.user && data_customer.user.user_type))}
-                    {text_line_1_3('Địa chỉ', data_customer.address)}
-                    {text_line_1_3('Ngày sinh', data_customer.date_of_birth)}
-
-                </div>
+                <Spin spinning={is_loading}>
+                    <div className='border-t py-[10px] space-y-[5px]'>
+                        {text_line_1_3('Mã KH', data_customer.code)}
+                        {text_line_1_3('Họ và tên', (data_customer.user && data_customer.user.full_name))}
+                        {text_line_1_3('Số điện thoại', (data_customer.user && data_customer.user.phone))}
+                        {text_line_1_3('Email', data_customer.email)}
+                        {text_line_1_3('Giới tính', data_customer.gender)}
+                        {text_line_1_3('Vai trò', (data_customer.user && data_customer.user.user_type))}
+                        {text_line_1_3('Địa chỉ', data_customer.address)}
+                        {text_line_1_3('Ngày sinh', data_customer.date_of_birth)}
+                    </div>
+                </Spin>
             </Modal>
         );
     }
@@ -43,6 +45,7 @@ class modal_detail extends Component {
 const mapStateToProps = state => {
     return {
         data_customer: state.customer.data_customer,
+        is_loading: state.customer.is_loading,
     };
 };
 const mapDispatchToProps = dispatch => {

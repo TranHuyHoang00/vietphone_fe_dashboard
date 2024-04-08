@@ -1,9 +1,6 @@
-const format_day = (number) => {
-    var number_new = parseFloat(number).toLocaleString('en-US', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 3
-    });
-    return number_new;
+const moment = require('moment');
+const format_day = (timestamp) => {
+    return moment(timestamp).format('HH:mm - DD/MM/YYYY');;
 };
 export {
     format_day

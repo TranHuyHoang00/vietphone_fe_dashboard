@@ -75,7 +75,7 @@ class modal_create extends Component {
                 maskClosable={!is_loading}
                 footer={[
                     <ModalFooter open_modal={this.props.open_modal} type={'create'}
-                        is_loading={is_loading} handle_funtion={this.handle_create} />
+                        is_loading={is_loading} handle_funtion={this.handle_funtion_menu} />
                 ]}>
                 <Spin spinning={is_loading}>
                     <div className="mx-[10px] space-y-[10px]">

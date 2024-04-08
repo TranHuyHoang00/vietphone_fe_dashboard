@@ -1,6 +1,6 @@
 import { Typography, Image } from 'antd';
 
-const text_line_1_3 = (name, value) => {
+const text_line_1_3 = (name, value, className) => {
     return (
         <div className='flex gap-[5px]'>
             <div className='w-1/3 flex justify-between space-x-[5px]'>
@@ -8,7 +8,7 @@ const text_line_1_3 = (name, value) => {
                 <span>:</span>
             </div>
             <div className='w-2/3'>
-                <Typography.Text >{value}</Typography.Text>
+                <Typography.Text className={`${className}`}>{value}</Typography.Text>
             </div>
         </div>
     )

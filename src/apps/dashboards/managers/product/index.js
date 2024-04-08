@@ -3,12 +3,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../store/actions';
 import {
-    Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown, Tag, Image
+    Table, Space, Divider, Button, Input,
+    Spin, Pagination, Typography, Tag, Image
 } from 'antd';
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineMenu } from "react-icons/ai";
 import FormSelectPage from '../../components/selects/form_select_page';
-
+import DrawerFilter from './drawers/drawer_filter';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -18,10 +18,16 @@ class index extends Component {
             modal_detail: false,
             modal_create: false,
             modal_edit: false,
+            drawer_filter: false,
+            data_filter: {},
         }
     }
     async componentDidMount() {
         this.props.get_list_product(this.props.data_filter);
+        this.props.get_list_brand({ page: 1, limit: 100, search: '' });
+        this.props.get_list_tag({ page: 1, limit: 100, search: '' });
+        this.props.get_list_category({ page: 1, limit: 100, search: '' });
+        this.setState({ data_filter: this.props.data_filter });
     }
     open_modal = async (name, value, id) => {
         if (name === 'create') {
@@ -45,6 +51,11 @@ class index extends Component {
             }
         }
     }
+    open_drawer = async (name, value) => {
+        if (name === 'filter') {
+            this.setState({ drawer_filter: value });
+        }
+    }
     handle_funtion_menu = async () => {
         let data_selected = this.state.data_selected;
         if (this.state.type_menu == 1) { await this.props.delete_list_product(data_selected); }
@@ -54,10 +65,16 @@ class index extends Component {
         if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
     }
     onchange_page = async (value, type) => {
-        let data_filter = this.props.data_filter;
+        let data_filter = this.state.data_filter;
         if (type === 'limit') { data_filter.limit = value; }
         if (type === 'page') { data_filter.page = value; }
         if (type === 'search') { data_filter.search = value; data_filter.page = 1; }
+        if (type === 'product_brand') { data_filter.product_brand = value; data_filter.page = 1; }
+        if (type === 'tag') { data_filter.tag = value; data_filter.page = 1; }
+        if (type === 'is_active') { data_filter.is_active = value; data_filter.page = 1; }
+        if (type === 'category') { data_filter.category = value; data_filter.page = 1; }
+
+        this.setState({ data_filter: data_filter })
         await this.props.get_list_product(data_filter);
         this.props.set_data_filter_product(data_filter);
     }
@@ -81,7 +98,7 @@ class index extends Component {
                 title: 'Tên sản phẩm', dataIndex: 'name',
                 render: (name, item) =>
                     <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product/edit/${item.id}`)}>
-                        <Typography.Text className='text-[#0574b8]'>{name}</Typography.Text>
+                        <Typography.Text className='text-[#0574b8] cursor-pointer'>{name}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
@@ -146,18 +163,26 @@ class index extends Component {
                 <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button disabled onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
+                            {/* <Button disabled onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
                                 <Space className='text-white'>
                                     <AiOutlinePlus />
                                     Tạo mới
                                 </Space>
-                            </Button>
+                            </Button> */}
+                            <Space>
+                                <Button onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff]'>
+                                    <Space className='text-white'>
+                                        <AiOutlineMenu />
+                                        Bộ lọc
+                                    </Space>
+                                </Button>
+                            </Space>
                             <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên sản phẩm !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={this.props.data_filter.limit} onchange_page={this.onchange_page} />
-                                <div>
+                                {/* <div>
                                     <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
@@ -170,7 +195,7 @@ class index extends Component {
                                             </div>
                                         </Dropdown.Button>
                                     </Popconfirm>
-                                </div>
+                                </div> */}
                             </div>
                             <Divider>SẢN PHẨM</Divider>
                             <div className='space-y-[20px]'>
@@ -184,6 +209,11 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
+                <DrawerFilter drawer_filter={this.state.drawer_filter}
+                    open_drawer={this.open_drawer} data_filter={this.state.data_filter}
+                    onchange_page={this.onchange_page}
+                    data_brands={this.props.data_brands} data_tags={this.props.data_tags}
+                    data_categorys={this.props.data_categorys} />
             </>
         );
     }
@@ -197,7 +227,9 @@ const mapStateToProps = state => {
         is_loading: state.product.is_loading,
         is_result: state.product.is_result,
         data_filter: state.product.data_filter,
-
+        data_tags: state.tag.data_tags,
+        data_brands: state.brand.data_brands,
+        data_categorys: state.category.data_categorys,
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -208,6 +240,10 @@ const mapDispatchToProps = dispatch => {
         delete_list_product: (id) => dispatch(actions.delete_list_product_redux(id)),
         set_data_product: (id) => dispatch(actions.set_data_product_redux(id)),
         set_data_filter_product: (data) => dispatch(actions.set_data_filter_product_redux(data)),
+        get_list_brand: (data_filter) => dispatch(actions.get_list_brand_redux(data_filter)),
+        get_list_tag: (data_filter) => dispatch(actions.get_list_tag_redux(data_filter)),
+        get_list_category: (data_filter) => dispatch(actions.get_list_category_redux(data_filter)),
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

@@ -74,7 +74,7 @@ class index extends Component {
                 sorter: (a, b) => a.task_id - b.task_id,
             },
             {
-                title: 'task_name', dataIndex: 'task_name',
+                title: 'Task_name', dataIndex: 'task_name',
                 render: (task_name) => <Typography.Text strong className='text-[#0574b8]'>{task_name}</Typography.Text>,
                 sorter: (a, b) => a.task_name.localeCompare(b.namtask_namee),
             },
@@ -154,14 +154,9 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {/* <ModalCreate modal_create={this.state.modal_create}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} /> */}
-                <ModalDetail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} />
-                {/* <ModalEdit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} /> */}
+                {this.state.modal_detail &&
+                    <ModalDetail modal_detail={this.state.modal_detail}
+                        open_modal={this.open_modal} />}
             </>
         );
     }

@@ -3,28 +3,31 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../store/actions';
 import {
-    Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown, Avatar
+    Table, Space, Divider, Button, Input,
+    Spin, Pagination, Typography, Avatar,
 } from 'antd';
-import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
+import { AiFillEye, AiOutlineMenu } from "react-icons/ai";
 import FormSelectPage from '../../components/selects/form_select_page';
 import { format_money } from '../../../../utils/format_money';
 import { text_line_1_3 } from '../../components/displays/data_line_1_3';
-
+import { format_day } from '../../../../utils/format_day';
 import ModalDetail from './modals/modal_detail';
+import DrawerFilter from './drawers/drawer_filter';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type_menu: 1,
             data_selected: [],
             modal_detail: false,
             modal_create: false,
             modal_edit: false,
+            drawer_filter: false,
             data_filter: {
                 page: 1,
                 limit: 5,
-                search: ''
+                search: '',
+                status: '',
+                source: '',
             },
         }
     }
@@ -53,17 +56,20 @@ class index extends Component {
             }
         }
     }
+    open_drawer = async (name, value) => {
+        if (name === 'filter') {
+            this.setState({ drawer_filter: value });
+        }
+    }
     handle_funtion_menu = async () => {
-        let data_selected = this.state.data_selected;
-        if (this.state.type_menu == 1) { await this.props.delete_list_order(data_selected); }
-        await this.props.get_list_order(this.state.data_filter);
-        if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
     }
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
         if (type === 'limit') { data_filter.limit = value; }
         if (type === 'page') { data_filter.page = value; }
         if (type === 'search') { data_filter.search = value; data_filter.page = 1; }
+        if (type === 'status') { data_filter.status = value; data_filter.page = 1; }
+        if (type === 'source') { data_filter.source = value; data_filter.page = 1; }
         this.setState({ data_filter: data_filter })
         await this.props.get_list_order(data_filter);
     }
@@ -71,7 +77,7 @@ class index extends Component {
         const columns = [
             {
                 title: 'Ngày tạo', dataIndex: 'created_at', width: 140, responsive: ['sm'],
-                render: (created_at) => <Typography.Text strong className='text-[#0574b8]'>{created_at}</Typography.Text>,
+                render: (created_at) => <Typography.Text strong className='text-[#0574b8]'>{format_day(created_at)}</Typography.Text>,
                 sorter: (a, b) => a.created_at - b.created_at,
             },
             {
@@ -94,10 +100,11 @@ class index extends Component {
                 title: 'Thông tin ĐH', dataIndex: 'id',
                 render: (id, item) =>
                     <div >
-                        {text_line_1_3('Mã ĐH', item.code)}
-                        {text_line_1_3('Tổng tiền', format_money(item.total))}
-                        {text_line_1_3('Khấu trừ', format_money(item.total_discount))}
-
+                        {text_line_1_3('Mã ĐH', item.code, 'font-medium')}
+                        {text_line_1_3('Khấu trừ', format_money(item.total_discount), 'font-medium text-red-500')}
+                        {text_line_1_3('Tổng tiền', format_money(item.total), 'font-medium text-red-500')}
+                        {text_line_1_3('Nguồn', item.source)}
+                        {text_line_1_3('Trạng thái', item.status,)}
                     </div>
 
             },
@@ -106,16 +113,10 @@ class index extends Component {
                 render: (_, item) => (
                     <Space size="middle" >
                         <span onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></span>
-                        <span disabled >
-                            <AiFillEdit />
-                        </span>
                     </Space >
                 ),
             },
 
-        ];
-        const items = [
-            { key: 1, label: 'Xóa' },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -123,35 +124,24 @@ class index extends Component {
         };
         const row_selection = { data_selected, onChange: onchange_selected };
         let data_filter = this.state.data_filter;
-        let type_menu = this.state.type_menu;
         return (
             <>
                 <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button disabled={true} onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
-                                <Space className='text-white'>
-                                    <AiOutlinePlus />
-                                    Tạo mới
-                                </Space>
-                            </Button>
-                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên, SĐT, Mã ĐH !" /></div>
+                            <Space>
+                                <Button onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff]'>
+                                    <Space className='text-white'>
+                                        <AiOutlineMenu />
+                                        Bộ lọc
+                                    </Space>
+                                </Button>
+                            </Space>
+                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên KH, SĐT, Mã ĐH !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
-                                <div>
-                                    <Popconfirm disabled={true}
-                                        title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
-                                        <Dropdown.Button disabled={true} menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
-                                            <div>
-                                                {type_menu == 1 && <span>Xóa</span>}
-                                                <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
-                                            </div>
-                                        </Dropdown.Button>
-                                    </Popconfirm>
-                                </div>
                             </div>
                             <Divider>ĐƠN HÀNG</Divider>
                             <div className='space-y-[20px]'>
@@ -165,14 +155,13 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {/* <ModalCreate modal_create={this.state.modal_create}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} /> */}
-                <ModalDetail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} />
-                {/* <ModalEdit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} /> */}
+                {this.state.modal_detail == true &&
+                    <ModalDetail modal_detail={this.state.modal_detail}
+                        open_modal={this.open_modal} />}
+                {this.state.drawer_filter == true &&
+                    <DrawerFilter drawer_filter={this.state.drawer_filter}
+                        open_drawer={this.open_drawer} data_filter={this.state.data_filter}
+                        onchange_page={this.onchange_page} />}
             </>
         );
     }
