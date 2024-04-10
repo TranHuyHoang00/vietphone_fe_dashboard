@@ -7,6 +7,7 @@ import ProductIntroduce from '../collapses/product_introduce';
 import ProductMedia from '../collapses/product_media';
 import ProductAttributeValue from '../collapses/product_attribute_value';
 import ProductContent from '../collapses/product_content';
+import ProductPage from '../collapses/product_page';
 import { create_media } from '../../../../../../../services/media_service';
 
 class product extends Component {
@@ -80,6 +81,7 @@ class product extends Component {
                     <div className='lg:grid grid-cols-2 gap-[10px] space-y-[10px] lg:space-y-0'>
                         <div className='space-y-[10px]'>
                             <ProductIntroduce />
+                            <ProductPage />
                             <ProductMedia handle_get_media={this.handle_get_media}
                                 data_media_ids={this.props.data_product.media} />
                         </div>

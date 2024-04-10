@@ -8,8 +8,6 @@ import FormTextare from '../../../components/inputs/form_textare';
 import FormDate from '../../../components/inputs/form_date';
 import FormSelectInput from '../../../components/selects/form_select_input';
 import ModalFooter from '../../../components/modal/modal_footer';
-import dayjs from 'dayjs';
-
 class modal_edit extends Component {
     constructor(props) {
         super(props);

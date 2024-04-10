@@ -21,5 +21,8 @@ export const theme = Object.freeze({
             iconFontSize: 50,
             titleFontSize: 20
         },
+        Statistic: {
+            contentFontSize: 16
+        },
     }
 });

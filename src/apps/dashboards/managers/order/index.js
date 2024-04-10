@@ -155,10 +155,10 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_detail == true &&
+                {this.state.modal_detail === true &&
                     <ModalDetail modal_detail={this.state.modal_detail}
                         open_modal={this.open_modal} />}
-                {this.state.drawer_filter == true &&
+                {this.state.drawer_filter === true &&
                     <DrawerFilter drawer_filter={this.state.drawer_filter}
                         open_drawer={this.open_drawer} data_filter={this.state.data_filter}
                         onchange_page={this.onchange_page} />}

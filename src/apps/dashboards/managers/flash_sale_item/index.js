@@ -55,9 +55,9 @@ class index extends Component {
     }
     handle_funtion_menu = async () => {
         let data_selected = this.state.data_selected;
-        if (this.state.type_menu == 1) { await this.props.delete_list_flash_sale_item(data_selected); }
+        if (this.state.type_menu === 1) { await this.props.delete_list_flash_sale_item(data_selected); }
         await this.props.get_flash_sale(this.props.data_flash_sale.id);
-        if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
+        if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
     }
     render() {
         const columns = [
@@ -138,9 +138,9 @@ class index extends Component {
                                     <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
-                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
+                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {type_menu == 1 && <span>Xóa</span>}
+                                                {type_menu === 1 && <span>Xóa</span>}
                                                 <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

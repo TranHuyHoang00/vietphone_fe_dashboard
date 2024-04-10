@@ -48,7 +48,7 @@ class modal_edit extends Component {
         }
     }
     validation = (data) => {
-        if (this.state.data_medias.length == 0) {
+        if (this.state.data_medias.length === 0) {
             return { mess: "Không được bỏ trống 'Hình ảnh' ", code: 1 };
         }
         if (!data.name) {

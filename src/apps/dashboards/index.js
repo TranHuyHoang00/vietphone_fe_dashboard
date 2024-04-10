@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher, AiFillBehanceSquare
-    , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile,
+    , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillDashboard, AiOutlineFundView,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment
 } from "react-icons/ai";
@@ -34,6 +34,7 @@ import ManagerTask from './managers/task/index';
 import ManagerLocation from './managers/location/index';
 import ManagerBanner from './managers/banner/index';
 
+import StatisticalWeb from './statisticals/web/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -71,6 +72,11 @@ class index extends Component {
     }
     render() {
         const items = [
+            // {
+            //     key: 'statistical', icon: <AiFillDashboard />, label: 'Dashboard', children: [
+            //         { key: 'statistical/web', icon: <AiOutlineFundView />, label: 'Website' },
+            //     ],
+            // },
             {
                 key: 'user_role', icon: <AiFillGithub />, label: 'Người dùng', children: [
                     { key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng' },
@@ -162,6 +168,8 @@ class index extends Component {
                                     <Route exact path={`${url}manager/task`}><ManagerTask /></Route>
                                     <Route exact path={`${url}manager/location`}><ManagerLocation /></Route>
                                     <Route exact path={`${url}manager/banner`}><ManagerBanner /></Route>
+
+                                    {/* <Route exact path={`${url}statistical/web`}><StatisticalWeb /></Route> */}
                                     <Route ><NotFound /></Route>
 
 

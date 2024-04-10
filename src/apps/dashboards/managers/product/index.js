@@ -13,7 +13,6 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type_menu: 1,
             data_selected: [],
             modal_detail: false,
             modal_create: false,
@@ -58,11 +57,11 @@ class index extends Component {
     }
     handle_funtion_menu = async () => {
         let data_selected = this.state.data_selected;
-        if (this.state.type_menu == 1) { await this.props.delete_list_product(data_selected); }
-        if (this.state.type_menu == 2) { await this.props.edit_list_product(data_selected, { is_active: false }); }
-        if (this.state.type_menu == 3) { await this.props.edit_list_product(data_selected, { is_active: true }); }
+        if (this.state.type_menu === 1) { await this.props.delete_list_product(data_selected); }
+        if (this.state.type_menu === 2) { await this.props.edit_list_product(data_selected, { is_active: false }); }
+        if (this.state.type_menu === 3) { await this.props.edit_list_product(data_selected, { is_active: true }); }
         await this.props.get_list_product(this.state.data_filter);
-        if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
+        if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
     }
     onchange_page = async (value, type) => {
         let data_filter = this.state.data_filter;
@@ -147,17 +146,11 @@ class index extends Component {
                     </div>
             },
         ];
-        const items = [
-            { key: 1, label: 'Xóa' },
-            { key: 2, label: 'Khóa' },
-            { key: 3, label: 'Mở' },
-        ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
             this.setState({ data_selected: data_new })
         };
         const row_selection = { data_selected, onChange: onchange_selected };
-        let type_menu = this.state.type_menu;
         return (
             <>
                 <Spin size='large' spinning={this.props.is_loading}>
@@ -186,11 +179,11 @@ class index extends Component {
                                     <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
-                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
+                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {type_menu == 1 && <span>Xóa</span>}
-                                                {type_menu == 2 && <span>Khóa</span>}
-                                                {type_menu == 3 && <span>Mở</span>}
+                                                {type_menu === 1 && <span>Xóa</span>}
+                                                {type_menu === 2 && <span>Khóa</span>}
+                                                {type_menu === 3 && <span>Mở</span>}
                                                 <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

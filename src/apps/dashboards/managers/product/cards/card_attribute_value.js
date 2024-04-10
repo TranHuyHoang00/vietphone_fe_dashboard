@@ -100,14 +100,16 @@ class card_attribute_value extends Component {
                     type_handle={this.props.type_handle}
                     variant_attribute_group={this.props.variant_attribute_group} />
 
-                {data_attribute_value_uniques && data_attribute_value_uniques.map((item, index) => {
-                    return (
-                        <TableAttributeValue key={index}
-                            data_attribute_value_raws={data_attribute_value_raws} data_attribute_value_uniques={item}
-                            handle_delete_atbvl={this.handle_delete_atbvl}
-                            is_edit={this.props.is_edit} />
-                    )
-                })}
+                <div className='overflow-y-auto max-h-[500px]'>
+                    {data_attribute_value_uniques && data_attribute_value_uniques.map((item, index) => {
+                        return (
+                            <TableAttributeValue key={index}
+                                data_attribute_value_raws={data_attribute_value_raws} data_attribute_value_uniques={item}
+                                handle_delete_atbvl={this.handle_delete_atbvl}
+                                is_edit={this.props.is_edit} />
+                        )
+                    })}
+                </div>
             </div>
         );
     }

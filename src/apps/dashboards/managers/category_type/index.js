@@ -108,13 +108,13 @@ class index extends Component {
             let data_selected = this.state.data_selected;
             for (const id of data_selected) {
                 let data;
-                if (this.state.type_menu == 1) { data = await delete_category_type(id); }
+                if (this.state.type_menu === 1) { data = await delete_category_type(id); }
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Thất bại khi xử lý dòng ID=${id}`);
                 }
             }
             await this.load_data();
-            if (this.state.type_menu == 1) { this.setState({ data_selected: [] }); }
+            if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
             message.success(`Thành công xử lý ${data_selected.length} dòng`);
         } catch (e) {
             message.error('Lỗi hệ thống');
@@ -193,9 +193,9 @@ class index extends Component {
                                     <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
-                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
+                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {type_menu == 1 && <span>Xóa</span>}
+                                                {type_menu === 1 && <span>Xóa</span>}
                                                 <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

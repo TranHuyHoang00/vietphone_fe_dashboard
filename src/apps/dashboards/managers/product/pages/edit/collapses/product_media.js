@@ -97,10 +97,10 @@ class product_media extends Component {
                         <div className='space-y-[10px]'>
                             <input id="media_product" type="file" accept="image/*" hidden multiple
                                 onChange={(event) => this.onchange_image(event, 'create')} />
-                            <Dropdown.Button disabled={!is_edit} menu={{ items, onClick: (value) => { this.setState({ type_menu: value.key }) } }}  >
+                            <Dropdown.Button disabled={!is_edit} menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
                                 <div>
-                                    {type_menu == 1 && <label htmlFor="media_product">Thêm ảnh</label>}
-                                    {type_menu == 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
+                                    {type_menu === 1 && <label htmlFor="media_product">Thêm ảnh</label>}
+                                    {type_menu === 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
                                 </div>
                             </Dropdown.Button>
                             <Carousel responsive={responsive} swipeable={true} draggable={true}

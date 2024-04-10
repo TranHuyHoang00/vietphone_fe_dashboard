@@ -21,7 +21,7 @@ class modal_create extends Component {
         this.props.get_list_location({ page: 1, limit: 100, search: '' });
     }
     validation = (data) => {
-        if (this.state.data_medias.length == 0) {
+        if (this.state.data_medias.length === 0) {
             return { mess: "Không được bỏ trống 'Hình ảnh' ", code: 1 };
         }
         if (!data.name) {

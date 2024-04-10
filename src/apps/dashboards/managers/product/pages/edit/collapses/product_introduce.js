@@ -51,10 +51,9 @@ class product_introduce extends Component {
         let data_variant_attribute_groups = this.props.data_variant_attribute_groups;
         return (
             <Collapse defaultActiveKey={['1']} >
-                <Collapse.Panel header="THông tin sản phẩm" key="1">
+                <Collapse.Panel header="Thông tin sản phẩm" key="1">
                     <div className='space-y-[5px]'>
                         {text_line_1_3('Tên sản phẩm', data_product.name)}
-
                         <div className='flex items-center gap-[5px]'>
                             <div className='w-1/3 flex items-center justify-between'>
                                 <span>Thương hiệu</span>
@@ -168,7 +167,7 @@ class product_introduce extends Component {
                             </div>
                             <div className='w-2/3'>
                                 <Select disabled={!this.props.is_edit} style={{ width: '100%' }} value={this.props.data_product.is_active}
-                                    onChange={(event) => this.props.on_change_product(event, 'is_active', 'select')}
+                                    onChange={(event) => this.props.on_change_product(event, 'is_active')}
                                     options={[
                                         { value: true, label: 'Mở' },
                                         { value: false, label: 'Khóa' },

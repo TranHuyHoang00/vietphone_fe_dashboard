@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Typography, DatePicker } from 'antd';
+import { Typography } from 'antd';
 class form_date extends Component {
     constructor(props) {
         super(props);

@@ -15,7 +15,7 @@ export * from './flash_sale_item_types';
 export * from './task_types';
 export * from './location_types';
 export * from './banner_types';
-
+export * from './product_page';
 
 
 
