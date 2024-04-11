@@ -15,6 +15,7 @@ const initialState = {
         tag: '',
         is_active: '',
         category: '',
+        has_page: '',
     },
 }
 

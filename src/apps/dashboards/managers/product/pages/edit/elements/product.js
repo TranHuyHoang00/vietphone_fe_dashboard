@@ -28,8 +28,10 @@ class product extends Component {
             if (!data_product_page.id) {
                 data_product_page.product = data_product.id;
                 await this.props.create_product_page(data_product_page);
+                this.props.get_product_page(data_product.id);
             } else {
                 await this.props.edit_product_page(data_product_page.id, data_product_page);
+                this.props.get_product_page(data_product.id);
             }
             if (this.state.data_medias.length !== 0) {
                 let media = await this.handle_create_media(this.state.data_medias);
@@ -113,6 +115,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
+
         get_product: (id) => dispatch(actions.get_product_redux(id)),
         click_edit_product: (value) => dispatch(actions.click_edit_product_redux(value)),
         edit_product: (id, data) => dispatch(actions.edit_product_redux(id, data)),

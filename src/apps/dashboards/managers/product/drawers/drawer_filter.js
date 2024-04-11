@@ -27,6 +27,14 @@ class drawer_filter extends Component {
                             <Radio.Button value={false}>Khóa</Radio.Button>
                         </Radio.Group>
                     </div>
+                    <div className='space-y-[2px]'>
+                        <Typography.Text strong>Website</Typography.Text>
+                        <Radio.Group value={data_filter.has_page} onChange={(event) => this.props.onchange_page(event.target.value, 'has_page')} className='flex'>
+                            <Radio.Button value="">Tất cả</Radio.Button>
+                            <Radio.Button value={true}>Đã đăng</Radio.Button>
+                            <Radio.Button value={false}>Chưa đăng</Radio.Button>
+                        </Radio.Group>
+                    </div>
                     <FormSelectInput name={'Loại sản phẩm'} variable={'category'} value={data_filter.category}
                         important={false} width={'100%'}
                         options={data_categorys.map((item) => ({

@@ -72,6 +72,7 @@ class index extends Component {
         if (type === 'tag') { data_filter.tag = value; data_filter.page = 1; }
         if (type === 'is_active') { data_filter.is_active = value; data_filter.page = 1; }
         if (type === 'category') { data_filter.category = value; data_filter.page = 1; }
+        if (type === 'has_page') { data_filter.has_page = value; data_filter.page = 1; }
 
         this.setState({ data_filter: data_filter })
         await this.props.get_list_product(data_filter);
@@ -135,7 +136,18 @@ class index extends Component {
                     </div>,
             },
             {
-                title: 'Status', dataIndex: 'is_active', width: 70,
+                title: 'Website', dataIndex: 'has_page', width: 70,
+                render: (has_page) =>
+                    <div className='flex items-center justify-start'>
+                        {has_page ?
+                            <Tag color='green'>Đã đăng</Tag>
+                            :
+                            <Tag color='red'>Chưa đăng</Tag>
+                        }
+                    </div>
+            },
+            {
+                title: 'Status', dataIndex: 'is_active', width: 70, responsive: ['lg'],
                 render: (is_active) =>
                     <div className='flex items-center justify-start'>
                         {is_active ?
