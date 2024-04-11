@@ -32,7 +32,7 @@ class modal_edit extends Component {
             }
             await this.props.edit_tag(data_tag.id, data_tag);
             let is_result = this.props.is_result;
-            if (is_result === true) {
+            if (is_result) {
                 await this.props.get_list_tag(this.props.data_filter);
                 this.props.open_modal("edit", false);
             }
@@ -60,7 +60,7 @@ class modal_edit extends Component {
 
                         <FormImage name={'Ảnh'} variable={'image'} value={data_tag.image}
                             important={true}
-                            htmlFor={'load_file_edit'} width={200} height={100}
+                            htmlFor={'load_file_edit'} width={100} height={100}
                             onchange_image={this.onchange_image} />
 
                         <FormInput name={'Tên tag'} variable={'name'} value={data_tag.name}

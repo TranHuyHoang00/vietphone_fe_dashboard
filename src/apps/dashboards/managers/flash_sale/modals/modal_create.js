@@ -33,9 +33,9 @@ class modal_create extends Component {
         if (result.code === 0) {
             await this.props.create_flash_sale(this.props.data_flash_sale);
             let is_result = this.props.is_result;
-            if (is_result === true) {
-                await this.props.get_list_flash_sale(this.props.data_filter);
+            if (is_result) {
                 this.props.open_modal("create", false);
+                await this.props.get_list_flash_sale(this.props.data_filter);
             }
         } else {
             message.error(result.mess);

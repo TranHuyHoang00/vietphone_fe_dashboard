@@ -125,7 +125,7 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_detail === true &&
+                {this.state.modal_detail &&
                     <ModalDetail modal_detail={this.state.modal_detail}
                         open_modal={this.open_modal} />}
             </>

@@ -11,6 +11,7 @@ class product_page extends Component {
         }
     }
     async componentDidMount() {
+        this.props.set_data_product_page({});
         if (this.props.match && this.props.match.params) {
             let product_id = this.props.match.params.id;
             if (product_id) { this.props.get_product_page(product_id); }
@@ -72,6 +73,8 @@ const mapDispatchToProps = dispatch => {
     return {
         get_product_page: (id) => dispatch(actions.get_product_page_redux(id)),
         on_change_product_page: (id, value) => dispatch(actions.on_change_product_page_redux(id, value)),
+        set_data_product_page: (id) => dispatch(actions.set_data_product_page_redux(id)),
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(product_page));

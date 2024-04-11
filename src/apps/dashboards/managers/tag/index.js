@@ -31,9 +31,9 @@ class index extends Component {
         this.props.get_list_tag(this.state.data_filter);
     }
     open_modal = async (name, value, id) => {
+        this.props.set_data_tag({});
         if (name === 'create') {
             this.setState({ modal_create: value });
-            this.props.set_data_tag({});
         }
         if (name === 'detail') {
             if (id === undefined) {
@@ -81,9 +81,11 @@ class index extends Component {
             },
             {
                 title: 'Icon', dataIndex: 'icon', responsive: ['lg'],
+                sorter: (a, b) => a.icon.localeCompare(b.icon),
             },
             {
                 title: 'Mô tả', dataIndex: 'description', responsive: ['xl'],
+                sorter: (a, b) => a.description.localeCompare(b.description),
             },
             {
                 title: 'Ảnh', dataIndex: 'image', responsive: ['md'], width: 60,
@@ -93,7 +95,7 @@ class index extends Component {
                 title: 'Status', dataIndex: 'is_active', width: 70, responsive: ['md'],
                 render: (is_active) =>
                     <div className='flex items-center justify-start'>
-                        {is_active === true ?
+                        {is_active ?
                             <Tag color='green'>Mở</Tag>
                             :
                             <Tag color='red'>Khóa</Tag>
@@ -168,14 +170,17 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                <ModalCreate modal_create={this.state.modal_create}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} />
-                <ModalDetail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} />
-                <ModalEdit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} />
+                {this.state.modal_create &&
+                    <ModalCreate modal_create={this.state.modal_create}
+                        open_modal={this.open_modal}
+                        data_filter={this.state.data_filter} />}
+                {this.state.modal_detail &&
+                    <ModalDetail modal_detail={this.state.modal_detail}
+                        open_modal={this.open_modal} />}
+                {this.state.modal_edit &&
+                    <ModalEdit modal_edit={this.state.modal_edit}
+                        open_modal={this.open_modal}
+                        data_filter={this.state.data_filter} />}
             </>
         );
     }

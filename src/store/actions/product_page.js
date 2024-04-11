@@ -28,7 +28,6 @@ export const get_product_page_redux = (id) => {
                 dispatch(get_product_page_success(data.data.data));
             } else {
                 dispatch(product_page_faided());
-                message.error('Lỗi');
             }
         } catch (error) {
             dispatch(product_page_faided());
@@ -43,10 +42,8 @@ export const create_product_page_redux = (data_product_page) => {
             let data = await create_product_page(data_product_page);
             if (data && data.data && data.data.success === 1) {
                 dispatch(product_page_success());
-                message.success('Thành công');
             } else {
                 dispatch(product_page_faided());
-                message.error('Lỗi');
             }
         } catch (error) {
             dispatch(product_page_faided());
@@ -97,10 +94,8 @@ export const edit_product_page_redux = (id, data_product_page) => {
             let data = await edit_product_page(id, data_product_page);
             if (data && data.data && data.data.success === 1) {
                 dispatch(product_page_success());
-                message.success('Thành công');
             } else {
                 dispatch(product_page_faided());
-                message.error('Lỗi');
             }
         } catch (error) {
             dispatch(product_page_faided());

@@ -104,7 +104,7 @@ class index extends Component {
                                         }>
                                         {this.state.sync_product === null && <></>}
                                         {this.state.sync_product === false && <>{failed('sản phẩm')}</>}
-                                        {this.state.sync_product === true && <> {suscess('sản phẩm', this.state.data_sync_product)}</>}
+                                        {this.state.sync_product && <> {suscess('sản phẩm', this.state.data_sync_product)}</>}
 
                                     </Card>
                                 </Spin>

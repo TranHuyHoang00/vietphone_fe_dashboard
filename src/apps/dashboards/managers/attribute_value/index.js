@@ -31,9 +31,9 @@ class index extends Component {
         this.props.get_list_attribute_value(this.state.data_filter);
     }
     open_modal = async (name, value, id) => {
+        this.props.set_data_attribute_value({});
         if (name === 'create') {
             this.setState({ modal_create: value });
-            this.props.set_data_attribute_value({});
         }
         if (name === 'detail') {
             if (id === undefined) {
@@ -149,14 +149,17 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                <ModalCreate modal_create={this.state.modal_create}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} />
-                <ModalDetail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} />
-                <ModalEdit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} />
+                {this.state.modal_create &&
+                    <ModalCreate modal_create={this.state.modal_create}
+                        open_modal={this.open_modal}
+                        data_filter={this.state.data_filter} />}
+                {this.state.modal_detail &&
+                    <ModalDetail modal_detail={this.state.modal_detail}
+                        open_modal={this.open_modal} />}
+                {this.state.modal_edit &&
+                    <ModalEdit modal_edit={this.state.modal_edit}
+                        open_modal={this.open_modal}
+                        data_filter={this.state.data_filter} />}
             </>
         );
     }

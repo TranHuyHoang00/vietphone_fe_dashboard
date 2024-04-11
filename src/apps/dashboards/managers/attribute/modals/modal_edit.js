@@ -14,6 +14,7 @@ class modal_edit extends Component {
         }
     }
     async componentDidMount() {
+        this.props.get_list_group_attribute({ page: 1, limit: 100, search: '' });
     }
     validation = (data) => {
         if (!data.name) {
@@ -27,9 +28,9 @@ class modal_edit extends Component {
             let data_attribute = this.props.data_attribute;
             await this.props.edit_attribute(data_attribute.id, data_attribute);
             let is_result = this.props.is_result;
-            if (is_result === true) {
-                await this.props.get_list_attribute(this.props.data_filter);
+            if (is_result) {
                 this.props.open_modal("edit", false);
+                await this.props.get_list_attribute(this.props.data_filter);
             }
         } else {
             message.error(result.mess);

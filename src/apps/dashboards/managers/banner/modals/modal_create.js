@@ -15,6 +15,7 @@ class modal_create extends Component {
         this.state = {
             data_medias: [],
             data_media_ids: [],
+            is_loading_media: false,
         }
     }
     async componentDidMount() {
@@ -37,15 +38,16 @@ class modal_create extends Component {
         if (result.code === 0) {
             let data_banner = this.props.data_banner;
             if (this.state.data_medias.length !== 0) {
+                this.setState({ is_loading_media: true });
                 let media = await this.handle_create_media(this.state.data_medias);
                 data_banner.media = media;
             }
             await this.props.create_banner(data_banner);
             let is_result = this.props.is_result;
-            if (is_result === true) {
+            if (is_result) {
+                this.props.open_modal("create", false);
                 this.setState({ data_medias: [], data_media_ids: [] })
                 await this.props.get_list_banner(this.props.data_filter);
-                this.props.open_modal("create", false);
             }
         } else {
             message.error(result.mess);
@@ -82,6 +84,7 @@ class modal_create extends Component {
                     }
                 }
             }
+            this.setState({ is_loading_media: false });
             return [...data_media_ids_new, ...data_media_ids];
         } catch (e) {
             message.error('Lỗi hệ thống');
@@ -90,6 +93,7 @@ class modal_create extends Component {
     render() {
         let data_banner = this.props.data_banner;
         let is_loading = this.props.is_loading;
+        let is_loading_media = this.state.is_loading_media;
         let data_locations = this.props.data_locations;
         let data_medias = this.state.data_medias;
         return (
@@ -101,7 +105,7 @@ class modal_create extends Component {
                     <ModalFooter open_modal={this.props.open_modal} type={'create'}
                         is_loading={is_loading} handle_funtion={this.handle_create} />
                 ]}>
-                <Spin spinning={is_loading}>
+                <Spin spinning={is_loading || is_loading_media}>
                     <div className="space-y-[10px]">
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>

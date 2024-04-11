@@ -27,9 +27,9 @@ class modal_create extends Component {
         if (result.code === 0) {
             await this.props.create_attribute(this.props.data_attribute);
             let is_result = this.props.is_result;
-            if (is_result === true) {
-                await this.props.get_list_attribute(this.props.data_filter);
+            if (is_result) {
                 this.props.open_modal("create", false);
+                await this.props.get_list_attribute(this.props.data_filter);
             }
         } else {
             message.error(result.mess);
@@ -50,10 +50,6 @@ class modal_create extends Component {
                 ]}>
                 <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
-
-                        <FormInput name={'CODE'} variable={'code'} value={data_attribute.code}
-                            important={false}
-                            handle_onchange_input={this.props.on_change_attribute} />
 
                         <FormInput name={'Tên thông số'} variable={'name'} value={data_attribute.name}
                             important={true}

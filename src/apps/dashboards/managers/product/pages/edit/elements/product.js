@@ -24,7 +24,14 @@ class product extends Component {
         let data_product = this.props.data_product;
         data_product.description = this.state.description;
         if (this.props.is_edit === false) { this.props.click_edit_product() };
-        if (this.props.is_edit === true) {
+        if (this.props.is_edit) {
+            let data_product_page = this.props.data_product_page;
+            if (!data_product_page.id) {
+                data_product_page.product = data_product.id;
+                await this.props.create_product_page(data_product_page);
+            } else {
+                await this.props.edit_product_page(data_product_page.id, data_product_page);
+            }
             if (this.state.data_medias.length !== 0) {
                 let media = await this.handle_create_media(this.state.data_medias);
                 data_product.media = media;
@@ -66,7 +73,7 @@ class product extends Component {
                 <div className='flex items-center justify-between'>
                     <Typography.Title level={4}>{this.props.data_product.name}</Typography.Title>
                     <Space>
-                        {this.props.is_edit === true &&
+                        {this.props.is_edit &&
                             <Button onClick={() => this.props.click_edit_product()}
                                 className='bg-[#e94138] text-white'>
                                 Hủy
@@ -102,6 +109,7 @@ const mapStateToProps = state => {
         is_loading: state.product.is_loading,
         data_product: state.product.data_product,
         is_edit: state.product.is_edit,
+        data_product_page: state.product_page.data_product_page,
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -109,6 +117,11 @@ const mapDispatchToProps = dispatch => {
         get_product: (id) => dispatch(actions.get_product_redux(id)),
         click_edit_product: (value) => dispatch(actions.click_edit_product_redux(value)),
         edit_product: (id, data) => dispatch(actions.edit_product_redux(id, data)),
+
+        create_product_page: (data) => dispatch(actions.create_product_page_redux(data)),
+        edit_product_page: (id, data) => dispatch(actions.edit_product_page_redux(id, data)),
+        get_product_page: (id) => dispatch(actions.get_product_page_redux(id)),
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(product));

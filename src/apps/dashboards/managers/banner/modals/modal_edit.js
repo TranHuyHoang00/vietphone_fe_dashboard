@@ -16,6 +16,7 @@ class modal_edit extends Component {
             data_medias: [],
             data_media_ids: [],
             data_banner: {},
+            is_loading_media: false,
         }
     }
     async componentDidMount() {
@@ -25,6 +26,7 @@ class modal_edit extends Component {
             this.props.get_list_location({ page: 1, limit: 100, search: '' });
             this.setState({ data_media_ids: this.props.data_banner.media });
             if (this.props.data_banner.media && this.props.data_banner.media.length !== 0) {
+                this.setState({ is_loading_media: true });
                 await this.get_list_media(this.props.data_banner.media);
             }
         }
@@ -35,7 +37,7 @@ class modal_edit extends Component {
             let data = await this.get_media(item);
             data_medias.push(data);
         }
-        this.setState({ data_medias: data_medias });
+        this.setState({ data_medias: data_medias, is_loading_media: false, });
     }
     get_media = async (id) => {
         try {
@@ -69,10 +71,10 @@ class modal_edit extends Component {
             }
             await this.props.edit_banner(data_banner.id, data_banner);
             let is_result = this.props.is_result;
-            if (is_result === true) {
+            if (is_result) {
+                this.props.open_modal("edit", false);
                 this.setState({ data_medias: [], data_media_ids: [] })
                 await this.props.get_list_banner(this.props.data_filter);
-                this.props.open_modal("edit", false);
             }
         } else {
             message.error(result.mess);
@@ -117,6 +119,7 @@ class modal_edit extends Component {
     render() {
         let data_banner = this.props.data_banner;
         let is_loading = this.props.is_loading;
+        let is_loading_media = this.state.is_loading_media;
         let data_locations = this.props.data_locations;
         let data_medias = this.state.data_medias;
 
@@ -128,7 +131,7 @@ class modal_edit extends Component {
                     <ModalFooter open_modal={this.props.open_modal} type={'edit'}
                         is_loading={is_loading} handle_funtion={this.handle_edit} />
                 ]}>
-                <Spin spinning={is_loading}>
+                <Spin spinning={is_loading || is_loading_media}>
                     <div className="space-y-[10px]">
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>

@@ -138,7 +138,7 @@ class index extends Component {
                 title: 'Status', dataIndex: 'is_active', width: 70,
                 render: (is_active) =>
                     <div className='flex items-center justify-start'>
-                        {is_active === true ?
+                        {is_active ?
                             <Tag color='green'>Mở</Tag>
                             :
                             <Tag color='red'>Khóa</Tag>
@@ -202,11 +202,13 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                <DrawerFilter drawer_filter={this.state.drawer_filter}
-                    open_drawer={this.open_drawer} data_filter={this.state.data_filter}
-                    onchange_page={this.onchange_page}
-                    data_brands={this.props.data_brands} data_tags={this.props.data_tags}
-                    data_categorys={this.props.data_categorys} />
+                {this.state.drawer_filter &&
+                    <DrawerFilter drawer_filter={this.state.drawer_filter}
+                        open_drawer={this.open_drawer} data_filter={this.state.data_filter}
+                        onchange_page={this.onchange_page}
+                        data_brands={this.props.data_brands} data_tags={this.props.data_tags}
+                        data_categorys={this.props.data_categorys} />
+                }
             </>
         );
     }

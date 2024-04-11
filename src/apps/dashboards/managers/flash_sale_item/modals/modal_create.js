@@ -32,7 +32,7 @@ class modal_create extends Component {
                 await this.props.create_list_flash_sale_item(data_flash_sale.id, data_selected);
             }
         }
-        if (this.props.is_result === true) {
+        if (this.props.is_result) {
             await this.props.get_flash_sale(data_flash_sale.id);
             this.props.open_modal("create", false);
             if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }

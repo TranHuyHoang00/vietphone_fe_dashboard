@@ -26,9 +26,9 @@ class modal_edit extends Component {
             let data_group_attribute = this.props.data_group_attribute;
             await this.props.edit_group_attribute(data_group_attribute.id, data_group_attribute);
             let is_result = this.props.is_result;
-            if (is_result === true) {
-                await this.props.get_list_group_attribute(this.props.data_filter);
+            if (is_result) {
                 this.props.open_modal("edit", false);
+                await this.props.get_list_group_attribute(this.props.data_filter);
             }
         } else {
             message.error(result.mess);

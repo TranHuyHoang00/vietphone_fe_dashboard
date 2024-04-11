@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Modal, Button } from 'antd';
+import { Modal, Button, Spin } from 'antd';
 import { text_line_1_3, image_line_1_3 } from '../../../components/displays/data_line_1_3';
 
 class modal_detail extends Component {
@@ -14,6 +14,7 @@ class modal_detail extends Component {
     }
     render() {
         let data_tag = this.props.data_tag;
+        let is_loading = this.props.is_loading;
         return (
             <Modal title="CHI TIẾT" open={this.props.modal_detail}
                 onCancel={() => this.props.open_modal("detail", false)} width={400}
@@ -25,13 +26,15 @@ class modal_detail extends Component {
                         </Button>
                     </>
                 ]}>
-                <div className='border-t py-[10px] space-y-[5px]'>
-                    {image_line_1_3('Ảnh', data_tag.image, 50, 50)}
-                    {text_line_1_3('Tên danh mục', data_tag.name)}
-                    {text_line_1_3('Icon', data_tag.icon)}
-                    {text_line_1_3('Mô tả', data_tag.description)}
-                    {text_line_1_3('Trạng thái', (data_tag && data_tag.is_active === true ? 'Mở' : 'Khóa'))}
-                </div>
+                <Spin spinning={is_loading}>
+                    <div className='border-t py-[10px] space-y-[5px]'>
+                        {image_line_1_3('Ảnh', data_tag.image, 50, 50)}
+                        {text_line_1_3('Tên danh mục', data_tag.name)}
+                        {text_line_1_3('Icon', data_tag.icon)}
+                        {text_line_1_3('Mô tả', data_tag.description)}
+                        {text_line_1_3('Trạng thái', (data_tag && data_tag.is_active ? 'Mở' : 'Khóa'))}
+                    </div>
+                </Spin>
             </Modal>
         );
     }
@@ -39,6 +42,7 @@ class modal_detail extends Component {
 }
 const mapStateToProps = state => {
     return {
+        is_loading: state.tag.is_loading,
         data_tag: state.tag.data_tag,
     };
 };

@@ -156,12 +156,12 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                <ModalCreate modal_create={this.state.modal_create}
-                    open_modal={this.open_modal} />
-                {/* <ModalDetail modal_detail={this.state.modal_detail}
-                    open_modal={this.open_modal} /> */}
-                <ModalEdit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal} />
+                {this.state.modal_create &&
+                    <ModalCreate modal_create={this.state.modal_create}
+                        open_modal={this.open_modal} />}
+                {this.state.modal_edit &&
+                    <ModalEdit modal_edit={this.state.modal_edit}
+                        open_modal={this.open_modal} />}
             </>
         );
     }

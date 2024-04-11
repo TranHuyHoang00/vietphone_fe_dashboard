@@ -32,9 +32,9 @@ class index extends Component {
         this.props.get_list_banner(this.state.data_filter);
     }
     open_modal = async (name, value, id) => {
+        this.props.set_data_banner({});
         if (name === 'create') {
             this.setState({ modal_create: value });
-            this.props.set_data_banner({});
         }
         if (name === 'detail') {
             if (id === undefined) {
@@ -166,12 +166,14 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                <ModalCreate modal_create={this.state.modal_create}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} />
-                <ModalEdit modal_edit={this.state.modal_edit}
-                    open_modal={this.open_modal}
-                    data_filter={this.state.data_filter} />
+                {this.state.modal_create &&
+                    <ModalCreate modal_create={this.state.modal_create}
+                        open_modal={this.open_modal}
+                        data_filter={this.state.data_filter} />}
+                {this.state.modal_edit &&
+                    <ModalEdit modal_edit={this.state.modal_edit}
+                        open_modal={this.open_modal}
+                        data_filter={this.state.data_filter} />}
             </>
         );
     }

@@ -13,6 +13,7 @@ class modal_edit extends Component {
         }
     }
     async componentDidMount() {
+        this.props.get_list_attribute({ page: 1, limit: 100, search: '' })
     }
     validation = (data) => {
         if (!data.name) {
@@ -26,9 +27,9 @@ class modal_edit extends Component {
             let data_variant_attribute_group = this.props.data_variant_attribute_group;
             await this.props.edit_variant_attribute_group(data_variant_attribute_group.id, data_variant_attribute_group);
             let is_result = this.props.is_result;
-            if (is_result === true) {
-                await this.props.get_list_variant_attribute_group(this.props.data_filter);
+            if (is_result) {
                 this.props.open_modal("edit", false);
+                await this.props.get_list_variant_attribute_group(this.props.data_filter);
             }
         } else {
             message.error(result.mess);

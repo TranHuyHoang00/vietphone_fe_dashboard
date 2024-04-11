@@ -76,7 +76,7 @@ class index extends Component {
             {
                 title: 'Task_name', dataIndex: 'task_name',
                 render: (task_name) => <Typography.Text strong className='text-[#0574b8]'>{task_name}</Typography.Text>,
-                sorter: (a, b) => a.task_name.localeCompare(b.namtask_namee),
+                sorter: (a, b) => a.task_name.localeCompare(b.task_name),
             },
             {
                 title: 'Ngày tạo', dataIndex: 'date_done', responsive: ['lg'],
@@ -85,6 +85,8 @@ class index extends Component {
             },
             {
                 title: 'Trạng thái', dataIndex: 'status', responsive: ['md'],
+                sorter: (a, b) => a.status.localeCompare(b.status),
+
             },
             {
                 title: 'HĐ', width: 80,

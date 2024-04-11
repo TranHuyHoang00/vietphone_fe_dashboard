@@ -32,9 +32,9 @@ class modal_edit extends Component {
             }
             await this.props.edit_category(data_category.id, data_category);
             let is_result = this.props.is_result;
-            if (is_result === true) {
-                await this.props.get_list_category(this.props.data_filter);
+            if (is_result) {
                 this.props.open_modal("edit", false);
+                await this.props.get_list_category(this.props.data_filter);
             }
         } else {
             message.error(result.mess);

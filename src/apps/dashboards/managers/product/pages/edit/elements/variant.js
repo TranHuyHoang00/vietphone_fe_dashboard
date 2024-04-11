@@ -70,7 +70,7 @@ class variant extends Component {
     handle_edit_variant = async () => {
         let data_variant = this.props.data_variant;
         if (this.props.is_edit === false) { this.props.click_edit_variant() };
-        if (this.props.is_edit === true) {
+        if (this.props.is_edit) {
             if (this.state.data_medias.length !== 0) {
                 let media = await this.handle_create_media(this.state.data_medias);
                 data_variant.media = media;
@@ -86,7 +86,7 @@ class variant extends Component {
                 <div className=" space-y-[10px]">
                     <div className='flex items-center justify-end'>
                         <Space>
-                            {this.props.is_edit === true &&
+                            {this.props.is_edit &&
                                 <Button onClick={() => this.props.click_edit_variant()}
                                     className='bg-[#e94138] text-white'>
                                     Hủy

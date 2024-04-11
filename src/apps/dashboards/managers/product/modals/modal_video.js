@@ -57,7 +57,7 @@ class modal_vide0 extends Component {
                             <Input onChange={(event) => this.handle_onchange_input(event)} />
                             <Button onClick={() => this.onclick_show_video()}>Xem trước</Button>
                         </div>
-                        {this.state.is_hide_video === true &&
+                        {this.state.is_hide_video &&
                             <div className='flex items-center justify-center'>
                                 <iframe title='video_product'
                                     width="100%"

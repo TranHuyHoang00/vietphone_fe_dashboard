@@ -34,9 +34,9 @@ class modal_edit extends Component {
             let data_flash_sale = this.props.data_flash_sale;
             await this.props.edit_flash_sale(data_flash_sale.id, data_flash_sale);
             let is_result = this.props.is_result;
-            if (is_result === true) {
-                await this.props.get_list_flash_sale(this.props.data_filter);
+            if (is_result) {
                 this.props.open_modal("edit", false);
+                await this.props.get_list_flash_sale(this.props.data_filter);
             }
         } else {
             message.error(result.mess);

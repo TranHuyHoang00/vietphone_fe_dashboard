@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher, AiFillBehanceSquare
-    , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillDashboard, AiOutlineFundView,
+    , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment
 } from "react-icons/ai";
@@ -33,8 +33,6 @@ import ManagerFlashSaleItem from './managers/flash_sale_item/index';
 import ManagerTask from './managers/task/index';
 import ManagerLocation from './managers/location/index';
 import ManagerBanner from './managers/banner/index';
-
-import StatisticalWeb from './statisticals/web/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -72,11 +70,6 @@ class index extends Component {
     }
     render() {
         const items = [
-            // {
-            //     key: 'statistical', icon: <AiFillDashboard />, label: 'Dashboard', children: [
-            //         { key: 'statistical/web', icon: <AiOutlineFundView />, label: 'Website' },
-            //     ],
-            // },
             {
                 key: 'user_role', icon: <AiFillGithub />, label: 'Người dùng', children: [
                     { key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng' },
@@ -128,7 +121,7 @@ class index extends Component {
         return (
 
             <>
-                {logged_in_db === true ?
+                {logged_in_db ?
                     <Layout hasSider style={{ minHeight: '100vh', }} >
                         <Layout.Sider className='overflow-y-auto h-screen md:block hidden'
                             collapsible collapsed={this.state.collapsed} breakpoint="lg"
@@ -168,8 +161,6 @@ class index extends Component {
                                     <Route exact path={`${url}manager/task`}><ManagerTask /></Route>
                                     <Route exact path={`${url}manager/location`}><ManagerLocation /></Route>
                                     <Route exact path={`${url}manager/banner`}><ManagerBanner /></Route>
-
-                                    {/* <Route exact path={`${url}statistical/web`}><StatisticalWeb /></Route> */}
                                     <Route ><NotFound /></Route>
 
 

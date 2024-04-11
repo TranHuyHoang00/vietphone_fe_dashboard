@@ -16,6 +16,7 @@ export * from './task_types';
 export * from './location_types';
 export * from './banner_types';
 export * from './product_page';
+export * from './media_base_types';
 
 
 
