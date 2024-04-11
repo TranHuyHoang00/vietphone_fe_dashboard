@@ -106,7 +106,7 @@ class variant extends Component {
                         <div className='col-span-2 space-y-[10px]'>
                             <div className='md:grid grid-cols-3 gap-[10px] space-y-[10px] md:space-y-0'>
                                 <div className='col-span-2 '>
-                                    <VariantIntroduce data_variant={this.props.data_variant} />
+                                    <VariantIntroduce />
                                 </div>
                                 <div>
                                     <VariantMedia data_medias={this.props.data_variant.media}

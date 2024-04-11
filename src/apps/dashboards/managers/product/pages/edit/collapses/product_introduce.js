@@ -54,6 +54,7 @@ class product_introduce extends Component {
                 <Collapse.Panel header="Thông tin sản phẩm" key="1">
                     <div className='space-y-[5px]'>
                         {text_line_1_3('Tên sản phẩm', data_product.name)}
+
                         <div className='flex items-center gap-[5px]'>
                             <div className='w-1/3 flex items-center justify-between'>
                                 <span>Thương hiệu</span>
@@ -68,8 +69,8 @@ class product_introduce extends Component {
                                         value: item.id,
                                     }))}
                                     disabled_select={!this.props.is_edit}
-                                    disabled_button={true}
-                                    disabled_search={true}
+                                    disabled_button={false}
+                                    disabled_search={false}
 
                                     on_search={this.on_search}
                                     variable_select={'product_brand'}
@@ -96,8 +97,8 @@ class product_introduce extends Component {
                                         value: item.id,
                                     }))}
                                     disabled_select={!this.props.is_edit}
-                                    disabled_button={true}
-                                    disabled_search={true}
+                                    disabled_button={false}
+                                    disabled_search={false}
                                     on_search={this.on_search}
                                     variable_select={'tags'}
                                     on_change_select={this.props.on_change_product}
@@ -122,8 +123,8 @@ class product_introduce extends Component {
                                         value: item.id,
                                     }))}
                                     disabled_select={!this.props.is_edit}
-                                    disabled_button={true}
-                                    disabled_search={true}
+                                    disabled_button={false}
+                                    disabled_search={false}
                                     on_search={this.on_search}
                                     variable_select={'categories'}
                                     on_change_select={this.props.on_change_product}
@@ -198,22 +199,22 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         get_list_brand: (data_filter) => dispatch(actions.get_list_brand_redux(data_filter)),
-        on_change_brand: (event, id, type) => dispatch(actions.on_change_brand_redux(event, id, type)),
+        on_change_brand: (event, id,) => dispatch(actions.on_change_brand_redux(event, id,)),
         create_brand: (data) => dispatch(actions.create_brand_redux(data)),
 
         get_list_tag: (data_filter) => dispatch(actions.get_list_tag_redux(data_filter)),
-        on_change_tag: (event, id, type) => dispatch(actions.on_change_tag_redux(event, id, type)),
+        on_change_tag: (event, id,) => dispatch(actions.on_change_tag_redux(event, id,)),
         create_tag: (data) => dispatch(actions.create_tag_redux(data)),
 
         get_list_category: (data_filter) => dispatch(actions.get_list_category_redux(data_filter)),
-        on_change_category: (event, id, type) => dispatch(actions.on_change_category_redux(event, id, type)),
+        on_change_category: (event, id,) => dispatch(actions.on_change_category_redux(event, id,)),
         create_category: (data) => dispatch(actions.create_category_redux(data)),
 
         get_list_variant_attribute_group: (data_filter) => dispatch(actions.get_list_variant_attribute_group_redux(data_filter)),
-        on_change_variant_attribute_group: (event, id, type) => dispatch(actions.on_change_variant_attribute_group_redux(event, id, type)),
+        on_change_variant_attribute_group: (event, id,) => dispatch(actions.on_change_variant_attribute_group_redux(event, id,)),
         create_variant_attribute_group: (data) => dispatch(actions.create_variant_attribute_group_redux(data)),
 
-        on_change_product: (event, id, type) => dispatch(actions.on_change_product_redux(event, id, type)),
+        on_change_product: (event, id,) => dispatch(actions.on_change_product_redux(event, id,)),
 
     };
 };

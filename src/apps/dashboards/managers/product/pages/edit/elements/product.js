@@ -16,7 +16,6 @@ class product extends Component {
         this.state = {
             data_medias: [],
             data_media_ids: [],
-
             description: '',
         }
     }

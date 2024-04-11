@@ -25,6 +25,7 @@ class variant_overview extends Component {
                                         <Radio value={index}></Radio>
                                         <div>
                                             <Typography.Text strong>{item.sku}</Typography.Text><br />
+                                            <Typography.Text strong>{item.name}</Typography.Text><br />
                                             <Typography.Text type='secondary'>Số lượng: {item.quantity} cái</Typography.Text>
                                         </div>
                                     </div>
