@@ -16,7 +16,6 @@ class modal_edit extends Component {
             data_medias: [],
             data_media_ids: [],
             data_banner: {},
-            is_loading_media: false,
         }
     }
     async componentDidMount() {
@@ -26,7 +25,6 @@ class modal_edit extends Component {
             this.props.get_list_location({ page: 1, limit: 100, search: '' });
             this.setState({ data_media_ids: this.props.data_banner.media });
             if (this.props.data_banner.media && this.props.data_banner.media.length !== 0) {
-                this.setState({ is_loading_media: true });
                 await this.get_list_media(this.props.data_banner.media);
             }
         }
@@ -37,7 +35,7 @@ class modal_edit extends Component {
             let data = await this.get_media(item);
             data_medias.push(data);
         }
-        this.setState({ data_medias: data_medias, is_loading_media: false, });
+        this.setState({ data_medias: data_medias });
     }
     get_media = async (id) => {
         try {
@@ -87,7 +85,7 @@ class modal_edit extends Component {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
                 let image_new = await image_to_base64(event, i);
-                data_medias.push({ image: image_new, media_type: 'image', alt: this.props.data_banner.name });
+                data_medias.push({ image: image_new, media_type: 'image', name: this.props.data_banner.name, alt: this.props.data_banner.name });
             }
         }
         if (type === 'delete') {
@@ -119,7 +117,6 @@ class modal_edit extends Component {
     render() {
         let data_banner = this.props.data_banner;
         let is_loading = this.props.is_loading;
-        let is_loading_media = this.state.is_loading_media;
         let data_locations = this.props.data_locations;
         let data_medias = this.state.data_medias;
 
@@ -131,7 +128,7 @@ class modal_edit extends Component {
                     <ModalFooter open_modal={this.props.open_modal} type={'edit'}
                         is_loading={is_loading} handle_funtion={this.handle_edit} />
                 ]}>
-                <Spin spinning={is_loading || is_loading_media}>
+                <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>
