@@ -8,6 +8,7 @@ import FormTextare from '../../../components/inputs/form_textare';
 import FormDate from '../../../components/inputs/form_date';
 import FormSelectInput from '../../../components/selects/form_select_input';
 import ModalFooter from '../../../components/modal/modal_footer';
+import dayjs from 'dayjs';
 class modal_edit extends Component {
     constructor(props) {
         super(props);
@@ -44,6 +45,7 @@ class modal_edit extends Component {
     }
     render() {
         let data_flash_sale = this.props.data_flash_sale;
+        console.log(data_flash_sale);
         let is_loading = this.props.is_loading;
         return (
             <Modal title="CHỈNH SỬA" open={this.props.modal_edit}
@@ -56,11 +58,11 @@ class modal_edit extends Component {
                 <Spin spinning={is_loading}>
                     <div className="space-y-[10px]">
 
-                        <FormDate name={'Ngày bắt đầu'} variable={'start_time'} value={data_flash_sale.start_time}
+                        <FormDate name={'Ngày bắt đầu'} variable={'start_time'} value={dayjs(data_flash_sale.start_time).format('YYYY-MM-DDTHH:mm')}
                             important={true}
                             handle_onchange_input={this.props.on_change_flash_sale} />
 
-                        <FormDate name={'Ngày kết thúc'} variable={'end_time'} value={data_flash_sale.end_time}
+                        <FormDate name={'Ngày kết thúc'} variable={'end_time'} value={dayjs(data_flash_sale.end_time).format('YYYY-MM-DDTHH:mm')}
                             important={true}
                             handle_onchange_input={this.props.on_change_flash_sale} />
 
