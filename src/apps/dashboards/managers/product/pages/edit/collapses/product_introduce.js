@@ -32,7 +32,7 @@ class product_introduce extends Component {
             await this.props.get_list_brand(this.state.data_filter);
         }
         if (form_name === 'tag') {
-            await this.props.create_tag(this.props.data_brand);
+            await this.props.create_tag(this.props.data_tag);
             await this.props.get_list_tag(this.state.data_filter);
         }
         if (form_name === 'category') {
@@ -97,8 +97,8 @@ class product_introduce extends Component {
                                         value: item.id,
                                     }))}
                                     disabled_select={!this.props.is_edit}
-                                    disabled_button={false}
-                                    disabled_search={false}
+                                    disabled_button={true}
+                                    disabled_search={true}
                                     on_search={this.on_search}
                                     variable_select={'tags'}
                                     on_change_select={this.props.on_change_product}
@@ -123,8 +123,8 @@ class product_introduce extends Component {
                                         value: item.id,
                                     }))}
                                     disabled_select={!this.props.is_edit}
-                                    disabled_button={false}
-                                    disabled_search={false}
+                                    disabled_button={true}
+                                    disabled_search={true}
                                     on_search={this.on_search}
                                     variable_select={'categories'}
                                     on_change_select={this.props.on_change_product}

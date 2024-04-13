@@ -25,8 +25,8 @@ class product extends Component {
         if (this.props.is_edit === false) { this.props.click_edit_product() };
         if (this.props.is_edit) {
             let data_product_page = this.props.data_product_page;
+            data_product_page.product = data_product.id;
             if (!data_product_page.id) {
-                data_product_page.product = data_product.id;
                 await this.props.create_product_page(data_product_page);
                 this.props.get_product_page(data_product.id);
             } else {
