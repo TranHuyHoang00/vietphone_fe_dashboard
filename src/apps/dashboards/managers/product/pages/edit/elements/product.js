@@ -36,9 +36,6 @@ class product extends Component {
                 let media = await this.handle_create_media(this.state.data_medias);
                 data_product.media = media;
             }
-            if (this.state.data_medias == 0) {
-                data_product.media = [];
-            }
             await this.props.edit_product(data_product.id, data_product);
             await this.props.get_product(data_product.id);
             this.props.click_edit_product();
