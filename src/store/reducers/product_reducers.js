@@ -17,6 +17,7 @@ const initialState = {
         category: '',
         has_page: '',
     },
+    description: '',
 }
 
 const product_reducers = (state = initialState, action) => {
@@ -52,7 +53,8 @@ const product_reducers = (state = initialState, action) => {
                 ...state,
                 is_loading: false,
                 is_result: true,
-                data_product: action.data
+                data_product: action.data,
+                description: action.data.description,
             }
         case action_types.CREATE_PRODUCT_SUCCESS:
             return {

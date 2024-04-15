@@ -9,16 +9,18 @@ class product_content extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            value: '',
         }
     }
     componentDidMount() {
+        this.setState({ value: this.props.value })
     }
     render() {
         return (
 
-            <Collapse >
+            <Collapse defaultActiveKey={"1"}>
                 <Collapse.Panel header="Mô tả sản phẩm" key="1">
-                    <ReactQuill theme="snow"
+                    <ReactQuill theme="snow" readOnly={!this.props.is_edit}
                         modules={product_content.modules}
                         formats={product_content.formats}
                         bounds={'.app'}
@@ -33,12 +35,11 @@ class product_content extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_product: state.product.data_product,
+        is_edit: state.product.is_edit,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        on_change_product: (event, id, type) => dispatch(actions.on_change_product_redux(event, id, type)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(product_content));

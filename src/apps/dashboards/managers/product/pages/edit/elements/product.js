@@ -98,7 +98,7 @@ class product extends Component {
                         </div>
                     </div>
                     <ProductContent onchange_content={this.onchange_content}
-                        value={this.props.data_product.description} />
+                        value={this.props.description} />
                 </div>
             </div>
         );
@@ -111,6 +111,8 @@ const mapStateToProps = state => {
         data_product: state.product.data_product,
         is_edit: state.product.is_edit,
         data_product_page: state.product_page.data_product_page,
+        description: state.product.description,
+
     };
 };
 const mapDispatchToProps = dispatch => {
