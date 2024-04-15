@@ -17,6 +17,9 @@ export * from './location_types';
 export * from './banner_types';
 export * from './product_page';
 export * from './media_base_types';
+export * from './category_post_types';
+export * from './post_types';
+
 
 
 

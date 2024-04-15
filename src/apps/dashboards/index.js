@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Layout, Menu, Drawer } from 'antd';
 import {
     AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher, AiFillBehanceSquare
-    , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile,
-    AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject,
+    , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillBook, AiFillBuild,
+    AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
@@ -33,6 +33,9 @@ import ManagerFlashSaleItem from './managers/flash_sale_item/index';
 import ManagerTask from './managers/task/index';
 import ManagerLocation from './managers/location/index';
 import ManagerBanner from './managers/banner/index';
+import ManagerCategoryPost from './managers/category_post/index';
+import ManagerPost from './managers/post/index';
+
 class index extends Component {
     constructor(props) {
         super(props);
@@ -71,7 +74,7 @@ class index extends Component {
     render() {
         const items = [
             {
-                key: 'user_role', icon: <AiFillGithub />, label: 'Người dùng', children: [
+                key: 'user', icon: <AiFillGithub />, label: 'Người dùng', children: [
                     { key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng' },
                 ],
             },
@@ -107,6 +110,12 @@ class index extends Component {
                     { key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục' },
                     { key: 'manager/flash_sale', icon: <AiFillMoneyCollect />, label: 'Flash_sale' },
 
+                ],
+            },
+            {
+                key: 'post_category', icon: <AiFillBook />, label: 'Bài đăng', children: [
+                    { key: 'manager/post', icon: <AiOutlineBook />, label: 'Bài viết' },
+                    { key: 'manager/category_post', icon: <AiFillBuild />, label: 'Loại bài viết' },
                 ],
             },
             {
@@ -161,6 +170,9 @@ class index extends Component {
                                     <Route exact path={`${url}manager/task`}><ManagerTask /></Route>
                                     <Route exact path={`${url}manager/location`}><ManagerLocation /></Route>
                                     <Route exact path={`${url}manager/banner`}><ManagerBanner /></Route>
+                                    <Route exact path={`${url}manager/category_post`}><ManagerCategoryPost /></Route>
+                                    <Route exact path={`${url}manager/post`}><ManagerPost /></Route>
+
                                     <Route ><NotFound /></Route>
 
 

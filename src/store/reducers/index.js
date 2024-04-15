@@ -18,6 +18,8 @@ import location_reducers from './location_reducers';
 import banner_reducers from './banner_reducers';
 import product_page_reducers from './product_page_reducers';
 import media_base_reducers from './media_base_reducers';
+import category_post_reducers from './category_post_reducers';
+import post_reducers from './post_reducers';
 
 export default combineReducers({
     product: product_reducers,
@@ -39,5 +41,7 @@ export default combineReducers({
     banner: banner_reducers,
     product_page: product_page_reducers,
     media_base: media_base_reducers,
+    category_post: category_post_reducers,
+    post: post_reducers,
 
 })
