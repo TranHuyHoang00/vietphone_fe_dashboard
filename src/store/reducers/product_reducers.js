@@ -94,6 +94,11 @@ const product_reducers = (state = initialState, action) => {
                     ...copyState,
                 }
             }
+        case action_types.ON_CHANGE_PRODUCT_DESCRIPTION:
+            return {
+                ...state,
+                description: action.value
+            }
         case action_types.CLICK_EDIT_PRODUCT:
             return {
                 ...state,

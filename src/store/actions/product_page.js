@@ -126,6 +126,10 @@ export const on_change_product_page_redux = (value, id) => ({
     value,
     id,
 })
+export const on_change_product_description_redux = (value) => ({
+    type: action_types.ON_CHANGE_PRODUCT_DESCRIPTION,
+    value,
+})
 export const set_data_product_page_redux = (data) => ({
     type: action_types.SET_DATA_PRODUCT_PAGE,
     data,

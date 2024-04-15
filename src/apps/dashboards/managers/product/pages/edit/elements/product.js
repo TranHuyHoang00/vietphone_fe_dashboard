@@ -16,12 +16,11 @@ class product extends Component {
         this.state = {
             data_medias: [],
             data_media_ids: [],
-            description: '',
         }
     }
     handle_edit_product = async () => {
         let data_product = this.props.data_product;
-        data_product.description = this.state.description;
+        data_product.description = this.props.description;
         if (this.props.is_edit === false) { this.props.click_edit_product() };
         if (this.props.is_edit) {
             let data_product_page = this.props.data_product_page;
@@ -36,6 +35,9 @@ class product extends Component {
             if (this.state.data_medias.length !== 0) {
                 let media = await this.handle_create_media(this.state.data_medias);
                 data_product.media = media;
+            }
+            if (this.state.data_medias == 0) {
+                data_product.media = [];
             }
             await this.props.edit_product(data_product.id, data_product);
             await this.props.get_product(data_product.id);
@@ -61,12 +63,6 @@ class product extends Component {
         } catch (e) {
             message.error('Lỗi hệ thống');
         }
-    }
-
-    onchange_content = (description) => {
-        this.setState({
-            description: description,
-        })
     }
     render() {
         return (
@@ -97,8 +93,7 @@ class product extends Component {
                             <ProductAttributeValue />
                         </div>
                     </div>
-                    <ProductContent onchange_content={this.onchange_content}
-                        value={this.props.description} />
+                    <ProductContent />
                 </div>
             </div>
         );
@@ -112,7 +107,6 @@ const mapStateToProps = state => {
         is_edit: state.product.is_edit,
         data_product_page: state.product_page.data_product_page,
         description: state.product.description,
-
     };
 };
 const mapDispatchToProps = dispatch => {

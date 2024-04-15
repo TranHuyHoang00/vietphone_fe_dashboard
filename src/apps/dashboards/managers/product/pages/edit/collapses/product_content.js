@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
 import * as actions from '../../../../../../../store/actions';
+import { connect } from 'react-redux';
 import { Collapse } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -9,11 +9,7 @@ class product_content extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
         }
-    }
-    componentDidMount() {
-        this.setState({ value: this.props.value })
     }
     render() {
         return (
@@ -24,8 +20,8 @@ class product_content extends Component {
                         modules={product_content.modules}
                         formats={product_content.formats}
                         bounds={'.app'}
-                        value={this.props.value}
-                        onChange={(value) => this.props.onchange_content(value)}
+                        value={this.props.description}
+                        onChange={(value) => this.props.on_change_product_description(value)}
                     />
                 </Collapse.Panel>
             </Collapse>
@@ -36,10 +32,13 @@ class product_content extends Component {
 const mapStateToProps = state => {
     return {
         is_edit: state.product.is_edit,
+        description: state.product.description,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
+        on_change_product_description: (value) => dispatch(actions.on_change_product_description_redux(value)),
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(product_content));

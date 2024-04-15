@@ -59,11 +59,11 @@ class product_page extends Component {
                             </div>
                             <div className='flex items-center gap-[5px]'>
                                 <div className='w-1/3 flex items-center justify-between'>
-                                    <span>CEO tìm kiếm</span>
+                                    <span>Mô tả</span>
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={data_product_page.search_description} width={'100%'} disabled={!this.props.is_edit}
+                                    <textarea className='w-full border p-[5px]' rows={4} value={data_product_page.search_description} width={'100%'} disabled={!this.props.is_edit}
                                         onChange={(event) => this.props.on_change_product_page(event.target.value, 'search_description')} />
                                 </div>
                             </div>
