@@ -25,7 +25,7 @@ import ManagerGroupAttribute from './managers/group_attribute/index';
 import ManagerAttribute from './managers/attribute/index';
 import ManagerAttributeValue from './managers/attribute_value/index';
 import ManagerProduct from './managers/product/index';
-import EditProduct from './managers/product/pages/edit/index';
+import EditProduct from './managers/product/edit/index';
 import ManagerVariantAttributeGroup from './managers/variant_attribute_group/index';
 import ManagerSyncData from './managers/sync_data/index';
 import ManagerFlashSale from './managers/flash_sale/index';

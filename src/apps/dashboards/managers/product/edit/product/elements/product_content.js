@@ -14,7 +14,7 @@ class product_content extends Component {
     render() {
         return (
 
-            <Collapse defaultActiveKey={"1"}>
+            <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Mô tả sản phẩm" key="1">
                     <ReactQuill theme="snow" readOnly={!this.props.is_edit}
                         modules={product_content.modules}

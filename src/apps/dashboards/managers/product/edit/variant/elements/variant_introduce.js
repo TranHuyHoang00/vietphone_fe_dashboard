@@ -9,7 +9,6 @@ class variant_introduce extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_variant: {},
         }
     }
     async componentDidMount() {

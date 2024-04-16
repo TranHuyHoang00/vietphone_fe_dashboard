@@ -1,5 +1,5 @@
 import action_types from './action_types';
-import { get_list_attribute_value, get_attribute_value, create_attribute_value, delete_attribute_value, edit_attribute_value } from '../../services/attribute_value_service';
+import { get_list_attribute_value, get_attribute_value_detail, create_attribute_value, delete_attribute_value, edit_attribute_value } from '../../services/attribute_value_service';
 import { message } from 'antd';
 
 export const get_list_attribute_value_redux = (data_filter) => {
@@ -23,7 +23,7 @@ export const get_attribute_value_redux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(attribute_value_start());
-            let data = await get_attribute_value(id);
+            let data = await get_attribute_value_detail(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_attribute_value_success(data.data.data));
             } else {

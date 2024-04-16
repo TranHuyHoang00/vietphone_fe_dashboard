@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../../../store/actions';
-import { Collapse, Select } from 'antd';
+import { Collapse, Select, message } from 'antd';
 import { text_line_1_3 } from '../../../../../components/displays/data_line_1_3';
 import FormSelectItem from '../../../../../components/selects/form_select_item';
 class product_introduce extends Component {
@@ -28,14 +28,17 @@ class product_introduce extends Component {
     }
     handle_create = async (form_name) => {
         if (form_name === 'brand') {
+            if (!this.props.data_brand.name) { message.error('Thiếu tên thương hiệu'); return; }
             await this.props.create_brand(this.props.data_brand);
             await this.props.get_list_brand(this.state.data_filter);
         }
         if (form_name === 'tag') {
+            if (!this.props.data_tag.name) { message.error('Thiếu tên tag'); return; }
             await this.props.create_tag(this.props.data_tag);
             await this.props.get_list_tag(this.state.data_filter);
         }
         if (form_name === 'category') {
+            if (!this.props.data_category.name) { message.error('Thiếu tên danh mục'); return; }
             await this.props.create_category(this.props.data_category);
             await this.props.get_list_category(this.state.data_filter);
         }
@@ -50,7 +53,7 @@ class product_introduce extends Component {
         let data_categorys = this.props.data_categorys;
         let data_variant_attribute_groups = this.props.data_variant_attribute_groups;
         return (
-            <Collapse defaultActiveKey={['1']} >
+            <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Thông tin sản phẩm" key="1">
                     <div className='space-y-[5px]'>
                         {text_line_1_3('Tên sản phẩm', data_product.name)}
@@ -97,8 +100,8 @@ class product_introduce extends Component {
                                         value: item.id,
                                     }))}
                                     disabled_select={!this.props.is_edit}
-                                    disabled_button={true}
-                                    disabled_search={true}
+                                    disabled_button={false}
+                                    disabled_search={false}
                                     on_search={this.on_search}
                                     variable_select={'tags'}
                                     on_change_select={this.props.on_change_product}
@@ -123,8 +126,8 @@ class product_introduce extends Component {
                                         value: item.id,
                                     }))}
                                     disabled_select={!this.props.is_edit}
-                                    disabled_button={true}
-                                    disabled_search={true}
+                                    disabled_button={false}
+                                    disabled_search={false}
                                     on_search={this.on_search}
                                     variable_select={'categories'}
                                     on_change_select={this.props.on_change_product}
@@ -143,7 +146,7 @@ class product_introduce extends Component {
                             <div className='w-2/3'>
                                 <FormSelectItem width={'100%'} placeholder={'Tên SP-TS'}
                                     form_name={'variant_attribute_group'}
-                                    value={data_product.variant_attribute_group}
+                                    value={(data_product?.variant_attribute_group?.id) ? (data_product.variant_attribute_group.id) : data_product.variant_attribute_group}
                                     options={data_variant_attribute_groups.map((item) => ({
                                         label: item.name,
                                         value: item.id,

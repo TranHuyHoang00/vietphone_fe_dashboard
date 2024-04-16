@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../../../store/actions';
-import { Collapse, Input, Spin, Button, message } from 'antd';
+import { Collapse, Input, Spin, Button } from 'antd';
 
 class product_page extends Component {
     constructor(props) {
@@ -24,17 +24,14 @@ class product_page extends Component {
             if (this.props.is_result) {
                 this.props.set_data_product_page({});
             }
-        } else {
-            message.error('Không có bài để xóa');
-            return;
         }
     }
     render() {
         let data_product_page = this.props.data_product_page;
         return (
-            <Collapse defaultActiveKey={['1']} >
+            <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Sản phẩm trên Website" key="1"
-                    extra={<Button onClick={() => this.handle_delete()} className='bg-[#e94138] text-white' disabled={!this.props.is_edit}>Xóa bài</Button>}>
+                    extra={<Button onClick={() => this.handle_delete()} className='bg-[#e94138] text-white' disabled={(this.props.is_edit === true && data_product_page?.id) ? false : true}>Xóa bài</Button>}>
                     <Spin spinning={this.props.is_loading}>
                         <div className='space-y-[5px]'>
                             <div className='flex items-center gap-[5px]'>

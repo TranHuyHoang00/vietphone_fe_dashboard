@@ -1,32 +1,33 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../../store/actions';
+import * as actions from '../../../../../../store/actions';
 import { Button, Space, message, Spin } from 'antd';
-import VariantOverview from '../collapses/variant_overview';
-import VariantIntroduce from '../collapses/variant_introduce';
-import VariantMedia from '../collapses/variant_media';
-import VariantAttributeValue from '../collapses/variant_attribute_value';
-import { create_media } from '../../../../../../../services/media_service';
-class variant extends Component {
+import VariantOverview from './elements/variant_overview';
+import VariantIntroduce from './elements/variant_introduce';
+import VariantMedia from './elements/variant_media';
+import VariantAttributeValue from './elements/variant_attribute_value';
+import { create_media } from '../../../../../../services/media_service';
+class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_product: {},
-            data_variant_ids: [],
             data_variants: [],
+            data_variant_ids: [],
+
             data_variant: {},
             active_variant: '',
 
-            data_medias: [],
             data_media_ids: [],
+            data_media_raws: [],
+            data_atbvl_ids: [],
         }
     }
     async componentDidMount() {
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.data_variants !== this.props.data_variants) {
-            let data_variant_ids = this.props.data_variants;
+        if (prevProps.data_variant_ids !== this.props.data_variant_ids) {
+            let data_variant_ids = this.props.data_variant_ids;
             if (data_variant_ids && data_variant_ids.length !== 0) {
                 this.setState({ data_variant_ids: data_variant_ids });
                 await this.get_list_variant(data_variant_ids);
@@ -47,14 +48,15 @@ class variant extends Component {
         this.setState({ active_variant: index })
         await this.props.get_variant(data_variants[index].id);
     }
-    handle_data_media = (data_medias, data_media_ids) => {
-        this.setState({ data_medias: data_medias, data_media_ids: data_media_ids });
+    get_data_media = (data_media_ids, data_media_raws) => {
+        this.setState({ data_media_ids: data_media_ids, data_media_raws: data_media_raws })
     }
-    handle_create_media = async (data_medias) => {
+    handle_create_media = async () => {
         try {
             let data_media_ids_new = [];
             let data_media_ids = this.state.data_media_ids;
-            for (const item of data_medias) {
+            let data_atbvl_raws = this.state.data_media_raws;
+            for (const item of data_atbvl_raws) {
                 if (!item.id) {
                     let data = await create_media(item);
                     if (data && data.data && data.data.success === 1) {
@@ -67,20 +69,43 @@ class variant extends Component {
             message.error('Lỗi hệ thống');
         }
     }
+    get_data_atbvl = (data_atbvl_ids) => {
+        this.setState({ data_atbvl_ids: data_atbvl_ids })
+    }
     handle_edit_variant = async () => {
-        let data_variant = this.props.data_variant;
         if (this.props.is_edit === false) { this.props.click_edit_variant() };
         if (this.props.is_edit) {
-            if (this.state.data_medias.length !== 0) {
-                let media = await this.handle_create_media(this.state.data_medias);
+            let data_variant = this.props.data_variant;
+            // not edit attribute_values
+            if (data_variant?.attribute_values?.id) {
+                delete data_variant.attribute_values;
+            }
+            // not edit attribute_values
+            if (data_variant?.attribute_values[0]?.id) {
+                delete data_variant.attribute_values;
+            }
+            if (this.state.data_atbvl_ids.length === 0) {
+                delete data_variant.attribute_values;
+            } else {
+                data_variant.attribute_values = this.state.data_atbvl_ids;
+            }
+            let media = await this.handle_create_media();
+            if (media.length === 0) {
+                if (data_variant?.media[0]?.id) {
+                    delete data_variant.media;
+                }
+            } else {
                 data_variant.media = media;
             }
+
             await this.props.edit_variant(data_variant.id, data_variant);
             await this.props.get_variant(data_variant.id);
             this.props.click_edit_variant();
         }
     }
     render() {
+        let data_product = this.props.data_product;
+        let data_variant = this.props.data_variant;
         return (
             <Spin size='large' spinning={this.props.is_loading}>
                 <div className=" space-y-[10px]">
@@ -109,11 +134,14 @@ class variant extends Component {
                                     <VariantIntroduce />
                                 </div>
                                 <div>
-                                    <VariantMedia data_medias={this.props.data_variant.media}
-                                        handle_data_media={this.handle_data_media} />
+                                    <VariantMedia data_media_raws={this.props.data_variant.media}
+                                        get_data_media={this.get_data_media} />
                                 </div>
                             </div>
-                            <VariantAttributeValue />
+                            <VariantAttributeValue
+                                data_attributes={data_product?.variant_attribute_group?.attribute}
+                                data_atbvl_raws={data_variant?.attribute_values}
+                                get_data_atbvl={this.get_data_atbvl} />
                         </div>
                     </div>
                 </div>
@@ -124,6 +152,7 @@ class variant extends Component {
 const mapStateToProps = state => {
     return {
         is_loading: state.variant.is_loading,
+        data_product: state.product.data_product,
         data_variant: state.variant.data_variant,
         is_edit: state.variant.is_edit,
     };
@@ -135,4 +164,4 @@ const mapDispatchToProps = dispatch => {
         edit_variant: (id, data) => dispatch(actions.edit_variant_redux(id, data)),
     };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(variant));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

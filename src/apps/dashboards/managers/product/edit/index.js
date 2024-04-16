@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../store/actions';
+import * as actions from '../../../../../store/actions';
 import { Button, Spin } from 'antd';
-import Product from './elements/product';
-import Variant from './elements/variant';
+import Product from './product/index';
+import Variant from './variant/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -21,7 +21,7 @@ class index extends Component {
         this.props.history.push(`/admin/manager/product`)
     }
     render() {
-
+        let data_product = this.props.data_product;
         return (
             <Spin size='large' spinning={this.props.is_loading}>
                 <div className='p-[10px] space-y-[10px]'>
@@ -30,7 +30,7 @@ class index extends Component {
                         Quay lại
                     </Button>
                     <Product />
-                    <Variant data_variants={this.props.data_product.variants} />
+                    <Variant data_variant_ids={data_product.variants} />
                 </div>
             </Spin>
         );

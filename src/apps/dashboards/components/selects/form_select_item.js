@@ -21,7 +21,8 @@ class form_select_item extends Component {
                         {menu}
                         <Divider />
                         <Space>
-                            <Input.Search placeholder={this.props.placeholder}
+                            <Input.Search onKeyDown={(e) => e.stopPropagation()}
+                                placeholder={this.props.placeholder}
                                 disabled={this.props.disabled_search}
                                 onChange={(event) => this.props.on_change_input(event.target.value, this.props.variable_input)}
                                 onSearch={(value) => this.props.on_search(value, this.props.form_name)} />
