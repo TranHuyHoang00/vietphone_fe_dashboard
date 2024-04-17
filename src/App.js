@@ -5,22 +5,7 @@ import { theme } from './assets/themes/theme';
 function App() {
   return (
     <ConfigProvider theme={theme}>
-      <div>
-        <Index />
-        {/* <ToastContainer
-          position="bottom-left"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        /> */}
-      </div>
-
+      <Index />
     </ConfigProvider>
   );
 }
