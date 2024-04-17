@@ -51,36 +51,33 @@ class index extends Component {
         }
     }
     handle_edit_product = async () => {
-        if (this.props.is_edit === false) { this.props.click_edit_product() };
-        if (this.props.is_edit) {
-            let data_product = this.props.data_product;
-            data_product.description = this.props.description;
-            // not edit variant_attribute_group
-            if (data_product?.variant_attribute_group?.name) {
-                delete data_product.variant_attribute_group;
-            }
-            // not edit attribute_values
-            if (data_product?.attribute_values[0]?.id) {
-                delete data_product.attribute_values;
-            }
-            let data_atbvl_ids = this.state.data_atbvl_ids;
-            if (data_atbvl_ids && data_atbvl_ids.length === 0) {
-                delete data_product.attribute_values;
-            } else {
-                data_product.attribute_values = data_atbvl_ids;
-            }
-            let media = await this.handle_create_media();
-            if (media && media.length === 0) {
-                if (data_product?.media[0]?.id) {
-                    delete data_product.media;
+        let data_product = this.props.data_product;
+        if (data_product?.id) {
+            if (this.props.is_edit) {
+                data_product.description = this.props.description;
+                if (data_product?.variant_attribute_group?.name) { delete data_product.variant_attribute_group; }
+                if (data_product?.attribute_values?.[0]?.id) { delete data_product.attribute_values; }
+                let data_atbvl_ids = this.state.data_atbvl_ids;
+                if (data_atbvl_ids && data_atbvl_ids.length === 0) {
+                    delete data_product.attribute_values;
+                } else {
+                    data_product.attribute_values = data_atbvl_ids;
                 }
+                let media = await this.handle_create_media();
+                if (media && media.length === 0) {
+                    if (data_product?.media?.[0]?.id) {
+                        delete data_product.media;
+                    }
+                } else {
+                    data_product.media = media;
+                }
+                await this.props.edit_product(data_product.id, data_product);
+                await this.handle_product_page();
+                await this.props.get_product(data_product.id);
+                this.props.click_edit_product();
             } else {
-                data_product.media = media;
+                this.props.click_edit_product()
             }
-            await this.props.edit_product(data_product.id, data_product);
-            await this.handle_product_page();
-            await this.props.get_product(data_product.id);
-            this.props.click_edit_product();
         }
     }
     get_data_atbvl = (data_atbvl_ids) => {
