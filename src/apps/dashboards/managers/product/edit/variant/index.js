@@ -21,6 +21,8 @@ class index extends Component {
             data_media_ids: [],
             data_media_raws: [],
             data_atbvl_ids: [],
+
+            data_attributes: [],
         }
     }
     async componentDidMount() {
@@ -28,8 +30,13 @@ class index extends Component {
     async componentDidUpdate(prevProps) {
         if (prevProps.data_variant_ids !== this.props.data_variant_ids) {
             let data_variant_ids = this.props.data_variant_ids;
+            let data_product = this.props.data_product;
+            let data_attributes;
+            if (data_product?.variant_attribute_group?.attribute) {
+                data_attributes = data_product.variant_attribute_group.attribute;
+            }
             if (data_variant_ids && data_variant_ids.length !== 0) {
-                this.setState({ data_variant_ids: data_variant_ids });
+                this.setState({ data_variant_ids: data_variant_ids, data_attributes: data_attributes });
                 await this.get_list_variant(data_variant_ids);
             }
         }
@@ -74,41 +81,46 @@ class index extends Component {
             return [...data_media_ids_new, ...data_media_ids];
         } catch (e) {
             message.error('Lỗi hệ thống');
+            return [];
+
         }
     }
     get_data_atbvl = (data_atbvl_ids) => {
         this.setState({ data_atbvl_ids: data_atbvl_ids })
     }
     handle_edit_variant = async () => {
-        if (this.props.is_edit === false) { this.props.click_edit_variant() };
-        if (this.props.is_edit) {
-            let data_variant = this.props.data_variant;
-            // not edit attribute_values
-            if (data_variant?.attribute_values?.id) {
-                delete data_variant.attribute_values;
-            }
-            // not edit attribute_values
-            if (data_variant?.attribute_values[0]?.id) {
-                delete data_variant.attribute_values;
-            }
-            if (this.state.data_atbvl_ids.length === 0) {
-                delete data_variant.attribute_values;
-            } else {
-                data_variant.attribute_values = this.state.data_atbvl_ids;
-            }
-            let media = await this.handle_create_media();
-            if (media.length === 0) {
-                if (data_variant?.media[0]?.id) {
-                    delete data_variant.media;
+        let data_variant = this.props.data_variant;
+        if (data_variant?.id) {
+            let data_atbvl_ids = this.state.data_atbvl_ids;
+            let data_attributes = this.state.data_attributes;
+            if (this.props.is_edit) {
+                if (data_variant.attribute_values?.[0]?.id) { delete data_variant.attribute_values; }
+                if (data_atbvl_ids.length === 0) { delete data_variant.attribute_values; }
+                else {
+                    if (data_atbvl_ids.length !== data_attributes.length) {
+                        message.error('Thông số chưa đủ, vui chọn đầy đủ');
+                        return;
+                    } else {
+                        data_variant.attribute_values = this.state.data_atbvl_ids;
+                    }
+                }
+                let media = await this.handle_create_media();
+                if (media && media.length === 0) {
+                    if (data_variant?.media?.[0]?.id) { delete data_variant.media; }
+                }
+                else { data_variant.media = media; }
+
+                await this.props.edit_variant(data_variant.id, data_variant);
+
+                if (this.props.is_result_variant) {
+                    await this.props.get_variant(data_variant.id);
+                    this.props.click_edit_variant();
                 }
             } else {
-                data_variant.media = media;
+                this.props.click_edit_variant();
             }
-
-            await this.props.edit_variant(data_variant.id, data_variant);
-            await this.props.get_variant(data_variant.id);
-            this.props.click_edit_variant();
         }
+
     }
     render() {
         let data_product = this.props.data_product;
@@ -161,7 +173,10 @@ const mapStateToProps = state => {
         is_loading: state.variant.is_loading,
         data_product: state.product.data_product,
         data_variant: state.variant.data_variant,
+        is_result_variant: state.variant.is_result,
+
         is_edit: state.variant.is_edit,
+
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -169,6 +184,8 @@ const mapDispatchToProps = dispatch => {
         get_variant: (id) => dispatch(actions.get_variant_redux(id)),
         click_edit_variant: (value) => dispatch(actions.click_edit_variant_redux(value)),
         edit_variant: (id, data) => dispatch(actions.edit_variant_redux(id, data)),
+        set_data_variant: (data) => dispatch(actions.set_data_variant_redux(data)),
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

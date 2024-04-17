@@ -100,7 +100,7 @@ export const edit_variant_redux = (id, data_variant) => {
                 message.success('Thành công');
             } else {
                 dispatch(variant_faided());
-                message.error('Lỗi khi sửa biến thể');
+                message.error(`Lỗi khi sửa biến thể`);
             }
         } catch (error) {
             dispatch(variant_faided());

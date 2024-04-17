@@ -47,6 +47,7 @@ class variant_attribute_value extends Component {
         }
     }
     on_search = (value, form_name) => {
+
     }
     handle_create = async (form_name) => {
         if (form_name === 'attribute_value') {
@@ -101,6 +102,15 @@ class variant_attribute_value extends Component {
         let data_attribute_value = this.props.data_attribute_value;
         let data_atbvl_ids = this.state.data_atbvl_ids;
         let data_atbvl_raws = this.state.data_atbvl_raws;
+        if (data_atbvl_ids.includes(data_attribute_value.id)) {
+            message.error('Đã tồn tại giá trị này');
+            return;
+        }
+        const index = data_atbvl_raws.findIndex(item => item.attribute.id === data_attribute_value.attribute.id);
+        if (index !== -1) {
+            message.error('Đã tồn tại thông số này');
+            return;
+        }
         data_atbvl_ids.push(data_attribute_value.id);
         data_atbvl_raws.push(data_attribute_value);
         await this.handle_data_unique(data_atbvl_raws);
@@ -109,6 +119,9 @@ class variant_attribute_value extends Component {
             data_atbvl_ids: data_atbvl_ids,
             data_atbvl_raws: data_atbvl_raws,
         })
+
+
+
     }
     handle_delete_atbvl = async (id) => {
         let data_atbvl_raws = this.state.data_atbvl_raws.filter(item => item.id !== id);
