@@ -19,6 +19,9 @@ class modal_edit extends Component {
         if (!data.value) {
             return { mess: "Không được bỏ trống 'Giá trị' ", code: 1 };
         }
+        if (!data.attribute) {
+            return { mess: "Không được bỏ trống 'Thông số' ", code: 1 };
+        }
         return { code: 0 };
     }
     handle_edit = async () => {

@@ -1,6 +1,7 @@
 import action_types from './action_types';
 import { get_list_product_page, get_product_page, create_product_page, delete_product_page, edit_product_page } from '../../services/product_page_service';
 import { message } from 'antd';
+import { show_notification } from '../../utils/show_notification';
 
 export const get_list_product_page_redux = (data_filter) => {
     return async (dispatch, getState) => {
@@ -15,7 +16,7 @@ export const get_list_product_page_redux = (data_filter) => {
             }
         } catch (error) {
             dispatch(product_page_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -31,7 +32,7 @@ export const get_product_page_redux = (id) => {
             }
         } catch (error) {
             dispatch(product_page_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -47,7 +48,7 @@ export const create_product_page_redux = (data_product_page) => {
             }
         } catch (error) {
             dispatch(product_page_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -62,7 +63,7 @@ export const delete_list_product_page_redux = (list_id) => {
                 }
             } catch (error) {
                 dispatch(product_page_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -80,7 +81,7 @@ export const edit_list_product_page_redux = (list_id, data_product_page) => {
                 }
             } catch (error) {
                 dispatch(product_page_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -99,7 +100,7 @@ export const edit_product_page_redux = (id, data_product_page) => {
             }
         } catch (error) {
             dispatch(product_page_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }

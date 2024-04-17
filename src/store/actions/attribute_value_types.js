@@ -1,7 +1,7 @@
 import action_types from './action_types';
 import { get_list_attribute_value, get_attribute_value_detail, create_attribute_value, delete_attribute_value, edit_attribute_value } from '../../services/attribute_value_service';
 import { message } from 'antd';
-
+import { show_notification } from '../../utils/show_notification';
 export const get_list_attribute_value_redux = (data_filter) => {
     return async (dispatch, getState) => {
         try {
@@ -15,7 +15,7 @@ export const get_list_attribute_value_redux = (data_filter) => {
             }
         } catch (error) {
             dispatch(attribute_value_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -32,7 +32,7 @@ export const get_attribute_value_redux = (id) => {
             }
         } catch (error) {
             dispatch(attribute_value_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -50,7 +50,7 @@ export const create_attribute_value_redux = (data_attribute_value) => {
             }
         } catch (error) {
             dispatch(attribute_value_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -65,7 +65,7 @@ export const delete_list_attribute_value_redux = (list_id) => {
                 }
             } catch (error) {
                 dispatch(attribute_value_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -83,7 +83,7 @@ export const edit_list_attribute_value_redux = (list_id, data_attribute_value) =
                 }
             } catch (error) {
                 dispatch(attribute_value_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -104,7 +104,7 @@ export const edit_attribute_value_redux = (id, data_attribute_value) => {
             }
         } catch (error) {
             dispatch(attribute_value_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }

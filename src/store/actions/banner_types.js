@@ -1,6 +1,7 @@
 import action_types from './action_types';
 import { get_list_banner, get_banner, create_banner, delete_banner, edit_banner } from '../../services/banner_service';
 import { message } from 'antd';
+import { show_notification } from '../../utils/show_notification';
 
 export const get_list_banner_redux = (data_filter) => {
     return async (dispatch, getState) => {
@@ -15,7 +16,7 @@ export const get_list_banner_redux = (data_filter) => {
             }
         } catch (error) {
             dispatch(banner_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -32,7 +33,7 @@ export const get_banner_redux = (id) => {
             }
         } catch (error) {
             dispatch(banner_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -50,7 +51,7 @@ export const create_banner_redux = (data_banner) => {
             }
         } catch (error) {
             dispatch(banner_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -65,7 +66,7 @@ export const delete_list_banner_redux = (list_id) => {
                 }
             } catch (error) {
                 dispatch(banner_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -83,7 +84,7 @@ export const edit_list_banner_redux = (list_id, data_banner) => {
                 }
             } catch (error) {
                 dispatch(banner_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -104,7 +105,7 @@ export const edit_banner_redux = (id, data_banner) => {
             }
         } catch (error) {
             dispatch(banner_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }

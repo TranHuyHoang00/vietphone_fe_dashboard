@@ -1,6 +1,7 @@
 import action_types from './action_types';
 import { get_list_permission, get_permission, create_permission, delete_permission, edit_permission } from '../../services/permission_service';
 import { message } from 'antd';
+import { show_notification } from '../../utils/show_notification';
 
 export const get_list_permission_redux = (data_filter) => {
     return async (dispatch, getState) => {
@@ -15,7 +16,7 @@ export const get_list_permission_redux = (data_filter) => {
             }
         } catch (error) {
             dispatch(permission_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -32,7 +33,7 @@ export const get_permission_redux = (id) => {
             }
         } catch (error) {
             dispatch(permission_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -50,7 +51,7 @@ export const create_permission_redux = (data_permission) => {
             }
         } catch (error) {
             dispatch(permission_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -65,7 +66,7 @@ export const delete_list_permission_redux = (list_id) => {
                 }
             } catch (error) {
                 dispatch(permission_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -83,7 +84,7 @@ export const edit_list_permission_redux = (list_id, data_permission) => {
                 }
             } catch (error) {
                 dispatch(permission_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -104,7 +105,7 @@ export const edit_permission_redux = (id, data_permission) => {
             }
         } catch (error) {
             dispatch(permission_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }

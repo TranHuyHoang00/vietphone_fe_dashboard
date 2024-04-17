@@ -84,7 +84,7 @@ class modal_create extends Component {
             }
             return [...data_media_ids_new, ...data_media_ids];
         } catch (e) {
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
     render() {

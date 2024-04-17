@@ -21,7 +21,7 @@ api_admin.interceptors.response.use(
     (response) => { return response; },
     async (error) => {
         const originalConfig = error.config;
-        if (error.response.status === 401) {
+        if (error?.response?.status === 401 && error?.response?.data?.error?.code === 'token_not_valid') {
             let data_account = await get_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
             let refresh = data_account.data.refresh;
             let token;

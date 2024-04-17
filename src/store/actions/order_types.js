@@ -1,6 +1,7 @@
 import action_types from './action_types';
 import { get_list_order, get_order, create_order, delete_order, edit_order } from '../../services/order_service';
 import { message } from 'antd';
+import { show_notification } from '../../utils/show_notification';
 
 export const get_list_order_redux = (data_filter) => {
     return async (dispatch, getState) => {
@@ -19,7 +20,7 @@ export const get_list_order_redux = (data_filter) => {
                 message.error('Không có đơn hàng nào cho mục này');
                 return;
             }
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -36,7 +37,7 @@ export const get_order_redux = (id) => {
             }
         } catch (error) {
             dispatch(order_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -54,7 +55,7 @@ export const create_order_redux = (data_order) => {
             }
         } catch (error) {
             dispatch(order_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -69,7 +70,7 @@ export const delete_list_order_redux = (list_id) => {
                 }
             } catch (error) {
                 dispatch(order_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -87,7 +88,7 @@ export const edit_list_order_redux = (list_id, data_order) => {
                 }
             } catch (error) {
                 dispatch(order_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -108,7 +109,7 @@ export const edit_order_redux = (id, data_order) => {
             }
         } catch (error) {
             dispatch(order_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }

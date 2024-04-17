@@ -1,6 +1,7 @@
 import action_types from './action_types';
 import { get_list_category_post, get_category_post, create_category_post, delete_category_post, edit_category_post } from '../../services/category_post_service';
 import { message } from 'antd';
+import { show_notification } from '../../utils/show_notification';
 
 export const get_list_category_post_redux = (data_filter) => {
     return async (dispatch, getState) => {
@@ -15,7 +16,7 @@ export const get_list_category_post_redux = (data_filter) => {
             }
         } catch (error) {
             dispatch(category_post_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -32,7 +33,7 @@ export const get_category_post_redux = (id) => {
             }
         } catch (error) {
             dispatch(category_post_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -50,7 +51,7 @@ export const create_category_post_redux = (data_category_post) => {
             }
         } catch (error) {
             dispatch(category_post_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -65,7 +66,7 @@ export const delete_list_category_post_redux = (list_id) => {
                 }
             } catch (error) {
                 dispatch(category_post_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -83,7 +84,7 @@ export const edit_list_category_post_redux = (list_id, data_category_post) => {
                 }
             } catch (error) {
                 dispatch(category_post_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -104,7 +105,7 @@ export const edit_category_post_redux = (id, data_category_post) => {
             }
         } catch (error) {
             dispatch(category_post_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }

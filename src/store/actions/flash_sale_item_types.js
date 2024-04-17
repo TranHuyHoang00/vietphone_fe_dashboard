@@ -1,6 +1,7 @@
 import action_types from './action_types';
 import { get_list_flash_sale_item, get_flash_sale_item, create_flash_sale_item, delete_flash_sale_item, edit_flash_sale_item } from '../../services/flash_sale_item_service';
 import { message } from 'antd';
+import { show_notification } from '../../utils/show_notification';
 
 export const get_list_flash_sale_item_redux = (data_filter) => {
     return async (dispatch, getState) => {
@@ -15,7 +16,7 @@ export const get_list_flash_sale_item_redux = (data_filter) => {
             }
         } catch (error) {
             dispatch(flash_sale_item_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -32,7 +33,7 @@ export const get_flash_sale_item_redux = (id) => {
             }
         } catch (error) {
             dispatch(flash_sale_item_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -50,7 +51,7 @@ export const create_flash_sale_item_redux = (data_flash_sale_item) => {
             }
         } catch (error) {
             dispatch(flash_sale_item_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }
@@ -82,7 +83,7 @@ export const delete_list_flash_sale_item_redux = (list_id) => {
                 }
             } catch (error) {
                 dispatch(flash_sale_item_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -100,7 +101,7 @@ export const edit_list_flash_sale_item_redux = (list_id, data_flash_sale_item) =
                 }
             } catch (error) {
                 dispatch(flash_sale_item_faided());
-                message.error('Lỗi hệ thống');
+                show_notification(error);
             }
         }
         message.success('Thành công');
@@ -121,7 +122,7 @@ export const edit_flash_sale_item_redux = (id, data_flash_sale_item) => {
             }
         } catch (error) {
             dispatch(flash_sale_item_faided());
-            message.error('Lỗi hệ thống');
+            show_notification(error);
         }
     }
 }

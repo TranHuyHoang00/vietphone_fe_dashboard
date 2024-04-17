@@ -36,7 +36,7 @@ class index extends Component {
                 this.handle_loading(funtion_name, false, true);
             }
         } catch (error) {
-            message.error('Lỗi hệ thống');
+            show_notification(error);
             this.handle_loading(funtion_name, false, false);
         }
 
