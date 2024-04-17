@@ -2,23 +2,20 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../store/actions';
-import { Modal, message, Spin, Collapse } from 'antd';
+import { Modal, Spin, Collapse, Checkbox } from 'antd';
 import ModalFooter from '../../../components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_filter: {
-                page: 1,
-                limit: 5,
-                search: ''
-            },
-            unique_permission_datas: [],
+            data_permission_uniques: [],
+            data_permission_ids: [],
         }
     }
     async componentDidMount() {
-        this.props.get_list_permission(this.state.data_filter);
-        this.handle_data_unique(this.props.data_permissions);
+        await this.props.get_list_permission({ page: 1, limit: 1000, search: '' });
+        await this.handle_data_unique(this.props.data_permissions);
+        this.setState({ data_permission_ids: this.props.data_group.permissions })
     }
     handle_data_unique = async (data) => {
         if (data && data.length !== 0) {
@@ -32,34 +29,52 @@ class modal_edit extends Component {
                     }
                 }
             }
-            this.setState({ unique_permission_datas: unique_datas });
+            this.setState({ data_permission_uniques: unique_datas });
         }
-    }
-    validation = (data) => {
-        if (!data.name) {
-            return { mess: "Không được bỏ trống 'Tên loại thông số' ", code: 1 };
-        }
-        return { code: 0 };
     }
     handle_edit = async () => {
-        let result = this.validation(this.props.data_group);
-        if (result.code === 0) {
-            let data_group = this.props.data_group;
-            await this.props.edit_group(data_group.id, data_group);
-            let is_result = this.props.is_result;
-            if (is_result) {
-                this.props.open_modal("edit", false);
-                await this.props.get_list_group(this.props.data_filter);
-            }
-        } else {
-            message.error(result.mess);
+        let data_group = this.props.data_group;
+        data_group.permissions = this.state.data_permission_ids;
+        await this.props.edit_group(data_group.id, data_group);
+        let is_result = this.props.is_result;
+        if (is_result) {
+            this.props.open_modal("edit", false);
+            await this.props.get_list_group(this.props.data_filter);
         }
     }
+    onchange_checkbox = (value) => {
+        let data_permission_ids = this.state.data_permission_ids;
+        const index = data_permission_ids.indexOf(value);
+        if (index !== -1) {
+            data_permission_ids.splice(index, 1);
+        } else {
+            data_permission_ids.push(value)
+        }
+        this.setState({ data_permission_ids: data_permission_ids })
+
+    }
+    handle_checked = (id) => {
+        if (id) {
+            let data_group = this.props.data_group;
+            if (data_group?.permissions) {
+                const found = (data_group.permissions).includes(id);
+                if (found) {
+                    return true
+                } else {
+                    return false
+                }
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+
+    }
     render() {
-        let data_group = this.props.data_group;
         let is_loading = this.props.is_loading;
-        let unique_permission_datas = this.state.unique_permission_datas;
-        console.log('unique_permission_datas', unique_permission_datas);
+        let data_permission_uniques = this.state.data_permission_uniques;
+        let data_permissions = this.props.data_permissions;
         return (
             <Modal title="CHỈNH SỬA" open={this.props.modal_edit}
                 onCancel={() => this.props.open_modal("edit", false)} width={600}
@@ -69,21 +84,28 @@ class modal_edit extends Component {
                         is_loading={is_loading} handle_funtion={this.handle_edit} />
                 ]}>
                 <Spin spinning={is_loading}>
-                    <div className="space-y-[10px]">
-                        {unique_permission_datas && unique_permission_datas.map((permission, index) => {
-                            return (
-                                <div key={index}>
-                                    <Collapse >
-                                        <Collapse.Panel header={`${permission.app_label} - ${permission.model}`} key="1">
-
-                                        </Collapse.Panel>
-                                    </Collapse>
-                                </div>
-                            )
-
-                        })}
-
-
+                    <div className="overflow-y-scroll">
+                        <div className='h-[350px] space-y-[10px] '>
+                            {data_permission_uniques && data_permission_uniques.map((permission, index) => {
+                                return (
+                                    <div key={permission.id}>
+                                        <Collapse defaultActiveKey={permission.id}>
+                                            <Collapse.Panel header={`${permission.app_label} - ${permission.model}`} key={permission.id}>
+                                                {data_permissions && data_permissions.map((item, index) => {
+                                                    return (
+                                                        <div key={item.id} className=''>
+                                                            {permission?.id === item?.content_type?.id &&
+                                                                <Checkbox checked={this.handle_checked(item.id)} onChange={(event) => this.onchange_checkbox(event.target.value)} value={item.id}>{item.name}</Checkbox>
+                                                            }
+                                                        </div>
+                                                    )
+                                                })}
+                                            </Collapse.Panel>
+                                        </Collapse>
+                                    </div>
+                                )
+                            })}
+                        </div>
                     </div>
                 </Spin>
             </Modal>
@@ -106,6 +128,8 @@ const mapDispatchToProps = dispatch => {
         edit_group: (id, data) => dispatch(actions.edit_group_redux(id, data)),
         on_change_group: (id, value) => dispatch(actions.on_change_group_redux(id, value)),
         get_list_permission: (data_filter) => dispatch(actions.get_list_permission_redux(data_filter)),
+        set_data_group: (data) => dispatch(actions.set_data_group_redux(data)),
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(modal_edit));
