@@ -44,9 +44,16 @@ class index extends Component {
         this.setState({ data_variants: data_variants, active_variant: (data_variants.length) - 1 });
     }
     select_variant = async (index) => {
-        let data_variants = this.state.data_variants;
-        this.setState({ active_variant: index })
-        await this.props.get_variant(data_variants[index].id);
+        let is_edit = this.props.is_edit;
+        if (is_edit) {
+            message.error('Bạn vui lòng lưu lại thay đôi');
+            return;
+        } else {
+            let data_variants = this.state.data_variants;
+            this.setState({ active_variant: index })
+            await this.props.get_variant(data_variants[index].id);
+        }
+
     }
     get_data_media = (data_media_ids, data_media_raws) => {
         this.setState({ data_media_ids: data_media_ids, data_media_raws: data_media_raws })
