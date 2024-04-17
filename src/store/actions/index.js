@@ -19,6 +19,8 @@ export * from './product_page';
 export * from './media_base_types';
 export * from './category_post_types';
 export * from './post_types';
+export * from './group_types';
+export * from './permission_types';
 
 
 

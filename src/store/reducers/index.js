@@ -20,6 +20,8 @@ import product_page_reducers from './product_page_reducers';
 import media_base_reducers from './media_base_reducers';
 import category_post_reducers from './category_post_reducers';
 import post_reducers from './post_reducers';
+import group_reducers from './group_reducers';
+import permission_reducers from './permission_reducers';
 
 export default combineReducers({
     product: product_reducers,
@@ -43,5 +45,6 @@ export default combineReducers({
     media_base: media_base_reducers,
     category_post: category_post_reducers,
     post: post_reducers,
-
+    group: group_reducers,
+    permission: permission_reducers,
 })

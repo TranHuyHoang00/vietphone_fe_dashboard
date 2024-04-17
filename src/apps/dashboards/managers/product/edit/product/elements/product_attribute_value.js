@@ -230,9 +230,9 @@ class product_attribute_value extends Component {
                                         <div className='space-y-[5px]'>
                                             {data_atbvl_raws && data_atbvl_raws.map((data, index) => {
                                                 return (
-                                                    <>
+                                                    <div key={index}>
                                                         {(data && data.attribute && data.attribute.group_attribute && data.attribute.group_attribute.id === item.id) &&
-                                                            <div key={index} className='flex gap-[5px]'>
+                                                            <div className='flex gap-[5px]'>
                                                                 <div className='w-1/3 flex justify-between space-x-[5px]'>
                                                                     <Typography.Text type="secondary">{data.attribute && data.attribute.name}</Typography.Text>
                                                                     <span>:</span>
@@ -251,7 +251,7 @@ class product_attribute_value extends Component {
                                                                 </div>
                                                             </div>
                                                         }
-                                                    </>
+                                                    </div>
                                                 )
                                             })}
                                         </div>

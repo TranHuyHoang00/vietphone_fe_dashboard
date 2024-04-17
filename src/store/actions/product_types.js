@@ -100,7 +100,7 @@ export const edit_product_redux = (id, data_product) => {
                 message.success('Thành công');
             } else {
                 dispatch(product_faided());
-                message.error('Lỗi');
+                message.error('Lỗi khi sửa sản phẩm');
             }
         } catch (error) {
             dispatch(product_faided());

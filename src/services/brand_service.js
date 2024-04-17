@@ -1,6 +1,6 @@
 import api_admin from '../auths/api_admin';
 const get_list_brand = (date_filter) => {
-    return api_admin.get(`/product/api/v1/list-brand?page=${date_filter.page}&limit=${date_filter.limit}${(date_filter.search === null || date_filter.search === '') ? '' : `&search=${date_filter.search}`}`);
+    return api_admin.get(`/product/api/v1/list-brand?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
 }
 const create_brand = (data) => {
     return api_admin.post(`/product/api/v1/create-brand`, data);

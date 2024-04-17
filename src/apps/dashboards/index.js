@@ -6,7 +6,7 @@ import {
     AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher, AiFillBehanceSquare
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillBook, AiFillBuild,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook,
-    AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment
+    AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
 import { get_local_account } from '../../auths/local_storage';
@@ -35,6 +35,7 @@ import ManagerLocation from './managers/location/index';
 import ManagerBanner from './managers/banner/index';
 import ManagerCategoryPost from './managers/category_post/index';
 import ManagerPost from './managers/post/index';
+import ManagerGroup from './managers/group/index';
 
 class index extends Component {
     constructor(props) {
@@ -76,6 +77,7 @@ class index extends Component {
             {
                 key: 'user', icon: <AiFillGithub />, label: 'Người dùng', children: [
                     { key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng' },
+                    { key: 'manager/group', icon: <AiFillRobot />, label: 'Phân quyền' },
                 ],
             },
             {
@@ -172,7 +174,7 @@ class index extends Component {
                                     <Route exact path={`${url}manager/banner`}><ManagerBanner /></Route>
                                     <Route exact path={`${url}manager/category_post`}><ManagerCategoryPost /></Route>
                                     <Route exact path={`${url}manager/post`}><ManagerPost /></Route>
-
+                                    <Route exact path={`${url}manager/group`}><ManagerGroup /></Route>
                                     <Route ><NotFound /></Route>
 
 

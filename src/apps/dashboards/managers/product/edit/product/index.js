@@ -77,8 +77,8 @@ class index extends Component {
             } else {
                 data_product.media = media;
             }
-            this.handle_product_page();
             await this.props.edit_product(data_product.id, data_product);
+            await this.handle_product_page();
             await this.props.get_product(data_product.id);
             this.props.click_edit_product();
         }

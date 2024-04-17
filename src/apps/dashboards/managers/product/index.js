@@ -78,6 +78,14 @@ class index extends Component {
         await this.props.get_list_product(data_filter);
         this.props.set_data_filter_product(data_filter);
     }
+    onchange_search = (value) => {
+        this.setState({
+            data_filter: {
+                ...this.state.data_filter,
+                search: value,
+            }
+        })
+    }
     render() {
         const columns = [
             {
@@ -182,7 +190,9 @@ class index extends Component {
                                     </Space>
                                 </Button>
                             </Space>
-                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên sản phẩm !" /></div>
+                            <div><Input.Search value={this.state.data_filter.search}
+                                onChange={(event) => this.onchange_search(event.target.value)}
+                                onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên sản phẩm !" /></div>
                         </div>
                         <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
                             <div className='flex items-center justify-between gap-[10px]'>
