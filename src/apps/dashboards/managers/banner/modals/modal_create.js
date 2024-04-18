@@ -9,6 +9,8 @@ import ModalFooter from '../../../components/modal/modal_footer';
 import { image_to_base64 } from '../../../../../utils/base64';
 import { DeleteOutlined } from '@ant-design/icons';
 import { create_media_base } from '../../../../../services/media_base_service';
+import { show_notification } from '../../../../../utils/show_notification';
+
 class modal_create extends Component {
     constructor(props) {
         super(props);
@@ -83,7 +85,7 @@ class modal_create extends Component {
                 }
             }
             return [...data_media_ids_new, ...data_media_ids];
-        } catch (e) {
+        } catch (error) {
             show_notification(error);
         }
     }

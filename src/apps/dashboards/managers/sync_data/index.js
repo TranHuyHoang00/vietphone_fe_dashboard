@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-
-import { Divider, Card, Spin, message } from 'antd';
+import { Divider, Card, Spin } from 'antd';
 import FormPopconfirm from '../../components/popconfirms/form_popconfirm';
 import { sync_all_products, get_task } from '../../../../services/task_service';
+import { show_notification } from '../../../../utils/show_notification';
 class index extends Component {
     constructor(props) {
         super(props);

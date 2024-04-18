@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../../../../store/actions';
-import { Button, Typography, Space, message } from 'antd';
+import { Button, Typography, Space } from 'antd';
 import ProductIntroduce from './elements/product_introduce';
 import ProductAttributeValue from './elements/product_attribute_value';
 import ProductPage from './elements/product_page';
 import ProductContent from './elements/product_content';
 import ProductMedia from './elements/product_media';
 import { create_media } from '../../../../../../services/media_service';
+import { show_notification } from '../../../../../../utils/show_notification';
+
 class index extends Component {
     constructor(props) {
         super(props);
@@ -46,7 +48,7 @@ class index extends Component {
                 }
             }
             return [...data_media_ids_new, ...data_media_ids];
-        } catch (e) {
+        } catch (error) {
             show_notification(error);
         }
     }

@@ -8,6 +8,7 @@ import VariantIntroduce from './elements/variant_introduce';
 import VariantMedia from './elements/variant_media';
 import VariantAttributeValue from './elements/variant_attribute_value';
 import { create_media } from '../../../../../../services/media_service';
+import { show_notification } from '../../../../../../utils/show_notification';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -79,7 +80,7 @@ class index extends Component {
                 }
             }
             return [...data_media_ids_new, ...data_media_ids];
-        } catch (e) {
+        } catch (error) {
             show_notification(error);
             return [];
 
