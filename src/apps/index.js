@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
-import Dashboards from './dashboards/index';
-import NotFound from './dashboards/pages_error/not_found';
+import Admin from './admins/index';
+import NotFound from './admins/pages_error/not_found';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -15,7 +15,7 @@ class index extends Component {
         return (
             <div>
                 <Switch>
-                    <Route path="/admin"><Dashboards /></Route>
+                    <Route path="/admin"><Admin /></Route>
                     <Redirect from="/" exact to="/admin" />
                     <Route ><NotFound /></Route>
                 </Switch>
