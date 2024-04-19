@@ -72,51 +72,40 @@ class login extends Component {
     }
     render() {
         return (
-            <div class="bg-no-repeat bg-cover bg-center relative" style={{ backgroundImage: `url(${bg})` }}>
-                <div class="absolute bg-gradient-to-b from-green-500 to-green-600 opacity-40 inset-0 z-0"></div>
-                <div class="flex items-center justify-center h-screen p-[10px]">
-                    <div class="flex justify-center self-center z-10">
-                        <div class="p-[20px] md:p-[30px] bg-white mx-auto rounded-2xl w-100 space-y-[20px]">
-                            <div class="text-center space-y-[10px]">
-                                <h3 class="font-bold text-2xl text-gray-800">ADMIN</h3>
-                                <div class="text-gray-500">
-                                    <p >Xin hãy đăng nhập bằng tài khoản của bạn.</p>
-                                </div>
-                            </div>
-                            <div class="space-y-5">
-                                <div class="space-y-2">
-                                    <label class="font-medium text-gray-700">Số điện thoại</label>
-                                    <input class=" w-full text-base px-4 py-2 border  border-gray-600 rounded-full focus:outline-none focus:border-green-400"
-                                        placeholder="0886825356" onChange={(event) => this.onchange_phone(event)} />
-                                </div>
-                                <div class="space-y-[5px]">
-                                    <label class="font-medium text-gray-700">
-                                        Mật khẩu
-                                    </label>
-                                    <div className='relative'>
-                                        <input class="w-full content-center text-base px-4 py-2 border border-gray-600 rounded-full focus:outline-none focus:border-green-400"
-                                            type={this.state.is_show_password === false ? 'password' : 'text'} placeholder="Nhập mật khẩu" onChange={(event) => this.onchange_password(event)} />
-                                        <div onClick={() => this.handle_show_password()}
-                                            className='absolute top-[12px] right-[12px] cursor-pointer'>
-                                            {this.state.is_show_password === false ?
-                                                <AiFillEye className='text-gray-700' />
-                                                :
-                                                <AiFillEyeInvisible className='text-gray-700' />
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className='pt-[10px] md:pt-[20px]'>
-                                    <Spin spinning={this.state.is_loading}>
-                                        <button disabled={this.state.is_loading} onClick={() => this.handle_login()}
-                                            class="w-full flex justify-center bg-green-500 text-white p-[10px] rounded-full font-semibold">
-                                            ĐĂNG NHẬP
-                                        </button>
-                                    </Spin>
+            <div className="h-screen w-screen font-sans bg-no-repeat bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: `url(${bg})` }}>
+                <div className="leading-loose">
+                    <div className=" m-4 p-[20px] md:p-[40px] bg-gray-700 bg-opacity-60 rounded shadow-xl space-y-[15px] w-[350px] sm:w-[400px]">
+                        <p className="text-white font-medium text-center text-[22px] ">ADMIN</p>
+                        <div className="space-y-[5px]">
+                            <label className="block  text-sm text-white" for="email">Số điện thoại</label>
+                            <input onChange={(event) => this.onchange_phone(event)}
+                                className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded focus:outline-none focus:bg-white"
+                                type="text" id="phone" aria-label="phone" required />
+                        </div>
+                        <div className="space-y-[5px]">
+                            <label className="block text-sm text-white">Mật khẩu</label>
+                            <div className='relative'>
+                                <input className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded focus:outline-none focus:bg-white"
+                                    id="password" arial-label="password" required
+                                    type={this.state.is_show_password === false ? 'password' : 'text'} onChange={(event) => this.onchange_password(event)} />
+                                <div onClick={() => this.handle_show_password()}
+                                    className='absolute top-[12px] right-[12px] cursor-pointer'>
+                                    {this.state.is_show_password === false ?
+                                        <AiFillEye className='text-gray-700' />
+                                        :
+                                        <AiFillEyeInvisible className='text-gray-700' />
+                                    }
                                 </div>
                             </div>
 
+                        </div>
+                        <div className="pt-[10px]">
+                            <Spin spinning={this.state.is_loading}>
+                                <button disabled={this.state.is_loading} onClick={() => this.handle_login()}
+                                    className="px-4 py-[10px] w-full flex justify-center font-medium text-white tracking-wider bg-gray-900 hover:bg-gray-800 rounded" type="submit">
+                                    ĐĂNG NHẬP
+                                </button>
+                            </Spin>
                         </div>
                     </div>
                 </div>
