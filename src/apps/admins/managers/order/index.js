@@ -13,6 +13,7 @@ import { text_line_1_3 } from '../../components/displays/data_line_1_3';
 import { format_day } from '../../../../utils/format_day';
 import ModalDetail from './modals/modal_detail';
 import DrawerFilter from './drawers/drawer_filter';
+import AvatarNone from '../../../../assets/images/avatar_none.jpg';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -69,8 +70,8 @@ class index extends Component {
             {
                 title: 'Thông tin KH', dataIndex: 'user',
                 render: (user, item) =>
-                    <div className='flex items-center justify-start'>
-                        <Avatar size={60} src="https://api.dicebear.com/7.x/miniavs/svg?seed=1" />
+                    <div className='flex items-center justify-start gap-x-[5px]'>
+                        <Avatar size={60} src={AvatarNone} />
                         <div>
                             <Typography.Text strong className='text-[#0574b8]'>{user.full_name}</Typography.Text><br />
                             <Typography.Text italic strong>{user.phone}</Typography.Text><br />
