@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { get_local_account, set_local_account } from './local_storage';
+import { get_data_local, set_data_local } from './local_storage';
 
 const api_admin = axios.create({
     baseURL: `${process.env.REACT_APP_API}`,
@@ -7,7 +7,7 @@ const api_admin = axios.create({
 
 api_admin.interceptors.request.use(
     async (request) => {
-        let data_account = await get_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+        let data_account = await get_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
         let token = data_account.data.access;
         if (token) { request.headers.Authorization = `Bearer ${token}`; }
         return request;
@@ -22,7 +22,7 @@ api_admin.interceptors.response.use(
     async (error) => {
         const originalConfig = error.config;
         if (error?.response?.status === 401 && error?.response?.data?.error?.code === 'token_not_valid') {
-            let data_account = await get_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+            let data_account = await get_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
             let refresh = data_account.data.refresh;
             let token;
             if (!refresh) {
@@ -34,7 +34,7 @@ api_admin.interceptors.response.use(
                     token = data.data.data.access;
                     originalConfig.headers.Authorization = `Bearer ${token}`;
                     data_account.data.access = token;
-                    set_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data_account.data);
+                    set_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data_account.data);
                     return api_admin(originalConfig);
                 } else {
                     return Promise.reject(error);

@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_tag, get_tag, create_tag, delete_tag, edit_tag } from '../../services/tag_service';
+import action_types from '@actions/action_types';
+import { get_list_tag, get_tag, create_tag, delete_tag, edit_tag } from '@services/tag_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_tag_redux = (data_filter) => {
     return async (dispatch, getState) => {

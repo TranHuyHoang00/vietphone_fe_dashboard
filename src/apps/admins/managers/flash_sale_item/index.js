@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../store/actions';
+import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm,
     Spin, Typography, Dropdown, Image
@@ -9,8 +9,8 @@ import {
 import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
 import ModalCreate from './modals/modal_create';
 import ModalEdit from './modals/modal_edit';
-import FormSelectInput from '../../components/selects/form_select_input';
-import { format_money } from '../../../../utils/format_money';
+import FormSelectInput from '@components/selects/form_select_input';
+import { format_money } from '@utils/format_money';
 
 class index extends Component {
     constructor(props) {

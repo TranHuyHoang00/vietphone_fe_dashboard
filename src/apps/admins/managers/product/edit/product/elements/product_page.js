@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../../store/actions';
+import * as actions from '@actions';
 import { Collapse, Input, Spin, Button } from 'antd';
 
 class product_page extends Component {

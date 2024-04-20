@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_media_base, get_media_base, create_media_base, delete_media_base, edit_media_base } from '../../services/media_base_service';
+import action_types from '@actions/action_types';
+import { get_list_media_base, get_media_base, create_media_base, delete_media_base, edit_media_base } from '@services/media_base_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_media_base_redux = (data_filter) => {
     return async (dispatch, getState) => {

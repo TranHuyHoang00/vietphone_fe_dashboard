@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_product, get_product, create_product, delete_product, edit_product } from '../../services/product_service';
+import action_types from '@actions/action_types';
+import { get_list_product, get_product, create_product, delete_product, edit_product } from '@services/product_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_product_redux = (data_filter) => {
     return async (dispatch, getState) => {

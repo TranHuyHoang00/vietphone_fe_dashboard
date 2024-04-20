@@ -9,7 +9,7 @@ import {
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot
 } from "react-icons/ai";
 import { withRouter } from 'react-router-dom';
-import { get_local_account } from '../../auths/local_storage';
+import { get_data_local } from '@auths/local_storage';
 import HeaderDB from './layouts/header';
 import LoginDB from './pages/login';
 import NotLogged from './pages_error/not_logged';
@@ -49,7 +49,8 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        let data_db = get_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+        let data_db = await get_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+
         if (data_db) {
             this.setState({ logged_in_db: true })
         }
@@ -174,6 +175,7 @@ class index extends Component {
                                     <Route exact path={`${url}manager/banner`}><ManagerBanner /></Route>
                                     <Route exact path={`${url}manager/category_post`}><ManagerCategoryPost /></Route>
                                     <Route exact path={`${url}manager/post`}><ManagerPost /></Route>
+
                                     <Route exact path={`${url}manager/group`}><ManagerGroup /></Route>
                                     <Route ><NotFound /></Route>
 

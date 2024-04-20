@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../store/actions';
+import * as actions from '@actions';
 import { Modal, message, Spin, Typography } from 'antd';
-import FormInput from '../../../components/inputs/form_input';
-import ModalFooter from '../../../components/modal/modal_footer';
-import FormSelectInput from '../../../components/selects/form_select_input';
+import FormInput from '@components/inputs/form_input';
+import ModalFooter from '@components/modal/modal_footer';
+import FormSelectInput from '@components/selects/form_select_input';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 class modal_create extends Component {

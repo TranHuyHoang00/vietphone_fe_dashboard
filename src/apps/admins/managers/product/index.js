@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../store/actions';
+import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Input,
     Spin, Pagination, Typography, Tag, Image
 } from 'antd';
 import { AiOutlineMenu } from "react-icons/ai";
-import FormSelectPage from '../../components/selects/form_select_page';
+import FormSelectPage from '@components/selects/form_select_page';
 import DrawerFilter from './drawers/drawer_filter';
 class index extends Component {
     constructor(props) {

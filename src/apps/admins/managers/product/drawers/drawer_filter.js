@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Drawer, Typography, Radio } from 'antd';
-import FormSelectInput from '../../../components/selects/form_select_input'
+import FormSelectInput from '@components/selects/form_select_input'
 class drawer_filter extends Component {
     constructor(props) {
         super(props);

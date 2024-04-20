@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_brand, get_brand, create_brand, delete_brand, edit_brand } from '../../services/brand_service';
+import action_types from '@actions/action_types';
+import { get_list_brand, get_brand, create_brand, delete_brand, edit_brand } from '@services/brand_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_brand_redux = (data_filter) => {
     return async (dispatch, getState) => {

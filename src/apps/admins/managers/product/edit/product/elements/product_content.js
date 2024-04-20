@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import * as actions from '../../../../../../../store/actions';
+import * as actions from '@actions';
 import { connect } from 'react-redux';
 import { Collapse } from 'antd';
 import ReactQuill from 'react-quill';

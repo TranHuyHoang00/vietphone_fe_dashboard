@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../store/actions';
+import * as actions from '@actions';
 import { Modal, message, Spin } from 'antd';
-import FormInput from '../../../components/inputs/form_input';
-import FormTextare from '../../../components/inputs/form_textare';
-import FormImage from '../../../components/inputs/form_image';
-import FormSelectInput from '../../../components/selects/form_select_input';
-import ModalFooter from '../../../components/modal/modal_footer';
+import FormInput from '@components/inputs/form_input';
+import FormTextare from '@components/inputs/form_textare';
+import FormImage from '@components/inputs/form_image';
+import FormSelectInput from '@components/selects/form_select_input';
+import ModalFooter from '@components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
         super(props);

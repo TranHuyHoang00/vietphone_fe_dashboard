@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_group_attribute, get_group_attribute, create_group_attribute, delete_group_attribute, edit_group_attribute } from '../../services/group_attribute_service';
+import action_types from '@actions/action_types';
+import { get_list_group_attribute, get_group_attribute, create_group_attribute, delete_group_attribute, edit_group_attribute } from '@services/group_attribute_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_group_attribute_redux = (data_filter) => {
     return async (dispatch, getState) => {

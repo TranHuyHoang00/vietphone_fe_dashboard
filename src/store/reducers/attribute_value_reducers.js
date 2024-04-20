@@ -1,4 +1,4 @@
-import action_types from '../actions/action_types';
+import action_types from '@actions/action_types';
 
 const initialState = {
     data_attribute_values: [],

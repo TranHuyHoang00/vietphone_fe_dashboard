@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { get_local_account, remove_local_account } from '../../../auths/local_storage';
+import { get_data_local, remove_data_local } from '@auths/local_storage';
 import { Avatar, Dropdown, Space, Badge } from 'antd';
 import { LogoutOutlined, MenuOutlined } from '@ant-design/icons';
-import AvatarNone from '../../../assets/images/avatar_none1.png'
+import AvatarNone from '@assets/images/avatar_none1.png'
 class header extends Component {
     constructor(props) {
         super(props);
@@ -12,14 +12,14 @@ class header extends Component {
         }
     }
     async componentDidMount() {
-        let data_user = get_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+        let data_user = get_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
         if (data_user) {
             this.setState({ data_user: data_user.data.user })
         }
     }
     handle_logout = () => {
         this.props.handle_logout_db();
-        remove_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+        remove_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
         this.props.history.push(`/admin/login`);
     }
     render() {

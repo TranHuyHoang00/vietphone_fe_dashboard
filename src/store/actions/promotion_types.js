@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_promotion, get_promotion, create_promotion, delete_promotion, edit_promotion } from '../../services/promotion_service';
+import action_types from '@actions/action_types';
+import { get_list_promotion, get_promotion, create_promotion, delete_promotion, edit_promotion } from '@services/promotion_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_promotion_redux = (data_filter) => {
     return async (dispatch, getState) => {

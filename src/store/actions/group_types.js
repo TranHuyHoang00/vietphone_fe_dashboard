@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_group, get_group, create_group, delete_group, edit_group } from '../../services/group_service';
+import action_types from '@actions/action_types';
+import { get_list_group, get_group, create_group, delete_group, edit_group } from '@services/group_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_group_redux = (data_filter) => {
     return async (dispatch, getState) => {

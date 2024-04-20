@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../../store/actions';
+import * as actions from '@actions';
 import { Button, Dropdown, Image, Collapse } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import "react-multi-carousel/lib/styles.css";
 import Carousel from "react-multi-carousel";
-import { image_to_base64 } from '../../../../../../../utils/base64';
+import { image_to_base64 } from '@utils/base64';
 import ModalVideo from '../../../modals/modal_video';
 class product_media extends Component {
     constructor(props) {

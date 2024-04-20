@@ -1,4 +1,4 @@
-import api_admin from '../auths/api_admin';
+import api_admin from '@auths/api_admin';
 const get_list_location = (date_filter) => {
     return api_admin.get(`/settings/api/v1/list-location?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
 }

@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_flash_sale_item, get_flash_sale_item, create_flash_sale_item, delete_flash_sale_item, edit_flash_sale_item } from '../../services/flash_sale_item_service';
+import action_types from '@actions/action_types';
+import { get_list_flash_sale_item, get_flash_sale_item, create_flash_sale_item, delete_flash_sale_item, edit_flash_sale_item } from '@services/flash_sale_item_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_flash_sale_item_redux = (data_filter) => {
     return async (dispatch, getState) => {

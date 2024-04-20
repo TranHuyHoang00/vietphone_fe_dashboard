@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { set_local_account } from '../../../auths/local_storage';
-import { Login } from '../../../services/login_services';
+import { set_data_local } from '@auths/local_storage';
+import { Login } from '@services/login_services';
 import { message, Spin } from 'antd';
-import bg from '../../../assets/images/bg.jpg';
+import bg from '@assets/images/bg.jpg';
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 class login extends Component {
     constructor(props) {
@@ -52,7 +52,7 @@ class login extends Component {
             try {
                 let data = await Login(this.state.phone, this.state.password);
                 if (data && data.data && data.data.success === 1) {
-                    set_local_account(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
+                    set_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
                     this.props.history.push(`/admin`);
                     this.props.handle_login_db();
                 }

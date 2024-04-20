@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../store/actions';
+import * as actions from '@actions';
 import {
     Table, Space, Divider, Input,
     Spin, Pagination, Typography, Avatar
 } from 'antd';
 import { AiFillEye } from "react-icons/ai";
-import FormSelectPage from '../../components/selects/form_select_page';
+import FormSelectPage from '@components/selects/form_select_page';
 import ModalDetail from './modals/modal_detail';
-import AvatarNone from '../../../../assets/images/avatar_none.jpg';
+import AvatarNone from '@assets/images/avatar_none.jpg';
 class index extends Component {
     constructor(props) {
         super(props);

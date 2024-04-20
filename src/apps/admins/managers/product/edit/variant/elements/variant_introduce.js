@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../../store/actions';
+import * as actions from '@actions';
 import { Collapse, Input, Typography } from 'antd';
-import { text_line_1_3 } from '../../../../../components/displays/data_line_1_3';
-import { format_money } from '../../../../../../../utils/format_money';
+import { text_line_1_3 } from '@components/displays/data_line_1_3';
+import { format_money } from '@utils/format_money';
 class variant_introduce extends Component {
     constructor(props) {
         super(props);

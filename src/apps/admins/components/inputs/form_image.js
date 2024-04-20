@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Typography, Image } from 'antd';
-import { image_to_base64 } from '../../../../utils/base64';
+import { image_to_base64 } from '@utils/base64';
 class form_image extends Component {
     constructor(props) {
         super(props);

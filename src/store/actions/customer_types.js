@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_customer, get_customer, create_customer, delete_customer, edit_customer } from '../../services/customer_service';
+import action_types from '@actions/action_types';
+import { get_list_customer, get_customer, create_customer, delete_customer, edit_customer } from '@services/customer_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_customer_redux = (data_filter) => {
     return async (dispatch, getState) => {

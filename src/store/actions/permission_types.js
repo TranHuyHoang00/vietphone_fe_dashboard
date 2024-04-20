@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_permission, get_permission, create_permission, delete_permission, edit_permission } from '../../services/permission_service';
+import action_types from '@actions/action_types';
+import { get_list_permission, get_permission, create_permission, delete_permission, edit_permission } from '@services/permission_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_permission_redux = (data_filter) => {
     return async (dispatch, getState) => {

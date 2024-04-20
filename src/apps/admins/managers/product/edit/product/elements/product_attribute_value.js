@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../../store/actions';
+import * as actions from '@actions';
 import { Collapse, Typography, Button, Card, message } from 'antd';
-import FormSelectItem from '../../../../../components/selects/form_select_item';
+import FormSelectItem from '@components/selects/form_select_item';
 import { DeleteOutlined } from '@ant-design/icons';
 class product_attribute_value extends Component {
     constructor(props) {

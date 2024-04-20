@@ -1,4 +1,4 @@
-import api_admin from '../auths/api_admin';
+import api_admin from '@auths/api_admin';
 const get_list_category_post = (date_filter) => {
     return api_admin.get(`/bai-viet/api/v1/list-category?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
 }

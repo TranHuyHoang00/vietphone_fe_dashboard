@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_variant_attribute_group, get_variant_attribute_group, create_variant_attribute_group, delete_variant_attribute_group, edit_variant_attribute_group } from '../../services/variant_attribute_group_service';
+import action_types from '@actions/action_types';
+import { get_list_variant_attribute_group, get_variant_attribute_group, create_variant_attribute_group, delete_variant_attribute_group, edit_variant_attribute_group } from '@services/variant_attribute_group_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_variant_attribute_group_redux = (data_filter) => {
     return async (dispatch, getState) => {

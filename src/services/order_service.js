@@ -1,4 +1,4 @@
-import api_admin from '../auths/api_admin';
+import api_admin from '@auths/api_admin';
 const get_list_order = (date_filter) => {
     return api_admin.get(`/order/api/v1/list-order?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}${date_filter.status === '' ? '' : `&status=${date_filter.status}`}${date_filter.source === '' ? '' : `&source=${date_filter.source}`}`);
 }

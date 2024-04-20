@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../store/actions';
+import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm, Input,
     Spin, Pagination, Typography, Image, Dropdown,
 } from 'antd';
 import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
-import FormSelectPage from '../../components/selects/form_select_page';
+import FormSelectPage from '@components/selects/form_select_page';
 import ModalCreate from './modals/modal_create';
 import ModalEdit from './modals/modal_edit';
 import "react-responsive-carousel/lib/styles/carousel.min.css";

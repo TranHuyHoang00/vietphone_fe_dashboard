@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../../store/actions';
+import * as actions from '@actions';
 import { Collapse, Select, message } from 'antd';
-import { text_line_1_3 } from '../../../../../components/displays/data_line_1_3';
-import FormSelectItem from '../../../../../components/selects/form_select_item';
+import { text_line_1_3 } from '@components/displays/data_line_1_3';
+import FormSelectItem from '@components/selects/form_select_item';
 class product_introduce extends Component {
     constructor(props) {
         super(props);

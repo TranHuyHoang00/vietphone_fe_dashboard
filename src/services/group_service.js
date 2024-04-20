@@ -1,4 +1,4 @@
-import api_admin from '../auths/api_admin';
+import api_admin from '@auths/api_admin';
 const get_list_group = (date_filter) => {
     return api_admin.get(`/auth/api/v1/list-group?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
 }

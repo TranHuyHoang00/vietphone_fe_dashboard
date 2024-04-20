@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../store/actions';
+import * as actions from '@actions';
 import {
     Modal, Input, Table, Divider, Popconfirm,
     Spin, Pagination, Typography, Dropdown,
 } from 'antd';
-import ModalFooter from '../../../components/modal/modal_footer';
-import FormSelectPage from '../../../components/selects/form_select_page';
+import ModalFooter from '@components/modal/modal_footer';
+import FormSelectPage from '@components/selects/form_select_page';
 class modal_create extends Component {
     constructor(props) {
         super(props);

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../store/actions';
+import * as actions from '@actions';
 import {
     Table, Space, Divider, Popconfirm,
     Spin, Pagination, Typography, Dropdown
 } from 'antd';
 import { AiFillEye } from "react-icons/ai";
-import FormSelectPage from '../../components/selects/form_select_page';
+import FormSelectPage from '@components/selects/form_select_page';
 import ModalDetail from './modals/modal_detail';
 import moment from 'moment';
 class index extends Component {

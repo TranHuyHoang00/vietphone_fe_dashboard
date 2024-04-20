@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../store/actions';
+import * as actions from '@actions';
 import { Modal, message, Spin, Typography, Carousel, Image, Button } from 'antd';
-import FormInput from '../../../components/inputs/form_input';
-import FormSelectInput from '../../../components/selects/form_select_input';
-import ModalFooter from '../../../components/modal/modal_footer';
-import { image_to_base64 } from '../../../../../utils/base64';
+import FormInput from '@components/inputs/form_input';
+import FormSelectInput from '@components/selects/form_select_input';
+import ModalFooter from '@components/modal/modal_footer';
+import { image_to_base64 } from '@utils/base64';
 import { DeleteOutlined } from '@ant-design/icons';
-import { create_media_base, get_media_base } from '../../../../../services/media_base_service';
-import { show_notification } from '../../../../../utils/show_notification';
+import { create_media_base, get_media_base } from '@services/media_base_service';
+import { show_notification } from '@utils/show_notification';
 class modal_edit extends Component {
     constructor(props) {
         super(props);

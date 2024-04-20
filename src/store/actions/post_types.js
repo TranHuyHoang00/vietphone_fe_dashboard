@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_post, get_post, create_post, delete_post, edit_post } from '../../services/post_service';
+import action_types from '@actions/action_types';
+import { get_list_post, get_post, create_post, delete_post, edit_post } from '@services/post_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_post_redux = (data_filter) => {
     return async (dispatch, getState) => {

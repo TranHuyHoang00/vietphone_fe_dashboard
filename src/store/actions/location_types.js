@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_location, get_location, create_location, delete_location, edit_location } from '../../services/location_service';
+import action_types from '@actions/action_types';
+import { get_list_location, get_location, create_location, delete_location, edit_location } from '@services/location_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_location_redux = (data_filter) => {
     return async (dispatch, getState) => {

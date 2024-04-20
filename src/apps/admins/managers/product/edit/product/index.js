@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../store/actions';
+import * as actions from '@actions';
 import { Button, Typography, Space } from 'antd';
 import ProductIntroduce from './elements/product_introduce';
 import ProductAttributeValue from './elements/product_attribute_value';
 import ProductPage from './elements/product_page';
 import ProductContent from './elements/product_content';
 import ProductMedia from './elements/product_media';
-import { create_media } from '../../../../../../services/media_service';
-import { show_notification } from '../../../../../../utils/show_notification';
+import { create_media } from '@services/media_service';
+import { show_notification } from '@utils/show_notification';
 
 class index extends Component {
     constructor(props) {

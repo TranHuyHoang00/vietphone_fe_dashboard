@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../store/actions';
+import * as actions from '@actions';
 import { Button, Space, message, Spin } from 'antd';
 import VariantOverview from './elements/variant_overview';
 import VariantIntroduce from './elements/variant_introduce';
 import VariantMedia from './elements/variant_media';
 import VariantAttributeValue from './elements/variant_attribute_value';
-import { create_media } from '../../../../../../services/media_service';
-import { show_notification } from '../../../../../../utils/show_notification';
+import { create_media } from '@services/media_service';
+import { show_notification } from '@utils/show_notification';
 class index extends Component {
     constructor(props) {
         super(props);

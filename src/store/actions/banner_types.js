@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_banner, get_banner, create_banner, delete_banner, edit_banner } from '../../services/banner_service';
+import action_types from '@actions/action_types';
+import { get_list_banner, get_banner, create_banner, delete_banner, edit_banner } from '@services/banner_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_banner_redux = (data_filter) => {
     return async (dispatch, getState) => {

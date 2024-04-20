@@ -1,7 +1,7 @@
-import action_types from './action_types';
-import { get_list_category, get_category, create_category, delete_category, edit_category } from '../../services/category_service';
+import action_types from '@actions/action_types';
+import { get_list_category, get_category, create_category, delete_category, edit_category } from '@services/category_service';
 import { message } from 'antd';
-import { show_notification } from '../../utils/show_notification';
+import { show_notification } from '@utils/show_notification';
 
 export const get_list_category_redux = (data_filter) => {
     return async (dispatch, getState) => {

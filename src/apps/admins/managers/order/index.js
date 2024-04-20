@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../store/actions';
+import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Input,
     Spin, Pagination, Typography, Avatar,
 } from 'antd';
 import { AiFillEye, AiOutlineMenu } from "react-icons/ai";
-import FormSelectPage from '../../components/selects/form_select_page';
-import { format_money } from '../../../../utils/format_money';
-import { text_line_1_3 } from '../../components/displays/data_line_1_3';
-import { format_day } from '../../../../utils/format_day';
+import FormSelectPage from '@components/selects/form_select_page';
+import { format_money } from '@utils/format_money';
+import { text_line_1_3 } from '@components/displays/data_line_1_3';
+import { format_day } from '@utils/format_day';
 import ModalDetail from './modals/modal_detail';
 import DrawerFilter from './drawers/drawer_filter';
-import AvatarNone from '../../../../assets/images/avatar_none.jpg';
+import AvatarNone from '@assets/images/avatar_none.jpg';
 class index extends Component {
     constructor(props) {
         super(props);

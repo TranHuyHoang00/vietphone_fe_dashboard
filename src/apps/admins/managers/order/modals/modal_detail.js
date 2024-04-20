@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Modal, Button, Collapse, Spin } from 'antd';
-import { format_money } from '../../../../../utils/format_money';
-import { text_line_1_3 } from '../../../components/displays/data_line_1_3';
-import { format_day } from '../../../../../utils/format_day';
+import { format_money } from '@utils/format_money';
+import { text_line_1_3 } from '@components/displays/data_line_1_3';
+import { format_day } from '@utils/format_day';
 class modal_detail extends Component {
     constructor(props) {
         super(props);

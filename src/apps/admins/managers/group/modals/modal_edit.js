@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../store/actions';
+import * as actions from '@actions';
 import { Modal, Spin, Collapse, Checkbox } from 'antd';
-import ModalFooter from '../../../components/modal/modal_footer';
+import ModalFooter from '@components/modal/modal_footer';
 class modal_edit extends Component {
     constructor(props) {
         super(props);
