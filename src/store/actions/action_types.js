@@ -328,6 +328,10 @@ const action_types = Object.freeze({
     EDIT_LIST_PERMISSION_SUCCESS: 'EDIT_LIST_PERMISSION_SUCCESS',
     ON_CHANGE_PERMISSION: 'ON_CHANGE_PERMISSION',
     SET_DATA_PERMISSION: 'SET_DATA_PERMISSION',
+
+    ///DARK MODE
+    SET_DARK_MODE: 'SET_DARK_MODE',
+
 })
 
 export default action_types;

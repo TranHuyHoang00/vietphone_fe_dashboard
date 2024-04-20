@@ -101,7 +101,7 @@ class index extends Component {
                                 Hủy
                             </Button>
                         }
-                        <Button onClick={() => this.handle_edit_product()} className='bg-[#0e97ff] text-white'>
+                        <Button onClick={() => this.handle_edit_product()} className='bg-[#0e97ff] dark:bg-white text-white'>
                             {this.props.is_edit === false ? 'Chỉnh sửa' : 'Lưu'}
                         </Button>
                     </Space>

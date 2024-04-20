@@ -59,7 +59,7 @@ class index extends Component {
             },
             {
                 title: 'Task_name', dataIndex: 'task_name',
-                render: (task_name) => <Typography.Text strong className='text-[#0574b8]'>{task_name}</Typography.Text>,
+                render: (task_name) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{task_name}</Typography.Text>,
                 sorter: (a, b) => a.task_name.localeCompare(b.task_name),
             },
             {
@@ -96,7 +96,7 @@ class index extends Component {
             <>
                 <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
-                        <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
                                 <div>

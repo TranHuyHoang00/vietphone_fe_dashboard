@@ -64,16 +64,16 @@ class index extends Component {
             },
             {
                 title: 'Giá trị', dataIndex: 'value',
-                render: (value) => <Typography.Text strong className='text-[#0574b8]'>{value}</Typography.Text>,
+                render: (value) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{value}</Typography.Text>,
                 sorter: (a, b) => a.value.localeCompare(b.value),
             },
             {
                 title: 'Thông số', dataIndex: 'attribute', responsive: ['md'],
-                render: (attribute) => <Typography.Text strong className='text-[#0574b8]'>{attribute && attribute.name}</Typography.Text>,
+                render: (attribute) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{attribute && attribute.name}</Typography.Text>,
             },
             {
                 title: 'Loại thông số', dataIndex: 'attribute', responsive: ['md'],
-                render: (attribute) => <Typography.Text strong className='text-[#0574b8]'>{attribute && attribute.group_attribute && attribute.group_attribute.name}</Typography.Text>,
+                render: (attribute) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{attribute && attribute.group_attribute && attribute.group_attribute.name}</Typography.Text>,
             },
             {
                 title: 'HĐ', width: 80,
@@ -102,15 +102,15 @@ class index extends Component {
                 <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
-                                <Space className='text-white'>
+                            <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
                                     Tạo mới
                                 </Space>
                             </Button>
                             <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Giá trị !" /></div>
                         </div>
-                        <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
                                 <div>

@@ -22,7 +22,7 @@ import category_post_reducers from '@reducers/category_post_reducers';
 import post_reducers from '@reducers/post_reducers';
 import group_reducers from '@reducers/group_reducers';
 import permission_reducers from '@reducers/permission_reducers';
-
+import dark_mode_reducers from '@reducers/dark_mode_reducers';
 export default combineReducers({
     product: product_reducers,
     customer: customer_reducers,
@@ -47,4 +47,5 @@ export default combineReducers({
     post: post_reducers,
     group: group_reducers,
     permission: permission_reducers,
+    dark_mode: dark_mode_reducers,
 })

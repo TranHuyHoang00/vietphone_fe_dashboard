@@ -50,7 +50,7 @@ class index extends Component {
         const columns = [
             {
                 title: 'Mã KH', dataIndex: 'code', width: 120, responsive: ['sm'],
-                render: (code) => <Typography.Text strong className='text-[#0574b8]'>{code}</Typography.Text>,
+                render: (code) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{code}</Typography.Text>,
                 sorter: (a, b) => a.code - b.code,
             },
             {
@@ -59,7 +59,7 @@ class index extends Component {
                     <div className='flex items-center justify-start gap-x-[5px]'>
                         <Avatar size={60} src={AvatarNone} />
                         <div>
-                            <Typography.Text strong className='text-[#0574b8]'>{user.full_name}</Typography.Text><br />
+                            <Typography.Text strong className='text-[#0574b8] dark:text-white'>{user.full_name}</Typography.Text><br />
                             <Typography.Text italic strong>{user.phone}</Typography.Text><br />
                             {item.email === '' || item.email === null ?
                                 <Typography.Text italic>none@gmail.com</Typography.Text>
@@ -95,7 +95,7 @@ class index extends Component {
                             </div>
                             <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên, Mã KH, SĐT !" /></div>
                         </div>
-                        <div className='bg-white p-[10px] rounded-[10px] shadow-sm bcustomer'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-sm bcustomer'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
                             </div>

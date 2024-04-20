@@ -13,7 +13,7 @@ class index extends Component {
     render() {
         return (
             <Space>
-                <span>Hiển thị</span>
+                <span className='text-black dark:text-white'>Hiển thị</span>
                 <Select
                     onChange={(value) => this.props.onchange_page(value, 'limit')}
                     defaultValue="5 dòng"

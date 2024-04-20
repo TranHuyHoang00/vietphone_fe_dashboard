@@ -42,7 +42,7 @@ class modal_vide0 extends Component {
                             Hủy bỏ
                         </Button>
                         <Button onClick={() => this.handle_create_video()}
-                            className='bg-[#0e97ff] text-white'>
+                            className='bg-[#0e97ff] dark:bg-white text-white'>
                             Xác nhận
                         </Button>
                     </>

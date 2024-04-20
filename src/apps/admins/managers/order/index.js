@@ -64,7 +64,7 @@ class index extends Component {
         const columns = [
             {
                 title: 'Ngày tạo', dataIndex: 'created_at', width: 140, responsive: ['sm'],
-                render: (created_at) => <Typography.Text strong className='text-[#0574b8]'>{format_day(created_at)}</Typography.Text>,
+                render: (created_at) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{format_day(created_at)}</Typography.Text>,
                 sorter: (a, b) => a.created_at - b.created_at,
             },
             {
@@ -73,7 +73,7 @@ class index extends Component {
                     <div className='flex items-center justify-start gap-x-[5px]'>
                         <Avatar size={60} src={AvatarNone} />
                         <div>
-                            <Typography.Text strong className='text-[#0574b8]'>{user.full_name}</Typography.Text><br />
+                            <Typography.Text strong className='text-[#0574b8] dark:text-white'>{user.full_name}</Typography.Text><br />
                             <Typography.Text italic strong>{user.phone}</Typography.Text><br />
                             {item.email === '' || item.email === null ?
                                 <Typography.Text italic>none@gmail.com</Typography.Text>
@@ -117,8 +117,8 @@ class index extends Component {
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Space>
-                                <Button onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff]'>
-                                    <Space className='text-white'>
+                                <Button onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                    <Space className='text-white dark:text-black'>
                                         <AiOutlineMenu />
                                         Bộ lọc
                                     </Space>
@@ -126,11 +126,11 @@ class index extends Component {
                             </Space>
                             <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên KH, SĐT, Mã ĐH !" /></div>
                         </div>
-                        <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
                             </div>
-                            <Divider>ĐƠN HÀNG</Divider>
+                            <Divider >ĐƠN HÀNG</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={row_selection} rowKey="id"
                                     columns={columns} dataSource={this.props.data_orders} pagination={false}

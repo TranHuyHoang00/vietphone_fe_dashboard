@@ -106,7 +106,7 @@ class index extends Component {
                 title: 'Tên sản phẩm', dataIndex: 'name',
                 render: (name, item) =>
                     <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product/edit/${item.id}`)}>
-                        <Typography.Text className='text-[#0574b8] cursor-pointer'>{name}</Typography.Text>
+                        <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{name}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
@@ -176,15 +176,15 @@ class index extends Component {
                 <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            {/* <Button disabled onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
-                                <Space className='text-white'>
+                            {/* <Button disabled onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
                                     Tạo mới
                                 </Space>
                             </Button> */}
                             <Space>
-                                <Button onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff]'>
-                                    <Space className='text-white'>
+                                <Button onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                    <Space className='text-white dark:text-black'>
                                         <AiOutlineMenu />
                                         Bộ lọc
                                     </Space>
@@ -194,7 +194,7 @@ class index extends Component {
                                 onChange={(event) => this.onchange_search(event.target.value)}
                                 onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên sản phẩm !" /></div>
                         </div>
-                        <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={this.props.data_filter.limit} onchange_page={this.onchange_page} />
                                 {/* <div>

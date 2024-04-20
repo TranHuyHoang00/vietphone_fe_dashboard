@@ -55,7 +55,7 @@ class modal_create extends Component {
             },
             {
                 title: 'Tên sản phẩm', dataIndex: 'name',
-                render: (name) => <Typography.Text className='text-[#0574b8]'>{name}</Typography.Text>,
+                render: (name) => <Typography.Text className='text-[#0574b8] dark:text-white'>{name}</Typography.Text>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
         ];
@@ -82,7 +82,7 @@ class modal_create extends Component {
                         <div className='flex items-center justify-between gap-[10px]'>
                             <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên sản phẩm !" /></div>
                         </div>
-                        <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={this.state.data_filter.limit} onchange_page={this.onchange_page} />
                                 <div>

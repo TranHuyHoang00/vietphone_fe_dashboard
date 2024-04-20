@@ -138,7 +138,7 @@ class index extends Component {
                         <Layout.Sider className='overflow-y-auto h-screen md:block hidden'
                             collapsible collapsed={this.state.collapsed} breakpoint="lg"
                             onCollapse={() => this.setCollapsed()}>
-                            <Menu theme="dark" mode="inline" items={items} defaultSelectedKeys={['manager']}
+                            <Menu theme='dark' mode="inline" items={items} defaultSelectedKeys={['manager']}
                                 onClick={(value) => this.onClickPage(value)} />
                         </Layout.Sider>
                         <Drawer title="Menu" placement={'left'} width={250} className='md:hidden block'
@@ -149,12 +149,9 @@ class index extends Component {
                                 onClick={(value) => this.onClickPage(value)} />
                         </Drawer>
                         <Layout className='overflow-auto h-screen'>
-                            <Layout.Header className='sticky top-0 z-50 border-b shadow-sm bg-white'>
-                                <HeaderDB open_drawer_form={this.open_drawer_form} handle_logout_db={this.handle_logout_db} />
-                            </Layout.Header>
+                            <HeaderDB open_drawer_form={this.open_drawer_form} handle_logout_db={this.handle_logout_db} />
                             <Layout.Content className='py-[10px]'>
                                 <Switch>
-
                                     <Route exact path={`${url}login`}><Empty /></Route>
                                     <Route exact path={`${url}manager/customer`}><ManagerCustomer /></Route>
                                     <Route exact path={`${url}manager/brand`}><ManagerBrand /></Route>

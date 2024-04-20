@@ -88,7 +88,7 @@ class index extends Component {
         return (
             <>
                 <div className="mx-[10px] space-y-[10px]">
-                    <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
+                    <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                         <Divider>ĐỒNG BỘ</Divider>
                         <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-[10px]'>
                             <div>

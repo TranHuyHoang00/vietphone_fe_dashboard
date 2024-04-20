@@ -76,7 +76,7 @@ class index extends Component {
             },
             {
                 title: 'Tên ', dataIndex: 'product_variant',
-                render: (product_variant) => <Typography.Text strong className='text-[#0574b8]'>{product_variant && product_variant.name}</Typography.Text>,
+                render: (product_variant) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{product_variant && product_variant.name}</Typography.Text>,
             },
             {
                 title: 'Giá gốc ', dataIndex: 'product_variant', responsive: ['md'],
@@ -114,14 +114,14 @@ class index extends Component {
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Button disabled={this.props.data_flash_sale.id ? false : true}
-                                onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff]'>
-                                <Space className='text-white'>
+                                onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
                                     Thêm mới
                                 </Space>
                             </Button>
                         </div>
-                        <div className='bg-white p-[10px] rounded-[10px] shadow-sm border'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-end justify-between gap-[10px]'>
                                 <div className='w-[200px] sm:w-[300px] md:w-[500px]'>
                                     <FormSelectInput name={'Flash sale'}
