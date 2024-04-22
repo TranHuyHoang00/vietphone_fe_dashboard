@@ -25,6 +25,9 @@ class modal_edit extends Component {
         let result = this.validation(this.props.data_variant_attribute_group);
         if (result.code === 0) {
             let data_variant_attribute_group = this.props.data_variant_attribute_group;
+            if (data_variant_attribute_group?.attribute?.[0]?.id) {
+                delete data_variant_attribute_group.attribute;
+            }
             await this.props.edit_variant_attribute_group(data_variant_attribute_group.id, data_variant_attribute_group);
             let is_result = this.props.is_result;
             if (is_result) {

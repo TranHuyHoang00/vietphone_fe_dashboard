@@ -22,6 +22,7 @@ export * from '@actions/post_types';
 export * from '@actions/group_types';
 export * from '@actions/permission_types';
 export * from '@actions/dark_mode_types';
+export * from '@actions/user_types';
 
 
 
