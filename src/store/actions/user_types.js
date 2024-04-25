@@ -1,8 +1,7 @@
 import action_types from '@actions/action_types';
-import { get_list_user, get_user, create_user, delete_user, edit_user } from '@services/user_service';
+import { get_list_user, get_user, create_user, delete_user, edit_user, get_list_user_permission } from '@services/user_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
-
 export const get_list_user_redux = (data_filter) => {
     return async (dispatch, getState) => {
         try {
@@ -47,7 +46,7 @@ export const create_user_redux = (data_user) => {
                 message.success('Thành công');
             } else {
                 dispatch(user_faided());
-                message.error('Lỗi');
+                message.error('Lỗi,vui lòng kiểm tra lại thông tin');
             }
         } catch (error) {
             dispatch(user_faided());
@@ -109,6 +108,30 @@ export const edit_user_redux = (id, data_user) => {
         }
     }
 }
+export const get_list_user_permission_redux = () => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch(user_start());
+            let data = await get_list_user_permission();
+            if (data && data.data && data.data.success === 1) {
+                let data_raw = data.data.data;
+                if (data_raw?.is_superuser === true) {
+                    dispatch(get_list_user_permission_success([]));
+                    dispatch(set_is_superuser_redux(true));
+                } else {
+                    dispatch(get_list_user_permission_success(data_raw));
+                    dispatch(set_is_superuser_redux(false));
+                }
+            } else {
+                dispatch(user_faided());
+                message.error('Lỗi');
+            }
+        } catch (error) {
+            dispatch(user_faided());
+            show_notification(error);
+        }
+    }
+}
 export const user_start = () => ({
     type: action_types.USER_START,
 })
@@ -134,5 +157,13 @@ export const on_change_user_redux = (value, id) => ({
 })
 export const set_data_user_redux = (data) => ({
     type: action_types.SET_DATA_USER,
+    data,
+})
+export const get_list_user_permission_success = (data) => ({
+    type: action_types.GET_LIST_USER_PERMISSION_SUCCESS,
+    data
+})
+export const set_is_superuser_redux = (data) => ({
+    type: action_types.SET_IS_SUPERUSER,
     data,
 })

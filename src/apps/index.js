@@ -11,11 +11,11 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
+
         }
     }
     async componentDidMount() {
     }
-
     render() {
         let dark_mode = this.props.dark_mode;
         return (
@@ -35,4 +35,8 @@ const mapStateToProps = state => {
         dark_mode: state.dark_mode.dark_mode,
     };
 };
-export default connect(mapStateToProps)(withRouter(index));
+const mapDispatchToProps = dispatch => {
+    return {
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

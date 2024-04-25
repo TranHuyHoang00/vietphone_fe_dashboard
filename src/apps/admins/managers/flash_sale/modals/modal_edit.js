@@ -45,7 +45,6 @@ class modal_edit extends Component {
     }
     render() {
         let data_flash_sale = this.props.data_flash_sale;
-        console.log(data_flash_sale);
         let is_loading = this.props.is_loading;
         return (
             <Modal title="CHỈNH SỬA" open={this.props.modal_edit}

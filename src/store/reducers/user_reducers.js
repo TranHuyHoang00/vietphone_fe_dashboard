@@ -6,6 +6,9 @@ const initialState = {
     data_meta: {},
     is_loading: false,
     is_result: false,
+
+    data_user_permissions: [],
+    is_superuser: true,
 }
 
 const user_reducers = (state = initialState, action) => {
@@ -80,6 +83,18 @@ const user_reducers = (state = initialState, action) => {
                 data_user: {
                     ...copyState,
                 }
+            }
+        case action_types.GET_LIST_USER_PERMISSION_SUCCESS:
+            return {
+                ...state,
+                is_loading: false,
+                is_result: true,
+                data_user_permissions: action?.data?.permissions ? action?.data?.permissions : []
+            }
+        case action_types.SET_IS_SUPERUSER:
+            return {
+                ...state,
+                is_superuser: action.data,
             }
         default:
             return state;

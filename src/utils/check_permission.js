@@ -1,12 +1,25 @@
-import { get_data_local } from '@auths/local_storage';
-
-const check_permission = async (permission) => {
-    let data_permissions = await get_data_local(process.env.REACT_APP_LOCALHOST_DATA_PERMISSIONS);
-    const is_exist = data_permissions.includes(permission);
-    if (is_exist) {
-        return true
-    } else {
-        return false
+const check_permission = (data_after_checks, data_user_permissions, is_superuser) => {
+    let data_before_checks = {};
+    if (is_superuser !== undefined && is_superuser !== null) {
+        if (is_superuser === false) {
+            if (data_after_checks && data_after_checks.length !== 0) {
+                for (const item of data_after_checks) {
+                    if (data_user_permissions.includes(item)) {
+                        data_before_checks[item] = true;
+                    } else {
+                        data_before_checks[item] = false;
+                    }
+                }
+            }
+        } else {
+            if (data_after_checks && data_after_checks.length !== 0) {
+                for (const item of data_after_checks) {
+                    data_before_checks[item] = true;
+                }
+            }
+        }
     }
+    return data_before_checks;
+
 };
 export { check_permission };

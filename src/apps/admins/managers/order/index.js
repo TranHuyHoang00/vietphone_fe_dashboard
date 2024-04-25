@@ -14,6 +14,8 @@ import { format_day } from '@utils/format_day';
 import ModalDetail from './modals/modal_detail';
 import DrawerFilter from './drawers/drawer_filter';
 import AvatarNone from '@assets/images/avatar_none.jpg';
+import { check_permission } from '@utils/check_permission';
+import { data_orders } from '@datas/data_after_check_permissions';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -28,10 +30,15 @@ class index extends Component {
                 status: '',
                 source: '',
             },
+            data_before_checks: {},
         }
     }
     async componentDidMount() {
         this.props.get_list_order(this.state.data_filter);
+        let data_before_checks = await check_permission(data_orders, this.props.data_user_permissions, this.props.is_superuser);
+        this.setState({
+            data_before_checks: data_before_checks,
+        });
     }
     open_modal = async (name, value, id) => {
         if (name === 'detail') {
@@ -99,12 +106,13 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <span className='cursor-pointer' onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></span>
+                        <button disabled={!data_before_checks['order.view_order']} onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></button>
                     </Space >
                 ),
             },
 
         ];
+        let data_before_checks = this.state.data_before_checks;
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
             this.setState({ data_selected: data_new })
@@ -117,7 +125,8 @@ class index extends Component {
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Space>
-                                <Button onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                <Button disabled={!data_before_checks['order.view_order']}
+                                    onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiOutlineMenu />
                                         Bộ lọc
@@ -142,10 +151,10 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_detail &&
+                {this.state.modal_detail && data_before_checks['order.view_order'] &&
                     <ModalDetail modal_detail={this.state.modal_detail}
                         open_modal={this.open_modal} />}
-                {this.state.drawer_filter &&
+                {this.state.drawer_filter && data_before_checks['order.view_order'] &&
                     <DrawerFilter drawer_filter={this.state.drawer_filter}
                         open_drawer={this.open_drawer} data_filter={this.state.data_filter}
                         onchange_page={this.onchange_page} />}
@@ -161,6 +170,9 @@ const mapStateToProps = state => {
         data_meta: state.order.data_meta,
         is_loading: state.order.is_loading,
         is_result: state.order.is_result,
+
+        data_user_permissions: state.user.data_user_permissions,
+        is_superuser: state.user.is_superuser,
     };
 };
 const mapDispatchToProps = dispatch => {

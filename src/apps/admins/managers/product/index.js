@@ -9,6 +9,8 @@ import {
 import { AiOutlineMenu } from "react-icons/ai";
 import FormSelectPage from '@components/selects/form_select_page';
 import DrawerFilter from './drawers/drawer_filter';
+import { check_permission } from '@utils/check_permission';
+import { data_products } from '@datas/data_after_check_permissions';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -19,6 +21,8 @@ class index extends Component {
             modal_edit: false,
             drawer_filter: false,
             data_filter: {},
+
+            data_before_checks: {},
         }
     }
     async componentDidMount() {
@@ -27,6 +31,11 @@ class index extends Component {
         this.props.get_list_tag({ page: 1, limit: 100, search: '' });
         this.props.get_list_category({ page: 1, limit: 100, search: '' });
         this.setState({ data_filter: this.props.data_filter });
+
+        let data_before_checks = await check_permission(data_products, this.props.data_user_permissions, this.props.is_superuser);
+        this.setState({
+            data_before_checks: data_before_checks,
+        });
     }
     open_modal = async (name, value, id) => {
         if (name === 'create') {
@@ -166,6 +175,7 @@ class index extends Component {
                     </div>
             },
         ];
+        let data_before_checks = this.state.data_before_checks;
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
             this.setState({ data_selected: data_new })
@@ -176,14 +186,9 @@ class index extends Component {
                 <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            {/* <Button disabled onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
-                                <Space className='text-white dark:text-black'>
-                                    <AiOutlinePlus />
-                                    Tạo mới
-                                </Space>
-                            </Button> */}
                             <Space>
-                                <Button onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                <Button disabled={!data_before_checks['product.view_product']}
+                                    onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiOutlineMenu />
                                         Bộ lọc
@@ -197,20 +202,6 @@ class index extends Component {
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={this.props.data_filter.limit} onchange_page={this.onchange_page} />
-                                {/* <div>
-                                    <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
-                                        title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
-                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
-                                            <div>
-                                                {type_menu === 1 && <span>Xóa</span>}
-                                                {type_menu === 2 && <span>Khóa</span>}
-                                                {type_menu === 3 && <span>Mở</span>}
-                                                <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
-                                            </div>
-                                        </Dropdown.Button>
-                                    </Popconfirm>
-                                </div> */}
                             </div>
                             <Divider>SẢN PHẨM</Divider>
                             <div className='space-y-[20px]'>
@@ -224,7 +215,7 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {this.state.drawer_filter &&
+                {this.state.drawer_filter && data_before_checks['product.view_product'] &&
                     <DrawerFilter drawer_filter={this.state.drawer_filter}
                         open_drawer={this.open_drawer} data_filter={this.state.data_filter}
                         onchange_page={this.onchange_page}
@@ -247,6 +238,9 @@ const mapStateToProps = state => {
         data_tags: state.tag.data_tags,
         data_brands: state.brand.data_brands,
         data_categorys: state.category.data_categorys,
+
+        data_user_permissions: state.user.data_user_permissions,
+        is_superuser: state.user.is_superuser,
     };
 };
 const mapDispatchToProps = dispatch => {

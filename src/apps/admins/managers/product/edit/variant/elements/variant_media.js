@@ -33,7 +33,6 @@ class variant_media extends Component {
     onchange_image = async (event, type, index, id) => {
         let data_media_raws = this.state.data_media_raws;
         let data_media_ids = this.state.data_media_ids;
-        console.log('event', event);
         if (type === 'create') {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {

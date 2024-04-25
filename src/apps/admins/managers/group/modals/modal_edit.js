@@ -90,7 +90,9 @@ class modal_edit extends Component {
                                 return (
                                     <div key={permission.id}>
                                         <Collapse defaultActiveKey={permission.id}>
-                                            <Collapse.Panel header={`${permission.app_label} - ${permission.model}`} key={permission.id}>
+                                            <Collapse.Panel
+                                                header={`${permission.app_label} - ${permission.model}`} key={permission.id}
+                                            >
                                                 {data_permissions && data_permissions.map((item, index) => {
                                                     return (
                                                         <div key={item.id} className=''>

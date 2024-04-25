@@ -11,6 +11,8 @@ import FormSelectPage from '@components/selects/form_select_page';
 import ModalCreate from './modals/modal_create';
 import ModalDetail from './modals/modal_detail';
 import ModalEdit from './modals/modal_edit';
+import { check_permission } from '@utils/check_permission';
+import { data_tags } from '@datas/data_after_check_permissions';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -25,10 +27,15 @@ class index extends Component {
                 limit: 5,
                 search: ''
             },
+            data_before_checks: {},
         }
     }
     async componentDidMount() {
         this.props.get_list_tag(this.state.data_filter);
+        let data_before_checks = await check_permission(data_tags, this.props.data_user_permissions, this.props.is_superuser);
+        this.setState({
+            data_before_checks: data_before_checks,
+        });
     }
     open_modal = async (name, value, id) => {
         this.props.set_data_tag({});
@@ -106,19 +113,20 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <span className='cursor-pointer' onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></span>
-                        <span className='cursor-pointer' onClick={() => this.open_modal('edit', true, item.id)}>
+                        <button disabled={!data_before_checks['product.view_tag']} onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></button>
+                        <button disabled={!data_before_checks['product.change_tag']} onClick={() => this.open_modal('edit', true, item.id)}>
                             <AiFillEdit />
-                        </span>
+                        </button>
                     </Space >
                 ),
             },
 
         ];
+        let data_before_checks = this.state.data_before_checks;
         const items = [
-            { key: 1, label: 'Xóa' },
-            { key: 2, label: 'Khóa' },
-            { key: 3, label: 'Mở' },
+            { key: 1, label: 'Xóa', disabled: !data_before_checks['product.delete_tag'] },
+            { key: 2, label: 'Khóa', disabled: !data_before_checks['product.change_tag'] },
+            { key: 3, label: 'Mở', disabled: !data_before_checks['product.change_tag'] },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -132,7 +140,8 @@ class index extends Component {
                 <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
+                            <Button disabled={!data_before_checks['product.add_tag']}
+                                onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
                                     Tạo mới
@@ -147,7 +156,9 @@ class index extends Component {
                                     <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
-                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
+                                        <Dropdown.Button
+                                            disabled={!data_before_checks['product.delete_tag']}
+                                            menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
                                             <div>
                                                 {type_menu === 1 && <span>Xóa</span>}
                                                 {type_menu === 2 && <span>Khóa</span>}
@@ -170,14 +181,14 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_create &&
+                {this.state.modal_create && data_before_checks['product.add_tag'] &&
                     <ModalCreate modal_create={this.state.modal_create}
                         open_modal={this.open_modal}
                         data_filter={this.state.data_filter} />}
-                {this.state.modal_detail &&
+                {this.state.modal_detail && data_before_checks['product.view_tag'] &&
                     <ModalDetail modal_detail={this.state.modal_detail}
                         open_modal={this.open_modal} />}
-                {this.state.modal_edit &&
+                {this.state.modal_edit && data_before_checks['product.change_tag'] &&
                     <ModalEdit modal_edit={this.state.modal_edit}
                         open_modal={this.open_modal}
                         data_filter={this.state.data_filter} />}
@@ -193,6 +204,9 @@ const mapStateToProps = state => {
         data_meta: state.tag.data_meta,
         is_loading: state.tag.is_loading,
         is_result: state.tag.is_result,
+
+        data_user_permissions: state.user.data_user_permissions,
+        is_superuser: state.user.is_superuser,
     };
 };
 const mapDispatchToProps = dispatch => {

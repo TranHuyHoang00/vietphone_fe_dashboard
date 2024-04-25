@@ -10,7 +10,8 @@ import ProductContent from './elements/product_content';
 import ProductMedia from './elements/product_media';
 import { create_media } from '@services/media_service';
 import { show_notification } from '@utils/show_notification';
-
+import { check_permission } from '@utils/check_permission';
+import { data_products } from '@datas/data_after_check_permissions';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -18,9 +19,14 @@ class index extends Component {
             data_atbvl_ids: [],
             data_media_ids: [],
             data_media_raws: [],
+            data_before_checks: {},
         }
     }
     async componentDidMount() {
+        let data_before_checks = await check_permission(data_products, this.props.data_user_permissions, this.props.is_superuser);
+        this.setState({
+            data_before_checks: data_before_checks,
+        });
     }
     handle_product_page = async () => {
         let data_product = this.props.data_product;
@@ -90,6 +96,7 @@ class index extends Component {
     }
     render() {
         let data_product = this.props.data_product;
+        let data_before_checks = this.state.data_before_checks;
         return (
             <div className='space-y-[10px]'>
                 <div className='flex items-center justify-between'>
@@ -101,7 +108,8 @@ class index extends Component {
                                 Hủy
                             </Button>
                         }
-                        <Button onClick={() => this.handle_edit_product()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
+                        <Button disabled={!data_before_checks['product.change_product']}
+                            onClick={() => this.handle_edit_product()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
                             {this.props.is_edit === false ? 'Chỉnh sửa' : 'Lưu'}
                         </Button>
                     </Space>
@@ -133,6 +141,9 @@ const mapStateToProps = state => {
         is_edit: state.product.is_edit,
         description: state.product.description,
         data_product_page: state.product_page.data_product_page,
+
+        data_user_permissions: state.user.data_user_permissions,
+        is_superuser: state.user.is_superuser,
     };
 };
 const mapDispatchToProps = dispatch => {

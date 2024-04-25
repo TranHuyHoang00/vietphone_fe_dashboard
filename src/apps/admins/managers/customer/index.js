@@ -10,6 +10,8 @@ import { AiFillEye } from "react-icons/ai";
 import FormSelectPage from '@components/selects/form_select_page';
 import ModalDetail from './modals/modal_detail';
 import AvatarNone from '@assets/images/avatar_none.jpg';
+import { check_permission } from '@utils/check_permission';
+import { data_customers } from '@datas/data_after_check_permissions';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -21,10 +23,15 @@ class index extends Component {
                 limit: 5,
                 search: ''
             },
+            data_before_checks: {},
         }
     }
     async componentDidMount() {
         this.props.get_list_customer(this.state.data_filter);
+        let data_before_checks = await check_permission(data_customers, this.props.data_user_permissions, this.props.is_superuser);
+        this.setState({
+            data_before_checks: data_before_checks,
+        });
     }
     open_modal = async (name, value, id) => {
         if (name === 'detail') {
@@ -73,7 +80,7 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <span className='cursor-pointer' onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></span>
+                        <button disabled={!data_before_checks['account.view_customer']} onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></button>
                     </Space >
                 ),
             },
@@ -85,13 +92,13 @@ class index extends Component {
         };
         const row_selection = { data_selected, onChange: onchange_selected };
         let data_filter = this.state.data_filter;
+        let data_before_checks = this.state.data_before_checks;
         return (
             <>
                 <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <div>
-
                             </div>
                             <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên, Mã KH, SĐT !" /></div>
                         </div>
@@ -111,7 +118,7 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_detail &&
+                {this.state.modal_detail && data_before_checks['account.view_customer'] &&
                     <ModalDetail modal_detail={this.state.modal_detail}
                         open_modal={this.open_modal} />}
             </>
@@ -126,6 +133,9 @@ const mapStateToProps = state => {
         data_meta: state.customer.data_meta,
         is_loading: state.customer.is_loading,
         is_result: state.customer.is_result,
+
+        data_user_permissions: state.user.data_user_permissions,
+        is_superuser: state.user.is_superuser,
     };
 };
 const mapDispatchToProps = dispatch => {

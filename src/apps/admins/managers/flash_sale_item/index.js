@@ -11,7 +11,8 @@ import ModalCreate from './modals/modal_create';
 import ModalEdit from './modals/modal_edit';
 import FormSelectInput from '@components/selects/form_select_input';
 import { format_money } from '@utils/format_money';
-
+import { check_permission } from '@utils/check_permission';
+import { data_flash_sale_items } from '@datas/data_after_check_permissions';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -26,10 +27,15 @@ class index extends Component {
                 limit: 5,
                 search: ''
             },
+            data_before_checks: {},
         }
     }
     async componentDidMount() {
         this.props.get_list_flash_sale(this.state.data_filter);
+        let data_before_checks = await check_permission(data_flash_sale_items, this.props.data_user_permissions, this.props.is_superuser);
+        this.setState({
+            data_before_checks: data_before_checks,
+        });
     }
     open_modal = async (name, value, id) => {
         if (name === 'create') {
@@ -90,16 +96,16 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        {/* <span onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></span> */}
-                        <span onClick={() => this.open_modal('edit', true, item.id)}>
+                        <button disabled={!data_before_checks['promotion.change_flashsaleitem']} className='cursor-pointer' onClick={() => this.open_modal('edit', true, item.id)}>
                             <AiFillEdit />
-                        </span>
+                        </button>
                     </Space >
                 ),
             },
         ];
+        let data_before_checks = this.state.data_before_checks;
         const items = [
-            { key: 1, label: 'Xóa' },
+            { key: 1, label: 'Xóa', disabled: !data_before_checks['promotion.delete_flashsaleitem'] },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -113,7 +119,7 @@ class index extends Component {
                 <Spin size='large' spinning={this.props.is_loading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button disabled={this.props.data_flash_sale.id ? false : true}
+                            <Button disabled={(!data_before_checks['promotion.delete_flashsaleitem'] === false && this.props.data_flash_sale.id) ? false : true}
                                 onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
@@ -123,7 +129,7 @@ class index extends Component {
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-end justify-between gap-[10px]'>
-                                <div className='w-[200px] sm:w-[300px] md:w-[500px]'>
+                                <div className='w-[200px] sm:w-[300px] md:w-[400px]'>
                                     <FormSelectInput name={'Flash sale'}
                                         important={true} width={'100%'}
                                         variable={'id'} value={this.props.data_flash_sale.id}
@@ -138,7 +144,9 @@ class index extends Component {
                                     <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
-                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
+                                        <Dropdown.Button
+                                            disabled={!data_before_checks['promotion.delete_flashsaleitem']}
+                                            menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
                                             <div>
                                                 {type_menu === 1 && <span>Xóa</span>}
                                                 <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
@@ -156,12 +164,14 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_create &&
+                {this.state.modal_create && data_before_checks['promotion.add_flashsaleitem'] &&
                     <ModalCreate modal_create={this.state.modal_create}
-                        open_modal={this.open_modal} />}
-                {this.state.modal_edit &&
+                        open_modal={this.open_modal}
+                        data_filter={this.state.data_filter} />}
+                {this.state.modal_edit && data_before_checks['promotion.change_flashsaleitem'] &&
                     <ModalEdit modal_edit={this.state.modal_edit}
-                        open_modal={this.open_modal} />}
+                        open_modal={this.open_modal}
+                        data_filter={this.state.data_filter} />}
             </>
         );
     }
@@ -172,6 +182,9 @@ const mapStateToProps = state => {
         data_flash_sales: state.flash_sale.data_flash_sales,
         data_flash_sale: state.flash_sale.data_flash_sale,
         is_loading: state.flash_sale.is_loading,
+
+        data_user_permissions: state.user.data_user_permissions,
+        is_superuser: state.user.is_superuser,
     };
 };
 const mapDispatchToProps = dispatch => {

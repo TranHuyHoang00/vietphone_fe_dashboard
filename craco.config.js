@@ -11,6 +11,7 @@ module.exports = {
             '@reducers': path.resolve(__dirname, 'src/store/reducers'),
             '@utils': path.resolve(__dirname, 'src/utils'),
             '@components': path.resolve(__dirname, 'src/apps/admins/components'),
+            '@datas': path.resolve(__dirname, 'src/apps/admins/datas'),
 
         }
     },

@@ -10,6 +10,8 @@ import { AiFillEye } from "react-icons/ai";
 import FormSelectPage from '@components/selects/form_select_page';
 import ModalDetail from './modals/modal_detail';
 import moment from 'moment';
+import { check_permission } from '@utils/check_permission';
+import { data_tasks } from '@datas/data_after_check_permissions';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -22,10 +24,15 @@ class index extends Component {
                 limit: 5,
                 search: ''
             },
+            data_before_checks: {},
         }
     }
     async componentDidMount() {
         this.props.get_list_task(this.state.data_filter);
+        let data_before_checks = await check_permission(data_tasks, this.props.data_user_permissions, this.props.is_superuser);
+        this.setState({
+            data_before_checks: data_before_checks,
+        });
     }
     open_modal = async (name, value, id) => {
         if (name === 'detail') {
@@ -76,14 +83,15 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <span className='cursor-pointer' onClick={() => this.open_modal('detail', true, item.task_id)}><AiFillEye /></span>
+                        <button disabled={!data_before_checks['task.change_task']} onClick={() => this.open_modal('detail', true, item.task_id)}><AiFillEye /></button>
                     </Space >
                 ),
             },
 
         ];
+        let data_before_checks = this.state.data_before_checks;
         const items = [
-            { key: 1, label: 'Xóa' },
+            { key: 1, label: 'Xóa', disabled: !data_before_checks['task.delete_task'] },
         ];
         const data_selected = this.state.data_selected;
         const onchange_selected = (data_new) => {
@@ -103,7 +111,9 @@ class index extends Component {
                                     <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
-                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(parseInt(value.key)) }) } }}  >
+                                        <Dropdown.Button
+                                            disabled={!data_before_checks['task.delete_task']}
+                                            menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(parseInt(value.key)) }) } }}  >
                                             <div>
                                                 {type_menu === 1 && <span>Xóa</span>}
                                                 <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
@@ -124,7 +134,7 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_detail &&
+                {this.state.modal_detail && data_before_checks['task.view_task'] &&
                     <ModalDetail modal_detail={this.state.modal_detail}
                         open_modal={this.open_modal} />}
             </>
@@ -139,6 +149,9 @@ const mapStateToProps = state => {
         data_meta: state.task.data_meta,
         is_loading: state.task.is_loading,
         is_result: state.task.is_result,
+
+        data_user_permissions: state.user.data_user_permissions,
+        is_superuser: state.user.is_superuser,
     };
 };
 const mapDispatchToProps = dispatch => {
