@@ -23,7 +23,7 @@ export * from '@actions/group_types';
 export * from '@actions/permission_types';
 export * from '@actions/dark_mode_types';
 export * from '@actions/user_types';
-
+export * from '@actions/statistical_types';
 
 
 

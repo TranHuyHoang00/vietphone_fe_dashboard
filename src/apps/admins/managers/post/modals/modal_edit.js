@@ -95,7 +95,7 @@ class modal_edit extends Component {
                                 Nội dung
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
-                            <ReactQuill theme="snow"
+                            <ReactQuill theme="snow" className='text-black dark:text-white'
                                 modules={modal_edit.modules}
                                 formats={modal_edit.formats}
                                 bounds={'.app'}

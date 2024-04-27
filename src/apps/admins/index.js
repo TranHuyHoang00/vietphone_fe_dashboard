@@ -7,8 +7,10 @@ import {
     AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher, AiFillBehanceSquare
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillBook, AiFillBuild,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook, AiOutlineUserSwitch,
-    AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot
+    AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard
 } from "react-icons/ai";
+import { IoStatsChart, IoLogoChrome } from "react-icons/io5";
+
 import { withRouter } from 'react-router-dom';
 import { get_data_local } from '@auths/local_storage';
 import { check_permission } from '@utils/check_permission';
@@ -40,6 +42,8 @@ import ManagerCategoryPost from './managers/category_post/index';
 import ManagerPost from './managers/post/index';
 import ManagerGroup from './managers/group/index';
 import ManagerUser from './managers/user/index';
+
+import StatisticalViewWeb from './statisticals/web/view_web/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -91,6 +95,17 @@ class index extends Component {
     render() {
 
         const items = [
+            {
+                key: 'menu_dashboard', icon: <AiFillDashboard />, label: 'Dashboard', children: [
+                    {
+                        key: 'website', icon: <IoLogoChrome />, label: 'Website', type: 'group', children: [
+                            {
+                                key: 'statistical/view_web', icon: <IoStatsChart />, label: 'Lượt truy cập',
+                            },
+                        ]
+                    },
+                ],
+            },
             {
                 key: 'menu_user', icon: <AiFillGithub />, label: 'Người dùng', children: [
                     {
@@ -230,6 +245,8 @@ class index extends Component {
                             <HeaderDB open_drawer_form={this.open_drawer_form} handle_logout_db={this.handle_logout_db} />
                             <Layout.Content className='py-[10px]'>
                                 <Switch>
+                                    <Route exact path={`${url}statistical/view_web`}><StatisticalViewWeb /></Route>
+
                                     {data_before_checks['account.view_customer'] &&
                                         <Route exact path={`${url}manager/customer`}><ManagerCustomer /></Route>}
                                     {data_before_checks['account.view_user'] &&

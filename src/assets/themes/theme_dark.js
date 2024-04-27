@@ -25,7 +25,8 @@ export const theme_dark = Object.freeze({
             titleFontSize: 20
         },
         Statistic: {
-            contentFontSize: 16
+            contentFontSize: 16,
+
         },
     }
 });

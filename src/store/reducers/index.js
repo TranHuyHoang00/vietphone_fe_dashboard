@@ -24,6 +24,8 @@ import group_reducers from '@reducers/group_reducers';
 import permission_reducers from '@reducers/permission_reducers';
 import dark_mode_reducers from '@reducers/dark_mode_reducers';
 import user_reducers from '@reducers/user_reducers';
+import statistical_reducers from '@reducers/statistical_reducers';
+
 export default combineReducers({
     product: product_reducers,
     customer: customer_reducers,
@@ -50,4 +52,5 @@ export default combineReducers({
     permission: permission_reducers,
     dark_mode: dark_mode_reducers,
     user: user_reducers,
+    statistical: statistical_reducers,
 })
