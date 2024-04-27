@@ -64,6 +64,16 @@ class product_page extends Component {
                                         onChange={(event) => this.props.on_change_product_page(event.target.value, 'search_description')} />
                                 </div>
                             </div>
+                            <div className='flex items-center gap-[5px]'>
+                                <div className='w-1/3 flex items-center justify-between'>
+                                    <span>Keyword</span>
+                                    <span>:</span>
+                                </div>
+                                <div className='w-2/3'>
+                                    <Input value={data_product_page.keywords} width={'100%'} disabled={!this.props.is_edit}
+                                        onChange={(event) => this.props.on_change_product_page(event.target.value, 'keywords')} />
+                                </div>
+                            </div>
                         </div>
                     </Spin>
                 </Collapse.Panel>
