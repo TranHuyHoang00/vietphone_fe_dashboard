@@ -9,7 +9,7 @@ import {
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook, AiOutlineUserSwitch,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard
 } from "react-icons/ai";
-import { IoStatsChart, IoLogoChrome } from "react-icons/io5";
+import { IoStatsChart, IoLogoChrome, IoBarChartSharp } from "react-icons/io5";
 
 import { withRouter } from 'react-router-dom';
 import { get_data_local } from '@auths/local_storage';
@@ -44,6 +44,8 @@ import ManagerGroup from './managers/group/index';
 import ManagerUser from './managers/user/index';
 
 import StatisticalViewWeb from './statisticals/web/view_web/index';
+import StatisticalViewProduct from './statisticals/web/view_product/index';
+
 class index extends Component {
     constructor(props) {
         super(props);
@@ -101,6 +103,9 @@ class index extends Component {
                         key: 'website', icon: <IoLogoChrome />, label: 'Website', type: 'group', children: [
                             {
                                 key: 'statistical/view_web', icon: <IoStatsChart />, label: 'Lượt truy cập',
+                            },
+                            {
+                                key: 'statistical/view_product', icon: <IoBarChartSharp />, label: 'Lượt xem sản phẩm',
                             },
                         ]
                     },
@@ -228,7 +233,7 @@ class index extends Component {
             <>
                 {logged_in_db ?
                     <Layout hasSider style={{ minHeight: '100vh', }} >
-                        <Layout.Sider className='overflow-y-auto h-screen md:block hidden'
+                        <Layout.Sider theme='dark' className='overflow-y-auto h-screen md:block hidden'
                             collapsible collapsed={this.state.collapsed} breakpoint="lg"
                             onCollapse={() => this.setCollapsed()}>
                             <Menu theme='dark' mode="inline" items={items} defaultSelectedKeys={['manager']}
@@ -246,6 +251,7 @@ class index extends Component {
                             <Layout.Content className='py-[10px]'>
                                 <Switch>
                                     <Route exact path={`${url}statistical/view_web`}><StatisticalViewWeb /></Route>
+                                    <Route exact path={`${url}statistical/view_product`}><StatisticalViewProduct /></Route>
 
                                     {data_before_checks['account.view_customer'] &&
                                         <Route exact path={`${url}manager/customer`}><ManagerCustomer /></Route>}

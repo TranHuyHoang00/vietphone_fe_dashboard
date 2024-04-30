@@ -30,7 +30,6 @@ class index extends Component {
     handle_day = (type_menu, day) => {
         let start, end;
         end = dayjs(day).format('YYYY-MM-DD');
-        console.log('day', day);
         if (type_menu === 'day') { start = dayjs(day).subtract(this.state.display_number, 'day').format('YYYY-MM-DD'); }
         if (type_menu === 'month') { start = dayjs(day).subtract(this.state.display_number, 'month').format('YYYY-MM-DD'); }
         if (type_menu === 'year') { start = dayjs(day).subtract(this.state.display_number, 'year').format('YYYY-MM-DD'); }
@@ -89,7 +88,8 @@ class index extends Component {
             let final_second_item = data_view_webs?.[data_view_webs.length - 2];
             let ratio;
             if (final_second_item && final_second_item !== 0) {
-                ratio = Math.round(100 - ((final_first_item / final_second_item) * 100));
+                let number = Math.round(((final_first_item - final_second_item) / final_second_item) * 100)
+                ratio = number < 0 ? -number : number;
             } else {
                 ratio = 100;
             }
@@ -120,21 +120,10 @@ class index extends Component {
     render() {
         let labels = this.state.labels
         return (
-            <Card title={`Lượt truy cập từ ${labels?.[0]} đến ${labels?.[labels.length - 1]}`}
-                extra={
-                    <div className='md:flex hidden items-center space-x-[10px]'>
-                        <Radio.Group value={this.props.data_statistical?.type} onChange={(event) => this.onchange_menu(event.target.value)} className='flex'>
-                            <Radio.Button value="day">Ngày</Radio.Button>
-                            <Radio.Button value="month">Tháng</Radio.Button>
-                            <Radio.Button value="year">Năm</Radio.Button>
-                        </Radio.Group>
-                        <DatePicker allowClear={false} onChange={(event, value) => this.onchange_daypicker(event, value)} picker={this.props.data_statistical?.type}
-                            disabledDate={(day) => this.disabled_day(day)} value={dayjs(this.props.data_statistical?.end)} />
-                    </div>
-                }>
-                <Spin spinning={this.props.is_loading}>
-                    <div className='space-y-[10px]'>
-                        <div className='md:hidden flex items-center gap-x-[10px]'>
+            <div className='px-[10px]'>
+                <Card title={`Lượt truy cập từ ${labels?.[0]} đến ${labels?.[labels.length - 1]}`}
+                    extra={
+                        <div className='md:flex hidden items-center space-x-[10px]'>
                             <Radio.Group value={this.props.data_statistical?.type} onChange={(event) => this.onchange_menu(event.target.value)} className='flex'>
                                 <Radio.Button value="day">Ngày</Radio.Button>
                                 <Radio.Button value="month">Tháng</Radio.Button>
@@ -143,76 +132,106 @@ class index extends Component {
                             <DatePicker allowClear={false} onChange={(event, value) => this.onchange_daypicker(event, value)} picker={this.props.data_statistical?.type}
                                 disabledDate={(day) => this.disabled_day(day)} value={dayjs(this.props.data_statistical?.end)} />
                         </div>
-                        <div className='lg:grid lg:grid-cols-3 py-[10px] gap-[20px]'>
-                            <div className='col-span-2'>
-                                <div className='space-y-[10px]'>
-                                    <Typography.Text strong className='text-blue-500 dark:text-white'>Biểu đồ cột lượt truy cập</Typography.Text>
-                                    <Bar data={{
-                                        labels: this.state.labels,
-                                        datasets: [
-                                            {
-                                                label: 'Lượt truy cập',
-                                                backgroundColor: '#4285f4',
-                                                data: this.props.data_view_webs,
-                                            },
-                                        ],
-                                    }} />
-                                </div>
+                    }>
+                    <Spin spinning={this.props.is_loading}>
+                        <div className='space-y-[10px]'>
+                            <div className='md:hidden flex items-center gap-x-[10px]'>
+                                <Radio.Group value={this.props.data_statistical?.type} onChange={(event) => this.onchange_menu(event.target.value)} className='flex'>
+                                    <Radio.Button value="day">Ngày</Radio.Button>
+                                    <Radio.Button value="month">Tháng</Radio.Button>
+                                    <Radio.Button value="year">Năm</Radio.Button>
+                                </Radio.Group>
+                                <DatePicker allowClear={false} onChange={(event, value) => this.onchange_daypicker(event, value)} picker={this.props.data_statistical?.type}
+                                    disabledDate={(day) => this.disabled_day(day)} value={dayjs(this.props.data_statistical?.end)} />
                             </div>
-                            <div className='space-y-[10px] w-full'>
-                                <div className='flex justify-between space-x-[5px] pb-[10px] border-b'>
-                                    <Statistic
-                                        title={<Typography.Text className='text-blue-500 dark:text-white' strong>Tổng lượt truy cập</Typography.Text>}
-                                        value={this.handle_sum_total(this.props.data_view_webs)}
-                                        valueStyle={{ color: '#ed3b00' }}
-                                        prefix={<EyeOutlined />}
-                                        suffix="lượt"
-                                    />
-                                    <Statistic
-                                        title={
-                                            <>
-                                                {this.props.data_statistical?.type === 'day' &&
-                                                    <Typography.Text className='text-blue-500 dark:text-white' strong>So với ngày trước</Typography.Text>}
-                                                {this.props.data_statistical?.type === 'month' &&
-                                                    <Typography.Text className='text-blue-500 dark:text-white' strong>So với tháng trước</Typography.Text>}
-                                                {this.props.data_statistical?.type === 'year' &&
-                                                    <Typography.Text className='text-blue-500 dark:text-white' strong>So với năm trước</Typography.Text>}
-                                            </>
-                                        }
-                                        value={this.check_ratio(this.props.data_view_webs, 'value')}
-                                        valueStyle={this.check_ratio(this.props.data_view_webs, 'valueStyle')}
-                                        prefix={this.check_ratio(this.props.data_view_webs, 'prefix')}
-                                        suffix="%"
-                                    />
+                            <div className='lg:grid lg:grid-cols-3 py-[10px] gap-[20px]'>
+                                <div className='col-span-2'>
+                                    <div className='space-y-[10px]'>
+                                        <Typography.Text strong className='text-blue-500 dark:text-white'>Biểu đồ cột lượt truy cập</Typography.Text>
+                                        <Bar data={{
+                                            labels: this.state.labels,
+                                            datasets: [
+                                                {
+                                                    label: 'Lượt truy cập',
+                                                    backgroundColor: '#4285f4',
+                                                    data: this.props.data_view_webs,
+                                                },
+                                            ],
+                                        }} />
+                                    </div>
                                 </div>
-                                <div className='space-y-[10px]'>
-                                    <Typography.Text className='text-blue-500 dark:text-white' strong>Top lượt truy cập</Typography.Text>
-                                    <List itemLayout="horizontal" size='small'
-                                        dataSource={this.state.data_top_view_web}
-                                        renderItem={(item, index) => (
-                                            <List.Item>
-                                                <List.Item.Meta
-                                                    avatar={
-                                                        <div className='rounded-full h-[25px] w-[25px] border flex items-center justify-center bg-gray-700 '>
-                                                            <Typography.Text className='text-white' strong>{index + 1}</Typography.Text>
-                                                        </div>
-                                                    }
-                                                    title={
-                                                        <div className='flex items-center justify-between'>
-                                                            <Typography.Text strong>{item.name}</Typography.Text>
-                                                            <Typography.Text italic>{format_number(item.value)} lượt</Typography.Text>
-                                                        </div>
-                                                    }
-                                                />
-                                            </List.Item>
-                                        )}
-                                    />
+                                <div className='space-y-[10px] w-full'>
+                                    <div className='flex justify-between space-x-[5px] pb-[10px] border-b'>
+                                        <Statistic
+                                            title={<Typography.Text className='text-blue-500 dark:text-white' strong>Tổng lượt truy cập</Typography.Text>}
+                                            value={this.handle_sum_total(this.props.data_view_webs)}
+                                            valueStyle={{ color: '#ed3b00' }}
+                                            prefix={<EyeOutlined />}
+                                            suffix="lượt" />
+                                        <Statistic
+                                            title={
+                                                <>
+                                                    {this.props.data_statistical?.type === 'day' &&
+                                                        <Typography.Text className='text-blue-500 dark:text-white' strong>So với ngày trước</Typography.Text>}
+                                                    {this.props.data_statistical?.type === 'month' &&
+                                                        <Typography.Text className='text-blue-500 dark:text-white' strong>So với tháng trước</Typography.Text>}
+                                                    {this.props.data_statistical?.type === 'year' &&
+                                                        <Typography.Text className='text-blue-500 dark:text-white' strong>So với năm trước</Typography.Text>}
+                                                </>
+                                            }
+                                            value={this.check_ratio(this.props.data_view_webs, 'value')}
+                                            valueStyle={this.check_ratio(this.props.data_view_webs, 'valueStyle')}
+                                            prefix={this.check_ratio(this.props.data_view_webs, 'prefix')}
+                                            suffix="%"
+                                        />
+                                    </div>
+                                    <div className='flex justify-between space-x-[5px] pb-[10px] border-b'>
+                                        <Statistic
+                                            title={
+                                                <>
+                                                    {this.props.data_statistical?.type === 'day' &&
+                                                        <Typography.Text className='text-blue-500 dark:text-white' strong>Trung bình ngày</Typography.Text>}
+                                                    {this.props.data_statistical?.type === 'month' &&
+                                                        <Typography.Text className='text-blue-500 dark:text-white' strong>Trung bình tháng</Typography.Text>}
+                                                    {this.props.data_statistical?.type === 'year' &&
+                                                        <Typography.Text className='text-blue-500 dark:text-white' strong>Trung bình năm</Typography.Text>}
+                                                </>
+                                            }
+                                            value={Math.round(this.handle_sum_total(this.props.data_view_webs) / this.state.display_number)}
+                                            valueStyle={{ color: '#ed3b00' }}
+                                            prefix={<EyeOutlined />}
+                                            suffix="lượt" />
+                                    </div>
+                                    <div className='space-y-[10px]'>
+                                        <Typography.Text className='text-blue-500 dark:text-white' strong>Top 5 lượt truy cập</Typography.Text>
+                                        <List itemLayout="horizontal" size='small'
+                                            dataSource={this.state.data_top_view_web}
+                                            renderItem={(item, index) => (
+                                                <List.Item>
+                                                    <List.Item.Meta
+                                                        avatar={
+                                                            <div className='rounded-full h-[25px] w-[25px] border flex items-center justify-center bg-gray-700 '>
+                                                                <Typography.Text className='text-white' strong>{index + 1}</Typography.Text>
+                                                            </div>
+                                                        }
+                                                        title={
+                                                            <div className='flex items-center justify-between'>
+                                                                <Typography.Text strong>{item.name}</Typography.Text>
+                                                                <Typography.Text italic>{format_number(item.value)} lượt</Typography.Text>
+                                                                <Typography.Text italic strong>{Math.round(format_number(item.value) / this.handle_sum_total(this.props.data_view_webs) * 100)} %</Typography.Text>
+                                                            </div>
+                                                        }
+                                                    />
+                                                </List.Item>
+                                            )}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </Spin>
-            </Card>
+                    </Spin>
+                </Card>
+            </div>
         );
     }
 
