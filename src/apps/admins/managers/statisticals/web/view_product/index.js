@@ -2,12 +2,9 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Card, Radio, Typography, Statistic, List, DatePicker, Spin, Avatar, Image, Progress, Tag, Button, Space } from 'antd';
+import { Card, Radio, Typography, DatePicker, Spin, Image, Progress, Button, Space } from 'antd';
 import dayjs from 'dayjs';
-import { Bar } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
-import { format_number } from '@utils/format_number';
-import { ArrowDownOutlined, ArrowUpOutlined, EyeOutlined } from '@ant-design/icons';
+import { EyeOutlined } from '@ant-design/icons';
 class index extends Component {
     constructor(props) {
         super(props);

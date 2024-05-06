@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Collapse, Input, Typography } from 'antd';
+import { Collapse, Input, Typography, Select } from 'antd';
 import { text_line_1_3 } from '@components/displays/data_line_1_3';
 import { format_money } from '@utils/format_money';
 class variant_introduce extends Component {
@@ -54,6 +54,20 @@ class variant_introduce extends Component {
                             </div>
                         </div>
                         {text_line_1_3('Số lượng', `${data_variant.quantity} cái`)}
+                        <div className='flex items-center gap-[5px]'>
+                            <div className='w-1/3 flex items-center justify-between'>
+                                <Typography.Text type="secondary">Trạng thái</Typography.Text>
+                                <span>:</span>
+                            </div>
+                            <div className='w-2/3'>
+                                <Select disabled={!this.props.is_edit} style={{ width: '100%' }} value={data_variant.is_active}
+                                    onChange={(event) => this.props.on_change_variant(event, 'is_active')}
+                                    options={[
+                                        { value: true, label: 'Mở' },
+                                        { value: false, label: 'Khóa' },
+                                    ]} />
+                            </div>
+                        </div>
                     </div>
                 </Collapse.Panel>
             </Collapse>

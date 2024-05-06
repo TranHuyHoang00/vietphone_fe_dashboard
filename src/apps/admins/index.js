@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Layout, Menu, Drawer } from 'antd';
 import {
-    AiFillGithub, AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher, AiFillBehanceSquare
+    AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher, AiFillBehanceSquare
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillBook, AiFillBuild,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook, AiOutlineUserSwitch,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard
 } from "react-icons/ai";
 import { IoStatsChart, IoLogoChrome, IoBarChartSharp } from "react-icons/io5";
+import { FaUserNurse, FaAndroid, FaUserShield } from "react-icons/fa6";
 
 import { withRouter } from 'react-router-dom';
 import { get_data_local } from '@auths/local_storage';
@@ -43,9 +44,10 @@ import ManagerPost from './managers/post/index';
 import ManagerGroup from './managers/group/index';
 import ManagerUser from './managers/user/index';
 
-import StatisticalViewWeb from './statisticals/web/view_web/index';
-import StatisticalViewProduct from './statisticals/web/view_product/index';
+import StatisticalViewWeb from './managers/statisticals/web/view_web/index';
+import StatisticalViewProduct from './managers/statisticals/web/view_product/index';
 
+import StaffRollCall from './managers/system_staff/roll_call/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -111,8 +113,15 @@ class index extends Component {
                     },
                 ],
             },
+            // {
+            //     key: 'menu_system_staff', icon: <FaUserNurse />, label: 'Nhân viên', children: [
+            //         {
+            //             key: 'system_staff/roll_call', icon: <FaAndroid />, label: 'Chấm công',
+            //         },
+            //     ],
+            // },
             {
-                key: 'menu_user', icon: <AiFillGithub />, label: 'Người dùng', children: [
+                key: 'menu_user', icon: <FaUserShield />, label: 'Người dùng', children: [
                     {
                         key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng',
                         disabled: !this.state.data_before_checks['account.view_customer']
@@ -253,6 +262,8 @@ class index extends Component {
                                     <Route exact path={`${url}statistical/view_web`}><StatisticalViewWeb /></Route>
                                     <Route exact path={`${url}statistical/view_product`}><StatisticalViewProduct /></Route>
 
+                                    <Route exact path={`${url}system_staff/roll_call`}><StaffRollCall /></Route>
+
                                     {data_before_checks['account.view_customer'] &&
                                         <Route exact path={`${url}manager/customer`}><ManagerCustomer /></Route>}
                                     {data_before_checks['account.view_user'] &&
@@ -302,6 +313,8 @@ class index extends Component {
                                         <Route exact path={`${url}manager/sync_data`}><ManagerSyncData /></Route>}
                                     {data_before_checks['task.view_task'] &&
                                         <Route exact path={`${url}manager/task`}><ManagerTask /></Route>}
+
+
 
                                     <Route exact path={`${url}login`}><Empty /></Route>
                                     <Route ><NotFound /></Route>

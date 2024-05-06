@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Collapse, Select, message } from 'antd';
-import { text_line_1_3 } from '@components/displays/data_line_1_3';
+import { Collapse, Select, message, Input } from 'antd';
 import FormSelectItem from '@components/selects/form_select_item';
 class product_introduce extends Component {
     constructor(props) {
@@ -56,8 +55,16 @@ class product_introduce extends Component {
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Thông tin sản phẩm" key="1">
                     <div className='space-y-[5px]'>
-                        {text_line_1_3('Tên sản phẩm', data_product.name)}
-
+                        <div className='flex gap-[5px]'>
+                            <div className='w-1/3 flex items-center justify-between'>
+                                <span>Trạng thái</span>
+                                <span>:</span>
+                            </div>
+                            <div className='w-2/3'>
+                                <Input disabled={!this.props.is_edit} value={data_product.name}
+                                    onChange={(event) => this.props.on_change_product(event.target.value, 'name')} />
+                            </div>
+                        </div>
                         <div className='flex items-center gap-[5px]'>
                             <div className='w-1/3 flex items-center justify-between'>
                                 <span>Thương hiệu</span>

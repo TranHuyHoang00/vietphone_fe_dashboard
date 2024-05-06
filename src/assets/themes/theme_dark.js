@@ -28,5 +28,8 @@ export const theme_dark = Object.freeze({
             contentFontSize: 16,
 
         },
+        Timeline: {
+            itemPaddingBottom: 80,
+        },
     }
 });
