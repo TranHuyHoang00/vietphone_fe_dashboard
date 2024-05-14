@@ -9,7 +9,7 @@ import {
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook, AiOutlineUserSwitch,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard
 } from "react-icons/ai";
-import { IoStatsChart, IoLogoChrome, IoBarChartSharp } from "react-icons/io5";
+import { IoStatsChart, IoLogoChrome, IoBarChartSharp, IoBookSharp } from "react-icons/io5";
 import { FaUserNurse, FaAndroid, FaUserShield } from "react-icons/fa6";
 
 import { withRouter } from 'react-router-dom';
@@ -48,6 +48,7 @@ import StatisticalViewWeb from './managers/statisticals/web/view_web/index';
 import StatisticalViewProduct from './managers/statisticals/web/view_product/index';
 
 import StaffRollCall from './managers/system_staff/roll_call/index';
+import HistoryRollCall from './managers/system_staff/history/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -113,13 +114,16 @@ class index extends Component {
                     },
                 ],
             },
-            // {
-            //     key: 'menu_system_staff', icon: <FaUserNurse />, label: 'Nhân viên', children: [
-            //         {
-            //             key: 'system_staff/roll_call', icon: <FaAndroid />, label: 'Chấm công',
-            //         },
-            //     ],
-            // },
+            {
+                key: 'menu_system_staff', icon: <FaUserNurse />, label: 'Nhân viên', children: [
+                    {
+                        key: 'system_staff/roll_call', icon: <FaAndroid />, label: 'Chấm công',
+                    },
+                    {
+                        key: 'system_staff/history', icon: <IoBookSharp />, label: 'Lịch sử',
+                    },
+                ],
+            },
             {
                 key: 'menu_user', icon: <FaUserShield />, label: 'Người dùng', children: [
                     {
@@ -263,6 +267,7 @@ class index extends Component {
                                     <Route exact path={`${url}statistical/view_product`}><StatisticalViewProduct /></Route>
 
                                     <Route exact path={`${url}system_staff/roll_call`}><StaffRollCall /></Route>
+                                    <Route exact path={`${url}system_staff/history`}><HistoryRollCall /></Route>
 
                                     {data_before_checks['account.view_customer'] &&
                                         <Route exact path={`${url}manager/customer`}><ManagerCustomer /></Route>}

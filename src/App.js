@@ -1,4 +1,3 @@
-import './App.css';
 import Index from './apps/index';
 function App() {
   return (

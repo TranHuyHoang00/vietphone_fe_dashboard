@@ -147,7 +147,7 @@ class index extends Component {
                                     Tạo mới
                                 </Space>
                             </Button>
-                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên tag!" /></div>
+                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên tag !" /></div>
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
@@ -215,7 +215,7 @@ const mapDispatchToProps = dispatch => {
         get_tag: (id) => dispatch(actions.get_tag_redux(id)),
         edit_list_tag: (id, data) => dispatch(actions.edit_list_tag_redux(id, data)),
         delete_list_tag: (id) => dispatch(actions.delete_list_tag_redux(id)),
-        set_data_tag: (id) => dispatch(actions.set_data_tag_redux(id)),
+        set_data_tag: (data) => dispatch(actions.set_data_tag_redux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

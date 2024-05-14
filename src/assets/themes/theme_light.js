@@ -21,8 +21,8 @@ export const theme_light = Object.freeze({
         Statistic: {
             contentFontSize: 16
         },
-        Timeline: {
-            itemPaddingBottom: 80,
+        Collapse: {
+            headerBg: '#ffffff'
         },
     }
 });

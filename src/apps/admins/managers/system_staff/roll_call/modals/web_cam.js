@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import ModalFooter from '@components/modal/modal_footer';
 import Webcam from "react-webcam";
 import { Modal, message, Button } from 'antd';
 import dayjs from 'dayjs';
@@ -57,7 +56,7 @@ class web_cam extends Component {
     capture_image = () => {
         let data_create = this.state.data_create;
         let data_image = this.webcamRef.current.getScreenshot();
-        if (data_image) { this.drawOnCanvas(data_image, data_create?.address); }
+        if (data_image) { this.drawOnCanvas(data_image, this.get_date_time(), data_create?.address); }
     };
     re_capture_image = () => {
         this.get_location_current();
@@ -88,7 +87,7 @@ class web_cam extends Component {
         }
         context.fillText(line, x, offsetY);
     }
-    drawOnCanvas(data_image, text) {
+    drawOnCanvas(data_image, time, text) {
         const canvas = this.canvasRef.current;
         const ctx = canvas.getContext('2d');
         const image = new Image();
@@ -102,9 +101,10 @@ class web_cam extends Component {
             const maxWidth = canvas.width - 10;
             const lineHeight = 20;
             const x = 5;
-            let y = 20;
+            let y = 40;
             ctx.font = '14px Arial';
             ctx.fillStyle = 'white';
+            ctx.fillText(time, 5, 20);
 
             this.wrapText(ctx, text, x, y, maxWidth, lineHeight);
             const image_new = canvas.toDataURL();
@@ -143,7 +143,7 @@ class web_cam extends Component {
                     <div className='space-y-[10px] '>
                         <div className=' flex items-center justify-center'>
                             {this.state.is_capture ?
-                                <img src={data_create?.image} className='object-cover' />
+                                <img src={data_create?.image} className='object-cover' alt='web cam' />
                                 :
                                 <div className='relative shadow-sm'>
                                     <Webcam
