@@ -13,6 +13,10 @@ import ModalDetail from './modals/modal_detail';
 import ModalEdit from './modals/modal_edit';
 import { check_permission } from '@utils/check_permission';
 import { data_tags } from '@datas/data_after_check_permissions';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
+
 class index extends Component {
     constructor(props) {
         super(props);
@@ -29,6 +33,7 @@ class index extends Component {
             },
             data_before_checks: {},
         }
+
     }
     async componentDidMount() {
         this.props.get_list_tag(this.state.data_filter);
@@ -38,42 +43,29 @@ class index extends Component {
         });
     }
     open_modal = async (name, value, id) => {
-        this.props.set_data_tag({});
-        if (name === 'create') {
-            this.setState({ modal_create: value });
-        }
-        if (name === 'detail') {
-            if (id === undefined) {
-                this.setState({ modal_detail: value, data_tag: {} });
-            } else {
-                this.setState({ modal_detail: value });
-                await this.props.get_tag(id);
-            }
-        }
-        if (name === 'edit') {
-            if (id === undefined) {
-                this.setState({ modal_edit: value, data_tag: {} });
-            } else {
-                this.setState({ modal_edit: value });
-                await this.props.get_tag(id);
-            }
-        }
+        const actions = {
+            setData: this.props.set_data_tag,
+            getData: this.props.get_tag,
+        };
+        const newStateModal = await handleOpenModal(name, value, id, actions);
+        this.setState(newStateModal);
+
+
     }
     handle_funtion_menu = async () => {
-        let data_selected = this.state.data_selected;
-        if (this.state.type_menu === 1) { await this.props.delete_list_tag(data_selected); }
-        if (this.state.type_menu === 2) { await this.props.edit_list_tag(data_selected, { is_active: false }); }
-        if (this.state.type_menu === 3) { await this.props.edit_list_tag(data_selected, { is_active: true }); }
-        await this.props.get_list_tag(this.state.data_filter);
-        if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
+        const { data_selected, type_menu, data_filter } = this.state;
+        const actions = {
+            deleteList: this.props.delete_list_tag,
+            editList: this.props.edit_list_tag,
+            getList: this.props.get_list_tag
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(type_menu, data_selected, data_filter, actions);
+        this.setState({ data_selected: newListItemSelected });
     }
     onchange_page = async (value, type) => {
-        let data_filter = this.state.data_filter;
-        if (type === 'limit') { data_filter.limit = value; }
-        if (type === 'page') { data_filter.page = value; }
-        if (type === 'search') { data_filter.search = value; data_filter.page = 1; }
-        this.setState({ data_filter: data_filter })
-        await this.props.get_list_tag(data_filter);
+        const newDataFilter = await handleOnChangePage(value, type, this.state.data_filter);
+        this.setState({ data_filter: newDataFilter });
+        await this.props.get_list_tag(newDataFilter);
     }
     render() {
         const columns = [
