@@ -9,7 +9,7 @@ class product_attribute_value extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_filter: { page: 1, limit: 100, search: '' },
+            dataFilter: { page: 1, limit: 100, search: '' },
             disable_atb: true,
             disable_atbvl: true,
             disabled_button: true,
@@ -21,7 +21,7 @@ class product_attribute_value extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_group_attribute(this.state.data_filter);
+        this.props.get_list_group_attribute(this.state.dataFilter);
     }
     async componentDidUpdate(prevProps) {
         if (prevProps.is_edit !== this.props.is_edit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws) {
@@ -44,15 +44,15 @@ class product_attribute_value extends Component {
         }
     }
     on_search = (value, form_name) => {
-        let data_filter = this.state.data_filter;
-        data_filter.search = value;
-        if (form_name === 'group_attribute') { this.props.get_list_group_attribute(data_filter); }
+        let dataFilter = this.state.dataFilter;
+        dataFilter.search = value;
+        if (form_name === 'group_attribute') { this.props.get_list_group_attribute(dataFilter); }
     }
-    handle_create = async (form_name) => {
+    handleCreate = async (form_name) => {
         if (form_name === 'group_attribute') {
             if (!this.props.data_group_attribute.name) { message.error('Thiếu tên loại thông số'); return; }
             await this.props.create_group_attribute(this.props.data_group_attribute);
-            await this.props.get_list_group_attribute(this.state.data_filter);
+            await this.props.get_list_group_attribute(this.state.dataFilter);
         }
         if (form_name === 'attribute') {
             if (!this.props.data_attribute.name) { message.error('Thiếu tên thông số'); return; }
@@ -168,7 +168,7 @@ class product_attribute_value extends Component {
                                         on_change_select={this.on_select}
                                         variable_input={'name'}
                                         on_change_input={this.props.on_change_group_attribute}
-                                        handle_create={this.handle_create}
+                                        handleCreate={this.handleCreate}
                                     />
                                 </div>
                             </div>
@@ -189,7 +189,7 @@ class product_attribute_value extends Component {
                                         on_change_select={this.on_select}
                                         variable_input={'name'}
                                         on_change_input={this.props.on_change_attribute}
-                                        handle_create={this.handle_create}
+                                        handleCreate={this.handleCreate}
                                     />
                                 </div>
                             </div>
@@ -212,7 +212,7 @@ class product_attribute_value extends Component {
                                         on_change_select={this.on_select}
                                         variable_input={'value'}
                                         on_change_input={this.props.on_change_attribute_value}
-                                        handle_create={this.handle_create}
+                                        handleCreate={this.handleCreate}
                                     />
                                 </div>
                             </div>
@@ -282,7 +282,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_group_attribute: (data_filter) => dispatch(actions.get_list_group_attribute_redux(data_filter)),
+        get_list_group_attribute: (dataFilter) => dispatch(actions.get_list_group_attribute_redux(dataFilter)),
         create_group_attribute: (data) => dispatch(actions.create_group_attribute_redux(data)),
         on_change_group_attribute: (id, value) => dispatch(actions.on_change_group_attribute_redux(id, value)),
         get_group_attribute: (id) => dispatch(actions.get_group_attribute_redux(id)),

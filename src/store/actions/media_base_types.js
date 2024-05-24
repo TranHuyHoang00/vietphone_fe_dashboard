@@ -3,11 +3,11 @@ import { get_list_media_base, get_media_base, create_media_base, delete_media_ba
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_media_base_redux = (data_filter) => {
+export const get_list_media_base_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(media_base_start());
-            let data = await get_list_media_base(data_filter);
+            let data = await get_list_media_base(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_media_base_success(data.data.data));
             } else {

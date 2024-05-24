@@ -3,11 +3,11 @@ import { get_list_task, get_task, create_task, delete_task, edit_task } from '@s
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_task_redux = (data_filter) => {
+export const get_list_task_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(task_start());
-            let data = await get_list_task(data_filter);
+            let data = await get_list_task(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_task_success(data.data.data));
             } else {

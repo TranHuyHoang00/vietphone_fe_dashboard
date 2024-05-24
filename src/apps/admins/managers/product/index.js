@@ -7,54 +7,54 @@ import {
     Spin, Pagination, Typography, Tag, Image
 } from 'antd';
 import { AiOutlineMenu } from "react-icons/ai";
-import FormSelectPage from '@components/selects/form_select_page';
+import FormSelectPage from '@components/selects/formSelectPage';
 import DrawerFilter from './drawers/drawer_filter';
-import { check_permission } from '@utils/check_permission';
-import { data_products } from '@datas/data_after_check_permissions';
+import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { data_products } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_selected: [],
-            modal_detail: false,
-            modal_create: false,
-            modal_edit: false,
+            listItemSelected: [],
+            modalDetail: false,
+            modalCreate: false,
+            modalEdit: false,
             drawer_filter: false,
-            data_filter: {},
+            dataFilter: {},
 
-            data_before_checks: {},
+            dataPermissionsAfterCheck: {},
         }
     }
     async componentDidMount() {
-        this.props.get_list_product(this.props.data_filter);
+        this.props.get_list_product(this.props.dataFilter);
         this.props.get_list_brand({ page: 1, limit: 100, search: '' });
-        this.props.get_list_tag({ page: 1, limit: 100, search: '' });
+        this.props.getListTag({ page: 1, limit: 100, search: '' });
         this.props.get_list_category({ page: 1, limit: 100, search: '' });
-        this.setState({ data_filter: this.props.data_filter });
+        this.setState({ dataFilter: this.props.dataFilter });
 
-        let data_before_checks = await check_permission(data_products, this.props.data_user_permissions, this.props.is_superuser);
+        let dataPermissionsAfterCheck = await handleCheckPermission(data_products, this.props.dataUserPermissions, this.props.isSuperUser);
         this.setState({
-            data_before_checks: data_before_checks,
+            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    open_modal = async (name, value, id) => {
+    openModal = async (name, value, id) => {
         if (name === 'create') {
-            this.setState({ modal_create: value });
+            this.setState({ modalCreate: value });
             this.props.set_data_product({});
         }
         if (name === 'detail') {
             if (id === undefined) {
-                this.setState({ modal_detail: value, data_product: {} });
+                this.setState({ modalDetail: value, data_product: {} });
             } else {
-                this.setState({ modal_detail: value });
+                this.setState({ modalDetail: value });
                 await this.props.get_product(id);
             }
         }
         if (name === 'edit') {
             if (id === undefined) {
-                this.setState({ modal_edit: value, data_product: {} });
+                this.setState({ modalEdit: value, data_product: {} });
             } else {
-                this.setState({ modal_edit: value });
+                this.setState({ modalEdit: value });
                 await this.props.get_product(id);
             }
         }
@@ -64,33 +64,33 @@ class index extends Component {
             this.setState({ drawer_filter: value });
         }
     }
-    handle_funtion_menu = async () => {
-        let data_selected = this.state.data_selected;
-        if (this.state.type_menu === 1) { await this.props.delete_list_product(data_selected); }
-        if (this.state.type_menu === 2) { await this.props.edit_list_product(data_selected, { is_active: false }); }
-        if (this.state.type_menu === 3) { await this.props.edit_list_product(data_selected, { is_active: true }); }
-        await this.props.get_list_product(this.state.data_filter);
-        if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
+    funcDropButtonHeaderOfTable = async () => {
+        let listItemSelected = this.state.listItemSelected;
+        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_product(listItemSelected); }
+        if (this.state.typeItemDropButton === 2) { await this.props.edit_list_product(listItemSelected, { is_active: false }); }
+        if (this.state.typeItemDropButton === 3) { await this.props.edit_list_product(listItemSelected, { is_active: true }); }
+        await this.props.get_list_product(this.state.dataFilter);
+        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
     }
-    onchange_page = async (value, type) => {
-        let data_filter = this.state.data_filter;
-        if (type === 'limit') { data_filter.limit = value; }
-        if (type === 'page') { data_filter.page = value; }
-        if (type === 'search') { data_filter.search = value; data_filter.page = 1; }
-        if (type === 'product_brand') { data_filter.product_brand = value; data_filter.page = 1; }
-        if (type === 'tag') { data_filter.tag = value; data_filter.page = 1; }
-        if (type === 'is_active') { data_filter.is_active = value; data_filter.page = 1; }
-        if (type === 'category') { data_filter.category = value; data_filter.page = 1; }
-        if (type === 'has_page') { data_filter.has_page = value; data_filter.page = 1; }
+    onChangePage = async (value, type) => {
+        let dataFilter = this.state.dataFilter;
+        if (type === 'limit') { dataFilter.limit = value; }
+        if (type === 'page') { dataFilter.page = value; }
+        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
+        if (type === 'product_brand') { dataFilter.product_brand = value; dataFilter.page = 1; }
+        if (type === 'tag') { dataFilter.tag = value; dataFilter.page = 1; }
+        if (type === 'is_active') { dataFilter.is_active = value; dataFilter.page = 1; }
+        if (type === 'category') { dataFilter.category = value; dataFilter.page = 1; }
+        if (type === 'has_page') { dataFilter.has_page = value; dataFilter.page = 1; }
 
-        this.setState({ data_filter: data_filter })
-        await this.props.get_list_product(data_filter);
-        this.props.set_data_filter_product(data_filter);
+        this.setState({ dataFilter: dataFilter })
+        await this.props.get_list_product(dataFilter);
+        this.props.set_dataFilter_product(dataFilter);
     }
     onchange_search = (value) => {
         this.setState({
-            data_filter: {
-                ...this.state.data_filter,
+            dataFilter: {
+                ...this.state.dataFilter,
                 search: value,
             }
         })
@@ -175,19 +175,19 @@ class index extends Component {
                     </div>
             },
         ];
-        let data_before_checks = this.state.data_before_checks;
-        const data_selected = this.state.data_selected;
-        const onchange_selected = (data_new) => {
-            this.setState({ data_selected: data_new })
+        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        const listItemSelected = this.state.listItemSelected;
+        const onChangeSelectedRow = (dataNew) => {
+            this.setState({ listItemSelected: dataNew })
         };
-        const row_selection = { data_selected, onChange: onchange_selected };
+        const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
         return (
             <>
-                <Spin size='large' spinning={this.props.is_loading}>
+                <Spin size='large' spinning={this.props.isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Space>
-                                <Button disabled={!data_before_checks['product.view_product']}
+                                <Button disabled={!dataPermissionsAfterCheck['product.view_product']}
                                     onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiOutlineMenu />
@@ -195,31 +195,31 @@ class index extends Component {
                                     </Space>
                                 </Button>
                             </Space>
-                            <div><Input.Search value={this.state.data_filter.search}
+                            <div><Input.Search value={this.state.dataFilter.search}
                                 onChange={(event) => this.onchange_search(event.target.value)}
-                                onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên sản phẩm !" /></div>
+                                onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên sản phẩm !" /></div>
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={this.props.data_filter.limit} onchange_page={this.onchange_page} />
+                                <FormSelectPage limit={this.props.dataFilter.limit} onChangePage={this.onChangePage} />
                             </div>
                             <Divider>SẢN PHẨM</Divider>
                             <div className='space-y-[20px]'>
-                                <Table rowSelection={row_selection} rowKey="id"
+                                <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={this.props.data_products} pagination={false}
                                     size="middle" bordered scroll={{}} />
-                                <Pagination responsive current={this.props.data_filter.page}
-                                    showQuickJumper total={this.props.data_meta.total * this.props.data_meta.limit} pageSize={this.props.data_filter.limit}
-                                    onChange={(value) => this.onchange_page(value, 'page')} />
+                                <Pagination responsive current={this.props.dataFilter.page}
+                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={this.props.dataFilter.limit}
+                                    onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.drawer_filter && data_before_checks['product.view_product'] &&
+                {this.state.drawer_filter && dataPermissionsAfterCheck['product.view_product'] &&
                     <DrawerFilter drawer_filter={this.state.drawer_filter}
-                        open_drawer={this.open_drawer} data_filter={this.state.data_filter}
-                        onchange_page={this.onchange_page}
-                        data_brands={this.props.data_brands} data_tags={this.props.data_tags}
+                        open_drawer={this.open_drawer} dataFilter={this.state.dataFilter}
+                        onChangePage={this.onChangePage}
+                        data_brands={this.props.data_brands} dataTags={this.props.dataTags}
                         data_categorys={this.props.data_categorys} />
                 }
             </>
@@ -231,29 +231,29 @@ const mapStateToProps = state => {
     return {
         data_products: state.product.data_products,
         data_product: state.product.data_product,
-        data_meta: state.product.data_meta,
-        is_loading: state.product.is_loading,
-        is_result: state.product.is_result,
-        data_filter: state.product.data_filter,
-        data_tags: state.tag.data_tags,
+        dataMeta: state.product.dataMeta,
+        isLoading: state.product.isLoading,
+        isResult: state.product.isResult,
+        dataFilter: state.product.dataFilter,
+        dataTags: state.tag.dataTags,
         data_brands: state.brand.data_brands,
         data_categorys: state.category.data_categorys,
 
-        data_user_permissions: state.user.data_user_permissions,
-        is_superuser: state.user.is_superuser,
+        dataUserPermissions: state.user.dataUserPermissions,
+        isSuperUser: state.user.isSuperUser,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_product: (data_filter) => dispatch(actions.get_list_product_redux(data_filter)),
+        get_list_product: (dataFilter) => dispatch(actions.get_list_product_redux(dataFilter)),
         get_product: (id) => dispatch(actions.get_product_redux(id)),
         edit_list_product: (id, data) => dispatch(actions.edit_list_product_redux(id, data)),
         delete_list_product: (id) => dispatch(actions.delete_list_product_redux(id)),
         set_data_product: (id) => dispatch(actions.set_data_product_redux(id)),
-        set_data_filter_product: (data) => dispatch(actions.set_data_filter_product_redux(data)),
-        get_list_brand: (data_filter) => dispatch(actions.get_list_brand_redux(data_filter)),
-        get_list_tag: (data_filter) => dispatch(actions.get_list_tag_redux(data_filter)),
-        get_list_category: (data_filter) => dispatch(actions.get_list_category_redux(data_filter)),
+        set_dataFilter_product: (data) => dispatch(actions.set_dataFilter_product_redux(data)),
+        get_list_brand: (dataFilter) => dispatch(actions.get_list_brand_redux(dataFilter)),
+        getListTag: (dataFilter) => dispatch(actions.getListTagRedux(dataFilter)),
+        get_list_category: (dataFilter) => dispatch(actions.get_list_category_redux(dataFilter)),
 
     };
 };

@@ -23,7 +23,7 @@ class index extends Component {
     render() {
         let data_product = this.props.data_product;
         return (
-            <Spin size='large' spinning={this.props.is_loading}>
+            <Spin size='large' spinning={this.props.isLoading}>
                 <div className='p-[10px] space-y-[10px]'>
                     <Button onClick={() => this.handle_go_back()}
                         className='bg-[#e94138] text-white'>
@@ -41,7 +41,7 @@ class index extends Component {
 const mapStateToProps = state => {
     return {
         data_product: state.product.data_product,
-        is_loading: state.product.is_loading,
+        isLoading: state.product.isLoading,
     };
 };
 const mapDispatchToProps = dispatch => {

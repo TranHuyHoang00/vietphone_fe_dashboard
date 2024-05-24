@@ -3,11 +3,11 @@ import { get_list_group, get_group, create_group, delete_group, edit_group } fro
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_group_redux = (data_filter) => {
+export const get_list_group_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(group_start());
-            let data = await get_list_group(data_filter);
+            let data = await get_list_group(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_group_success(data.data.data));
             } else {

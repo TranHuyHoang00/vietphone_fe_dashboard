@@ -7,65 +7,65 @@ import {
     Spin, Pagination, Typography, Image, Dropdown, Tag
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
-import FormSelectPage from '@components/selects/form_select_page';
-import ModalCreate from './modals/modal_create';
-import ModalDetail from './modals/modal_detail';
-import ModalEdit from './modals/modal_edit';
-import { check_permission } from '@utils/check_permission';
-import { data_tags } from '@datas/data_after_check_permissions';
+import FormSelectPage from '@components/selects/formSelectPage';
+import ModalCreate from './modals/modalCreate';
+import ModalDetail from './modals/modalDetail';
+import ModalEdit from './modals/modalEdit';
+import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { dataTags } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
-
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type_menu: 1,
-            data_selected: [],
-            modal_detail: false,
-            modal_create: false,
-            modal_edit: false,
-            data_filter: {
+            typeItemDropButton: 1,
+            listItemSelected: [],
+            modalDetail: false,
+            modalCreate: false,
+            modalEdit: false,
+            dataFilter: {
                 page: 1,
                 limit: 5,
                 search: ''
             },
-            data_before_checks: {},
+            dataPermissionsAfterCheck: {},
         }
 
     }
     async componentDidMount() {
-        this.props.get_list_tag(this.state.data_filter);
-        let data_before_checks = await check_permission(data_tags, this.props.data_user_permissions, this.props.is_superuser);
+        const { dataFilter } = this.state;
+        const { getListTag, dataUserPermissions, isSuperUser } = this.props;
+        await getListTag(dataFilter);
+        const dataPermissionsAfterCheck = await handleCheckPermission(dataTags, dataUserPermissions, isSuperUser);
         this.setState({
-            data_before_checks: data_before_checks,
+            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    open_modal = async (name, value, id) => {
+    openModal = async (modalName, modalValue, itemId,) => {
         const actions = {
-            setData: this.props.set_data_tag,
-            getData: this.props.get_tag,
+            setData: this.props.setDataTag,
+            getData: this.props.getDataTag,
         };
-        const newStateModal = await handleOpenModal(name, value, id, actions);
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
         this.setState(newStateModal);
-
-
     }
-    handle_funtion_menu = async () => {
-        const { data_selected, type_menu, data_filter } = this.state;
+    funcDropButtonHeaderOfTable = async () => {
+        const { listItemSelected, typeItemDropButton, dataFilter } = this.state;
         const actions = {
-            deleteList: this.props.delete_list_tag,
-            editList: this.props.edit_list_tag,
-            getList: this.props.get_list_tag
+            deleteList: this.props.deleteListTag,
+            editList: this.props.editListTag,
+            getList: this.props.getListTag
         };
-        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(type_menu, data_selected, data_filter, actions);
-        this.setState({ data_selected: newListItemSelected });
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(typeItemDropButton, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onchange_page = async (value, type) => {
-        const newDataFilter = await handleOnChangePage(value, type, this.state.data_filter);
-        this.setState({ data_filter: newDataFilter });
-        await this.props.get_list_tag(newDataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await this.props.getListTag(newDataFilter);
     }
     render() {
         const columns = [
@@ -105,8 +105,8 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!data_before_checks['product.view_tag']} onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></button>
-                        <button disabled={!data_before_checks['product.change_tag']} onClick={() => this.open_modal('edit', true, item.id)}>
+                        <button disabled={!dataPermissionsAfterCheck['product.view_tag']} onClick={() => this.openModal('detail', true, item.id)}><AiFillEye /></button>
+                        <button disabled={!dataPermissionsAfterCheck['product.change_tag']} onClick={() => this.openModal('edit', true, item.id)}>
                             <AiFillEdit />
                         </button>
                     </Space >
@@ -114,48 +114,47 @@ class index extends Component {
             },
 
         ];
-        let data_before_checks = this.state.data_before_checks;
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, typeItemDropButton,
+            modalCreate, modalDetail, modalEdit } = this.state;
+        const { isLoading, dataTags, dataMeta } = this.props;
         const items = [
-            { key: 1, label: 'Xóa', disabled: !data_before_checks['product.delete_tag'] },
-            { key: 2, label: 'Khóa', disabled: !data_before_checks['product.change_tag'] },
-            { key: 3, label: 'Mở', disabled: !data_before_checks['product.change_tag'] },
+            { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['product.delete_tag'] },
+            { key: 2, label: 'Khóa', disabled: !dataPermissionsAfterCheck['product.change_tag'] },
+            { key: 3, label: 'Mở', disabled: !dataPermissionsAfterCheck['product.change_tag'] },
         ];
-        const data_selected = this.state.data_selected;
-        const onchange_selected = (data_new) => {
-            this.setState({ data_selected: data_new })
+        const onChangeSelectedRow = (dataNew) => {
+            this.setState({ listItemSelected: dataNew })
         };
-        const row_selection = { data_selected, onChange: onchange_selected };
-        let data_filter = this.state.data_filter;
-        let type_menu = this.state.type_menu;
+        const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
         return (
             <>
-                <Spin size='large' spinning={this.props.is_loading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button disabled={!data_before_checks['product.add_tag']}
-                                onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
+                            <Button disabled={!dataPermissionsAfterCheck['product.add_tag']}
+                                onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
                                     Tạo mới
                                 </Space>
                             </Button>
-                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên tag !" /></div>
+                            <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên tag !" /></div>
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
+                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
                                 <div>
-                                    <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
-                                        title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
+                                    <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
+                                        title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
+                                        placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
-                                            disabled={!data_before_checks['product.delete_tag']}
-                                            menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
+                                            disabled={!dataPermissionsAfterCheck['product.delete_tag']}
+                                            menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {type_menu === 1 && <span>Xóa</span>}
-                                                {type_menu === 2 && <span>Khóa</span>}
-                                                {type_menu === 3 && <span>Mở</span>}
-                                                <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
+                                                {typeItemDropButton === 1 && <span>Xóa</span>}
+                                                {typeItemDropButton === 2 && <span>Khóa</span>}
+                                                {typeItemDropButton === 3 && <span>Mở</span>}
+                                                <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
                                     </Popconfirm>
@@ -163,27 +162,27 @@ class index extends Component {
                             </div>
                             <Divider>TAG</Divider>
                             <div className='space-y-[20px]'>
-                                <Table rowSelection={row_selection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_tags} pagination={false}
+                                <Table rowSelection={rowSelection} rowKey="id"
+                                    columns={columns} dataSource={dataTags} pagination={false}
                                     size="middle" bordered scroll={{}} />
-                                <Pagination responsive current={data_filter.page}
-                                    showQuickJumper total={this.props.data_meta.total * this.props.data_meta.limit} pageSize={data_filter.limit}
-                                    onChange={(value) => this.onchange_page(value, 'page')} />
+                                <Pagination responsive current={dataFilter.page}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
+                                    onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_create && data_before_checks['product.add_tag'] &&
-                    <ModalCreate modal_create={this.state.modal_create}
-                        open_modal={this.open_modal}
-                        data_filter={this.state.data_filter} />}
-                {this.state.modal_detail && data_before_checks['product.view_tag'] &&
-                    <ModalDetail modal_detail={this.state.modal_detail}
-                        open_modal={this.open_modal} />}
-                {this.state.modal_edit && data_before_checks['product.change_tag'] &&
-                    <ModalEdit modal_edit={this.state.modal_edit}
-                        open_modal={this.open_modal}
-                        data_filter={this.state.data_filter} />}
+                {modalCreate && dataPermissionsAfterCheck['product.add_tag'] &&
+                    <ModalCreate modalCreate={modalCreate}
+                        openModal={this.openModal}
+                        dataFilter={dataFilter} />}
+                {modalDetail && dataPermissionsAfterCheck['product.view_tag'] &&
+                    <ModalDetail modalDetail={modalDetail}
+                        openModal={this.openModal} />}
+                {modalEdit && dataPermissionsAfterCheck['product.change_tag'] &&
+                    <ModalEdit modalEdit={modalEdit}
+                        openModal={this.openModal}
+                        dataFilter={dataFilter} />}
             </>
         );
     }
@@ -191,23 +190,23 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_tags: state.tag.data_tags,
-        data_tag: state.tag.data_tag,
-        data_meta: state.tag.data_meta,
-        is_loading: state.tag.is_loading,
-        is_result: state.tag.is_result,
+        dataTags: state.tag.dataTags,
+        dataTag: state.tag.dataTag,
+        dataMeta: state.tag.dataMeta,
+        isLoading: state.tag.isLoading,
+        isResult: state.tag.isResult,
 
-        data_user_permissions: state.user.data_user_permissions,
-        is_superuser: state.user.is_superuser,
+        dataUserPermissions: state.user.dataUserPermissions,
+        isSuperUser: state.user.isSuperUser,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_tag: (data_filter) => dispatch(actions.get_list_tag_redux(data_filter)),
-        get_tag: (id) => dispatch(actions.get_tag_redux(id)),
-        edit_list_tag: (id, data) => dispatch(actions.edit_list_tag_redux(id, data)),
-        delete_list_tag: (id) => dispatch(actions.delete_list_tag_redux(id)),
-        set_data_tag: (data) => dispatch(actions.set_data_tag_redux(data)),
+        getListTag: (dataFilter) => dispatch(actions.getListTagRedux(dataFilter)),
+        getDataTag: (id) => dispatch(actions.getDataTagRedux(id)),
+        editListTag: (id, data) => dispatch(actions.editListTagRedux(id, data)),
+        deleteListTag: (id) => dispatch(actions.deleteListTagRedux(id)),
+        setDataTag: (data) => dispatch(actions.setDataTagRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

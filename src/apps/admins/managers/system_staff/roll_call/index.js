@@ -13,7 +13,7 @@ class index extends Component {
     }
     async componentDidMount() {
     }
-    open_modal = async (name, value) => {
+    openModal = async (name, value) => {
         if (name === 'web_cam') {
             this.setState({ modal_webcam: value });
         }
@@ -23,7 +23,7 @@ class index extends Component {
             <>
                 <div className="mx-[10px] space-y-[10px]">
                     <div className='flex flex-wrap gap-[5px]'>
-                        <Button onClick={() => this.open_modal('web_cam', true)}
+                        <Button onClick={() => this.openModal('web_cam', true)}
                             className='bg-white text-black w-[80px]'>Vào ca</Button>
                         <Button className='bg-white text-black w-[80px]'>Ra ca</Button>
                         <Button className='bg-white text-black w-[80px]'>Nghỉ</Button>
@@ -116,7 +116,7 @@ class index extends Component {
                 </div>
                 {this.state.modal_webcam &&
                     <ModalWebCam modal_webcam={this.state.modal_webcam}
-                        open_modal={this.open_modal} />}
+                        openModal={this.openModal} />}
             </>
         );
     }

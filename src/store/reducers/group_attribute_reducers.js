@@ -3,9 +3,9 @@ import action_types from '@actions/action_types';
 const initialState = {
     data_group_attributes: [],
     data_group_attribute: {},
-    data_meta: {},
-    is_loading: false,
-    is_result: false,
+    dataMeta: {},
+    isLoading: false,
+    isResult: false,
 }
 
 const group_attribute_reducers = (state = initialState, action) => {
@@ -13,59 +13,59 @@ const group_attribute_reducers = (state = initialState, action) => {
         case action_types.GROUP_ATTRIBUTE_START:
             return {
                 ...state,
-                is_loading: true,
-                is_result: false,
+                isLoading: true,
+                isResult: false,
             }
         case action_types.GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.GROUP_ATTRIBUTE_FAIDED:
             return {
                 ...state,
-                is_loading: false,
-                is_result: false,
+                isLoading: false,
+                isResult: false,
             }
         case action_types.GET_LIST_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
                 data_group_attributes: action.data.group_attributes,
-                data_meta: action.data.metadata
+                dataMeta: action.data.metadata
             }
         case action_types.GET_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
                 data_group_attribute: action.data
             }
         case action_types.CREATE_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.EDIT_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.EDIT_LIST_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.DELETE_LIST_GROUP_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.SET_DATA_GROUP_ATTRIBUTE:
             return {

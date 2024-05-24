@@ -7,18 +7,18 @@ import {
     Spin, Pagination, Typography, Dropdown
 } from 'antd';
 import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
-import FormSelectPage from '@components/selects/form_select_page';
-import ModalCreate from './modals/modal_create';
-import ModalEdit from './modals/modal_edit';
+import FormSelectPage from '@components/selects/formSelectPage';
+import ModalCreate from './modals/modalCreate';
+import ModalEdit from './modals/modalEdit';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type_menu: 1,
-            data_selected: [],
-            modal_create: false,
-            modal_edit: false,
-            data_filter: {
+            typeItemDropButton: 1,
+            listItemSelected: [],
+            modalCreate: false,
+            modalEdit: false,
+            dataFilter: {
                 page: 1,
                 limit: 5,
                 search: ''
@@ -26,35 +26,35 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_group(this.state.data_filter);
+        this.props.get_list_group(this.state.dataFilter);
     }
-    open_modal = async (name, value, id) => {
+    openModal = async (name, value, id) => {
         this.props.set_data_group({});
         if (name === 'create') {
-            this.setState({ modal_create: value });
+            this.setState({ modalCreate: value });
         }
         if (name === 'edit') {
             if (id === undefined) {
-                this.setState({ modal_edit: value, data_group: {} });
+                this.setState({ modalEdit: value, data_group: {} });
             } else {
-                this.setState({ modal_edit: value });
+                this.setState({ modalEdit: value });
                 await this.props.get_group(id);
             }
         }
     }
-    handle_funtion_menu = async () => {
-        let data_selected = this.state.data_selected;
-        if (this.state.type_menu === 1) { await this.props.delete_list_group(data_selected); }
-        await this.props.get_list_group(this.state.data_filter);
-        if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
+    funcDropButtonHeaderOfTable = async () => {
+        let listItemSelected = this.state.listItemSelected;
+        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_group(listItemSelected); }
+        await this.props.get_list_group(this.state.dataFilter);
+        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
     }
-    onchange_page = async (value, type) => {
-        let data_filter = this.state.data_filter;
-        if (type === 'limit') { data_filter.limit = value; }
-        if (type === 'page') { data_filter.page = value; }
-        if (type === 'search') { data_filter.search = value; data_filter.page = 1; }
-        this.setState({ data_filter: data_filter })
-        await this.props.get_list_group(data_filter);
+    onChangePage = async (value, type) => {
+        let dataFilter = this.state.dataFilter;
+        if (type === 'limit') { dataFilter.limit = value; }
+        if (type === 'page') { dataFilter.page = value; }
+        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
+        this.setState({ dataFilter: dataFilter })
+        await this.props.get_list_group(dataFilter);
     }
     render() {
         const columns = [
@@ -71,7 +71,7 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <span className='cursor-pointer' onClick={() => this.open_modal('edit', true, item.id)}>
+                        <span className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
                             <AiFillEdit />
                         </span>
                     </Space >
@@ -82,37 +82,37 @@ class index extends Component {
         const items = [
             { key: 1, label: 'Xóa' },
         ];
-        const data_selected = this.state.data_selected;
-        const onchange_selected = (data_new) => {
-            this.setState({ data_selected: data_new })
+        const listItemSelected = this.state.listItemSelected;
+        const onChangeSelectedRow = (dataNew) => {
+            this.setState({ listItemSelected: dataNew })
         };
-        const row_selection = { data_selected, onChange: onchange_selected };
-        let data_filter = this.state.data_filter;
-        let type_menu = this.state.type_menu;
+        const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
+        let dataFilter = this.state.dataFilter;
+        let typeItemDropButton = this.state.typeItemDropButton;
         return (
             <>
-                <Spin size='large' spinning={this.props.is_loading}>
+                <Spin size='large' spinning={this.props.isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
+                            <Button onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
                                     Tạo mới
                                 </Space>
                             </Button>
-                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên quyền !" /></div>
+                            <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên quyền !" /></div>
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
+                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
                                 <div>
-                                    <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
-                                        title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
-                                        <Dropdown.Button disabled menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
+                                    <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
+                                        title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
+                                        placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
+                                        <Dropdown.Button disabled menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {type_menu === 1 && <span>Xóa</span>}
-                                                <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
+                                                {typeItemDropButton === 1 && <span>Xóa</span>}
+                                                <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
                                     </Popconfirm>
@@ -120,24 +120,24 @@ class index extends Component {
                             </div>
                             <Divider>PHÂN QUYỀN</Divider>
                             <div className='space-y-[20px]'>
-                                <Table rowSelection={row_selection} rowKey="id"
+                                <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={this.props.data_groups} pagination={false}
                                     size="middle" bordered scroll={{}} />
-                                <Pagination responsive current={data_filter.page}
-                                    showQuickJumper total={this.props.data_meta.total * this.props.data_meta.limit} pageSize={data_filter.limit}
-                                    onChange={(value) => this.onchange_page(value, 'page')} />
+                                <Pagination responsive current={dataFilter.page}
+                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_create &&
-                    <ModalCreate modal_create={this.state.modal_create}
-                        open_modal={this.open_modal}
-                        data_filter={this.state.data_filter} />}
-                {this.state.modal_edit &&
-                    <ModalEdit modal_edit={this.state.modal_edit}
-                        open_modal={this.open_modal}
-                        data_filter={this.state.data_filter} />}
+                {this.state.modalCreate &&
+                    <ModalCreate modalCreate={this.state.modalCreate}
+                        openModal={this.openModal}
+                        dataFilter={this.state.dataFilter} />}
+                {this.state.modalEdit &&
+                    <ModalEdit modalEdit={this.state.modalEdit}
+                        openModal={this.openModal}
+                        dataFilter={this.state.dataFilter} />}
             </>
         );
     }
@@ -147,14 +147,14 @@ const mapStateToProps = state => {
     return {
         data_groups: state.group.data_groups,
         data_group: state.group.data_group,
-        data_meta: state.group.data_meta,
-        is_loading: state.group.is_loading,
-        is_result: state.group.is_result,
+        dataMeta: state.group.dataMeta,
+        isLoading: state.group.isLoading,
+        isResult: state.group.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_group: (data_filter) => dispatch(actions.get_list_group_redux(data_filter)),
+        get_list_group: (dataFilter) => dispatch(actions.get_list_group_redux(dataFilter)),
         get_group: (id) => dispatch(actions.get_group_redux(id)),
         edit_list_group: (id, data) => dispatch(actions.edit_list_group_redux(id, data)),
         delete_list_group: (id) => dispatch(actions.delete_list_group_redux(id)),

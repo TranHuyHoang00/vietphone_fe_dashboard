@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Typography } from 'antd';
-class form_date extends Component {
+class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,11 +19,11 @@ class form_date extends Component {
                 <div>
                     <input className='border w-full h-[35px] px-[5px]'
                         type='datetime-local' value={this.props.value}
-                        onChange={(event) => this.props.handle_onchange_input(event.target.value, this.props.variable)} />
+                        onChange={(event) => this.props.onChangeInput(event.target.value, this.props.variable)} />
                 </div>
             </div>
         );
     }
 
 }
-export default withRouter(form_date);
+export default withRouter(index);

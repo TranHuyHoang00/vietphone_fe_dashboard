@@ -9,8 +9,8 @@ import VariantMedia from './elements/variant_media';
 import VariantAttributeValue from './elements/variant_attribute_value';
 import { create_media } from '@services/media_service';
 import { show_notification } from '@utils/show_notification';
-import { check_permission } from '@utils/check_permission';
-import { data_products } from '@datas/data_after_check_permissions';
+import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { data_products } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -26,13 +26,13 @@ class index extends Component {
             data_atbvl_ids: [],
 
             data_attributes: [],
-            data_before_checks: {},
+            dataPermissionsAfterCheck: {},
         }
     }
     async componentDidMount() {
-        let data_before_checks = await check_permission(data_products, this.props.data_user_permissions, this.props.is_superuser);
+        let dataPermissionsAfterCheck = await handleCheckPermission(data_products, this.props.dataUserPermissions, this.props.isSuperUser);
         this.setState({
-            data_before_checks: data_before_checks,
+            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
     async componentDidUpdate(prevProps) {
@@ -133,9 +133,9 @@ class index extends Component {
     render() {
         let data_product = this.props.data_product;
         let data_variant = this.props.data_variant;
-        let data_before_checks = this.state.data_before_checks;
+        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
         return (
-            <Spin size='large' spinning={this.props.is_loading}>
+            <Spin size='large' spinning={this.props.isLoading}>
                 <div className=" space-y-[10px]">
                     <div className='flex items-center justify-end'>
                         <Space>
@@ -145,7 +145,7 @@ class index extends Component {
                                     Hủy
                                 </Button>
                             }
-                            <Button disabled={!data_before_checks['product.change_product']}
+                            <Button disabled={!dataPermissionsAfterCheck['product.change_product']}
                                 onClick={() => this.handle_edit_variant()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
                                 {this.props.is_edit === false ? 'Chỉnh sửa' : 'Lưu'}
                             </Button>
@@ -180,15 +180,15 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        is_loading: state.variant.is_loading,
+        isLoading: state.variant.isLoading,
         data_product: state.product.data_product,
         data_variant: state.variant.data_variant,
-        is_result_variant: state.variant.is_result,
+        is_result_variant: state.variant.isResult,
 
         is_edit: state.variant.is_edit,
 
-        data_user_permissions: state.user.data_user_permissions,
-        is_superuser: state.user.is_superuser,
+        dataUserPermissions: state.user.dataUserPermissions,
+        isSuperUser: state.user.isSuperUser,
 
     };
 };

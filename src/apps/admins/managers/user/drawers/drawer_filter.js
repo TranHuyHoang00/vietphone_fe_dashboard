@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Drawer, Typography, Radio } from 'antd';
-import FormSelectInput from '@components/selects/form_select_input'
+import FormSelectInput from '@components/selects/formSelectInput'
 class drawer_filter extends Component {
     constructor(props) {
         super(props);
@@ -11,7 +11,7 @@ class drawer_filter extends Component {
     async componentDidMount() {
     }
     render() {
-        let data_filter = this.props.data_filter;
+        let dataFilter = this.props.dataFilter;
         let data_groups = [{ name: 'TẤT CẢ', id: '' }, ...this.props.data_groups];
 
         return (
@@ -19,7 +19,7 @@ class drawer_filter extends Component {
                 <div className='space-y-[10px]'>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Trạng thái</Typography.Text>
-                        <Radio.Group value={data_filter.is_active} onChange={(event) => this.props.onchange_page(event.target.value, 'is_active')} className='flex'>
+                        <Radio.Group value={dataFilter.is_active} onChange={(event) => this.props.onChangePage(event.target.value, 'is_active')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value={true}>Mở</Radio.Button>
                             <Radio.Button value={false}>Khóa</Radio.Button>
@@ -27,19 +27,19 @@ class drawer_filter extends Component {
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Toàn quyền</Typography.Text>
-                        <Radio.Group value={data_filter.is_superuser} onChange={(event) => this.props.onchange_page(event.target.value, 'is_superuser')} className='flex'>
+                        <Radio.Group value={dataFilter.isSuperUser} onChange={(event) => this.props.onChangePage(event.target.value, 'isSuperUser')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value={true}>Có</Radio.Button>
                             <Radio.Button value={false}>Không</Radio.Button>
                         </Radio.Group>
                     </div>
-                    <FormSelectInput name={'Phân quyền'} variable={'groups'} value={data_filter.groups}
+                    <FormSelectInput name={'Phân quyền'} variable={'groups'} value={dataFilter.groups}
                         important={false} width={'100%'}
                         options={data_groups.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}
-                        handle_onchange_input={this.props.onchange_page} />
+                        onChangeInput={this.props.onChangePage} />
                 </div>
             </Drawer>
         );

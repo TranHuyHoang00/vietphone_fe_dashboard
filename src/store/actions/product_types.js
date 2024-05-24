@@ -3,11 +3,11 @@ import { get_list_product, get_product, create_product, delete_product, edit_pro
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_product_redux = (data_filter) => {
+export const get_list_product_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(product_start());
-            let data = await get_list_product(data_filter);
+            let data = await get_list_product(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_product_success(data.data.data));
             } else {
@@ -141,7 +141,7 @@ export const click_edit_product_redux = (data) => ({
     type: action_types.CLICK_EDIT_PRODUCT,
     data: data
 })
-export const set_data_filter_product_redux = (data) => ({
-    type: action_types.SET_DATA_FILTER_PRODUCT,
+export const set_dataFilter_product_redux = (data) => ({
+    type: action_types.SET_dataFilter_PRODUCT,
     data,
 })

@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Collapse, Input, Typography, Select } from 'antd';
-import { text_line_1_3 } from '@components/displays/data_line_1_3';
+import { textLine13 } from '@components/displays/line13';
 import { format_money } from '@utils/format_money';
 class variant_introduce extends Component {
     constructor(props) {
@@ -20,8 +20,8 @@ class variant_introduce extends Component {
         return (
             <Collapse defaultActiveKey={['1']}>
                 <Collapse.Panel header="Phiên bản" key="1">
-                    {text_line_1_3('Mã SKU', data_variant.sku)}
-                    {text_line_1_3('Mã Barcode', data_variant.barcode)}
+                    {textLine13('Mã SKU', data_variant.sku)}
+                    {textLine13('Mã Barcode', data_variant.barcode)}
                     <div className='space-y-[5px]'>
                         <div className='flex gap-[5px]'>
                             <div className='w-1/3 flex justify-between space-x-[5px]'>
@@ -53,7 +53,7 @@ class variant_introduce extends Component {
                                     onChange={(event) => this.props.on_change_variant(event.target.value, 'discount_price')} />
                             </div>
                         </div>
-                        {text_line_1_3('Số lượng', `${data_variant.quantity} cái`)}
+                        {textLine13('Số lượng', `${data_variant.quantity} cái`)}
                         <div className='flex items-center gap-[5px]'>
                             <div className='w-1/3 flex items-center justify-between'>
                                 <Typography.Text type="secondary">Trạng thái</Typography.Text>

@@ -6,14 +6,14 @@ import { Button, Dropdown, Image, Collapse } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import "react-multi-carousel/lib/styles.css";
 import Carousel from "react-multi-carousel";
-import { image_to_base64 } from '@utils/base64';
+import { convertImageToBase64 } from '@utils/base64';
 import ModalVideo from '../../../modals/modal_video';
 class product_media extends Component {
     constructor(props) {
         super(props);
         this.state = {
             is_edit: false,
-            type_menu: 1,
+            typeItemDropButton: 1,
             modal_video: false,
 
             data_media_raws: [],
@@ -41,14 +41,14 @@ class product_media extends Component {
             data_media_ids: data_media_ids,
         })
     }
-    onchange_image = async (event, type, index, id) => {
+    onChangeImage = async (event, type, index, id) => {
         let data_media_raws = this.state.data_media_raws;
         let data_media_ids = this.state.data_media_ids;
 
         if (type === 'create') {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
-                let image_new = await image_to_base64(event, i);
+                let image_new = await convertImageToBase64(event, i);
                 data_media_raws.push({ image: image_new, media_type: 'image', alt: this.props.data_product.name });
             }
         }
@@ -61,7 +61,7 @@ class product_media extends Component {
         this.setState({ data_media_raws: data_media_raws, data_media_ids: data_media_ids });
         this.props.get_data_media(data_media_ids, data_media_raws);
     }
-    open_modal = async (name, value) => {
+    openModal = async (name, value) => {
         if (name === 'video') { this.setState({ modal_video: value }); }
     }
     onchange_video = (value) => {
@@ -81,7 +81,7 @@ class product_media extends Component {
             { key: 2, label: 'Thêm video' },
         ];
         let is_edit = this.props.is_edit;
-        let type_menu = this.state.type_menu;
+        let typeItemDropButton = this.state.typeItemDropButton;
         let data_media_raws = this.state.data_media_raws;
         return (
             <>
@@ -89,11 +89,11 @@ class product_media extends Component {
                     <Collapse.Panel header="Hình ảnh sản phẩm" key="1">
                         <div className='space-y-[10px]'>
                             <input id="media_product" type="file" accept="image/*" hidden multiple
-                                onChange={(event) => this.onchange_image(event, 'create')} />
-                            <Dropdown.Button disabled={!is_edit} menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
+                                onChange={(event) => this.onChangeImage(event, 'create')} />
+                            <Dropdown.Button disabled={!is_edit} menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
                                 <div>
-                                    {type_menu === 1 && <label htmlFor="media_product">Thêm ảnh</label>}
-                                    {type_menu === 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
+                                    {typeItemDropButton === 1 && <label htmlFor="media_product">Thêm ảnh</label>}
+                                    {typeItemDropButton === 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
                                 </div>
                             </Dropdown.Button>
                             {data_media_raws && data_media_raws.length !== 0 &&
@@ -118,7 +118,7 @@ class product_media extends Component {
                                                             </iframe>
                                                         }
                                                     </div>
-                                                    <Button disabled={!is_edit} onClick={() => this.onchange_image(null, 'delete', index, item.id)}
+                                                    <Button disabled={!is_edit} onClick={() => this.onChangeImage(null, 'delete', index, item.id)}
                                                         className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
 
                                                 </div>
@@ -130,7 +130,7 @@ class product_media extends Component {
                         </div>
                     </Collapse.Panel>
                 </Collapse>
-                <ModalVideo modal_video={this.state.modal_video} open_modal={this.open_modal}
+                <ModalVideo modal_video={this.state.modal_video} openModal={this.openModal}
                     onchange_video={this.onchange_video} />
             </>
         );

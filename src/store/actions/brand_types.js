@@ -3,11 +3,11 @@ import { get_list_brand, get_brand, create_brand, delete_brand, edit_brand } fro
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_brand_redux = (data_filter) => {
+export const get_list_brand_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(brand_start());
-            let data = await get_list_brand(data_filter);
+            let data = await get_list_brand(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_brand_success(data.data.data));
             } else {

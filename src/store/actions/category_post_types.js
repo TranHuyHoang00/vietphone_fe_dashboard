@@ -3,11 +3,11 @@ import { get_list_category_post, get_category_post, create_category_post, delete
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_category_post_redux = (data_filter) => {
+export const get_list_category_post_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(category_post_start());
-            let data = await get_list_category_post(data_filter);
+            let data = await get_list_category_post(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_category_post_success(data.data.data));
             } else {

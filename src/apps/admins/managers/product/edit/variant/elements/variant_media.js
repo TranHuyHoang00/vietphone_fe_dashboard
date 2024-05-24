@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, Carousel, Image, Collapse } from 'antd';
-import { image_to_base64 } from '@utils/base64';
+import { convertImageToBase64 } from '@utils/base64';
 import { DeleteOutlined } from '@ant-design/icons';
 
 class variant_media extends Component {
@@ -30,13 +30,13 @@ class variant_media extends Component {
             data_media_ids: data_media_ids,
         })
     }
-    onchange_image = async (event, type, index, id) => {
+    onChangeImage = async (event, type, index, id) => {
         let data_media_raws = this.state.data_media_raws;
         let data_media_ids = this.state.data_media_ids;
         if (type === 'create') {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
-                let image_new = await image_to_base64(event, i);
+                let image_new = await convertImageToBase64(event, i);
                 data_media_raws.push({ image: image_new, media_type: 'image', alt: this.props.data_variant.name });
             }
         }
@@ -61,7 +61,7 @@ class variant_media extends Component {
                                     <div key={index}>
                                         <Image height={150} width={150} src={item.image} className='object-cover' />
                                         <div >
-                                            <Button disabled={!this.props.is_edit} onClick={() => this.onchange_image(null, 'delete', index, item.id)}
+                                            <Button disabled={!this.props.is_edit} onClick={() => this.onChangeImage(null, 'delete', index, item.id)}
                                                 className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
                                         </div>
                                     </div>
@@ -70,7 +70,7 @@ class variant_media extends Component {
                             })}
                         </Carousel>
                         <input id="media_variant" type="file" accept="image/*" hidden
-                            onChange={(event) => this.onchange_image(event, 'create')} />
+                            onChange={(event) => this.onChangeImage(event, 'create')} />
                         <Button disabled={!this.props.is_edit}>
                             <label className='w-full h-full' htmlFor="media_variant">Thêm ảnh</label>
                         </Button>

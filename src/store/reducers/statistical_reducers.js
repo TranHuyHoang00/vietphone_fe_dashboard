@@ -6,8 +6,8 @@ const initialState = {
         start: '',
         end: '',
     },
-    is_loading: false,
-    is_result: false,
+    isLoading: false,
+    isResult: false,
 
     data_view_webs: [],
     data_view_products: [],
@@ -18,34 +18,34 @@ const statistical_reducers = (state = initialState, action) => {
         case action_types.STATISTICAL_START:
             return {
                 ...state,
-                is_loading: true,
-                is_result: false,
+                isLoading: true,
+                isResult: false,
             }
         case action_types.STATISTICAL_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.STATISTICAL_FAIDED:
             return {
                 ...state,
-                is_loading: false,
-                is_result: false,
+                isLoading: false,
+                isResult: false,
             }
 
         case action_types.GET_VIEW_WEB_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
                 data_view_webs: action.data,
             }
         case action_types.GET_VIEW_PRODUCT_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
                 data_view_products: action.data,
             }
         case action_types.SET_STATISTICAL:

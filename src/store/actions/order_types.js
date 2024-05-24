@@ -3,11 +3,11 @@ import { get_list_order, get_order, create_order, delete_order, edit_order } fro
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_order_redux = (data_filter) => {
+export const get_list_order_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(order_start());
-            let data = await get_list_order(data_filter);
+            let data = await get_list_order(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_order_success(data.data.data));
             } else {

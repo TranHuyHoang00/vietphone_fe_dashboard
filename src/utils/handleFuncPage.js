@@ -1,14 +1,14 @@
-const handleOnChangePage = async (value, type, dataFilter) => {
+const handleOnChangePage = async (pageValue, pageType, dataFilter) => {
     let newDataFilter = { ...dataFilter };
-    switch (type) {
+    switch (pageType) {
         case 'limit':
-            newDataFilter.limit = value;
+            newDataFilter.limit = pageValue;
             break;
         case 'page':
-            newDataFilter.page = value;
+            newDataFilter.page = pageValue;
             break;
         case 'search':
-            newDataFilter.search = value;
+            newDataFilter.search = pageValue;
             newDataFilter.page = 1;
             break;
         default:

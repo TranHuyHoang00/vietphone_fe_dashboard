@@ -21,7 +21,7 @@ class product_page extends Component {
         let data_product_page = this.props.data_product_page;
         if (data_product_page && data_product_page.id) {
             this.props.delete_list_product_page([data_product_page.id]);
-            if (this.props.is_result) {
+            if (this.props.isResult) {
                 this.props.set_data_product_page({});
             }
         }
@@ -32,7 +32,7 @@ class product_page extends Component {
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Sản phẩm trên Website" key="1"
                     extra={<Button onClick={() => this.handle_delete()} className='bg-[#e94138] text-white' disabled={(this.props.is_edit === true && data_product_page?.id) ? false : true}>Xóa bài</Button>}>
-                    <Spin spinning={this.props.is_loading}>
+                    <Spin spinning={this.props.isLoading}>
                         <div className='space-y-[5px]'>
                             <div className='flex items-center gap-[5px]'>
                                 <div className='w-1/3 flex items-center justify-between'>
@@ -85,9 +85,9 @@ class product_page extends Component {
 const mapStateToProps = state => {
     return {
         data_product_page: state.product_page.data_product_page,
-        is_loading: state.product_page.is_loading,
+        isLoading: state.product_page.isLoading,
         is_edit: state.product.is_edit,
-        is_result: state.tag.is_result,
+        isResult: state.tag.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {

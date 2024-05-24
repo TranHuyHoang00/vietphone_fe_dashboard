@@ -23,27 +23,27 @@ class index extends Component {
         await this.props.get_view_product(data_statistical);
     }
 
-    handle_day = (type_menu, day) => {
+    handle_day = (typeItemDropButton, day) => {
         let start, end;
-        if (type_menu === 'day') {
+        if (typeItemDropButton === 'day') {
             start = dayjs(day).format('YYYY-MM-DD');
             end = dayjs(day).format('YYYY-MM-DD');
         }
-        if (type_menu === 'month') {
+        if (typeItemDropButton === 'month') {
             start = (dayjs(day).startOf('month')).format('YYYY-MM-DD');
             end = (dayjs(day).endOf('month')).format('YYYY-MM-DD');
         }
-        if (type_menu === 'year') {
+        if (typeItemDropButton === 'year') {
             start = (dayjs(day).startOf('year')).format('YYYY-MM-DD');
             end = (dayjs(day).endOf('year')).format('YYYY-MM-DD');
         }
 
         return { start, end }
     }
-    onchange_menu = async (type_menu) => {
+    onchange_menu = async (typeItemDropButton) => {
         let data_statistical = this.props.data_statistical;
-        let data_day = this.handle_day(type_menu, new Date());
-        data_statistical.type = type_menu;
+        let data_day = this.handle_day(typeItemDropButton, new Date());
+        data_statistical.type = typeItemDropButton;
         data_statistical.start = data_day.start;
         data_statistical.end = data_day.end;
         this.props.set_statistical(data_statistical);
@@ -84,7 +84,7 @@ class index extends Component {
                                 disabledDate={(day) => this.disabled_day(day)} value={dayjs(this.props.data_statistical?.end)} />
                         </div>
                     }>
-                    <Spin spinning={this.props.is_loading}>
+                    <Spin spinning={this.props.isLoading}>
                         <div className='space-y-[10px]'>
                             <div className='md:hidden flex items-center gap-x-[10px]'>
                                 <Radio.Group value={this.props.data_statistical?.type} onChange={(event) => this.onchange_menu(event.target.value)} className='flex'>
@@ -151,8 +151,8 @@ const mapStateToProps = state => {
     return {
         data_view_products: state.statistical.data_view_products,
         data_statistical: state.statistical.data_statistical,
-        is_loading: state.statistical.is_loading,
-        is_result: state.statistical.is_result,
+        isLoading: state.statistical.isLoading,
+        isResult: state.statistical.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {

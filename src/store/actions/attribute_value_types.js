@@ -2,11 +2,11 @@ import action_types from '@actions/action_types';
 import { get_list_attribute_value, get_attribute_value_detail, create_attribute_value, delete_attribute_value, edit_attribute_value } from '@services/attribute_value_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
-export const get_list_attribute_value_redux = (data_filter) => {
+export const get_list_attribute_value_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(attribute_value_start());
-            let data = await get_list_attribute_value(data_filter);
+            let data = await get_list_attribute_value(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_attribute_value_success(data.data.data));
             } else {

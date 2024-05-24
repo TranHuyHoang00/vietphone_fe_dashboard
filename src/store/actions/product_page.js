@@ -3,11 +3,11 @@ import { get_list_product_page, get_product_page, create_product_page, delete_pr
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_product_page_redux = (data_filter) => {
+export const get_list_product_page_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(product_page_start());
-            let data = await get_list_product_page(data_filter);
+            let data = await get_list_product_page(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_product_page_success(data.data.data));
             } else {

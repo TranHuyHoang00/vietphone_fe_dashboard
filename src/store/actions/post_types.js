@@ -3,11 +3,11 @@ import { get_list_post, get_post, create_post, delete_post, edit_post } from '@s
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_post_redux = (data_filter) => {
+export const get_list_post_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(post_start());
-            let data = await get_list_post(data_filter);
+            let data = await get_list_post(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_post_success(data.data.data));
             } else {

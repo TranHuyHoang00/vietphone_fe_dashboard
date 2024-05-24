@@ -7,63 +7,63 @@ import {
     Spin, Typography, Dropdown, Image
 } from 'antd';
 import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
-import ModalCreate from './modals/modal_create';
-import ModalEdit from './modals/modal_edit';
-import FormSelectInput from '@components/selects/form_select_input';
+import ModalCreate from './modals/modalCreate';
+import ModalEdit from './modals/modalEdit';
+import FormSelectInput from '@components/selects/formSelectInput';
 import { format_money } from '@utils/format_money';
-import { check_permission } from '@utils/check_permission';
-import { data_flash_sale_items } from '@datas/data_after_check_permissions';
+import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { data_flash_sale_items } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type_menu: 1,
-            data_selected: [],
-            modal_detail: false,
-            modal_create: false,
-            modal_edit: false,
-            data_filter: {
+            typeItemDropButton: 1,
+            listItemSelected: [],
+            modalDetail: false,
+            modalCreate: false,
+            modalEdit: false,
+            dataFilter: {
                 page: 1,
                 limit: 5,
                 search: ''
             },
-            data_before_checks: {},
+            dataPermissionsAfterCheck: {},
         }
     }
     async componentDidMount() {
-        this.props.get_list_flash_sale(this.state.data_filter);
-        let data_before_checks = await check_permission(data_flash_sale_items, this.props.data_user_permissions, this.props.is_superuser);
+        this.props.get_list_flash_sale(this.state.dataFilter);
+        let dataPermissionsAfterCheck = await handleCheckPermission(data_flash_sale_items, this.props.dataUserPermissions, this.props.isSuperUser);
         this.setState({
-            data_before_checks: data_before_checks,
+            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    open_modal = async (name, value, id) => {
+    openModal = async (name, value, id) => {
         if (name === 'create') {
-            this.setState({ modal_create: value });
+            this.setState({ modalCreate: value });
         }
         if (name === 'detail') {
             if (id === undefined) {
-                this.setState({ modal_detail: value });
+                this.setState({ modalDetail: value });
             } else {
-                this.setState({ modal_detail: value });
+                this.setState({ modalDetail: value });
                 await this.props.get_flash_sale_item(id);
             }
         }
         if (name === 'edit') {
             if (id === undefined) {
-                this.setState({ modal_edit: value });
+                this.setState({ modalEdit: value });
             } else {
-                this.setState({ modal_edit: value });
+                this.setState({ modalEdit: value });
                 await this.props.get_flash_sale_item(id);
 
             }
         }
     }
-    handle_funtion_menu = async () => {
-        let data_selected = this.state.data_selected;
-        if (this.state.type_menu === 1) { await this.props.delete_list_flash_sale_item(data_selected); }
+    funcDropButtonHeaderOfTable = async () => {
+        let listItemSelected = this.state.listItemSelected;
+        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_flash_sale_item(listItemSelected); }
         await this.props.get_flash_sale(this.props.data_flash_sale.id);
-        if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
+        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
     }
     render() {
         const columns = [
@@ -96,31 +96,31 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!data_before_checks['promotion.change_flashsaleitem']} className='cursor-pointer' onClick={() => this.open_modal('edit', true, item.id)}>
+                        <button disabled={!dataPermissionsAfterCheck['promotion.change_flashsaleitem']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
                             <AiFillEdit />
                         </button>
                     </Space >
                 ),
             },
         ];
-        let data_before_checks = this.state.data_before_checks;
+        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
         const items = [
-            { key: 1, label: 'Xóa', disabled: !data_before_checks['promotion.delete_flashsaleitem'] },
+            { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['promotion.delete_flashsaleitem'] },
         ];
-        const data_selected = this.state.data_selected;
-        const onchange_selected = (data_new) => {
-            this.setState({ data_selected: data_new })
+        const listItemSelected = this.state.listItemSelected;
+        const onChangeSelectedRow = (dataNew) => {
+            this.setState({ listItemSelected: dataNew })
         };
-        const row_selection = { data_selected, onChange: onchange_selected };
-        let type_menu = this.state.type_menu;
+        const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
+        let typeItemDropButton = this.state.typeItemDropButton;
         let data_flash_sale = this.props.data_flash_sale;
         return (
             <>
-                <Spin size='large' spinning={this.props.is_loading}>
+                <Spin size='large' spinning={this.props.isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button disabled={(!data_before_checks['promotion.delete_flashsaleitem'] === false && this.props.data_flash_sale.id) ? false : true}
-                                onClick={() => this.open_modal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
+                            <Button disabled={(!dataPermissionsAfterCheck['promotion.delete_flashsaleitem'] === false && this.props.data_flash_sale.id) ? false : true}
+                                onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
                                     Thêm mới
@@ -137,19 +137,19 @@ class index extends Component {
                                             label: item.name,
                                             value: item.id,
                                         }))}
-                                        handle_onchange_input={this.props.get_flash_sale}
+                                        onChangeInput={this.props.get_flash_sale}
                                     />
                                 </div>
                                 <div>
-                                    <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
-                                        title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
+                                    <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
+                                        title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
+                                        placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
-                                            disabled={!data_before_checks['promotion.delete_flashsaleitem']}
-                                            menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(value.key) }) } }}  >
+                                            disabled={!dataPermissionsAfterCheck['promotion.delete_flashsaleitem']}
+                                            menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {type_menu === 1 && <span>Xóa</span>}
-                                                <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
+                                                {typeItemDropButton === 1 && <span>Xóa</span>}
+                                                <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
                                     </Popconfirm>
@@ -157,21 +157,21 @@ class index extends Component {
                             </div>
                             <Divider>FLASH SALE</Divider>
                             <div className='space-y-[20px]'>
-                                <Table rowSelection={row_selection} rowKey="id"
+                                <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={data_flash_sale && data_flash_sale.flash_sale_items} pagination={false}
                                     size="middle" bordered scroll={{}} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_create && data_before_checks['promotion.add_flashsaleitem'] &&
-                    <ModalCreate modal_create={this.state.modal_create}
-                        open_modal={this.open_modal}
-                        data_filter={this.state.data_filter} />}
-                {this.state.modal_edit && data_before_checks['promotion.change_flashsaleitem'] &&
-                    <ModalEdit modal_edit={this.state.modal_edit}
-                        open_modal={this.open_modal}
-                        data_filter={this.state.data_filter} />}
+                {this.state.modalCreate && dataPermissionsAfterCheck['promotion.add_flashsaleitem'] &&
+                    <ModalCreate modalCreate={this.state.modalCreate}
+                        openModal={this.openModal}
+                        dataFilter={this.state.dataFilter} />}
+                {this.state.modalEdit && dataPermissionsAfterCheck['promotion.change_flashsaleitem'] &&
+                    <ModalEdit modalEdit={this.state.modalEdit}
+                        openModal={this.openModal}
+                        dataFilter={this.state.dataFilter} />}
             </>
         );
     }
@@ -181,15 +181,15 @@ const mapStateToProps = state => {
     return {
         data_flash_sales: state.flash_sale.data_flash_sales,
         data_flash_sale: state.flash_sale.data_flash_sale,
-        is_loading: state.flash_sale.is_loading,
+        isLoading: state.flash_sale.isLoading,
 
-        data_user_permissions: state.user.data_user_permissions,
-        is_superuser: state.user.is_superuser,
+        dataUserPermissions: state.user.dataUserPermissions,
+        isSuperUser: state.user.isSuperUser,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_flash_sale: (data_filter) => dispatch(actions.get_list_flash_sale_redux(data_filter)),
+        get_list_flash_sale: (dataFilter) => dispatch(actions.get_list_flash_sale_redux(dataFilter)),
         get_flash_sale: (id) => dispatch(actions.get_flash_sale_redux(id)),
         delete_list_flash_sale_item: (id) => dispatch(actions.delete_list_flash_sale_item_redux(id)),
         get_flash_sale_item: (id) => dispatch(actions.get_flash_sale_item_redux(id)),

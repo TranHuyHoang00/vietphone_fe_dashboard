@@ -7,56 +7,56 @@ import {
     Spin, Pagination, Typography, Dropdown
 } from 'antd';
 import { AiFillEye } from "react-icons/ai";
-import FormSelectPage from '@components/selects/form_select_page';
-import ModalDetail from './modals/modal_detail';
+import FormSelectPage from '@components/selects/formSelectPage';
+import ModalDetail from './modals/modalDetail';
 import moment from 'moment';
-import { check_permission } from '@utils/check_permission';
-import { data_tasks } from '@datas/data_after_check_permissions';
+import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { data_tasks } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            type_menu: 1,
-            data_selected: [],
-            modal_detail: false,
-            data_filter: {
+            typeItemDropButton: 1,
+            listItemSelected: [],
+            modalDetail: false,
+            dataFilter: {
                 page: 1,
                 limit: 5,
                 search: ''
             },
-            data_before_checks: {},
+            dataPermissionsAfterCheck: {},
         }
     }
     async componentDidMount() {
-        this.props.get_list_task(this.state.data_filter);
-        let data_before_checks = await check_permission(data_tasks, this.props.data_user_permissions, this.props.is_superuser);
+        this.props.get_list_task(this.state.dataFilter);
+        let dataPermissionsAfterCheck = await handleCheckPermission(data_tasks, this.props.dataUserPermissions, this.props.isSuperUser);
         this.setState({
-            data_before_checks: data_before_checks,
+            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    open_modal = async (name, value, id) => {
+    openModal = async (name, value, id) => {
         if (name === 'detail') {
             if (id === undefined) {
-                this.setState({ modal_detail: value, data_task: {} });
+                this.setState({ modalDetail: value, data_task: {} });
             } else {
-                this.setState({ modal_detail: value });
+                this.setState({ modalDetail: value });
                 await this.props.get_task(id);
             }
         }
     }
-    handle_funtion_menu = async () => {
-        let data_selected = this.state.data_selected;
-        if (this.state.type_menu === 1) { await this.props.delete_list_task(data_selected); }
-        await this.props.get_list_task(this.state.data_filter);
-        if (this.state.type_menu === 1) { this.setState({ data_selected: [] }); }
+    funcDropButtonHeaderOfTable = async () => {
+        let listItemSelected = this.state.listItemSelected;
+        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_task(listItemSelected); }
+        await this.props.get_list_task(this.state.dataFilter);
+        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
     }
-    onchange_page = async (value, type) => {
-        let data_filter = this.state.data_filter;
-        if (type === 'limit') { data_filter.limit = value; }
-        if (type === 'page') { data_filter.page = value; }
-        if (type === 'search') { data_filter.search = value; data_filter.page = 1; }
-        this.setState({ data_filter: data_filter })
-        await this.props.get_list_task(data_filter);
+    onChangePage = async (value, type) => {
+        let dataFilter = this.state.dataFilter;
+        if (type === 'limit') { dataFilter.limit = value; }
+        if (type === 'page') { dataFilter.page = value; }
+        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
+        this.setState({ dataFilter: dataFilter })
+        await this.props.get_list_task(dataFilter);
     }
     render() {
         const columns = [
@@ -83,40 +83,40 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!data_before_checks['task.change_task']} onClick={() => this.open_modal('detail', true, item.task_id)}><AiFillEye /></button>
+                        <button disabled={!dataPermissionsAfterCheck['task.change_task']} onClick={() => this.openModal('detail', true, item.task_id)}><AiFillEye /></button>
                     </Space >
                 ),
             },
 
         ];
-        let data_before_checks = this.state.data_before_checks;
+        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
         const items = [
-            { key: 1, label: 'Xóa', disabled: !data_before_checks['task.delete_task'] },
+            { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['task.delete_task'] },
         ];
-        const data_selected = this.state.data_selected;
-        const onchange_selected = (data_new) => {
-            this.setState({ data_selected: data_new })
+        const listItemSelected = this.state.listItemSelected;
+        const onChangeSelectedRow = (dataNew) => {
+            this.setState({ listItemSelected: dataNew })
         };
-        const row_selection = { data_selected, onChange: onchange_selected };
-        let data_filter = this.state.data_filter;
-        let type_menu = this.state.type_menu;
+        const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
+        let dataFilter = this.state.dataFilter;
+        let typeItemDropButton = this.state.typeItemDropButton;
         return (
             <>
-                <Spin size='large' spinning={this.props.is_loading}>
+                <Spin size='large' spinning={this.props.isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
+                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
                                 <div>
-                                    <Popconfirm disabled={(data_selected && data_selected.length === 0 ? true : false)}
-                                        title={`Thực hiện tác vụ với ${data_selected && data_selected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.handle_funtion_menu()}>
+                                    <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
+                                        title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
+                                        placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
-                                            disabled={!data_before_checks['task.delete_task']}
-                                            menu={{ items, onClick: (value) => { this.setState({ type_menu: parseInt(parseInt(value.key)) }) } }}  >
+                                            disabled={!dataPermissionsAfterCheck['task.delete_task']}
+                                            menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(parseInt(value.key)) }) } }}  >
                                             <div>
-                                                {type_menu === 1 && <span>Xóa</span>}
-                                                <span> {data_selected && data_selected.length === 0 ? '' : `(${data_selected.length})`}</span>
+                                                {typeItemDropButton === 1 && <span>Xóa</span>}
+                                                <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
                                     </Popconfirm>
@@ -124,19 +124,19 @@ class index extends Component {
                             </div>
                             <Divider>LỊCH SỬ</Divider>
                             <div className='space-y-[20px]'>
-                                <Table rowSelection={row_selection} rowKey="id"
+                                <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={this.props.data_tasks} pagination={false}
                                     size="middle" bordered scroll={{}} />
-                                <Pagination responsive current={data_filter.page}
-                                    showQuickJumper total={this.props.data_meta.total * this.props.data_meta.limit} pageSize={data_filter.limit}
-                                    onChange={(value) => this.onchange_page(value, 'page')} />
+                                <Pagination responsive current={dataFilter.page}
+                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_detail && data_before_checks['task.view_task'] &&
-                    <ModalDetail modal_detail={this.state.modal_detail}
-                        open_modal={this.open_modal} />}
+                {this.state.modalDetail && dataPermissionsAfterCheck['task.view_task'] &&
+                    <ModalDetail modalDetail={this.state.modalDetail}
+                        openModal={this.openModal} />}
             </>
         );
     }
@@ -146,17 +146,17 @@ const mapStateToProps = state => {
     return {
         data_tasks: state.task.data_tasks,
         data_task: state.task.data_task,
-        data_meta: state.task.data_meta,
-        is_loading: state.task.is_loading,
-        is_result: state.task.is_result,
+        dataMeta: state.task.dataMeta,
+        isLoading: state.task.isLoading,
+        isResult: state.task.isResult,
 
-        data_user_permissions: state.user.data_user_permissions,
-        is_superuser: state.user.is_superuser,
+        dataUserPermissions: state.user.dataUserPermissions,
+        isSuperUser: state.user.isSuperUser,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_task: (data_filter) => dispatch(actions.get_list_task_redux(data_filter)),
+        get_list_task: (dataFilter) => dispatch(actions.get_list_task_redux(dataFilter)),
         get_task: (id) => dispatch(actions.get_task_redux(id)),
         edit_list_task: (id, data) => dispatch(actions.edit_list_task_redux(id, data)),
         delete_list_task: (id) => dispatch(actions.delete_list_task_redux(id)),

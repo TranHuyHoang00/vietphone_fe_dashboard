@@ -12,7 +12,7 @@ class index extends Component {
     }
     async componentDidMount() {
     }
-    open_modal = async (name, value) => {
+    openModal = async (name, value) => {
         if (name === 'web_cam') {
             this.setState({ modal_webcam: value });
         }

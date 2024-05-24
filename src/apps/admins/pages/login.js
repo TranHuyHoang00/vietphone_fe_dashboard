@@ -11,14 +11,14 @@ class login extends Component {
         this.state = {
             password: '',
             phone: '',
-            is_loading: false,
+            isLoading: false,
             is_show_password: false,
         }
     }
     async componentDidMount() {
     }
     handle_loading = (value) => {
-        this.setState({ is_loading: value });
+        this.setState({ isLoading: value });
     }
     onchange_password = (event) => {
         this.setState({ password: (event.target.value).replace(/\s/g, '') })
@@ -33,22 +33,22 @@ class login extends Component {
         const re = /^(?:\+84|0)(?:3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-46-9])(?:\d{7}|\d{7})$/;
         return re.test(phone_number);
     }
-    validation = (phone, password) => {
+    validationData = (phone, password) => {
         this.handle_loading(true);
         if (this.isCheckEmpty(phone) === 0) {
-            return { mess: "Số điện thoại không được bỏ trống!", code: 1 };
+            return { mess: "Số điện thoại không được bỏ trống!", check: false };
         }
         if (!this.validation_phone(phone)) {
-            return { mess: "Số điện thoại sai định dạng", code: 1 };
+            return { mess: "Số điện thoại sai định dạng", check: false };
         }
         if (this.isCheckEmpty(password) === 0) {
-            return { mess: "Mật khẩu không được bỏ trống!", code: 1 };
+            return { mess: "Mật khẩu không được bỏ trống!", check: false };
         }
-        return { code: 0 };
+        return { check: true };
     }
     handle_login = async () => {
-        let result = this.validation(this.state.phone, this.state.password);
-        if (result.code === 0) {
+        let result = this.validationData(this.state.phone, this.state.password);
+        if (result.check) {
             try {
                 let data = await Login(this.state.phone, this.state.password);
                 if (data && data.data && data.data.success === 1) {
@@ -100,8 +100,8 @@ class login extends Component {
 
                         </div>
                         <div className="pt-[10px]">
-                            <Spin spinning={this.state.is_loading}>
-                                <button disabled={this.state.is_loading} onClick={() => this.handle_login()}
+                            <Spin spinning={this.state.isLoading}>
+                                <button disabled={this.state.isLoading} onClick={() => this.handle_login()}
                                     className="px-4 py-[10px] w-full flex justify-center font-medium text-white tracking-wider bg-gray-900 hover:bg-gray-800 rounded" type="submit">
                                     ĐĂNG NHẬP
                                 </button>

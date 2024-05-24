@@ -3,11 +3,11 @@ import { get_list_variant_attribute_group, get_variant_attribute_group, create_v
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_variant_attribute_group_redux = (data_filter) => {
+export const get_list_variant_attribute_group_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variant_attribute_group_start());
-            let data = await get_list_variant_attribute_group(data_filter);
+            let data = await get_list_variant_attribute_group(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_variant_attribute_group_success(data.data.data));
             } else {

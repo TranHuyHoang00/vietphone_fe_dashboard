@@ -3,11 +3,11 @@ import { get_list_location, get_location, create_location, delete_location, edit
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_location_redux = (data_filter) => {
+export const get_list_location_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(location_start());
-            let data = await get_list_location(data_filter);
+            let data = await get_list_location(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_location_success(data.data.data));
             } else {

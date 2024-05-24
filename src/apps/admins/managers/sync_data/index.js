@@ -5,8 +5,8 @@ import { Divider, Card, Spin } from 'antd';
 import FormPopconfirm from '@components/popconfirms/form_popconfirm';
 import { sync_all_products, get_task } from '@services/task_service';
 import { show_notification } from '@utils/show_notification';
-import { check_permission } from '@utils/check_permission';
-import { data_syncs } from '@datas/data_after_check_permissions';
+import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { data_syncs } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -14,13 +14,13 @@ class index extends Component {
             loading_sync_product: false,
             sync_product: null,
             data_sync_product: {},
-            data_before_checks: {},
+            dataPermissionsAfterCheck: {},
         }
     }
     async componentDidMount() {
-        let data_before_checks = await check_permission(data_syncs, this.props.data_user_permissions, this.props.is_superuser);
+        let dataPermissionsAfterCheck = await handleCheckPermission(data_syncs, this.props.dataUserPermissions, this.props.isSuperUser);
         this.setState({
-            data_before_checks: data_before_checks,
+            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
     handle_loading = (funtion_name, value, result) => {
@@ -154,8 +154,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_user_permissions: state.user.data_user_permissions,
-        is_superuser: state.user.is_superuser,
+        dataUserPermissions: state.user.dataUserPermissions,
+        isSuperUser: state.user.isSuperUser,
     };
 };
 const mapDispatchToProps = dispatch => {

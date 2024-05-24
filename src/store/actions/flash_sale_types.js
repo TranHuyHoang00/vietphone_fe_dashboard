@@ -3,11 +3,11 @@ import { get_list_flash_sale, get_flash_sale, create_flash_sale, delete_flash_sa
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_flash_sale_redux = (data_filter) => {
+export const get_list_flash_sale_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flash_sale_start());
-            let data = await get_list_flash_sale(data_filter);
+            let data = await get_list_flash_sale(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_flash_sale_success(data.data.data));
             } else {

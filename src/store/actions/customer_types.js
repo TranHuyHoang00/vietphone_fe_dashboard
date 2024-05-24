@@ -3,11 +3,11 @@ import { get_list_customer, get_customer, create_customer, delete_customer, edit
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_customer_redux = (data_filter) => {
+export const get_list_customer_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(customer_start());
-            let data = await get_list_customer(data_filter);
+            let data = await get_list_customer(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_customer_success(data.data.data));
             } else {

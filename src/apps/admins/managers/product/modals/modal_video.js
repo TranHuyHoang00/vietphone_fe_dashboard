@@ -11,7 +11,7 @@ class modal_vide0 extends Component {
     }
     async componentDidMount() {
     }
-    handle_onchange_input = (event) => {
+    onChangeInput = (event) => {
         this.setState({ link_video: event.target.value })
     }
     handle_create_video = () => {
@@ -20,7 +20,7 @@ class modal_vide0 extends Component {
             message.error("Không được bỏ trống 'Link video");
         } else {
             this.props.onchange_video(link_video);
-            this.props.open_modal("video", false);
+            this.props.openModal("video", false);
         }
     }
     onclick_show_video = () => {
@@ -34,10 +34,10 @@ class modal_vide0 extends Component {
     render() {
         return (
             <Modal title="VIDEO" open={this.props.modal_video}
-                onCancel={() => this.props.open_modal("video", false)} width={400}
+                onCancel={() => this.props.openModal("video", false)} width={400}
                 footer={[
                     <>
-                        <Button onClick={() => this.props.open_modal("video", false)}
+                        <Button onClick={() => this.props.openModal("video", false)}
                             className='bg-[#e94138] text-white'>
                             Hủy bỏ
                         </Button>
@@ -54,7 +54,7 @@ class modal_vide0 extends Component {
                             <Typography.Text type="danger" strong> *</Typography.Text>
                         </Typography.Text>
                         <div className='flex items-center gap-[5px]'>
-                            <Input onChange={(event) => this.handle_onchange_input(event)} />
+                            <Input onChange={(event) => this.onChangeInput(event)} />
                             <Button onClick={() => this.onclick_show_video()}>Xem trước</Button>
                         </div>
                         {this.state.is_hide_video &&

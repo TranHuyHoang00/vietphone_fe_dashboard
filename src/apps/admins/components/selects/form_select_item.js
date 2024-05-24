@@ -28,7 +28,7 @@ class form_select_item extends Component {
                                 onSearch={(value) => this.props.on_search(value, this.props.form_name)} />
 
                             <Button disabled={this.props.disabled_button}
-                                onClick={() => this.props.handle_create(this.props.form_name)}
+                                onClick={() => this.props.handleCreate(this.props.form_name)}
                                 className='bg-[#0e97ff] text-white' icon={<PlusOutlined />}></Button>
                         </Space>
                     </div>

@@ -10,13 +10,13 @@ class drawer_filter extends Component {
     async componentDidMount() {
     }
     render() {
-        let data_filter = this.props.data_filter;
+        let dataFilter = this.props.dataFilter;
         return (
             <Drawer title="Bộ lọc nâng cao" onClose={() => this.props.open_drawer('filter', false)} open={this.props.drawer_filter}>
                 <Space direction='vertical'>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Trạng thái</Typography.Text>
-                        <Radio.Group value={data_filter.status} onChange={(event) => this.props.onchange_page(event.target.value, 'status')} className='flex'>
+                        <Radio.Group value={dataFilter.status} onChange={(event) => this.props.onChangePage(event.target.value, 'status')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value="success">Thành công</Radio.Button>
                             <Radio.Button value="unconfirmed">Chưa xác nhận</Radio.Button>
@@ -24,7 +24,7 @@ class drawer_filter extends Component {
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Nguồn</Typography.Text>
-                        <Radio.Group value={data_filter.source} onChange={(event) => this.props.onchange_page(event.target.value, 'source')} className='flex'>
+                        <Radio.Group value={dataFilter.source} onChange={(event) => this.props.onChangePage(event.target.value, 'source')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value="sapo">Sapo</Radio.Button>
                             <Radio.Button value="web">Web</Radio.Button>

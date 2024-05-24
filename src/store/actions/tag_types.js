@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_tag, get_tag, create_tag, delete_tag, edit_tag } from '@services/tag_service';
+import { getListTag, getDataTag, createTag, delete_tag, editTag } from '@services/tag_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_tag_redux = (data_filter) => {
+export const getListTagRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(tag_start());
-            let data = await get_list_tag(data_filter);
+            let data = await getListTag(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_tag_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_list_tag_redux = (data_filter) => {
         }
     }
 }
-export const get_tag_redux = (id) => {
+export const getDataTagRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(tag_start());
-            let data = await get_tag(id);
+            let data = await getDataTag(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_tag_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_tag_redux = (id) => {
         }
     }
 }
-export const create_tag_redux = (data_tag) => {
+export const createTagRedux = (dataTag) => {
     return async (dispatch, getState) => {
         try {
             dispatch(tag_start());
-            let data = await create_tag(data_tag);
+            let data = await createTag(dataTag);
             if (data && data.data && data.data.success === 1) {
                 dispatch(tag_success());
                 message.success('Thành công');
@@ -55,7 +55,7 @@ export const create_tag_redux = (data_tag) => {
         }
     }
 }
-export const delete_list_tag_redux = (list_id) => {
+export const deleteListTagRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(tag_start());
         for (const id of list_id) {
@@ -73,12 +73,12 @@ export const delete_list_tag_redux = (list_id) => {
         dispatch(tag_success());
     }
 }
-export const edit_list_tag_redux = (list_id, data_tag) => {
+export const editListTagRedux = (list_id, dataTag) => {
     return async (dispatch, getState) => {
         dispatch(tag_start());
         for (const id of list_id) {
             try {
-                let data = await edit_tag(id, data_tag);
+                let data = await editTag(id, dataTag);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_tag_redux = (list_id, data_tag) => {
         dispatch(tag_success());
     }
 }
-export const edit_tag_redux = (id, data_tag) => {
+export const editTagRedux = (id, dataTag) => {
     return async (dispatch, getState) => {
         try {
             dispatch(tag_start());
-            let data = await edit_tag(id, data_tag);
+            let data = await editTag(id, dataTag);
             if (data && data.data && data.data.success === 1) {
                 dispatch(tag_success());
                 message.success('Thành công');
@@ -127,12 +127,12 @@ export const get_tag_success = (data) => ({
     type: action_types.GET_TAG_SUCCESS,
     data
 })
-export const on_change_tag_redux = (value, id) => ({
+export const onChangeTagRedux = (value, id) => ({
     type: action_types.ON_CHANGE_TAG,
     value,
     id,
 })
-export const set_data_tag_redux = (data) => ({
+export const setDataTagRedux = (data) => ({
     type: action_types.SET_DATA_TAG,
     data,
 })

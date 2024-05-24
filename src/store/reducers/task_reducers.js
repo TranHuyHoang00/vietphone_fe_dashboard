@@ -3,9 +3,9 @@ import action_types from '@actions/action_types';
 const initialState = {
     data_tasks: [],
     data_task: {},
-    data_meta: {},
-    is_loading: false,
-    is_result: false,
+    dataMeta: {},
+    isLoading: false,
+    isResult: false,
 }
 
 const task_reducers = (state = initialState, action) => {
@@ -13,59 +13,59 @@ const task_reducers = (state = initialState, action) => {
         case action_types.TASK_START:
             return {
                 ...state,
-                is_loading: true,
-                is_result: false,
+                isLoading: true,
+                isResult: false,
             }
         case action_types.TASK_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.TASK_FAIDED:
             return {
                 ...state,
-                is_loading: false,
-                is_result: false,
+                isLoading: false,
+                isResult: false,
             }
         case action_types.GET_LIST_TASK_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
                 data_tasks: action.data.task_results,
-                data_meta: action.data.metadata
+                dataMeta: action.data.metadata
             }
         case action_types.GET_TASK_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
                 data_task: action.data
             }
         case action_types.CREATE_TASK_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.EDIT_TASK_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.EDIT_LIST_TASK_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.DELETE_LIST_TASK_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.SET_DATA_TASK:
             return {

@@ -24,12 +24,12 @@ class form_select_data extends Component {
                             <Divider />
                             <Space>
                                 <Input.Search disabled={this.props.disabled_search}
-                                    onChange={(event) => this.props.handle_onchange_input(event, this.props.variable, this.props.type, this.props.name_funtion)}
+                                    onChange={(event) => this.props.onChangeInput(event, this.props.variable, this.props.type, this.props.name_funtion)}
                                     onSearch={(value) => this.props.on_search_data_api(value, this.props.name_funtion)}
                                     placeholder={this.props.name} />
 
                                 <Button disabled={this.props.disabled_create}
-                                    onClick={() => this.props.handle_create(this.props.name_funtion)}
+                                    onClick={() => this.props.handleCreate(this.props.name_funtion)}
                                     className='bg-[#0e97ff] text-white' icon={<PlusOutlined />}></Button>
                             </Space>
                         </div>

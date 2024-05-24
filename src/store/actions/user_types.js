@@ -2,11 +2,11 @@ import action_types from '@actions/action_types';
 import { get_list_user, get_user, create_user, delete_user, edit_user, get_list_user_permission } from '@services/user_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
-export const get_list_user_redux = (data_filter) => {
+export const get_list_user_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(user_start());
-            let data = await get_list_user(data_filter);
+            let data = await get_list_user(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_user_success(data.data.data));
             } else {
@@ -115,7 +115,7 @@ export const get_list_user_permission_redux = () => {
             let data = await get_list_user_permission();
             if (data && data.data && data.data.success === 1) {
                 let data_raw = data.data.data;
-                if (data_raw?.is_superuser === true) {
+                if (data_raw?.isSuperUser === true) {
                     dispatch(get_list_user_permission_success([]));
                     dispatch(set_is_superuser_redux(true));
                 } else {

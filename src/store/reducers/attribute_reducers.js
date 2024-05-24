@@ -3,9 +3,9 @@ import action_types from '@actions/action_types';
 const initialState = {
     data_attributes: [],
     data_attribute: {},
-    data_meta: {},
-    is_loading: false,
-    is_result: false,
+    dataMeta: {},
+    isLoading: false,
+    isResult: false,
 }
 
 const attribute_reducers = (state = initialState, action) => {
@@ -13,59 +13,59 @@ const attribute_reducers = (state = initialState, action) => {
         case action_types.ATTRIBUTE_START:
             return {
                 ...state,
-                is_loading: true,
-                is_result: false,
+                isLoading: true,
+                isResult: false,
             }
         case action_types.ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.ATTRIBUTE_FAIDED:
             return {
                 ...state,
-                is_loading: false,
-                is_result: false,
+                isLoading: false,
+                isResult: false,
             }
         case action_types.GET_LIST_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
                 data_attributes: action.data.attributes,
-                data_meta: action.data.metadata
+                dataMeta: action.data.metadata
             }
         case action_types.GET_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
                 data_attribute: action.data
             }
         case action_types.CREATE_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.EDIT_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.EDIT_LIST_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.DELETE_LIST_ATTRIBUTE_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.SET_DATA_ATTRIBUTE:
             return {

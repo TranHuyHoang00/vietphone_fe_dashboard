@@ -3,12 +3,12 @@ import action_types from '@actions/action_types';
 const initialState = {
     data_users: [],
     data_user: {},
-    data_meta: {},
-    is_loading: false,
-    is_result: false,
+    dataMeta: {},
+    isLoading: false,
+    isResult: false,
 
-    data_user_permissions: [],
-    is_superuser: true,
+    dataUserPermissions: [],
+    isSuperUser: true,
 }
 
 const user_reducers = (state = initialState, action) => {
@@ -16,59 +16,59 @@ const user_reducers = (state = initialState, action) => {
         case action_types.USER_START:
             return {
                 ...state,
-                is_loading: true,
-                is_result: false,
+                isLoading: true,
+                isResult: false,
             }
         case action_types.USER_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.USER_FAIDED:
             return {
                 ...state,
-                is_loading: false,
-                is_result: false,
+                isLoading: false,
+                isResult: false,
             }
         case action_types.GET_LIST_USER_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
                 data_users: action.data.users,
-                data_meta: action.data.metadata
+                dataMeta: action.data.metadata
             }
         case action_types.GET_USER_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
                 data_user: action.data
             }
         case action_types.CREATE_USER_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.EDIT_USER_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.EDIT_LIST_USER_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.DELETE_LIST_USER_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
+                isLoading: false,
+                isResult: true,
             }
         case action_types.SET_DATA_USER:
             return {
@@ -87,14 +87,14 @@ const user_reducers = (state = initialState, action) => {
         case action_types.GET_LIST_USER_PERMISSION_SUCCESS:
             return {
                 ...state,
-                is_loading: false,
-                is_result: true,
-                data_user_permissions: action?.data?.permissions ? action?.data?.permissions : []
+                isLoading: false,
+                isResult: true,
+                dataUserPermissions: action?.data?.permissions ? action?.data?.permissions : []
             }
         case action_types.SET_IS_SUPERUSER:
             return {
                 ...state,
-                is_superuser: action.data,
+                isSuperUser: action.data,
             }
         default:
             return state;

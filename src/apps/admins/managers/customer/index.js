@@ -7,51 +7,51 @@ import {
     Spin, Pagination, Typography, Avatar
 } from 'antd';
 import { AiFillEye } from "react-icons/ai";
-import FormSelectPage from '@components/selects/form_select_page';
-import ModalDetail from './modals/modal_detail';
+import FormSelectPage from '@components/selects/formSelectPage';
+import ModalDetail from './modals/modalDetail';
 import AvatarNone from '@assets/images/avatar_none.jpg';
-import { check_permission } from '@utils/check_permission';
-import { data_customers } from '@datas/data_after_check_permissions';
+import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { data_customers } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_selected: [],
-            modal_detail: false,
-            data_filter: {
+            listItemSelected: [],
+            modalDetail: false,
+            dataFilter: {
                 page: 1,
                 limit: 5,
                 search: ''
             },
-            data_before_checks: {},
+            dataPermissionsAfterCheck: {},
         }
     }
     async componentDidMount() {
-        this.props.get_list_customer(this.state.data_filter);
-        let data_before_checks = await check_permission(data_customers, this.props.data_user_permissions, this.props.is_superuser);
+        this.props.get_list_customer(this.state.dataFilter);
+        let dataPermissionsAfterCheck = await handleCheckPermission(data_customers, this.props.dataUserPermissions, this.props.isSuperUser);
         this.setState({
-            data_before_checks: data_before_checks,
+            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    open_modal = async (name, value, id) => {
+    openModal = async (name, value, id) => {
         if (name === 'detail') {
             if (id === undefined) {
-                this.setState({ modal_detail: value, data_customer: {} });
+                this.setState({ modalDetail: value, data_customer: {} });
             } else {
-                this.setState({ modal_detail: value });
+                this.setState({ modalDetail: value });
                 await this.props.get_customer(id);
             }
         }
     }
-    handle_funtion_menu = async () => {
+    funcDropButtonHeaderOfTable = async () => {
     }
-    onchange_page = async (value, type) => {
-        let data_filter = this.state.data_filter;
-        if (type === 'limit') { data_filter.limit = value; }
-        if (type === 'page') { data_filter.page = value; }
-        if (type === 'search') { data_filter.search = value; data_filter.page = 1; }
-        this.setState({ data_filter: data_filter })
-        await this.props.get_list_customer(data_filter);
+    onChangePage = async (value, type) => {
+        let dataFilter = this.state.dataFilter;
+        if (type === 'limit') { dataFilter.limit = value; }
+        if (type === 'page') { dataFilter.page = value; }
+        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
+        this.setState({ dataFilter: dataFilter })
+        await this.props.get_list_customer(dataFilter);
     }
     render() {
         const columns = [
@@ -80,47 +80,47 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!data_before_checks['account.view_customer']} onClick={() => this.open_modal('detail', true, item.id)}><AiFillEye /></button>
+                        <button disabled={!dataPermissionsAfterCheck['account.view_customer']} onClick={() => this.openModal('detail', true, item.id)}><AiFillEye /></button>
                     </Space >
                 ),
             },
 
         ];
-        const data_selected = this.state.data_selected;
-        const onchange_selected = (data_new) => {
-            this.setState({ data_selected: data_new })
+        const listItemSelected = this.state.listItemSelected;
+        const onChangeSelectedRow = (dataNew) => {
+            this.setState({ listItemSelected: dataNew })
         };
-        const row_selection = { data_selected, onChange: onchange_selected };
-        let data_filter = this.state.data_filter;
-        let data_before_checks = this.state.data_before_checks;
+        const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
+        let dataFilter = this.state.dataFilter;
+        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
         return (
             <>
-                <Spin size='large' spinning={this.props.is_loading}>
+                <Spin size='large' spinning={this.props.isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <div>
                             </div>
-                            <div><Input.Search onSearch={(value) => this.onchange_page(value, 'search')} placeholder="Tên, Mã KH, SĐT !" /></div>
+                            <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên, Mã KH, SĐT !" /></div>
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-sm bcustomer'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={data_filter.limit} onchange_page={this.onchange_page} />
+                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
                             </div>
                             <Divider>KHÁCH HÀNG</Divider>
                             <div className='space-y-[20px]'>
-                                <Table rowSelection={row_selection} rowKey="id"
+                                <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={this.props.data_customers} pagination={false}
                                     size="middle" bcustomered scroll={{}} />
-                                <Pagination responsive current={data_filter.page}
-                                    showQuickJumper total={this.props.data_meta.total * this.props.data_meta.limit} pageSize={data_filter.limit}
-                                    onChange={(value) => this.onchange_page(value, 'page')} />
+                                <Pagination responsive current={dataFilter.page}
+                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modal_detail && data_before_checks['account.view_customer'] &&
-                    <ModalDetail modal_detail={this.state.modal_detail}
-                        open_modal={this.open_modal} />}
+                {this.state.modalDetail && dataPermissionsAfterCheck['account.view_customer'] &&
+                    <ModalDetail modalDetail={this.state.modalDetail}
+                        openModal={this.openModal} />}
             </>
         );
     }
@@ -130,17 +130,17 @@ const mapStateToProps = state => {
     return {
         data_customers: state.customer.data_customers,
         data_customer: state.customer.data_customer,
-        data_meta: state.customer.data_meta,
-        is_loading: state.customer.is_loading,
-        is_result: state.customer.is_result,
+        dataMeta: state.customer.dataMeta,
+        isLoading: state.customer.isLoading,
+        isResult: state.customer.isResult,
 
-        data_user_permissions: state.user.data_user_permissions,
-        is_superuser: state.user.is_superuser,
+        dataUserPermissions: state.user.dataUserPermissions,
+        isSuperUser: state.user.isSuperUser,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_customer: (data_filter) => dispatch(actions.get_list_customer_redux(data_filter)),
+        get_list_customer: (dataFilter) => dispatch(actions.get_list_customer_redux(dataFilter)),
         get_customer: (id) => dispatch(actions.get_customer_redux(id)),
         edit_list_customer: (id, data) => dispatch(actions.edit_list_customer_redux(id, data)),
         delete_list_customer: (id) => dispatch(actions.delete_list_customer_redux(id)),

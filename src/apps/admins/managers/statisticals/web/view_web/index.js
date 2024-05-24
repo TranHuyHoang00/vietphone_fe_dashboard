@@ -27,28 +27,28 @@ class index extends Component {
         await this.props.get_view_web(data_statistical);
         this.handle_data_top(this.state.labels, this.props.data_view_webs);
     }
-    handle_day = (type_menu, day) => {
+    handle_day = (typeItemDropButton, day) => {
         let start, end;
         end = dayjs(day).format('YYYY-MM-DD');
-        if (type_menu === 'day') { start = dayjs(day).subtract(this.state.display_number, 'day').format('YYYY-MM-DD'); }
-        if (type_menu === 'month') { start = dayjs(day).subtract(this.state.display_number, 'month').format('YYYY-MM-DD'); }
-        if (type_menu === 'year') { start = dayjs(day).subtract(this.state.display_number, 'year').format('YYYY-MM-DD'); }
+        if (typeItemDropButton === 'day') { start = dayjs(day).subtract(this.state.display_number, 'day').format('YYYY-MM-DD'); }
+        if (typeItemDropButton === 'month') { start = dayjs(day).subtract(this.state.display_number, 'month').format('YYYY-MM-DD'); }
+        if (typeItemDropButton === 'year') { start = dayjs(day).subtract(this.state.display_number, 'year').format('YYYY-MM-DD'); }
 
         let labels = [];
         for (let i = 0; i <= this.state.display_number; i++) {
             let previous_day;
-            if (type_menu === 'day') { previous_day = dayjs(day).subtract(i, 'day').format('DD-MM'); }
-            if (type_menu === 'month') { previous_day = dayjs(day).subtract(i, 'month').format('MM-YYYY'); }
-            if (type_menu === 'year') { previous_day = dayjs(day).subtract(i, 'year').format('YYYY'); }
+            if (typeItemDropButton === 'day') { previous_day = dayjs(day).subtract(i, 'day').format('DD-MM'); }
+            if (typeItemDropButton === 'month') { previous_day = dayjs(day).subtract(i, 'month').format('MM-YYYY'); }
+            if (typeItemDropButton === 'year') { previous_day = dayjs(day).subtract(i, 'year').format('YYYY'); }
             labels.unshift(previous_day);
         }
         this.setState({ labels: labels })
         return { start, end }
     }
-    onchange_menu = async (type_menu) => {
+    onchange_menu = async (typeItemDropButton) => {
         let data_statistical = this.props.data_statistical;
-        let data_day = this.handle_day(type_menu, data_statistical.end);
-        data_statistical.type = type_menu;
+        let data_day = this.handle_day(typeItemDropButton, data_statistical.end);
+        data_statistical.type = typeItemDropButton;
         data_statistical.start = data_day.start;
         data_statistical.end = data_day.end;
         this.props.set_statistical(data_statistical);
@@ -133,7 +133,7 @@ class index extends Component {
                                 disabledDate={(day) => this.disabled_day(day)} value={dayjs(this.props.data_statistical?.end)} />
                         </div>
                     }>
-                    <Spin spinning={this.props.is_loading}>
+                    <Spin spinning={this.props.isLoading}>
                         <div className='space-y-[10px]'>
                             <div className='md:hidden flex items-center gap-x-[10px]'>
                                 <Radio.Group value={this.props.data_statistical?.type} onChange={(event) => this.onchange_menu(event.target.value)} className='flex'>
@@ -240,8 +240,8 @@ const mapStateToProps = state => {
     return {
         data_view_webs: state.statistical.data_view_webs,
         data_statistical: state.statistical.data_statistical,
-        is_loading: state.statistical.is_loading,
-        is_result: state.statistical.is_result,
+        isLoading: state.statistical.isLoading,
+        isResult: state.statistical.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {

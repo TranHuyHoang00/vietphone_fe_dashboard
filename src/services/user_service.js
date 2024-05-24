@@ -1,6 +1,6 @@
 import api_admin from '@auths/api_admin';
 const get_list_user = (date_filter) => {
-    return api_admin.get(`/auth/api/v1/list-user?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}${date_filter.is_active === '' ? '' : `&is_active=${date_filter.is_active}`}${date_filter.is_superuser === '' ? '' : `&is_superuser=${date_filter.is_superuser}`}${date_filter.groups === '' ? '' : `&groups=${date_filter.groups}`}`);
+    return api_admin.get(`/auth/api/v1/list-user?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}${date_filter.is_active === '' ? '' : `&is_active=${date_filter.is_active}`}${date_filter.isSuperUser === '' ? '' : `&isSuperUser=${date_filter.isSuperUser}`}${date_filter.groups === '' ? '' : `&groups=${date_filter.groups}`}`);
 }
 const create_user = (data) => {
     return api_admin.post(`/auth/api/v1/register`, data,);

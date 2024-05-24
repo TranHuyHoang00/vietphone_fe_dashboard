@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '@actions';
 import Webcam from "react-webcam";
 import { Modal, message, Button } from 'antd';
 import dayjs from 'dayjs';
@@ -127,7 +126,7 @@ class web_cam extends Component {
         return (
             <>
                 <Modal title="VÀO CA" open={this.props.modal_webcam}
-                    onCancel={() => this.props.open_modal("web_cam", false)} width={400}
+                    onCancel={() => this.props.openModal("web_cam", false)} width={400}
                     footer={[
                         <>
                             <Button

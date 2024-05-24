@@ -49,7 +49,7 @@ class variant_attribute_value extends Component {
     on_search = (value, form_name) => {
 
     }
-    handle_create = async (form_name) => {
+    handleCreate = async (form_name) => {
         if (form_name === 'attribute_value') {
             if (!this.props.data_attribute_value.value) { message.error('Thiếu giá trị'); return; }
             await this.props.create_attribute_value(this.props.data_attribute_value);
@@ -163,7 +163,7 @@ class variant_attribute_value extends Component {
                                         on_change_select={this.on_select}
                                         variable_input={'name'}
                                         on_change_input={this.props.on_change_attribute}
-                                        handle_create={this.handle_create}
+                                        handleCreate={this.handleCreate}
                                     />
                                 </div>
                             </div>
@@ -184,7 +184,7 @@ class variant_attribute_value extends Component {
                                         on_change_select={this.on_select}
                                         variable_input={'value'}
                                         on_change_input={this.props.on_change_attribute_value}
-                                        handle_create={this.handle_create}
+                                        handleCreate={this.handleCreate}
                                     />
                                 </div>
                             </div>
