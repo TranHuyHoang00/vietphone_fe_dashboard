@@ -13,7 +13,7 @@ import { textLine13 } from '@components/displays/line13';
 import ModalDetail from './modals/modalDetail';
 import DrawerFilter from './drawers/drawerFilter';
 import AvatarNone from '@assets/images/avatarNone.jpg';
-import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataOrders } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
@@ -32,16 +32,16 @@ class index extends Component {
                 status: '',
                 source: '',
             },
-            dataPermissionsAfterCheck: {},
+            dataCheckPermis: {},
         }
     }
     async componentDidMount() {
         const { dataFilter } = this.state;
-        const { getListOrder, dataUserPermissions, isSuperUser } = this.props;
+        const { getListOrder, dataUserPermis, isSuperUser } = this.props;
         await getListOrder(dataFilter);
-        const dataPermissionsAfterCheck = await handleCheckPermission(dataOrders, dataUserPermissions, isSuperUser);
+        const dataCheckPermis = await handleCheckPermis(dataOrders, dataUserPermis, isSuperUser);
         this.setState({
-            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
+            dataCheckPermis: dataCheckPermis,
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {
@@ -120,13 +120,13 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!dataPermissionsAfterCheck['order.view_order']} onClick={() => this.openModal('detail', true, item.id)}><AiFillEye /></button>
+                        <button disabled={!dataCheckPermis['order.view_order']} onClick={() => this.openModal('detail', true, item.id)}><AiFillEye /></button>
                     </Space >
                 ),
             },
 
         ];
-        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, modalDetail, drawerFilter } = this.state;
+        const { dataCheckPermis, listItemSelected, dataFilter, modalDetail, drawerFilter } = this.state;
         const { isLoading, dataOrders, dataMeta } = this.props;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -138,7 +138,7 @@ class index extends Component {
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Space>
-                                <Button disabled={!dataPermissionsAfterCheck['order.view_order']}
+                                <Button disabled={!dataCheckPermis['order.view_order']}
                                     onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiOutlineMenu />
@@ -164,10 +164,10 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {modalDetail && dataPermissionsAfterCheck['order.view_order'] &&
+                {modalDetail && dataCheckPermis['order.view_order'] &&
                     <ModalDetail modalDetail={modalDetail}
                         openModal={this.openModal} />}
-                {drawerFilter && dataPermissionsAfterCheck['order.view_order'] &&
+                {drawerFilter && dataCheckPermis['order.view_order'] &&
                     <DrawerFilter drawerFilter={drawerFilter}
                         openDrawer={this.openDrawer} dataFilter={dataFilter}
                         onChangePage={this.onChangePage} />}
@@ -184,7 +184,7 @@ const mapStateToProps = state => {
         isLoading: state.order.isLoading,
         isResult: state.order.isResult,
 
-        dataUserPermissions: state.user.dataUserPermissions,
+        dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };

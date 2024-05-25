@@ -8,15 +8,12 @@ const createBanner = (data) => {
 const getDataBanner = (id) => {
     return apiAdmin.get(`/settings/api/v1/get-banner/${id}`);
 }
-const delete_banner = (id) => {
+const deleteBanner = (id) => {
     return apiAdmin.delete(`/settings/api/v1/update-banner/${id}`);
 }
 const editBanner = (id, data) => {
     return apiAdmin.put(`/settings/api/v1/update-banner/${id}`, data);
 }
-const create_media_banner = (data) => {
-    return apiAdmin.post(`/settings/api/v1/create-media-base`, data);
-}
 export {
-    getListBanner, createBanner, getDataBanner, delete_banner, editBanner, create_media_banner
+    getListBanner, createBanner, getDataBanner, deleteBanner, editBanner,
 }

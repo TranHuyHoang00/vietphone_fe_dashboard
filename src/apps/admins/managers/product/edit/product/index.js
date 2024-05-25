@@ -10,7 +10,7 @@ import ProductContent from './elements/product_content';
 import ProductMedia from './elements/product_media';
 import { create_media } from '@services/media_service';
 import { showNotification } from '@utils/handleFuncNotification';
-import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { data_products } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
@@ -19,13 +19,13 @@ class index extends Component {
             data_atbvl_ids: [],
             dataMediaIds: [],
             data_media_raws: [],
-            dataPermissionsAfterCheck: {},
+            dataCheckPermis: {},
         }
     }
     async componentDidMount() {
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_products, this.props.dataUserPermissions, this.props.isSuperUser);
+        let dataCheckPermis = await handleCheckPermis(data_products, this.props.dataUserPermis, this.props.isSuperUser);
         this.setState({
-            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
+            dataCheckPermis: dataCheckPermis,
         });
     }
     handle_product_page = async () => {
@@ -96,7 +96,7 @@ class index extends Component {
     }
     render() {
         let data_product = this.props.data_product;
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        let dataCheckPermis = this.state.dataCheckPermis;
         return (
             <div className='space-y-[10px]'>
                 <div className='flex items-center justify-between'>
@@ -108,7 +108,7 @@ class index extends Component {
                                 Hủy
                             </Button>
                         }
-                        <Button disabled={!dataPermissionsAfterCheck['product.change_product']}
+                        <Button disabled={!dataCheckPermis['product.change_product']}
                             onClick={() => this.handle_edit_product()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
                             {this.props.is_edit === false ? 'Chỉnh sửa' : 'Lưu'}
                         </Button>
@@ -142,7 +142,7 @@ const mapStateToProps = state => {
         description: state.product.description,
         data_product_page: state.product_page.data_product_page,
 
-        dataUserPermissions: state.user.dataUserPermissions,
+        dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };

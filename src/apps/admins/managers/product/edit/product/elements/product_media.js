@@ -6,7 +6,7 @@ import { Button, Dropdown, Image, Collapse } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import "react-multi-carousel/lib/styles.css";
 import Carousel from "react-multi-carousel";
-import { convertImageToBase64 } from '@utils/base64';
+import { convertImageToBase64 } from '@utils/handleFuncImage';
 import ModalVideo from '../../../modals/modal_video';
 class product_media extends Component {
     constructor(props) {

@@ -10,7 +10,6 @@ import attribute_reducers from '@reducers/attribute_reducers';
 import attribute_value_reducers from '@reducers/attribute_value_reducers';
 import order_reducers from '@reducers/order_reducers';
 import customer_reducers from '@reducers/customer_reducers';
-import promotion_reducers from '@reducers/promotion_reducers';
 import flash_sale_reducers from '@reducers/flash_sale_reducers';
 import flash_sale_item_reducers from '@reducers/flash_sale_item_reducers';
 import task_reducers from '@reducers/task_reducers';
@@ -38,7 +37,6 @@ export default combineReducers({
     attribute: attribute_reducers,
     attribute_value: attribute_value_reducers,
     variant_attribute_group: variant_attribute_group_reducers,
-    promotion: promotion_reducers,
     flash_sale: flash_sale_reducers,
     flash_sale_item: flash_sale_item_reducers,
     task: task_reducers,

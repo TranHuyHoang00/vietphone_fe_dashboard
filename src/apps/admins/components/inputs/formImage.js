@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Typography, Image } from 'antd';
-import { convertImageToBase64 } from '@utils/base64';
+import { convertImageToBase64 } from '@utils/handleFuncImage';
 class index extends Component {
     constructor(props) {
         super(props);

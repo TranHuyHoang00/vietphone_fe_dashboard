@@ -1,8 +1,8 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_tasks: [],
-    data_task: {},
+    dataTasks: [],
+    dataTask: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -33,7 +33,7 @@ const task_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_tasks: action.data.task_results,
+                dataTasks: action.data.task_results,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_TASK_SUCCESS:
@@ -41,7 +41,7 @@ const task_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_task: action.data
+                dataTask: action.data
             }
         case action_types.CREATE_TASK_SUCCESS:
             return {
@@ -70,14 +70,14 @@ const task_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_TASK:
             return {
                 ...state,
-                data_task: action.data,
+                dataTask: action.data,
             }
         case action_types.ON_CHANGE_TASK:
-            let copyState = { ...state.data_task };
+            let copyState = { ...state.dataTask };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_task: {
+                dataTask: {
                     ...copyState,
                 }
             }

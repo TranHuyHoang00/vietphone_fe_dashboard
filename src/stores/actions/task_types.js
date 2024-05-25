@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_task, get_task, create_task, delete_task, edit_task } from '@services/task_service';
+import { getListTask, getDataTask, create_task, delete_task, edit_task } from '@services/task_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
-export const get_list_task_redux = (dataFilter) => {
+export const getListTaskRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(task_start());
-            let data = await get_list_task(dataFilter);
+            let data = await getListTask(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_task_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_list_task_redux = (dataFilter) => {
         }
     }
 }
-export const get_task_redux = (id) => {
+export const getDataTaskRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(task_start());
-            let data = await get_task(id);
+            let data = await getDataTask(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_task_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_task_redux = (id) => {
         }
     }
 }
-export const create_task_redux = (data_task) => {
+export const create_task_redux = (dataTask) => {
     return async (dispatch, getState) => {
         try {
             dispatch(task_start());
-            let data = await create_task(data_task);
+            let data = await create_task(dataTask);
             if (data && data.data && data.data.success === 1) {
                 dispatch(task_success());
                 message.success('Thành công');
@@ -55,7 +55,7 @@ export const create_task_redux = (data_task) => {
         }
     }
 }
-export const delete_list_task_redux = (list_id) => {
+export const deleteListTaskRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(task_start());
         for (const id of list_id) {
@@ -73,12 +73,12 @@ export const delete_list_task_redux = (list_id) => {
         dispatch(task_success());
     }
 }
-export const edit_list_task_redux = (list_id, data_task) => {
+export const editListRaskRedux = (list_id, dataTask) => {
     return async (dispatch, getState) => {
         dispatch(task_start());
         for (const id of list_id) {
             try {
-                let data = await edit_task(id, data_task);
+                let data = await edit_task(id, dataTask);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_task_redux = (list_id, data_task) => {
         dispatch(task_success());
     }
 }
-export const edit_task_redux = (id, data_task) => {
+export const edit_task_redux = (id, dataTask) => {
     return async (dispatch, getState) => {
         try {
             dispatch(task_start());
-            let data = await edit_task(id, data_task);
+            let data = await edit_task(id, dataTask);
             if (data && data.data && data.data.success === 1) {
                 dispatch(task_success());
                 message.success('Thành công');
@@ -132,7 +132,7 @@ export const on_change_task_redux = (value, id) => ({
     value,
     id,
 })
-export const set_data_task_redux = (data) => ({
+export const setDataTaskRedux = (data) => ({
     type: action_types.SET_DATA_TASK,
     data,
 })

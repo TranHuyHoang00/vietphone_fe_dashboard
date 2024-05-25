@@ -9,7 +9,6 @@ export * from '@actions/group_attribute_types';
 export * from '@actions/attribute_types';
 export * from '@actions/attribute_value_types';
 export * from '@actions/variant_attribute_group_types';
-export * from '@actions/promotion_types';
 export * from '@actions/flash_sale_types';
 export * from '@actions/flash_sale_item_types';
 export * from '@actions/task_types';

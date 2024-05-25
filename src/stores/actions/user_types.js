@@ -115,7 +115,7 @@ export const get_list_user_permission_redux = () => {
             let data = await getListUserPermission();
             if (data && data.data && data.data.success === 1) {
                 let data_raw = data.data.data;
-                if (data_raw?.isSuperUser === true) {
+                if (data_raw?.is_superuser === true) {
                     dispatch(get_list_user_permission_success([]));
                     dispatch(set_is_superuser_redux(true));
                 } else {

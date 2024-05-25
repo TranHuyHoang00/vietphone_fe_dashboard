@@ -9,6 +9,13 @@ const formatMoney = (number) => {
     });
     return `${newNumber} vnđ`;
 };
+const formatNumber = (number) => {
+    var newNumber = parseFloat(number).toLocaleString('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 3
+    });
+    return `${newNumber}`;
+};
 export {
-    formatDay, formatMoney
+    formatDay, formatMoney, formatNumber
 }

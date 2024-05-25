@@ -10,7 +10,7 @@ import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
-import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataPosts } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
@@ -29,17 +29,17 @@ class index extends Component {
                 limit: 5,
                 search: ''
             },
-            dataPermissionsAfterCheck: {},
+            dataCheckPermis: {},
 
         }
     }
     async componentDidMount() {
         const { dataFilter } = this.state;
-        const { getListPost, dataUserPermissions, isSuperUser } = this.props;
+        const { getListPost, dataUserPermis, isSuperUser } = this.props;
         await getListPost(dataFilter);
-        const dataPermissionsAfterCheck = await handleCheckPermission(dataPosts, dataUserPermissions, isSuperUser);
+        const dataCheckPermis = await handleCheckPermis(dataPosts, dataUserPermis, isSuperUser);
         this.setState({
-            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
+            dataCheckPermis: dataCheckPermis,
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {
@@ -92,7 +92,7 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!dataPermissionsAfterCheck['post.change_post']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
+                        <button disabled={!dataCheckPermis['post.change_post']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
                             <AiFillEdit />
                         </button>
                     </Space >
@@ -100,11 +100,11 @@ class index extends Component {
             },
 
         ];
-        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, dropButtonType,
+        const { dataCheckPermis, listItemSelected, dataFilter, dropButtonType,
             modalCreate, modalEdit } = this.state;
         const { isLoading, dataPosts, dataMeta } = this.props;
         const items = [
-            { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['post.delete_post'] },
+            { key: 1, label: 'Xóa', disabled: !dataCheckPermis['post.delete_post'] },
         ];
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -115,7 +115,7 @@ class index extends Component {
                 <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button disabled={!dataPermissionsAfterCheck['post.add_post']}
+                            <Button disabled={!dataCheckPermis['post.add_post']}
                                 onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
@@ -132,7 +132,7 @@ class index extends Component {
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
-                                            disabled={!dataPermissionsAfterCheck['post.delete_post']}
+                                            disabled={!dataCheckPermis['post.delete_post']}
                                             menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
                                                 {dropButtonType === 1 && <span>Xóa</span>}
@@ -154,11 +154,11 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {modalCreate && dataPermissionsAfterCheck['post.add_post'] &&
+                {modalCreate && dataCheckPermis['post.add_post'] &&
                     <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
-                {modalEdit && dataPermissionsAfterCheck['post.change_post'] &&
+                {modalEdit && dataCheckPermis['post.change_post'] &&
                     <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
@@ -175,7 +175,7 @@ const mapStateToProps = state => {
         isLoading: state.post.isLoading,
         isResult: state.post.isResult,
 
-        dataUserPermissions: state.user.dataUserPermissions,
+        dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };

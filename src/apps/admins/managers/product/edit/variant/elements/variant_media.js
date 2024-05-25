@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button, Carousel, Image, Collapse } from 'antd';
-import { convertImageToBase64 } from '@utils/base64';
+import { convertImageToBase64 } from '@utils/handleFuncImage';
 import { DeleteOutlined } from '@ant-design/icons';
 
 class variant_media extends Component {

@@ -14,7 +14,7 @@ import { FaUserNurse, FaAndroid, FaUserShield } from "react-icons/fa6";
 
 import { withRouter } from 'react-router-dom';
 import { getDataLocal } from '@auths/localStorage';
-import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { data_indexs } from '@datas/dataPermissionsOrigin';
 import HeaderDB from './layouts/header';
 import LoginDB from './pages/login';
@@ -58,7 +58,7 @@ class index extends Component {
             value: {},
             logged_in_db: false,
             is_form_drawer: false,
-            dataPermissionsAfterCheck: {},
+            dataCheckPermis: {},
         }
     }
     async componentDidMount() {
@@ -71,12 +71,12 @@ class index extends Component {
     }
     get_dataPermissionsAfterCheck = async () => {
         let isSuperUser = this.props.isSuperUser;
-        let dataUserPermissions;
-        if (isSuperUser && isSuperUser === true) { dataUserPermissions = []; }
-        else { dataUserPermissions = this.props.dataUserPermissions; }
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_indexs, dataUserPermissions, isSuperUser);
+        let dataUserPermis;
+        if (isSuperUser && isSuperUser === true) { dataUserPermis = []; }
+        else { dataUserPermis = this.props.dataUserPermis; }
+        let dataCheckPermis = await handleCheckPermis(data_indexs, dataUserPermis, isSuperUser);
         this.setState({
-            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
+            dataCheckPermis: dataCheckPermis,
         });
     }
     setCollapsed = () => {
@@ -98,7 +98,6 @@ class index extends Component {
         this.setState({ is_form_drawer: false })
     }
     render() {
-
         const items = [
             {
                 key: 'menu_dashboard', icon: <AiFillDashboard />, label: 'Dashboard', children: [
@@ -128,15 +127,15 @@ class index extends Component {
                 key: 'menu_user', icon: <FaUserShield />, label: 'Người dùng', children: [
                     {
                         key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng',
-                        disabled: !this.state.dataPermissionsAfterCheck['account.view_customer']
+                        disabled: !this.state.dataCheckPermis['account.view_customer']
                     },
                     {
                         key: 'manager/user', icon: <AiOutlineUserSwitch />, label: 'Tài khoản',
-                        disabled: !this.state.dataPermissionsAfterCheck['account.view_user']
+                        disabled: !this.state.dataCheckPermis['account.view_user']
                     },
                     {
                         key: 'manager/group', icon: <AiFillRobot />, label: 'Phân quyền',
-                        disabled: !this.state.dataPermissionsAfterCheck['group.view_group']
+                        disabled: !this.state.dataCheckPermis['group.view_group']
                     },
                 ],
             },
@@ -144,7 +143,7 @@ class index extends Component {
                 key: 'menu_order', icon: <AiFillContainer />, label: 'Đơn đặt', children: [
                     {
                         key: '', icon: <AiFillFileMarkdown />, label: 'Đơn hàng',
-                        disabled: !this.state.dataPermissionsAfterCheck['order.view_order']
+                        disabled: !this.state.dataCheckPermis['order.view_order']
                     },
                 ],
             },
@@ -152,11 +151,11 @@ class index extends Component {
                 key: 'menu_product', icon: <AiFillShop />, label: 'Cửa hàng', children: [
                     {
                         key: 'manager/product', icon: <AiFillMobile />, label: 'Sản phẩm',
-                        disabled: !this.state.dataPermissionsAfterCheck['product.view_product']
+                        disabled: !this.state.dataCheckPermis['product.view_product']
                     },
                     {
                         key: 'manager/flash_sale_item', icon: <AiFillPayCircle />, label: 'Flash sale',
-                        disabled: !this.state.dataPermissionsAfterCheck['promotion.view_flashsaleitem']
+                        disabled: !this.state.dataCheckPermis['promotion.view_flashsaleitem']
                     },
                 ],
             },
@@ -164,11 +163,11 @@ class index extends Component {
                 key: 'advertisement', icon: <AiFillProject />, label: 'Quảng cáo', children: [
                     {
                         key: 'manager/banner', icon: <AiFillBehanceSquare />, label: 'Băng rôn',
-                        disabled: !this.state.dataPermissionsAfterCheck['settings.view_banner']
+                        disabled: !this.state.dataCheckPermis['settings.view_banner']
                     },
                     {
                         key: 'manager/location', icon: <AiFillEnvironment />, label: 'Vị trí',
-                        disabled: !this.state.dataPermissionsAfterCheck['settings.view_location']
+                        disabled: !this.state.dataCheckPermis['settings.view_location']
                     },
                 ],
             },
@@ -176,19 +175,19 @@ class index extends Component {
                 key: 'menu_specification', icon: <AiFillSetting />, label: 'Thông số', children: [
                     {
                         key: 'manager/attribute_value', icon: <AiFillRocket />, label: 'Giá trị',
-                        disabled: !this.state.dataPermissionsAfterCheck['product.view_attributevalue']
+                        disabled: !this.state.dataCheckPermis['product.view_attributevalue']
                     },
                     {
                         key: 'manager/attribute', icon: <AiFillUsb />, label: 'Thông số',
-                        disabled: !this.state.dataPermissionsAfterCheck['product.view_attribute']
+                        disabled: !this.state.dataCheckPermis['product.view_attribute']
                     },
                     {
                         key: 'manager/group_attribute', icon: <AiFillFire />, label: 'Loại thông số',
-                        disabled: !this.state.dataPermissionsAfterCheck['product.view_groupattribute']
+                        disabled: !this.state.dataCheckPermis['product.view_groupattribute']
                     },
                     {
                         key: 'manager/variant_attribute_group', icon: <AiFillCrown />, label: 'Loại TS-SP',
-                        disabled: !this.state.dataPermissionsAfterCheck['product.view_variantattributegroup']
+                        disabled: !this.state.dataCheckPermis['product.view_variantattributegroup']
                     },
                 ],
             },
@@ -196,19 +195,19 @@ class index extends Component {
                 key: 'menu_category', icon: <AiFillHdd />, label: 'Danh mục', children: [
                     {
                         key: 'manager/tag', icon: <AiFillTag />, label: 'Tag',
-                        disabled: !this.state.dataPermissionsAfterCheck['product.view_tag']
+                        disabled: !this.state.dataCheckPermis['product.view_tag']
                     },
                     {
                         key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu',
-                        disabled: !this.state.dataPermissionsAfterCheck['product.view_brand']
+                        disabled: !this.state.dataCheckPermis['product.view_brand']
                     },
                     {
                         key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục',
-                        disabled: !this.state.dataPermissionsAfterCheck['product.view_category']
+                        disabled: !this.state.dataCheckPermis['product.view_category']
                     },
                     {
                         key: 'manager/flash_sale', icon: <AiFillMoneyCollect />, label: 'Flash_sale',
-                        disabled: !this.state.dataPermissionsAfterCheck['promotion.view_flashsale']
+                        disabled: !this.state.dataCheckPermis['promotion.view_flashsale']
                     },
 
                 ],
@@ -217,11 +216,11 @@ class index extends Component {
                 key: 'menu_post', icon: <AiFillBook />, label: 'Bài đăng', children: [
                     {
                         key: 'manager/post', icon: <AiOutlineBook />, label: 'Bài viết',
-                        disabled: !this.state.dataPermissionsAfterCheck['post.view_post']
+                        disabled: !this.state.dataCheckPermis['post.view_post']
                     },
                     {
                         key: 'manager/category_post', icon: <AiFillBuild />, label: 'Loại bài viết',
-                        disabled: !this.state.dataPermissionsAfterCheck['post.view_category']
+                        disabled: !this.state.dataCheckPermis['post.view_category']
                     },
                 ],
             },
@@ -229,18 +228,18 @@ class index extends Component {
                 key: 'menu_system', icon: <AiFillAndroid />, label: 'Hệ thống', children: [
                     {
                         key: 'manager/sync_data', icon: <AiFillControl />, label: 'Đồng bộ',
-                        disabled: !this.state.dataPermissionsAfterCheck['sync.view_sync']
+                        disabled: !this.state.dataCheckPermis['sync.view_sync']
                     },
                     {
                         key: 'manager/task', icon: <AiFillSwitcher />, label: 'Lịch sử',
-                        disabled: !this.state.dataPermissionsAfterCheck['task.view_task']
+                        disabled: !this.state.dataCheckPermis['task.view_task']
                     },
                 ],
             },
         ];
         let url = this.state.url;
         let logged_in_db = this.state.logged_in_db;
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        let dataCheckPermis = this.state.dataCheckPermis;
         return (
 
             <>
@@ -269,54 +268,54 @@ class index extends Component {
                                     <Route exact path={`${url}system_staff/roll_call`}><StaffRollCall /></Route>
                                     <Route exact path={`${url}system_staff/history`}><HistoryRollCall /></Route>
 
-                                    {dataPermissionsAfterCheck['account.view_customer'] &&
+                                    {dataCheckPermis['account.view_customer'] &&
                                         <Route exact path={`${url}manager/customer`}><ManagerCustomer /></Route>}
-                                    {dataPermissionsAfterCheck['account.view_user'] &&
+                                    {dataCheckPermis['account.view_user'] &&
                                         <Route Route exact path={`${url}manager/user`}><ManagerUser /></Route>}
-                                    {dataPermissionsAfterCheck['group.view_group'] &&
+                                    {dataCheckPermis['group.view_group'] &&
                                         <Route exact path={`${url}manager/group`}><ManagerGroup /></Route>}
 
-                                    {dataPermissionsAfterCheck['order.view_order'] &&
+                                    {dataCheckPermis['order.view_order'] &&
                                         <Route exact path={`${url}`}><ManagerOrder /></Route>}
 
-                                    {dataPermissionsAfterCheck['product.view_product'] &&
+                                    {dataCheckPermis['product.view_product'] &&
                                         <Route exact path={`${url}manager/product`}><ManagerProduct /></Route>}
-                                    {dataPermissionsAfterCheck['product.view_product'] &&
+                                    {dataCheckPermis['product.view_product'] &&
                                         <Route exact path={`${url}manager/product/edit/:id`}><EditProduct /></Route>}
-                                    {dataPermissionsAfterCheck['promotion.view_flashsaleitem'] &&
+                                    {dataCheckPermis['promotion.view_flashsaleitem'] &&
                                         <Route exact path={`${url}manager/flash_sale_item`}><ManagerFlashSaleItem /></Route>}
 
 
-                                    {dataPermissionsAfterCheck['settings.view_banner'] &&
+                                    {dataCheckPermis['settings.view_banner'] &&
                                         <Route exact path={`${url}manager/banner`}><ManagerBanner /></Route>}
-                                    {dataPermissionsAfterCheck['settings.view_location'] &&
+                                    {dataCheckPermis['settings.view_location'] &&
                                         <Route exact path={`${url}manager/location`}><ManagerLocation /></Route>}
 
-                                    {dataPermissionsAfterCheck['product.view_attributevalue'] &&
+                                    {dataCheckPermis['product.view_attributevalue'] &&
                                         <Route exact path={`${url}manager/attribute_value`}><ManagerAttributeValue /></Route>}
-                                    {dataPermissionsAfterCheck['product.view_attribute'] &&
+                                    {dataCheckPermis['product.view_attribute'] &&
                                         <Route exact path={`${url}manager/attribute`}><ManagerAttribute /></Route>}
-                                    {dataPermissionsAfterCheck['product.view_groupattribute'] &&
+                                    {dataCheckPermis['product.view_groupattribute'] &&
                                         <Route exact path={`${url}manager/group_attribute`}><ManagerGroupAttribute /></Route>}
-                                    {dataPermissionsAfterCheck['product.view_variantattributegroup'] &&
+                                    {dataCheckPermis['product.view_variantattributegroup'] &&
                                         <Route exact path={`${url}manager/variant_attribute_group`}><ManagerVariantAttributeGroup /></Route>}
 
-                                    {dataPermissionsAfterCheck['product.view_tag'] &&
+                                    {dataCheckPermis['product.view_tag'] &&
                                         <Route exact path={`${url}manager/tag`}><ManagerTag /></Route>}
-                                    {dataPermissionsAfterCheck['product.view_brand'] &&
+                                    {dataCheckPermis['product.view_brand'] &&
                                         <Route exact path={`${url}manager/brand`}><ManagerBrand /></Route>}
-                                    {dataPermissionsAfterCheck['product.view_category'] &&
+                                    {dataCheckPermis['product.view_category'] &&
                                         <Route exact path={`${url}manager/category`}><ManagerCategory /></Route>}
-                                    {dataPermissionsAfterCheck['promotion.view_flashsale'] &&
+                                    {dataCheckPermis['promotion.view_flashsale'] &&
                                         <Route exact path={`${url}manager/flash_sale`}><ManagerFlashSale /></Route>}
 
-                                    {dataPermissionsAfterCheck['post.view_post'] &&
+                                    {dataCheckPermis['post.view_post'] &&
                                         <Route exact path={`${url}manager/post`}><ManagerPost /></Route>}
-                                    {dataPermissionsAfterCheck['post.view_category'] &&
+                                    {dataCheckPermis['post.view_category'] &&
                                         <Route exact path={`${url}manager/category_post`}><ManagerCategoryPost /></Route>}
-                                    {dataPermissionsAfterCheck['sync.view_sync'] &&
+                                    {dataCheckPermis['sync.view_sync'] &&
                                         <Route exact path={`${url}manager/sync_data`}><ManagerSyncData /></Route>}
-                                    {dataPermissionsAfterCheck['task.view_task'] &&
+                                    {dataCheckPermis['task.view_task'] &&
                                         <Route exact path={`${url}manager/task`}><ManagerTask /></Route>}
 
 
@@ -345,7 +344,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataUserPermissions: state.user.dataUserPermissions,
+        dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };

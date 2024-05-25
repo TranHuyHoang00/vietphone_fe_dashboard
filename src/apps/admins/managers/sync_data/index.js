@@ -3,9 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Divider, Card, Spin } from 'antd';
 import FormPopconfirm from '@components/popconfirms/form_popconfirm';
-import { sync_all_products, get_task } from '@services/task_service';
+import { sync_all_products, getDataTask } from '@services/task_service';
 import { showNotification } from '@utils/handleFuncNotification';
-import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { data_syncs } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
@@ -14,13 +14,13 @@ class index extends Component {
             loading_sync_product: false,
             sync_product: null,
             data_sync_product: {},
-            dataPermissionsAfterCheck: {},
+            dataCheckPermis: {},
         }
     }
     async componentDidMount() {
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_syncs, this.props.dataUserPermissions, this.props.isSuperUser);
+        let dataCheckPermis = await handleCheckPermis(data_syncs, this.props.dataUserPermis, this.props.isSuperUser);
         this.setState({
-            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
+            dataCheckPermis: dataCheckPermis,
         });
     }
     handle_loading = (funtion_name, value, result) => {
@@ -32,9 +32,9 @@ class index extends Component {
         }
     }
 
-    get_task = async (id, funtion_name) => {
+    getDataTask = async (id, funtion_name) => {
         try {
-            let data = await get_task(id);
+            let data = await getDataTask(id);
             if (data && data.data && data.data.success === 1) {
                 if (funtion_name === 'sync_product') {
                     clearInterval(this.state.interval_task_product);
@@ -50,7 +50,7 @@ class index extends Component {
     }
     check_task = async (id, funtion_name) => {
         if (funtion_name === 'sync_product') {
-            const interval_task_product = setInterval(() => { this.get_task(id, funtion_name) }, 2000);
+            const interval_task_product = setInterval(() => { this.getDataTask(id, funtion_name) }, 2000);
             this.setState({ interval_task_product });
             return () => clearInterval(interval_task_product);
         }
@@ -154,7 +154,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataUserPermissions: state.user.dataUserPermissions,
+        dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };

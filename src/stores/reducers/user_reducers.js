@@ -7,7 +7,7 @@ const initialState = {
     isLoading: false,
     isResult: false,
 
-    dataUserPermissions: [],
+    dataUserPermis: [],
     isSuperUser: true,
 }
 
@@ -89,7 +89,7 @@ const user_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                dataUserPermissions: action?.data?.permissions ? action?.data?.permissions : []
+                dataUserPermis: action?.data?.permissions ? action?.data?.permissions : []
             }
         case action_types.SET_IS_SUPERUSER:
             return {

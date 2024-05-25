@@ -9,7 +9,7 @@ import {
 import { AiOutlineMenu } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import DrawerFilter from './drawers/drawerFilter';
-import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { data_products } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
@@ -22,7 +22,7 @@ class index extends Component {
             drawerFilter: false,
             dataFilter: {},
 
-            dataPermissionsAfterCheck: {},
+            dataCheckPermis: {},
         }
     }
     async componentDidMount() {
@@ -32,9 +32,9 @@ class index extends Component {
         this.props.getListCategory({ page: 1, limit: 100, search: '' });
         this.setState({ dataFilter: this.props.dataFilter });
 
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_products, this.props.dataUserPermissions, this.props.isSuperUser);
+        let dataCheckPermis = await handleCheckPermis(data_products, this.props.dataUserPermis, this.props.isSuperUser);
         this.setState({
-            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
+            dataCheckPermis: dataCheckPermis,
         });
     }
     openModal = async (name, value, id) => {
@@ -175,7 +175,7 @@ class index extends Component {
                     </div>
             },
         ];
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        let dataCheckPermis = this.state.dataCheckPermis;
         const listItemSelected = this.state.listItemSelected;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -187,7 +187,7 @@ class index extends Component {
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Space>
-                                <Button disabled={!dataPermissionsAfterCheck['product.view_product']}
+                                <Button disabled={!dataCheckPermis['product.view_product']}
                                     onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiOutlineMenu />
@@ -215,7 +215,7 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {this.state.drawerFilter && dataPermissionsAfterCheck['product.view_product'] &&
+                {this.state.drawerFilter && dataCheckPermis['product.view_product'] &&
                     <DrawerFilter drawerFilter={this.state.drawerFilter}
                         openDrawer={this.openDrawer} dataFilter={this.state.dataFilter}
                         onChangePage={this.onChangePage}
@@ -239,7 +239,7 @@ const mapStateToProps = state => {
         dataBrands: state.brand.dataBrands,
         dataCategorys: state.category.dataCategorys,
 
-        dataUserPermissions: state.user.dataUserPermissions,
+        dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };

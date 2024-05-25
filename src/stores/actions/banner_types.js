@@ -1,5 +1,5 @@
 import action_types from '@actions/action_types';
-import { getListBanner, getDataBanner, createBanner, delete_banner, editBanner } from '@services/banner_service';
+import { getListBanner, getDataBanner, createBanner, deleteBanner, editBanner } from '@services/banner_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -60,7 +60,7 @@ export const deleteListBannerRedux = (list_id) => {
         dispatch(banner_start());
         for (const id of list_id) {
             try {
-                let data = await delete_banner(id);
+                let data = await deleteBanner(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }

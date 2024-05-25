@@ -11,7 +11,7 @@ import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import FormSelectSingle from '@components/selects/formSelectSingle';
 import { formatMoney } from '@utils/handleFuncFormat';
-import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataFlashSaleItems } from '@datas/dataPermissionsOrigin';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
@@ -29,16 +29,16 @@ class index extends Component {
                 limit: 5,
                 search: ''
             },
-            dataPermissionsAfterCheck: {},
+            dataCheckPermis: {},
         }
     }
     async componentDidMount() {
         const { dataFilter } = this.state;
-        const { getListFlashSale, dataUserPermissions, isSuperUser } = this.props;
+        const { getListFlashSale, dataUserPermis, isSuperUser } = this.props;
         await getListFlashSale(dataFilter);
-        const dataPermissionsAfterCheck = await handleCheckPermission(dataFlashSaleItems, dataUserPermissions, isSuperUser);
+        const dataCheckPermis = await handleCheckPermis(dataFlashSaleItems, dataUserPermis, isSuperUser);
         this.setState({
-            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
+            dataCheckPermis: dataCheckPermis,
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {
@@ -91,17 +91,17 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!dataPermissionsAfterCheck['promotion.change_flashsaleitem']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
+                        <button disabled={!dataCheckPermis['promotion.change_flashsaleitem']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
                             <AiFillEdit />
                         </button>
                     </Space >
                 ),
             },
         ];
-        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, modalEdit, modalCreate, dropButtonType } = this.state;
+        const { dataCheckPermis, listItemSelected, dataFilter, modalEdit, modalCreate, dropButtonType } = this.state;
         const { isLoading, dataFlashSales, dataFlashSale, getDataFlashSale } = this.props;
         const items = [
-            { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['promotion.delete_flashsaleitem'] },
+            { key: 1, label: 'Xóa', disabled: !dataCheckPermis['promotion.delete_flashsaleitem'] },
         ];
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -112,7 +112,7 @@ class index extends Component {
                 <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button disabled={(!dataPermissionsAfterCheck['promotion.delete_flashsaleitem'] === false && dataFlashSale.id) ? false : true}
+                            <Button disabled={(!dataCheckPermis['promotion.delete_flashsaleitem'] === false && dataFlashSale.id) ? false : true}
                                 onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
@@ -138,7 +138,7 @@ class index extends Component {
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
-                                            disabled={!dataPermissionsAfterCheck['promotion.delete_flashsaleitem']}
+                                            disabled={!dataCheckPermis['promotion.delete_flashsaleitem']}
                                             menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
                                                 {dropButtonType === 1 && <span>Xóa</span>}
@@ -157,11 +157,11 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {modalCreate && dataPermissionsAfterCheck['promotion.add_flashsaleitem'] &&
+                {modalCreate && dataCheckPermis['promotion.add_flashsaleitem'] &&
                     <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
-                {modalEdit && dataPermissionsAfterCheck['promotion.change_flashsaleitem'] &&
+                {modalEdit && dataCheckPermis['promotion.change_flashsaleitem'] &&
                     <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
@@ -175,7 +175,7 @@ const mapStateToProps = state => {
         dataFlashSales: state.flash_sale.dataFlashSales,
         dataFlashSale: state.flash_sale.dataFlashSale,
         isLoading: state.flash_sale.isLoading,
-        dataUserPermissions: state.user.dataUserPermissions,
+        dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };

@@ -10,7 +10,7 @@ import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
-import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataVariantAttributeGroups } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
@@ -28,16 +28,16 @@ class index extends Component {
                 limit: 5,
                 search: ''
             },
-            dataPermissionsAfterCheck: {},
+            dataCheckPermis: {},
         }
     }
     async componentDidMount() {
         const { dataFilter } = this.state;
-        const { getListVariantAttributeGroup, dataUserPermissions, isSuperUser } = this.props;
+        const { getListVariantAttributeGroup, dataUserPermis, isSuperUser } = this.props;
         await getListVariantAttributeGroup(dataFilter);
-        const dataPermissionsAfterCheck = await handleCheckPermission(dataVariantAttributeGroups, dataUserPermissions, isSuperUser);
+        const dataCheckPermis = await handleCheckPermis(dataVariantAttributeGroups, dataUserPermis, isSuperUser);
         this.setState({
-            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
+            dataCheckPermis: dataCheckPermis,
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {
@@ -99,7 +99,7 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!dataPermissionsAfterCheck['product.change_variantattributegroup']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
+                        <button disabled={!dataCheckPermis['product.change_variantattributegroup']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
                             <AiFillEdit />
                         </button>
                     </Space >
@@ -107,11 +107,11 @@ class index extends Component {
             },
 
         ];
-        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, dropButtonType,
+        const { dataCheckPermis, listItemSelected, dataFilter, dropButtonType,
             modalCreate, modalEdit } = this.state;
         const { isLoading, dataVariantAttributeGroups, dataMeta } = this.props;
         const items = [
-            { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['product.delete_variantattributegroup'] },
+            { key: 1, label: 'Xóa', disabled: !dataCheckPermis['product.delete_variantattributegroup'] },
         ];
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -122,7 +122,7 @@ class index extends Component {
                 <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button disabled={!dataPermissionsAfterCheck['product.add_variantattributegroup']}
+                            <Button disabled={!dataCheckPermis['product.add_variantattributegroup']}
                                 onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
@@ -139,7 +139,7 @@ class index extends Component {
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
-                                            disabled={!dataPermissionsAfterCheck['product.delete_variantattributegroup']}
+                                            disabled={!dataCheckPermis['product.delete_variantattributegroup']}
                                             menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
                                                 {dropButtonType === 1 && <span>Xóa</span>}
@@ -161,11 +161,11 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {modalCreate && dataPermissionsAfterCheck['product.add_variantattributegroup'] &&
+                {modalCreate && dataCheckPermis['product.add_variantattributegroup'] &&
                     <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
-                {modalEdit && dataPermissionsAfterCheck['product.change_variantattributegroup'] &&
+                {modalEdit && dataCheckPermis['product.change_variantattributegroup'] &&
                     <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
@@ -182,7 +182,7 @@ const mapStateToProps = state => {
         isLoading: state.variant_attribute_group.isLoading,
         isResult: state.variant_attribute_group.isResult,
 
-        dataUserPermissions: state.user.dataUserPermissions,
+        dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };

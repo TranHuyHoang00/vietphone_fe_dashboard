@@ -66,7 +66,7 @@ const dataCategoryPosts = [
 const data_syncs = [
     "sync.view_task", "sync.change_sync", "sync.delete_sync", "sync.add_sync",
 ];
-const data_tasks = [
+const dataTasks = [
     "task.view_task", "task.change_task", "task.delete_task", "task.add_task",
 ];
 export {
@@ -78,5 +78,5 @@ export {
     dataAttributeValues, dataAttributes, dataGroupAttributes, dataVariantAttributeGroups,
     dataTags, dataBrands, dataCategorys, dataFlashSales,
     dataPosts, dataCategoryPosts,
-    data_syncs, data_tasks,
+    data_syncs, dataTasks,
 }

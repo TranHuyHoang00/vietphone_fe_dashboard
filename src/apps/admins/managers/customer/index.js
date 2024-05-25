@@ -10,7 +10,7 @@ import { AiFillEye } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalDetail from './modals/modalDetail';
 import AvatarNone from '@assets/images/avatarNone.jpg';
-import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataCustomers } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
@@ -26,16 +26,16 @@ class index extends Component {
                 limit: 5,
                 search: ''
             },
-            dataPermissionsAfterCheck: {},
+            dataCheckPermis: {},
         }
     }
     async componentDidMount() {
         const { dataFilter } = this.state;
-        const { getListCustomer, dataUserPermissions, isSuperUser } = this.props;
+        const { getListCustomer, dataUserPermis, isSuperUser } = this.props;
         await getListCustomer(dataFilter);
-        const dataPermissionsAfterCheck = await handleCheckPermission(dataCustomers, dataUserPermissions, isSuperUser);
+        const dataCheckPermis = await handleCheckPermis(dataCustomers, dataUserPermis, isSuperUser);
         this.setState({
-            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
+            dataCheckPermis: dataCheckPermis,
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {
@@ -92,13 +92,13 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!dataPermissionsAfterCheck['account.view_customer']} onClick={() => this.openModal('detail', true, item.id)}><AiFillEye /></button>
+                        <button disabled={!dataCheckPermis['account.view_customer']} onClick={() => this.openModal('detail', true, item.id)}><AiFillEye /></button>
                     </Space >
                 ),
             },
 
         ];
-        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, modalDetail } = this.state;
+        const { dataCheckPermis, listItemSelected, dataFilter, modalDetail } = this.state;
         const { isLoading, dataCustomers, dataMeta } = this.props;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -129,7 +129,7 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {modalDetail && dataPermissionsAfterCheck['account.view_customer'] &&
+                {modalDetail && dataCheckPermis['account.view_customer'] &&
                     <ModalDetail modalDetail={modalDetail}
                         openModal={this.openModal} />}
             </>
@@ -145,7 +145,7 @@ const mapStateToProps = state => {
         isLoading: state.customer.isLoading,
         isResult: state.customer.isResult,
 
-        dataUserPermissions: state.user.dataUserPermissions,
+        dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };

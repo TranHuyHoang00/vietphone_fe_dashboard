@@ -12,7 +12,7 @@ import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import AvatarNone from '@assets/images/avatarNone.jpg';
 import DrawerFilter from './drawers/drawerFilter';
-import { handleCheckPermission } from '@utils/handleFuncPermission';
+import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataUsers } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
@@ -34,18 +34,18 @@ class index extends Component {
                 is_superuser: '',
                 groups: '',
             },
-            dataPermissionsAfterCheck: {},
+            dataCheckPermis: {},
         }
     }
     async componentDidMount() {
         const { dataFilter } = this.state;
-        const { getListUser, dataUserPermissions, isSuperUser } = this.props;
+        const { getListUser, dataUserPermis, isSuperUser } = this.props;
         await getListUser(dataFilter);
-        const dataPermissionsAfterCheck = await handleCheckPermission(dataUsers, dataUserPermissions, isSuperUser);
-        console.log(dataPermissionsAfterCheck);
+        const dataCheckPermis = await handleCheckPermis(dataUsers, dataUserPermis, isSuperUser);
+        console.log(dataCheckPermis);
 
         this.setState({
-            dataPermissionsAfterCheck: dataPermissionsAfterCheck,
+            dataCheckPermis: dataCheckPermis,
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {
@@ -153,7 +153,7 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!dataPermissionsAfterCheck['account.change_user']} onClick={() => this.openModal('edit', true, item.id)}>
+                        <button disabled={!dataCheckPermis['account.change_user']} onClick={() => this.openModal('edit', true, item.id)}>
                             <AiFillEdit />
                         </button>
                     </Space >
@@ -161,13 +161,13 @@ class index extends Component {
             },
 
         ];
-        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, dropButtonType,
+        const { dataCheckPermis, listItemSelected, dataFilter, dropButtonType,
             modalCreate, modalEdit, drawerFilter } = this.state;
         const { isLoading, dataUsers, dataMeta } = this.props;
         const items = [
-            { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['account.delete_user'] },
-            { key: 2, label: 'Khóa', disabled: !dataPermissionsAfterCheck['account.change_user'] },
-            { key: 3, label: 'Mở', disabled: !dataPermissionsAfterCheck['account.change_user'] },
+            { key: 1, label: 'Xóa', disabled: !dataCheckPermis['account.delete_user'] },
+            { key: 2, label: 'Khóa', disabled: !dataCheckPermis['account.change_user'] },
+            { key: 3, label: 'Mở', disabled: !dataCheckPermis['account.change_user'] },
         ];
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -179,7 +179,7 @@ class index extends Component {
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex flex-wrap items-center justify-between gap-[10px]'>
                             <div>
-                                <Button disabled={!dataPermissionsAfterCheck['account.add_user']} onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                <Button disabled={!dataCheckPermis['account.add_user']} onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiOutlinePlus />
                                         Tạo mới
@@ -201,7 +201,7 @@ class index extends Component {
                                     <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
-                                        <Dropdown.Button disabled={!dataPermissionsAfterCheck['account.delete_user']}
+                                        <Dropdown.Button disabled={!dataCheckPermis['account.delete_user']}
                                             menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
                                                 {dropButtonType === 1 && <span>Xóa</span>}
@@ -225,11 +225,11 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {modalCreate && dataPermissionsAfterCheck['account.add_user'] &&
+                {modalCreate && dataCheckPermis['account.add_user'] &&
                     <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
-                {modalEdit && dataPermissionsAfterCheck['account.change_user'] &&
+                {modalEdit && dataCheckPermis['account.change_user'] &&
                     <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
@@ -250,7 +250,7 @@ const mapStateToProps = state => {
         dataMeta: state.user.dataMeta,
         isLoading: state.user.isLoading,
         isResult: state.user.isResult,
-        dataUserPermissions: state.user.dataUserPermissions,
+        dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };

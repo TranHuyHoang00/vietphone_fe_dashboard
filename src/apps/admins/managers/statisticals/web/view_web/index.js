@@ -5,8 +5,8 @@ import * as actions from '@actions';
 import { Card, Radio, Typography, Statistic, List, DatePicker, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { Bar } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
-import { format_number } from '@utils/format_number';
+// import Chart from 'chart.js/auto';
+import { formatNumber } from '@utils/handleFuncFormat';
 import { ArrowDownOutlined, ArrowUpOutlined, EyeOutlined } from '@ant-design/icons';
 
 class index extends Component {
@@ -217,8 +217,8 @@ class index extends Component {
                                                         title={
                                                             <div className='flex items-center justify-between'>
                                                                 <Typography.Text strong>{item.name}</Typography.Text>
-                                                                <Typography.Text italic>{format_number(item.value)} lượt</Typography.Text>
-                                                                <Typography.Text italic strong>{Math.round(format_number(item.value) / this.handle_sum_total(this.props.data_view_webs) * 100)} %</Typography.Text>
+                                                                <Typography.Text italic>{formatNumber(item.value)} lượt</Typography.Text>
+                                                                <Typography.Text italic strong>{Math.round(formatNumber(item.value) / this.handle_sum_total(this.props.data_view_webs) * 100)} %</Typography.Text>
                                                             </div>
                                                         }
                                                     />
