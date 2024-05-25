@@ -33,7 +33,7 @@ class index extends Component {
             }
         }
         if (this.props.isResult) {
-            await this.props.get_flash_sale(data_flash_sale.id);
+            await this.props.getDataFlashSale(data_flash_sale.id);
             this.props.openModal("create", false);
             if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
         }
@@ -127,7 +127,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_flash_sale: (id) => dispatch(actions.get_flash_sale_redux(id)),
+        getDataFlashSale: (id) => dispatch(actions.getDataFlashSaleRedux(id)),
         get_list_variant: (dataFilter) => dispatch(actions.get_list_variant_redux(dataFilter)),
         create_list_flash_sale_item: (id, list_it) => dispatch(actions.create_list_flash_sale_item_redux(id, list_it)),
 

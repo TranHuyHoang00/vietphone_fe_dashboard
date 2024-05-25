@@ -30,7 +30,7 @@ class index extends Component {
             let isResult = this.props.isResult;
             if (isResult) {
                 this.props.openModal("edit", false);
-                await this.props.get_list_attribute(this.props.dataFilter);
+                await this.props.getListAttribute(this.props.dataFilter);
             }
         } else {
             message.error(result.mess);
@@ -84,7 +84,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_attribute: (dataFilter) => dispatch(actions.get_list_attribute_redux(dataFilter)),
+        getListAttribute: (dataFilter) => dispatch(actions.getListAttributeRedux(dataFilter)),
         edit_attribute: (id, data) => dispatch(actions.edit_attribute_redux(id, data)),
         on_change_attribute: (id, value) => dispatch(actions.on_change_attribute_redux(id, value)),
         get_list_group_attribute: (dataFilter) => dispatch(actions.get_list_group_attribute_redux(dataFilter)),

@@ -24,64 +24,63 @@ class index extends Component {
         return { check: true };
     }
     handleEdit = async () => {
-        let result = this.validationData(this.props.data_category);
+        const { dataCategory, isResult, openModal, getListCategory, editCategory, dataFilter } = this.props;
+        const { isEditImage } = this.state;
+        const result = this.validationData(dataCategory);
+        let newDataCategory = { ...dataCategory };
         if (result.check) {
-            let data_category = this.props.data_category;
-            if (this.state.isEditImage === false) {
-                delete data_category.image;
-            }
-            await this.props.edit_category(data_category.id, data_category);
-            let isResult = this.props.isResult;
+            if (isEditImage === false) { delete newDataCategory.image; }
+            await editCategory(newDataCategory.id, newDataCategory);
             if (isResult) {
-                this.props.openModal("edit", false);
-                await this.props.get_list_category(this.props.dataFilter);
+                await getListCategory(dataFilter);
+                openModal("edit", false);
             }
         } else {
             message.error(result.mess);
         }
     }
     onChangeImage = (image) => {
+        const { onChangeCategory } = this.props;
         this.setState({ isEditImage: true, })
-        this.props.on_change_category(image, 'image');
+        onChangeCategory(image, 'image');
     }
     render() {
-        let data_category = this.props.data_category;
-        let isLoading = this.props.isLoading;
+        const { dataCategory, isLoading, onChangeCategory, modalEdit, openModal } = this.props;
         return (
-            <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
-                onCancel={() => this.props.openModal("edit", false)} width={400}
+            <Modal title="CHỈNH SỬA" open={modalEdit}
+                onCancel={() => openModal("edit", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'edit'}
+                    <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormImage name={'Ảnh'} variable={'image'} value={data_category.image}
+                        <FormImage name={'Ảnh'} variable={'image'} value={dataCategory.image}
                             important={true}
                             htmlFor={'loadImageEdit'} width={100} height={100}
                             onChangeImage={this.onChangeImage} />
 
-                        <FormInput name={'Tên danh mục'} variable={'name'} value={data_category.name}
+                        <FormInput name={'Tên danh mục'} variable={'name'} value={dataCategory.name}
                             important={true}
-                            onChangeInput={this.props.on_change_category} />
+                            onChangeInput={onChangeCategory} />
 
-                        <FormInput name={'Icon'} variable={'icon'} value={data_category.icon}
+                        <FormInput name={'Icon'} variable={'icon'} value={dataCategory.icon}
                             important={false}
-                            onChangeInput={this.props.on_change_category} />
+                            onChangeInput={onChangeCategory} />
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={data_category.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataCategory.description}
                             important={false}
-                            onChangeInput={this.props.on_change_category} />
+                            onChangeInput={onChangeCategory} />
 
-                        <FormSelectInput name={'Trạng thái'} variable={'is_active'} value={data_category.is_active}
+                        <FormSelectInput name={'Trạng thái'} variable={'is_active'} value={dataCategory.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },
                                 { value: false, label: 'Khóa' },
                             ]}
-                            onChangeInput={this.props.on_change_category} />
+                            onChangeInput={onChangeCategory} />
                     </div>
                 </Spin>
             </Modal>
@@ -91,16 +90,16 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_category: state.category.data_category,
+        dataCategory: state.category.dataCategory,
         isLoading: state.category.isLoading,
         isResult: state.category.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_category: (dataFilter) => dispatch(actions.get_list_category_redux(dataFilter)),
-        edit_category: (id, data) => dispatch(actions.edit_category_redux(id, data)),
-        on_change_category: (id, value) => dispatch(actions.on_change_category_redux(id, value)),
+        getListCategory: (dataFilter) => dispatch(actions.getListCategoryRedux(dataFilter)),
+        editCategory: (id, data) => dispatch(actions.editCategoryRedux(id, data)),
+        onChangeCategory: (id, value) => dispatch(actions.onChangeCategoryRedux(id, value)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

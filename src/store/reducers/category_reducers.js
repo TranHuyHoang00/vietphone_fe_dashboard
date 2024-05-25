@@ -1,8 +1,8 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_categorys: [],
-    data_category: {},
+    dataCategorys: [],
+    dataCategory: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -33,7 +33,7 @@ const category_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_categorys: action.data.categories,
+                dataCategorys: action.data.categories,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_CATEGORY_SUCCESS:
@@ -41,7 +41,7 @@ const category_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_category: action.data
+                dataCategory: action.data
             }
         case action_types.CREATE_CATEGORY_SUCCESS:
             return {
@@ -70,14 +70,14 @@ const category_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_CATEGORY:
             return {
                 ...state,
-                data_category: action.data,
+                dataCategory: action.data,
             }
         case action_types.ON_CHANGE_CATEGORY:
-            let copyState = { ...state.data_category };
+            let copyState = { ...state.dataCategory };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_category: {
+                dataCategory: {
                     ...copyState,
                 }
             }

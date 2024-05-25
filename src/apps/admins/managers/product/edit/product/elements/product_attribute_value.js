@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Collapse, Typography, Button, Card, message } from 'antd';
-import FormSelectItem from '@components/selects/form_select_item';
+import FormSelectItem from '@components/selects/formSelectItem';
 import { DeleteOutlined } from '@ant-design/icons';
 class product_attribute_value extends Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class product_attribute_value extends Component {
             dataFilter: { page: 1, limit: 100, search: '' },
             disable_atb: true,
             disable_atbvl: true,
-            disabled_button: true,
+            disabledButtonCreate: true,
             is_edit: '',
             data_atbvl_raws: [],
             data_atbvl_ids: [],
@@ -39,54 +39,54 @@ class product_attribute_value extends Component {
             this.setState({
                 disable_atb: true,
                 disable_atbvl: true,
-                disabled_button: true,
+                disabledButtonCreate: true,
             })
         }
     }
-    on_search = (value, form_name) => {
+    onSearch = (value, nameFormSelect) => {
         let dataFilter = this.state.dataFilter;
         dataFilter.search = value;
-        if (form_name === 'group_attribute') { this.props.get_list_group_attribute(dataFilter); }
+        if (nameFormSelect === 'group_attribute') { this.props.get_list_group_attribute(dataFilter); }
     }
-    handleCreate = async (form_name) => {
-        if (form_name === 'group_attribute') {
+    handleCreate = async (nameFormSelect) => {
+        if (nameFormSelect === 'group_attribute') {
             if (!this.props.data_group_attribute.name) { message.error('Thiếu tên loại thông số'); return; }
             await this.props.create_group_attribute(this.props.data_group_attribute);
             await this.props.get_list_group_attribute(this.state.dataFilter);
         }
-        if (form_name === 'attribute') {
+        if (nameFormSelect === 'attribute') {
             if (!this.props.data_attribute.name) { message.error('Thiếu tên thông số'); return; }
             await this.props.create_attribute(this.props.data_attribute);
             await this.props.get_group_attribute(this.props.data_attribute.group_attribute);
         }
-        if (form_name === 'attribute_value') {
+        if (nameFormSelect === 'attribute_value') {
             if (!this.props.data_attribute_value.value) { message.error('Thiếu giá trị'); return; }
             await this.props.create_attribute_value(this.props.data_attribute_value);
             await this.props.get_attribute(this.props.data_attribute_value.attribute);
         }
     }
-    on_select = async (value, form_name) => {
-        if (form_name === 'group_attribute') {
+    on_select = async (value, nameFormSelect) => {
+        if (nameFormSelect === 'group_attribute') {
             await this.props.get_group_attribute(value);
             this.props.set_data_attribute({ group_attribute: this.props.data_group_attribute.id });
             this.props.set_data_attribute_value({});
             this.setState({
                 disable_atb: false,
                 disable_atbvl: true,
-                disabled_button: true,
+                disabledButtonCreate: true,
             })
         }
-        if (form_name === 'attribute') {
+        if (nameFormSelect === 'attribute') {
             await this.props.get_attribute(value);
             this.props.set_data_attribute_value({ attribute: this.props.data_attribute.id });
             this.setState({
                 disable_atbvl: false,
             })
         }
-        if (form_name === 'attribute_value') {
+        if (nameFormSelect === 'attribute_value') {
             await this.props.get_attribute_value(value);
             this.setState({
-                disabled_button: false,
+                disabledButtonCreate: false,
             })
         }
     }
@@ -156,18 +156,18 @@ class product_attribute_value extends Component {
                                     <Typography.Text italic strong>Loại thông số</Typography.Text>
                                     <FormSelectItem width={'100%'}
                                         placeholder={'Loại thông số'}
-                                        form_name={'group_attribute'}
+                                        nameFormSelect={'group_attribute'}
                                         options={data_group_attributes.map((item) => ({
                                             label: item.name,
                                             value: item.id,
                                         }))}
                                         value={data_group_attribute.id}
-                                        disabled_select={!this.props.is_edit}
-                                        on_search={this.on_search}
-                                        variable_select={'group_attribute'}
-                                        on_change_select={this.on_select}
-                                        variable_input={'name'}
-                                        on_change_input={this.props.on_change_group_attribute}
+                                        disabledSelect={!this.props.is_edit}
+                                        onSearch={this.onSearch}
+                                        variableSelect={'group_attribute'}
+                                        onChangeSelect={this.on_select}
+                                        variableInputSearch={'name'}
+                                        onChangeInput={this.props.on_change_group_attribute}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -177,18 +177,18 @@ class product_attribute_value extends Component {
                                     <Typography.Text italic strong>Thông số</Typography.Text>
                                     <FormSelectItem width={'100%'}
                                         placeholder={'Thông số'}
-                                        form_name={'attribute'}
+                                        nameFormSelect={'attribute'}
                                         options={data_group_attribute.attributes && data_group_attribute.attributes.map((item) => ({
                                             label: item.name,
                                             value: item.id,
                                         }))}
                                         value={data_attribute.id}
-                                        disabled_select={this.state.disable_atb}
-                                        on_search={this.on_search}
-                                        variable_select={'attribute'}
-                                        on_change_select={this.on_select}
-                                        variable_input={'name'}
-                                        on_change_input={this.props.on_change_attribute}
+                                        disabledSelect={this.state.disable_atb}
+                                        onSearch={this.onSearch}
+                                        variableSelect={'attribute'}
+                                        onChangeSelect={this.on_select}
+                                        variableInputSearch={'name'}
+                                        onChangeInput={this.props.on_change_attribute}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -200,18 +200,18 @@ class product_attribute_value extends Component {
                                     <Typography.Text italic strong>Giá trị</Typography.Text>
                                     <FormSelectItem width={'100%'}
                                         placeholder={'Giá trị'}
-                                        form_name={'attribute_value'}
+                                        nameFormSelect={'attribute_value'}
                                         options={data_attribute.attribute_values && data_attribute.attribute_values.map((item) => ({
                                             label: item.value,
                                             value: item.id,
                                         }))}
                                         value={data_attribute_value.id}
-                                        disabled_select={this.state.disable_atbvl}
-                                        on_search={this.on_search}
-                                        variable_select={'attribute_value'}
-                                        on_change_select={this.on_select}
-                                        variable_input={'value'}
-                                        on_change_input={this.props.on_change_attribute_value}
+                                        disabledSelect={this.state.disable_atbvl}
+                                        onSearch={this.onSearch}
+                                        variableSelect={'attribute_value'}
+                                        onChangeSelect={this.on_select}
+                                        variableInputSearch={'value'}
+                                        onChangeInput={this.props.on_change_attribute_value}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -219,7 +219,7 @@ class product_attribute_value extends Component {
                             <div className='w-1/4'>
                                 <Button className='w-full bg-[#0e97ff] text-white'
                                     onClick={() => this.handle_add_atbvl()}
-                                    disabled={this.state.disabled_button}>Thêm </Button>
+                                    disabled={this.state.disabledButtonCreate}>Thêm </Button>
                             </div>
                         </div>
 

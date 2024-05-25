@@ -12,7 +12,10 @@ import ModalCreate from './modals/modalCreate';
 import ModalDetail from './modals/modalDetail';
 import ModalEdit from './modals/modalEdit';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
-import { data_categorys } from '@datas/dataPermissionsOrigin';
+import { dataCategorys } from '@datas/dataPermissionsOrigin';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -31,49 +34,40 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_category(this.state.dataFilter);
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_categorys, this.props.dataUserPermissions, this.props.isSuperUser);
+        const { dataFilter } = this.state;
+        const { getListCategory, dataUserPermissions, isSuperUser } = this.props;
+        await getListCategory(dataFilter);
+        const dataPermissionsAfterCheck = await handleCheckPermission(dataCategorys, dataUserPermissions, isSuperUser);
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    openModal = async (name, value, id) => {
-        this.props.set_data_category({});
-        if (name === 'create') {
-            this.setState({ modalCreate: value });
-        }
-        if (name === 'detail') {
-            if (id === undefined) {
-                this.setState({ modalDetail: value, data_category: {} });
-            } else {
-                this.setState({ modalDetail: value });
-                await this.props.get_category(id);
-            }
-        }
-        if (name === 'edit') {
-            if (id === undefined) {
-                this.setState({ modalEdit: value, data_category: {} });
-            } else {
-                this.setState({ modalEdit: value });
-                await this.props.get_category(id);
-            }
-        }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataCategory, getDataCategory } = this.props;
+        const actions = {
+            setData: setDataCategory,
+            getData: getDataCategory,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
-        let listItemSelected = this.state.listItemSelected;
-        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_category(listItemSelected); }
-        if (this.state.typeItemDropButton === 2) { await this.props.edit_list_category(listItemSelected, { is_active: false }); }
-        if (this.state.typeItemDropButton === 3) { await this.props.edit_list_category(listItemSelected, { is_active: true }); }
-        await this.props.get_list_category(this.state.dataFilter);
-        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+        const { listItemSelected, typeItemDropButton, dataFilter } = this.state;
+        const { deleteListCategory, editListCategory, getListCategory } = this.props;
+        const actions = {
+            deleteList: deleteListCategory,
+            editList: editListCategory,
+            getList: getListCategory
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(typeItemDropButton, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_category(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListCategory } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListCategory(newDataFilter);
     }
     render() {
         const columns = [
@@ -117,22 +111,21 @@ class index extends Component {
             },
 
         ];
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, typeItemDropButton,
+            modalCreate, modalDetail, modalEdit } = this.state;
+        const { isLoading, dataCategorys, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['product.delete_category'] },
             { key: 2, label: 'Khóa', disabled: !dataPermissionsAfterCheck['product.change_category'] },
             { key: 3, label: 'Mở', disabled: !dataPermissionsAfterCheck['product.change_category'] },
         ];
-        const listItemSelected = this.state.listItemSelected;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dataFilter = this.state.dataFilter;
-        let typeItemDropButton = this.state.typeItemDropButton;
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Button disabled={!dataPermissionsAfterCheck['product.add_category']}
@@ -167,26 +160,26 @@ class index extends Component {
                             <Divider>DANH MỤC</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_categorys} pagination={false}
+                                    columns={columns} dataSource={dataCategorys} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modalCreate && dataPermissionsAfterCheck['product.add_category'] &&
-                    <ModalCreate modalCreate={this.state.modalCreate}
+                {modalCreate && dataPermissionsAfterCheck['product.add_category'] &&
+                    <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
-                {this.state.modalDetail && dataPermissionsAfterCheck['product.view_category'] &&
-                    <ModalDetail modalDetail={this.state.modalDetail}
+                        dataFilter={dataFilter} />}
+                {modalDetail && dataPermissionsAfterCheck['product.view_category'] &&
+                    <ModalDetail modalDetail={modalDetail}
                         openModal={this.openModal} />}
-                {this.state.modalEdit && dataPermissionsAfterCheck['product.change_category'] &&
-                    <ModalEdit modalEdit={this.state.modalEdit}
+                {modalEdit && dataPermissionsAfterCheck['product.change_category'] &&
+                    <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
+                        dataFilter={dataFilter} />}
             </>
         );
     }
@@ -194,8 +187,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_categorys: state.category.data_categorys,
-        data_category: state.category.data_category,
+        dataCategorys: state.category.dataCategorys,
+        dataCategory: state.category.dataCategory,
         dataMeta: state.category.dataMeta,
         isLoading: state.category.isLoading,
         isResult: state.category.isResult,
@@ -206,11 +199,11 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_category: (dataFilter) => dispatch(actions.get_list_category_redux(dataFilter)),
-        get_category: (id) => dispatch(actions.get_category_redux(id)),
-        edit_list_category: (id, data) => dispatch(actions.edit_list_category_redux(id, data)),
-        delete_list_category: (id) => dispatch(actions.delete_list_category_redux(id)),
-        set_data_category: (id) => dispatch(actions.set_data_category_redux(id)),
+        getListCategory: (dataFilter) => dispatch(actions.getListCategoryRedux(dataFilter)),
+        getDataCategory: (id) => dispatch(actions.getDataCategoryRedux(id)),
+        editListCategory: (id, data) => dispatch(actions.editListCategoryRedux(id, data)),
+        deleteListCategory: (id) => dispatch(actions.deleteListCategoryRedux(id)),
+        setDataCategory: (id) => dispatch(actions.setDataCategoryRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

@@ -27,9 +27,9 @@ class index extends Component {
     }
     async componentDidMount() {
         this.props.get_list_product(this.props.dataFilter);
-        this.props.get_list_brand({ page: 1, limit: 100, search: '' });
+        this.props.getListBrand({ page: 1, limit: 100, search: '' });
         this.props.getListTag({ page: 1, limit: 100, search: '' });
-        this.props.get_list_category({ page: 1, limit: 100, search: '' });
+        this.props.getListCategory({ page: 1, limit: 100, search: '' });
         this.setState({ dataFilter: this.props.dataFilter });
 
         let dataPermissionsAfterCheck = await handleCheckPermission(data_products, this.props.dataUserPermissions, this.props.isSuperUser);
@@ -219,8 +219,8 @@ class index extends Component {
                     <DrawerFilter drawer_filter={this.state.drawer_filter}
                         open_drawer={this.open_drawer} dataFilter={this.state.dataFilter}
                         onChangePage={this.onChangePage}
-                        data_brands={this.props.data_brands} dataTags={this.props.dataTags}
-                        data_categorys={this.props.data_categorys} />
+                        dataBrands={this.props.dataBrands} dataTags={this.props.dataTags}
+                        dataCategorys={this.props.dataCategorys} />
                 }
             </>
         );
@@ -236,8 +236,8 @@ const mapStateToProps = state => {
         isResult: state.product.isResult,
         dataFilter: state.product.dataFilter,
         dataTags: state.tag.dataTags,
-        data_brands: state.brand.data_brands,
-        data_categorys: state.category.data_categorys,
+        dataBrands: state.brand.dataBrands,
+        dataCategorys: state.category.dataCategorys,
 
         dataUserPermissions: state.user.dataUserPermissions,
         isSuperUser: state.user.isSuperUser,
@@ -251,9 +251,9 @@ const mapDispatchToProps = dispatch => {
         delete_list_product: (id) => dispatch(actions.delete_list_product_redux(id)),
         set_data_product: (id) => dispatch(actions.set_data_product_redux(id)),
         set_dataFilter_product: (data) => dispatch(actions.set_dataFilter_product_redux(data)),
-        get_list_brand: (dataFilter) => dispatch(actions.get_list_brand_redux(dataFilter)),
+        getListBrand: (dataFilter) => dispatch(actions.getListBrandRedux(dataFilter)),
         getListTag: (dataFilter) => dispatch(actions.getListTagRedux(dataFilter)),
-        get_list_category: (dataFilter) => dispatch(actions.get_list_category_redux(dataFilter)),
+        getListCategory: (dataFilter) => dispatch(actions.getListCategoryRedux(dataFilter)),
 
     };
 };

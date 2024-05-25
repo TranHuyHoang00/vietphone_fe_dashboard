@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_attribute, get_attribute, create_attribute, delete_attribute, edit_attribute } from '@services/attribute_service';
+import { getListAttribute, get_attribute, create_attribute, delete_attribute, edit_attribute } from '@services/attribute_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_attribute_redux = (dataFilter) => {
+export const getListAttributeRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(attribute_start());
-            let data = await get_list_attribute(dataFilter);
+            let data = await getListAttribute(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_attribute_success(data.data.data));
             } else {

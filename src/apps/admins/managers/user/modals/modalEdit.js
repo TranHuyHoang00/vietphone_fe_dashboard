@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import FormSelectItem from '@components/selects/form_select_item';
+import FormSelectItem from '@components/selects/formSelectItem';
 import FormSelectInput from '@components/selects/formSelectInput';
 import ModalFooter from '@components/modal/modalFooter';
 class index extends Component {
@@ -106,11 +106,11 @@ class index extends Component {
                                     label: item.name,
                                     value: item.id,
                                 }))}
-                                disabled_select={false}
-                                disabled_button={true}
-                                disabled_search={true}
-                                variable_select={'groups'}
-                                on_change_select={this.props.on_change_user}
+                                disabledSelect={false}
+                                disabledButtonCreate={true}
+                                disabledSearch={true}
+                                variableSelect={'groups'}
+                                onChangeSelect={this.props.on_change_user}
                             />
                         </div>
                         <FormSelectInput name={'Trạng thái'} variable={'is_active'} value={data_user.is_active}

@@ -1,8 +1,8 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_flash_sales: [],
-    data_flash_sale: {},
+    dataFlashSales: [],
+    dataFlashSale: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -33,7 +33,7 @@ const flash_sale_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_flash_sales: action.data.flash_sales,
+                dataFlashSales: action.data.flash_sales,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_FLASH_SALE_SUCCESS:
@@ -41,7 +41,7 @@ const flash_sale_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_flash_sale: action.data
+                dataFlashSale: action.data
             }
         case action_types.CREATE_FLASH_SALE_SUCCESS:
             return {
@@ -70,14 +70,14 @@ const flash_sale_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_FLASH_SALE:
             return {
                 ...state,
-                data_flash_sale: action.data,
+                dataFlashSale: action.data,
             }
         case action_types.ON_CHANGE_FLASH_SALE:
-            let copyState = { ...state.data_flash_sale };
+            let copyState = { ...state.dataFlashSale };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_flash_sale: {
+                dataFlashSale: {
                     ...copyState,
                 }
             }

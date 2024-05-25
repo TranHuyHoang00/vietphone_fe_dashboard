@@ -13,27 +13,23 @@ class index extends Component {
     async componentDidMount() {
     }
     render() {
-        let data_category = this.props.data_category;
-        let isLoading = this.props.isLoading;
-
+        const { dataCategory, isLoading, modalDetail, openModal } = this.props;
         return (
-            <Modal title="CHI TIẾT" open={this.props.modalDetail}
-                onCancel={() => this.props.openModal("detail", false)} width={400}
+            <Modal title="CHI TIẾT" open={modalDetail}
+                onCancel={() => openModal("detail", false)} width={400}
                 footer={[
-                    <>
-                        <Button onClick={() => this.props.openModal("detail", false)}
-                            className='bg-[#e94138] text-white'>
-                            Hủy bỏ
-                        </Button>
-                    </>
+                    <Button onClick={() => openModal("detail", false)}
+                        className='bg-[#e94138] text-white'>
+                        Hủy bỏ
+                    </Button>
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {imageLine13('Ảnh', data_category.image, 50, 50)}
-                        {textLine13('Tên danh mục', data_category.name)}
-                        {textLine13('Icon', data_category.icon)}
-                        {textLine13('Mô tả', data_category.description)}
-                        {textLine13('Trạng thái', (data_category && data_category.is_active ? 'Mở' : 'Khóa'))}
+                        {imageLine13('Ảnh', dataCategory.image, 50, 50)}
+                        {textLine13('Tên danh mục', dataCategory.name)}
+                        {textLine13('Icon', dataCategory.icon)}
+                        {textLine13('Mô tả', dataCategory.description)}
+                        {textLine13('Trạng thái', (dataCategory && dataCategory.is_active ? 'Mở' : 'Khóa'))}
                     </div>
                 </Spin>
             </Modal>
@@ -43,7 +39,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_category: state.category.data_category,
+        dataCategory: state.category.dataCategory,
         isLoading: state.category.isLoading,
     };
 };

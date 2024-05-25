@@ -36,31 +36,31 @@ const data_locations = [
 const data_attribute_values = [
     "product.view_attributevalue", "product.change_attributevalue", "product.delete_attributevalue", "product.add_attributevalue",
 ];
-const data_attributes = [
+const dataAttributes = [
     "product.view_attribute", "product.change_attribute", "product.delete_attribute", "product.add_attribute",
 ];
 const data_group_attributes = [
     "product.view_groupattribute", "product.change_groupattribute", "product.delete_groupattribute", "product.add_groupattribute",
 ];
-const data_variant_attribute_groups = [
+const dataVariantAttributeGroups = [
     "product.view_variantattributegroup", "product.change_variantattributegroup", "product.delete_variantattributegroup", "product.add_variantattributegroup",
 ];
 const dataTags = [
     "product.view_tag", "product.change_tag", "product.delete_tag", "product.add_tag",
 ];
-const data_brands = [
+const dataBrands = [
     "product.view_brand", "product.change_brand", "product.delete_brand", "product.add_brand",
 ];
-const data_categorys = [
+const dataCategorys = [
     "product.view_category", "product.change_category", "product.delete_category", "product.add_category",
 ];
-const data_flash_sales = [
+const dataFlashSales = [
     "promotion.view_flashsale", "promotion.change_flashsale", "promotion.delete_flashsale", "promotion.add_flashsale",
 ];
-const data_posts = [
+const dataPosts = [
     "post.view_post", "post.change_post", "post.delete_post", "post.add_post",
 ];
-const data_category_posts = [
+const dataCategoryPosts = [
     "post.view_category", "post.change_category", "post.delete_category", "post.add_category",
 ];
 const data_syncs = [
@@ -75,8 +75,8 @@ export {
     data_orders,
     data_products, data_flash_sale_items,
     data_banners, data_locations,
-    data_attribute_values, data_attributes, data_group_attributes, data_variant_attribute_groups,
-    dataTags, data_brands, data_categorys, data_flash_sales,
-    data_posts, data_category_posts,
+    data_attribute_values, dataAttributes, data_group_attributes, dataVariantAttributeGroups,
+    dataTags, dataBrands, dataCategorys, dataFlashSales,
+    dataPosts, dataCategoryPosts,
     data_syncs, data_tasks,
 }

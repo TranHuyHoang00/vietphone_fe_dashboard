@@ -23,7 +23,7 @@ class form_select_data extends Component {
                             {menu}
                             <Divider />
                             <Space>
-                                <Input.Search disabled={this.props.disabled_search}
+                                <Input.Search disabled={this.props.disabledSearch}
                                     onChange={(event) => this.props.onChangeInput(event, this.props.variable, this.props.type, this.props.name_funtion)}
                                     onSearch={(value) => this.props.on_search_data_api(value, this.props.name_funtion)}
                                     placeholder={this.props.name} />

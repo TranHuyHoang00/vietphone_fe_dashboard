@@ -12,16 +12,11 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_post: {},
         }
     }
     async componentDidMount() {
-        this.props.get_list_category_post({ page: 1, limit: 100, search: '' });
-    }
-    async componentDidUpdate(prevProps) {
-        if (prevProps.data_post !== this.props.data_post) {
-            this.setState({ data_post: this.props.data_post })
-        }
+        const { getListCategoryPost } = this.props;
+        getListCategoryPost({ page: 1, limit: 100, search: '' });
     }
     validationData = (data) => {
         if (!data.title) {
@@ -36,59 +31,46 @@ class index extends Component {
         return { check: true };
     }
     handleEdit = async () => {
-        let data_post = this.props.data_post;
-        data_post.body = this.state.data_post.body;
-        let result = this.validationData(data_post);
+        const { dataPost, isResult, openModal, getListPost, editPost, dataFilter } = this.props;
+        const result = this.validationData(dataPost);
         if (result.check) {
-            await this.props.edit_post(data_post.id, data_post);
-            let isResult = this.props.isResult;
+            await editPost(dataPost.id, dataPost);
             if (isResult) {
-                this.props.openModal("edit", false);
-                await this.props.get_list_post(this.props.dataFilter);
+                openModal("edit", false);
+                await getListPost(dataFilter);
             }
         } else {
             message.error(result.mess);
         }
     }
-    onchange_ReactQuill = (value) => {
-        this.setState({
-            data_post: {
-                ...this.state.data_post,
-                body: value,
-            }
-        });
-    }
     render() {
-        let data_post = this.props.data_post;
-        let isLoading = this.props.isLoading;
-        let data_category_posts = this.props.data_category_posts;
+        const { dataPost, isLoading, onChangePost, modalEdit, openModal, dataCategoryPosts } = this.props;
         return (
-            <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
-                onCancel={() => this.props.openModal("edit", false)} width={800}
+            <Modal title="CHỈNH SỬA" open={modalEdit}
+                onCancel={() => openModal("edit", false)} width={800}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'edit'}
+                    <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
                         <div className='flex flex-col flex-wrap sm:flex-row gap-[10px]'>
-                            <FormInput name={'Tiêu đề'} variable={'title'} value={data_post.title}
+                            <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost.title}
                                 important={true}
-                                onChangeInput={this.props.on_change_post} />
+                                onChangeInput={onChangePost} />
 
-
-                            <FormInput name={'Slug'} variable={'slug'} value={data_post.slug}
+                            <FormInput name={'Slug'} variable={'slug'} value={dataPost.slug}
                                 important={true}
-                                onChangeInput={this.props.on_change_post} />
+                                onChangeInput={onChangePost} />
 
-                            <FormSelectInput name={'Loại bài viết'} variable={'category'} value={data_post.category}
+                            <FormSelectInput name={'Loại bài viết'} variable={'category'} value={dataPost.category}
                                 important={true} width={200}
-                                options={data_category_posts.map((item) => ({
+                                options={dataCategoryPosts.map((item) => ({
                                     label: item.title,
                                     value: item.id,
                                 }))}
-                                onChangeInput={this.props.on_change_post} />
+                                onChangeInput={onChangePost} />
                         </div>
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>
@@ -99,8 +81,8 @@ class index extends Component {
                                 modules={index.modules}
                                 formats={index.formats}
                                 bounds={'.app'}
-                                value={this.state.data_post.body}
-                                onChange={(value) => this.onchange_ReactQuill(value)}
+                                value={dataPost.body}
+                                onChange={(value) => onChangePost(value, 'body')}
                             />
                         </div>
                     </div>
@@ -112,18 +94,18 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_category_posts: state.category_post.data_category_posts,
-        data_post: state.post.data_post,
+        dataCategoryPosts: state.category_post.dataCategoryPosts,
+        dataPost: state.post.dataPost,
         isLoading: state.post.isLoading,
         isResult: state.post.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_post: (dataFilter) => dispatch(actions.get_list_post_redux(dataFilter)),
-        edit_post: (id, data) => dispatch(actions.edit_post_redux(id, data)),
-        on_change_post: (id, value) => dispatch(actions.on_change_post_redux(id, value)),
-        get_list_category_post: (dataFilter) => dispatch(actions.get_list_category_post_redux(dataFilter)),
+        getListPost: (dataFilter) => dispatch(actions.getListPostRedux(dataFilter)),
+        editPost: (id, data) => dispatch(actions.editPostRedux(id, data)),
+        onChangePost: (id, value) => dispatch(actions.onChangePostRedux(id, value)),
+        getListCategoryPost: (dataFilter) => dispatch(actions.getListCategoryPostRedux(dataFilter)),
 
     };
 };

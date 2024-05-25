@@ -12,9 +12,9 @@ class drawer_filter extends Component {
     }
     render() {
         let dataFilter = this.props.dataFilter;
-        let data_brands = [{ name: 'TẤT CẢ', id: '' }, ...this.props.data_brands];
+        let dataBrands = [{ name: 'TẤT CẢ', id: '' }, ...this.props.dataBrands];
         let dataTags = [{ name: 'TẤT CẢ', id: '' }, ...this.props.dataTags];
-        let data_categorys = [{ name: 'TẤT CẢ', id: '' }, ...this.props.data_categorys];
+        let dataCategorys = [{ name: 'TẤT CẢ', id: '' }, ...this.props.dataCategorys];
 
         return (
             <Drawer title="Bộ lọc nâng cao" onClose={() => this.props.open_drawer('filter', false)} open={this.props.drawer_filter}>
@@ -37,14 +37,14 @@ class drawer_filter extends Component {
                     </div>
                     <FormSelectInput name={'Loại sản phẩm'} variable={'category'} value={dataFilter.category}
                         important={false} width={'100%'}
-                        options={data_categorys.map((item) => ({
+                        options={dataCategorys.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}
                         onChangeInput={this.props.onChangePage} />
                     <FormSelectInput name={'Thương hiệu'} variable={'product_brand'} value={dataFilter.product_brand}
                         important={false} width={'100%'}
-                        options={data_brands.map((item) => ({
+                        options={dataBrands.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}

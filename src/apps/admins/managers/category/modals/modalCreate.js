@@ -23,57 +23,56 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        let result = this.validationData(this.props.data_category);
+        const { dataCategory, isResult, openModal, getListCategory, createCategory, dataFilter } = this.props;
+        const result = this.validationData(dataCategory);
         if (result.check) {
-            await this.props.create_category(this.props.data_category);
-            let isResult = this.props.isResult;
+            await createCategory(dataCategory);
             if (isResult) {
-                this.props.openModal("create", false);
-                await this.props.get_list_category(this.props.dataFilter);
+                await getListCategory(dataFilter);
+                openModal("create", false);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        let data_category = this.props.data_category;
-        let isLoading = this.props.isLoading;
+        const { dataCategory, isLoading, onChangeCategory, modalCreate, openModal } = this.props;
         return (
 
-            <Modal title="TẠO MỚI" open={this.props.modalCreate}
-                onCancel={() => this.props.openModal("create", false)} width={400}
+            <Modal title="TẠO MỚI" open={modalCreate}
+                onCancel={() => openModal("create", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'create'}
+                    <ModalFooter openModal={openModal} type={'create'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleCreate} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormImage name={'Ảnh'} variable={'image'} value={data_category.image}
+                        <FormImage name={'Ảnh'} variable={'image'} value={dataCategory.image}
                             important={true}
                             htmlFor={'loadImageCreate'} width={100} height={100}
-                            onChangeInput={this.props.on_change_category} />
+                            onChangeInput={onChangeCategory} />
 
-                        <FormInput name={'Tên danh mục'} variable={'name'} value={data_category.name}
+                        <FormInput name={'Tên danh mục'} variable={'name'} value={dataCategory.name}
                             important={true}
-                            onChangeInput={this.props.on_change_category} />
+                            onChangeInput={onChangeCategory} />
 
-                        <FormInput name={'Icon'} variable={'icon'} value={data_category.icon}
+                        <FormInput name={'Icon'} variable={'icon'} value={dataCategory.icon}
                             important={false}
-                            onChangeInput={this.props.on_change_category} />
+                            onChangeInput={onChangeCategory} />
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={data_category.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataCategory.description}
                             important={false}
-                            onChangeInput={this.props.on_change_category} />
+                            onChangeInput={onChangeCategory} />
 
-                        <FormSelectInput name={'Trạng thái'} variable={'is_active'} value={data_category.is_active}
+                        <FormSelectInput name={'Trạng thái'} variable={'is_active'} value={dataCategory.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },
                                 { value: false, label: 'Khóa' },
                             ]}
-                            onChangeInput={this.props.on_change_category} />
+                            onChangeInput={onChangeCategory} />
 
                     </div>
                 </Spin>
@@ -84,16 +83,16 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_category: state.category.data_category,
+        dataCategory: state.category.dataCategory,
         isLoading: state.category.isLoading,
         isResult: state.category.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_category: (dataFilter) => dispatch(actions.get_list_category_redux(dataFilter)),
-        create_category: (data) => dispatch(actions.create_category_redux(data)),
-        on_change_category: (id, value) => dispatch(actions.on_change_category_redux(id, value)),
+        getListCategory: (dataFilter) => dispatch(actions.getListCategoryRedux(dataFilter)),
+        createCategory: (data) => dispatch(actions.createCategoryRedux(data)),
+        onChangeCategory: (id, value) => dispatch(actions.onChangeCategoryRedux(id, value)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

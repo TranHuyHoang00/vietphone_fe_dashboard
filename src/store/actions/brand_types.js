@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_brand, get_brand, create_brand, delete_brand, edit_brand } from '@services/brand_service';
+import { getListBrand, getDataBrand, createBrand, deleteBrand, editBrand } from '@services/brand_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_brand_redux = (dataFilter) => {
+export const getListBrandRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(brand_start());
-            let data = await get_list_brand(dataFilter);
+            let data = await getListBrand(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_brand_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_list_brand_redux = (dataFilter) => {
         }
     }
 }
-export const get_brand_redux = (id) => {
+export const getDataBrandRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(brand_start());
-            let data = await get_brand(id);
+            let data = await getDataBrand(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_brand_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_brand_redux = (id) => {
         }
     }
 }
-export const create_brand_redux = (data_brand) => {
+export const createBrandRedux = (dataBrand) => {
     return async (dispatch, getState) => {
         try {
             dispatch(brand_start());
-            let data = await create_brand(data_brand);
+            let data = await createBrand(dataBrand);
             if (data && data.data && data.data.success === 1) {
                 dispatch(brand_success());
                 message.success('Thành công');
@@ -55,12 +55,12 @@ export const create_brand_redux = (data_brand) => {
         }
     }
 }
-export const delete_list_brand_redux = (list_id) => {
+export const deleteListBrandRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(brand_start());
         for (const id of list_id) {
             try {
-                let data = await delete_brand(id);
+                let data = await deleteBrand(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -73,12 +73,12 @@ export const delete_list_brand_redux = (list_id) => {
         dispatch(brand_success());
     }
 }
-export const edit_list_brand_redux = (list_id, data_brand) => {
+export const editListBrandRedux = (list_id, dataBrand) => {
     return async (dispatch, getState) => {
         dispatch(brand_start());
         for (const id of list_id) {
             try {
-                let data = await edit_brand(id, data_brand);
+                let data = await editBrand(id, dataBrand);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_brand_redux = (list_id, data_brand) => {
         dispatch(brand_success());
     }
 }
-export const edit_brand_redux = (id, data_brand) => {
+export const editBrandRedux = (id, dataBrand) => {
     return async (dispatch, getState) => {
         try {
             dispatch(brand_start());
-            let data = await edit_brand(id, data_brand);
+            let data = await editBrand(id, dataBrand);
             if (data && data.data && data.data.success === 1) {
                 dispatch(brand_success());
                 message.success('Thành công');
@@ -127,12 +127,12 @@ export const get_brand_success = (data) => ({
     type: action_types.GET_BRAND_SUCCESS,
     data
 })
-export const on_change_brand_redux = (value, id) => ({
+export const onChangeBrandRedux = (value, id) => ({
     type: action_types.ON_CHANGE_BRAND,
     value,
     id,
 })
-export const set_data_brand_redux = (data) => ({
+export const setDataBrandRedux = (data) => ({
     type: action_types.SET_DATA_BRAND,
     data,
 })

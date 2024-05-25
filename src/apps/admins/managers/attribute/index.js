@@ -11,7 +11,7 @@ import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
-import { data_attributes } from '@datas/dataPermissionsOrigin';
+import { dataAttributes } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -29,8 +29,8 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_attribute(this.state.dataFilter);
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_attributes, this.props.dataUserPermissions, this.props.isSuperUser);
+        this.props.getListAttribute(this.state.dataFilter);
+        let dataPermissionsAfterCheck = await handleCheckPermission(dataAttributes, this.props.dataUserPermissions, this.props.isSuperUser);
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
@@ -52,7 +52,7 @@ class index extends Component {
     funcDropButtonHeaderOfTable = async () => {
         let listItemSelected = this.state.listItemSelected;
         if (this.state.typeItemDropButton === 1) { await this.props.delete_list_attribute(listItemSelected); }
-        await this.props.get_list_attribute(this.state.dataFilter);
+        await this.props.getListAttribute(this.state.dataFilter);
         if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
     }
     onChangePage = async (value, type) => {
@@ -61,7 +61,7 @@ class index extends Component {
         if (type === 'page') { dataFilter.page = value; }
         if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
         this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_attribute(dataFilter);
+        await this.props.getListAttribute(dataFilter);
     }
     render() {
         const columns = [
@@ -136,7 +136,7 @@ class index extends Component {
                             <Divider>THÔNG SỐ</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_attributes} pagination={false}
+                                    columns={columns} dataSource={this.props.dataAttributes} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
                                     showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
@@ -160,7 +160,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_attributes: state.attribute.data_attributes,
+        dataAttributes: state.attribute.dataAttributes,
         data_attribute: state.attribute.data_attribute,
         dataMeta: state.attribute.dataMeta,
         isLoading: state.attribute.isLoading,
@@ -172,7 +172,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_attribute: (dataFilter) => dispatch(actions.get_list_attribute_redux(dataFilter)),
+        getListAttribute: (dataFilter) => dispatch(actions.getListAttributeRedux(dataFilter)),
         get_attribute: (id) => dispatch(actions.get_attribute_redux(id)),
         edit_list_attribute: (id, data) => dispatch(actions.edit_list_attribute_redux(id, data)),
         delete_list_attribute: (id) => dispatch(actions.delete_list_attribute_redux(id)),

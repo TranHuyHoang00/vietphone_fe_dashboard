@@ -13,7 +13,10 @@ import ModalDetail from './modals/modalDetail';
 import ModalEdit from './modals/modalEdit';
 import moment from 'moment';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
-import { data_flash_sales } from '@datas/dataPermissionsOrigin';
+import { dataFlashSales } from '@datas/dataPermissionsOrigin';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -32,49 +35,40 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_flash_sale(this.state.dataFilter);
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_flash_sales, this.props.dataUserPermissions, this.props.isSuperUser);
+        const { dataFilter } = this.state;
+        const { getListFlashSale, dataUserPermissions, isSuperUser } = this.props;
+        await getListFlashSale(dataFilter);
+        const dataPermissionsAfterCheck = await handleCheckPermission(dataFlashSales, dataUserPermissions, isSuperUser);
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    openModal = async (name, value, id) => {
-        this.props.set_data_flash_sale({});
-        if (name === 'create') {
-            this.setState({ modalCreate: value });
-        }
-        if (name === 'detail') {
-            if (id === undefined) {
-                this.setState({ modalDetail: value, data_flash_sale: {} });
-            } else {
-                this.setState({ modalDetail: value });
-                await this.props.get_flash_sale(id);
-            }
-        }
-        if (name === 'edit') {
-            if (id === undefined) {
-                this.setState({ modalEdit: value, data_flash_sale: {} });
-            } else {
-                this.setState({ modalEdit: value });
-                await this.props.get_flash_sale(id);
-            }
-        }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataFlashSale, getDataFlashSale } = this.props;
+        const actions = {
+            setData: setDataFlashSale,
+            getData: getDataFlashSale,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
-        let listItemSelected = this.state.listItemSelected;
-        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_flash_sale(listItemSelected); }
-        if (this.state.typeItemDropButton === 2) { await this.props.edit_list_flash_sale(listItemSelected, { is_active: false }); }
-        if (this.state.typeItemDropButton === 3) { await this.props.edit_list_flash_sale(listItemSelected, { is_active: true }); }
-        await this.props.get_list_flash_sale(this.state.dataFilter);
-        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+        const { listItemSelected, typeItemDropButton, dataFilter } = this.state;
+        const { deleteListFlashSale, editListFlashSale, getListFlashSale } = this.props;
+        const actions = {
+            deleteList: deleteListFlashSale,
+            editList: editListFlashSale,
+            getList: getListFlashSale
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(typeItemDropButton, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_flash_sale(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListFlashSale } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListFlashSale(newDataFilter);
     }
     render() {
         const columns = [
@@ -119,23 +113,21 @@ class index extends Component {
             },
 
         ];
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, typeItemDropButton,
+            modalCreate, modalDetail, modalEdit } = this.state;
+        const { isLoading, dataFlashSales, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['promotion.delete_flashsale'] },
             { key: 2, label: 'Khóa', disabled: !dataPermissionsAfterCheck['promotion.change_flashsale'] },
             { key: 3, label: 'Mở', disabled: !dataPermissionsAfterCheck['promotion.change_flashsale'] },
         ];
-        const listItemSelected = this.state.listItemSelected;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dataFilter = this.state.dataFilter;
-        let typeItemDropButton = this.state.typeItemDropButton;
-
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Button disabled={!dataPermissionsAfterCheck['promotion.add_flashsale']}
@@ -170,26 +162,26 @@ class index extends Component {
                             <Divider>FLASH SALE</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_flash_sales} pagination={false}
+                                    columns={columns} dataSource={dataFlashSales} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modalCreate && dataPermissionsAfterCheck['promotion.add_flashsale'] &&
-                    <ModalCreate modalCreate={this.state.modalCreate}
+                {modalCreate && dataPermissionsAfterCheck['promotion.add_flashsale'] &&
+                    <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
-                {this.state.modalDetail && dataPermissionsAfterCheck['promotion.view_flashsale'] &&
-                    <ModalDetail modalDetail={this.state.modalDetail}
+                        dataFilter={dataFilter} />}
+                {modalDetail && dataPermissionsAfterCheck['promotion.view_flashsale'] &&
+                    <ModalDetail modalDetail={modalDetail}
                         openModal={this.openModal} />}
-                {this.state.modalEdit && dataPermissionsAfterCheck['promotion.change_flashsale'] &&
-                    <ModalEdit modalEdit={this.state.modalEdit}
+                {modalEdit && dataPermissionsAfterCheck['promotion.change_flashsale'] &&
+                    <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
+                        dataFilter={dataFilter} />}
             </>
         );
     }
@@ -197,8 +189,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_flash_sales: state.flash_sale.data_flash_sales,
-        data_flash_sale: state.flash_sale.data_flash_sale,
+        dataFlashSales: state.flash_sale.dataFlashSales,
+        dataFlashSale: state.flash_sale.dataFlashSale,
         dataMeta: state.flash_sale.dataMeta,
         isLoading: state.flash_sale.isLoading,
         isResult: state.flash_sale.isResult,
@@ -209,11 +201,11 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_flash_sale: (dataFilter) => dispatch(actions.get_list_flash_sale_redux(dataFilter)),
-        get_flash_sale: (id) => dispatch(actions.get_flash_sale_redux(id)),
-        edit_list_flash_sale: (id, data) => dispatch(actions.edit_list_flash_sale_redux(id, data)),
-        delete_list_flash_sale: (id) => dispatch(actions.delete_list_flash_sale_redux(id)),
-        set_data_flash_sale: (id) => dispatch(actions.set_data_flash_sale_redux(id)),
+        getListFlashSale: (dataFilter) => dispatch(actions.getListFlashSaleRedux(dataFilter)),
+        getDataFlashSale: (id) => dispatch(actions.getDataFlashSaleRedux(id)),
+        editListFlashSale: (id, data) => dispatch(actions.editListFlashSaleRedux(id, data)),
+        deleteListFlashSale: (id) => dispatch(actions.deleteListFlashSaleRedux(id)),
+        setDataFlashSale: (id) => dispatch(actions.setDataFlashSaleRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

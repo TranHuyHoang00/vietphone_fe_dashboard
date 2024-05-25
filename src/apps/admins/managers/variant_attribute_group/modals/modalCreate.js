@@ -5,7 +5,7 @@ import * as actions from '@actions';
 import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import ModalFooter from '@components/modal/modalFooter';
-import FormSelectItem from '@components/selects/form_select_item';
+import FormSelectItem from '@components/selects/formSelectItem';
 
 class index extends Component {
     constructor(props) {
@@ -14,7 +14,8 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_attribute({ page: 1, limit: 100, search: '' })
+        const { getListAttribute } = this.props;
+        getListAttribute({ page: 1, limit: 100, search: '' });
     }
     validationData = (data) => {
         if (!data.name) {
@@ -23,53 +24,52 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        let result = this.validationData(this.props.data_variant_attribute_group);
+        const { dataVariantAttributeGroup, isResult, openModal, getListVariantAttributeGroup, createVariantAttributeGroup, dataFilter } = this.props;
+        const result = this.validationData(dataVariantAttributeGroup);
         if (result.check) {
-            await this.props.create_variant_attribute_group(this.props.data_variant_attribute_group);
-            let isResult = this.props.isResult;
+            await createVariantAttributeGroup(dataVariantAttributeGroup);
             if (isResult) {
-                this.props.openModal("create", false);
-                await this.props.get_list_variant_attribute_group(this.props.dataFilter);
+                await getListVariantAttributeGroup(dataFilter);
+                openModal("create", false);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        let data_variant_attribute_group = this.props.data_variant_attribute_group;
-        let isLoading = this.props.isLoading;
-        let data_attributes = this.props.data_attributes;
+        const { dataVariantAttributeGroup, isLoading, onChangeVariantAttributeGroup, modalCreate, openModal, dataAttributes } = this.props;
+
         return (
 
-            <Modal title="TẠO MỚI" open={this.props.modalCreate}
-                onCancel={() => this.props.openModal("create", false)} width={400}
+            <Modal title="TẠO MỚI" open={modalCreate}
+                onCancel={() => openModal("create", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'create'}
+                    <ModalFooter openModal={openModal} type={'create'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleCreate} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Tên TS-SP'} variable={'name'} value={data_variant_attribute_group.name}
+                        <FormInput name={'Tên TS-SP'} variable={'name'} value={dataVariantAttributeGroup.name}
                             important={true}
-                            onChangeInput={this.props.on_change_variant_attribute_group} />
+                            onChangeInput={onChangeVariantAttributeGroup} />
 
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>Thông số
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
                             <FormSelectItem width={'100%'} mode={'multiple'}
-                                variable_select={'attribute'}
-                                value={data_variant_attribute_group.variant_attribute_group}
-                                on_change_select={this.props.on_change_variant_attribute_group}
-                                options={data_attributes.map((item) => ({
+                                variableSelect={'attribute'}
+                                value={dataVariantAttributeGroup.variant_attribute_group}
+                                onChangeSelect={onChangeVariantAttributeGroup}
+                                options={dataAttributes.map((item) => ({
                                     label: item.name,
                                     value: item.id,
                                 }))}
-                                disabled_select={false}
-                                disabled_button={true}
-                                disabled_search={true}
+                                disabledSelect={false}
+                                disabledButtonCreate={true}
+                                disabledSearch={true}
                             />
                         </div>
 
@@ -82,18 +82,18 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_variant_attribute_group: state.variant_attribute_group.data_variant_attribute_group,
+        dataVariantAttributeGroup: state.variant_attribute_group.dataVariantAttributeGroup,
         isLoading: state.variant_attribute_group.isLoading,
         isResult: state.variant_attribute_group.isResult,
-        data_attributes: state.attribute.data_attributes,
+        dataAttributes: state.attribute.dataAttributes,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_variant_attribute_group: (dataFilter) => dispatch(actions.get_list_variant_attribute_group_redux(dataFilter)),
-        create_variant_attribute_group: (data) => dispatch(actions.create_variant_attribute_group_redux(data)),
-        on_change_variant_attribute_group: (id, value) => dispatch(actions.on_change_variant_attribute_group_redux(id, value)),
-        get_list_attribute: (dataFilter) => dispatch(actions.get_list_attribute_redux(dataFilter)),
+        getListVariantAttributeGroup: (dataFilter) => dispatch(actions.getListVariantAttributeGroupRedux(dataFilter)),
+        createVariantAttributeGroup: (data) => dispatch(actions.createVariantAttributeGroupRedux(data)),
+        onChangeVariantAttributeGroup: (id, value) => dispatch(actions.onChangeVariantAttributeGroupRedux(id, value)),
+        getListAttribute: (dataFilter) => dispatch(actions.getListAttributeRedux(dataFilter)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

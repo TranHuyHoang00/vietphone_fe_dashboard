@@ -30,56 +30,54 @@ class index extends Component {
         return { check: true };
     }
     handleEdit = async () => {
-        let result = this.validationData(this.props.data_flash_sale);
+        const { dataFlashSale, isResult, openModal, getListFlashSale, editFlashSale, dataFilter } = this.props;
+        const result = this.validationData(dataFlashSale);
         if (result.check) {
-            let data_flash_sale = this.props.data_flash_sale;
-            await this.props.edit_flash_sale(data_flash_sale.id, data_flash_sale);
-            let isResult = this.props.isResult;
+            await editFlashSale(dataFlashSale.id, dataFlashSale);
             if (isResult) {
-                this.props.openModal("edit", false);
-                await this.props.get_list_flash_sale(this.props.dataFilter);
+                await getListFlashSale(dataFilter);
+                openModal("edit", false);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        let data_flash_sale = this.props.data_flash_sale;
-        let isLoading = this.props.isLoading;
+        const { dataFlashSale, isLoading, onChangeFlashSale, modalEdit, openModal } = this.props;
         return (
-            <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
-                onCancel={() => this.props.openModal("edit", false)} width={400}
+            <Modal title="CHỈNH SỬA" open={modalEdit}
+                onCancel={() => openModal("edit", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'edit'}
+                    <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormDate name={'Ngày bắt đầu'} variable={'start_time'} value={dayjs(data_flash_sale.start_time).format('YYYY-MM-DDTHH:mm')}
+                        <FormDate name={'Ngày bắt đầu'} variable={'start_time'} value={dayjs(dataFlashSale.start_time).format('YYYY-MM-DDTHH:mm')}
                             important={true}
-                            onChangeInput={this.props.on_change_flash_sale} />
+                            onChangeInput={onChangeFlashSale} />
 
-                        <FormDate name={'Ngày kết thúc'} variable={'end_time'} value={dayjs(data_flash_sale.end_time).format('YYYY-MM-DDTHH:mm')}
+                        <FormDate name={'Ngày kết thúc'} variable={'end_time'} value={dayjs(dataFlashSale.end_time).format('YYYY-MM-DDTHH:mm')}
                             important={true}
-                            onChangeInput={this.props.on_change_flash_sale} />
+                            onChangeInput={onChangeFlashSale} />
 
-                        <FormInput name={'Tên flash sale'} variable={'name'} value={data_flash_sale.name}
+                        <FormInput name={'Tên flash sale'} variable={'name'} value={dataFlashSale.name}
                             important={true}
-                            onChangeInput={this.props.on_change_flash_sale} />
+                            onChangeInput={onChangeFlashSale} />
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={data_flash_sale.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataFlashSale.description}
                             important={false}
-                            onChangeInput={this.props.on_change_flash_sale} />
+                            onChangeInput={onChangeFlashSale} />
 
-                        <FormSelectInput name={'Trạng thái'} variable={'is_active'} value={data_flash_sale.is_active}
+                        <FormSelectInput name={'Trạng thái'} variable={'is_active'} value={dataFlashSale.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },
                                 { value: false, label: 'Khóa' },
                             ]}
-                            onChangeInput={this.props.on_change_flash_sale} />
+                            onChangeInput={onChangeFlashSale} />
                     </div>
                 </Spin>
             </Modal>
@@ -89,16 +87,16 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_flash_sale: state.flash_sale.data_flash_sale,
+        dataFlashSale: state.flash_sale.dataFlashSale,
         isLoading: state.flash_sale.isLoading,
         isResult: state.flash_sale.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_flash_sale: (dataFilter) => dispatch(actions.get_list_flash_sale_redux(dataFilter)),
-        edit_flash_sale: (id, data) => dispatch(actions.edit_flash_sale_redux(id, data)),
-        on_change_flash_sale: (id, value) => dispatch(actions.on_change_flash_sale_redux(id, value)),
+        getListFlashSale: (dataFilter) => dispatch(actions.getListFlashSaleRedux(dataFilter)),
+        editFlashSale: (id, data) => dispatch(actions.editFlashSaleRedux(id, data)),
+        onChangeFlashSale: (id, value) => dispatch(actions.onChangeFlashSaleRedux(id, value)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Collapse, Select, message, Input } from 'antd';
-import FormSelectItem from '@components/selects/form_select_item';
+import FormSelectItem from '@components/selects/formSelectItem';
 class product_introduce extends Component {
     constructor(props) {
         super(props);
@@ -12,45 +12,45 @@ class product_introduce extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_brand(this.state.dataFilter);
+        this.props.getListBrand(this.state.dataFilter);
         this.props.getListTag(this.state.dataFilter);
-        this.props.get_list_category(this.state.dataFilter);
-        this.props.get_list_variant_attribute_group(this.state.dataFilter);
+        this.props.getListCategory(this.state.dataFilter);
+        this.props.getListVariantAttributeGroup(this.state.dataFilter);
     }
-    on_search = (value, form_name) => {
+    onSearch = (value, nameFormSelect) => {
         let dataFilter = this.state.dataFilter;
         dataFilter.search = value;
-        if (form_name === 'brand') { this.props.get_list_brand(dataFilter); }
-        if (form_name === 'tag') { this.props.getListTag(dataFilter); }
-        if (form_name === 'category') { this.props.get_list_category(dataFilter); }
-        if (form_name === 'variant_attribute_group') { this.props.get_list_variant_attribute_group(dataFilter); }
+        if (nameFormSelect === 'brand') { this.props.getListBrand(dataFilter); }
+        if (nameFormSelect === 'tag') { this.props.getListTag(dataFilter); }
+        if (nameFormSelect === 'category') { this.props.getListCategory(dataFilter); }
+        if (nameFormSelect === 'variant_attribute_group') { this.props.getListVariantAttributeGroup(dataFilter); }
     }
-    handleCreate = async (form_name) => {
-        if (form_name === 'brand') {
-            if (!this.props.data_brand.name) { message.error('Thiếu tên thương hiệu'); return; }
-            await this.props.create_brand(this.props.data_brand);
-            await this.props.get_list_brand(this.state.dataFilter);
+    handleCreate = async (nameFormSelect) => {
+        if (nameFormSelect === 'brand') {
+            if (!this.props.dataBrand.name) { message.error('Thiếu tên thương hiệu'); return; }
+            await this.props.createBrand(this.props.dataBrand);
+            await this.props.getListBrand(this.state.dataFilter);
         }
-        if (form_name === 'tag') {
+        if (nameFormSelect === 'tag') {
             if (!this.props.dataTag.name) { message.error('Thiếu tên tag'); return; }
             await this.props.createTag(this.props.dataTag);
             await this.props.getListTag(this.state.dataFilter);
         }
-        if (form_name === 'category') {
-            if (!this.props.data_category.name) { message.error('Thiếu tên danh mục'); return; }
-            await this.props.create_category(this.props.data_category);
-            await this.props.get_list_category(this.state.dataFilter);
+        if (nameFormSelect === 'category') {
+            if (!this.props.dataCategory.name) { message.error('Thiếu tên danh mục'); return; }
+            await this.props.createCategory(this.props.dataCategory);
+            await this.props.getListCategory(this.state.dataFilter);
         }
-        if (form_name === 'variant_attribute_group') {
-            await this.props.get_list_variant_attribute_group(this.state.dataFilter);
+        if (nameFormSelect === 'variant_attribute_group') {
+            await this.props.getListVariantAttributeGroup(this.state.dataFilter);
         }
     }
     render() {
         let data_product = this.props.data_product;
-        let data_brands = this.props.data_brands;
+        let dataBrands = this.props.dataBrands;
         let dataTags = this.props.dataTags;
-        let data_categorys = this.props.data_categorys;
-        let data_variant_attribute_groups = this.props.data_variant_attribute_groups;
+        let dataCategorys = this.props.dataCategorys;
+        let dataVariantAttributeGroups = this.props.dataVariantAttributeGroups;
         return (
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Thông tin sản phẩm" key="1">
@@ -72,22 +72,22 @@ class product_introduce extends Component {
                             </div>
                             <div className='w-2/3'>
                                 <FormSelectItem width={'100%'} placeholder={'Tên thương hiệu'}
-                                    form_name={'brand'}
+                                    nameFormSelect={'brand'}
                                     value={data_product.product_brand}
-                                    options={data_brands.map((item) => ({
+                                    options={dataBrands.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabled_select={!this.props.is_edit}
-                                    disabled_button={false}
-                                    disabled_search={false}
+                                    disabledSelect={!this.props.is_edit}
+                                    disabledButtonCreate={false}
+                                    disabledSearch={false}
 
-                                    on_search={this.on_search}
-                                    variable_select={'product_brand'}
-                                    on_change_select={this.props.on_change_product}
+                                    onSearch={this.onSearch}
+                                    variableSelect={'product_brand'}
+                                    onChangeSelect={this.props.on_change_product}
 
-                                    variable_input={'name'}
-                                    on_change_input={this.props.on_change_brand}
+                                    variableInputSearch={'name'}
+                                    onChangeInput={this.props.onChangeBrand}
                                     handleCreate={this.handleCreate}
                                 />
 
@@ -100,20 +100,20 @@ class product_introduce extends Component {
                             </div>
                             <div className='w-2/3'>
                                 <FormSelectItem width={'100%'} placeholder={'Tên tag'}
-                                    form_name={'tag'} mode={'multiple'}
+                                    nameFormSelect={'tag'} mode={'multiple'}
                                     value={data_product.tags}
                                     options={dataTags.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabled_select={!this.props.is_edit}
-                                    disabled_button={false}
-                                    disabled_search={false}
-                                    on_search={this.on_search}
-                                    variable_select={'tags'}
-                                    on_change_select={this.props.on_change_product}
-                                    variable_input={'name'}
-                                    on_change_input={this.props.onChangeTag}
+                                    disabledSelect={!this.props.is_edit}
+                                    disabledButtonCreate={false}
+                                    disabledSearch={false}
+                                    onSearch={this.onSearch}
+                                    variableSelect={'tags'}
+                                    onChangeSelect={this.props.on_change_product}
+                                    variableInputSearch={'name'}
+                                    onChangeInput={this.props.onChangeTag}
                                     handleCreate={this.handleCreate}
                                 />
 
@@ -126,20 +126,20 @@ class product_introduce extends Component {
                             </div>
                             <div className='w-2/3'>
                                 <FormSelectItem width={'100%'} placeholder={'Tên danh mục'}
-                                    form_name={'category'} mode={'multiple'}
+                                    nameFormSelect={'category'} mode={'multiple'}
                                     value={data_product.categories}
-                                    options={data_categorys.map((item) => ({
+                                    options={dataCategorys.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabled_select={!this.props.is_edit}
-                                    disabled_button={false}
-                                    disabled_search={false}
-                                    on_search={this.on_search}
-                                    variable_select={'categories'}
-                                    on_change_select={this.props.on_change_product}
-                                    variable_input={'name'}
-                                    on_change_input={this.props.on_change_category}
+                                    disabledSelect={!this.props.is_edit}
+                                    disabledButtonCreate={false}
+                                    disabledSearch={false}
+                                    onSearch={this.onSearch}
+                                    variableSelect={'categories'}
+                                    onChangeSelect={this.props.on_change_product}
+                                    variableInputSearch={'name'}
+                                    onChangeInput={this.props.onChangeCategory}
                                     handleCreate={this.handleCreate}
                                 />
 
@@ -152,20 +152,20 @@ class product_introduce extends Component {
                             </div>
                             <div className='w-2/3'>
                                 <FormSelectItem width={'100%'} placeholder={'Tên SP-TS'}
-                                    form_name={'variant_attribute_group'}
+                                    nameFormSelect={'variant_attribute_group'}
                                     value={(data_product?.variant_attribute_group?.id) ? (data_product.variant_attribute_group.id) : data_product.variant_attribute_group}
-                                    options={data_variant_attribute_groups.map((item) => ({
+                                    options={dataVariantAttributeGroups.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabled_select={!this.props.is_edit}
-                                    disabled_button={true}
-                                    disabled_search={true}
-                                    on_search={this.on_search}
-                                    variable_select={'variant_attribute_group'}
-                                    on_change_select={this.props.on_change_product}
-                                    variable_input={'name'}
-                                    on_change_input={this.props.on_change_variant_attribute_group}
+                                    disabledSelect={!this.props.is_edit}
+                                    disabledButtonCreate={true}
+                                    disabledSearch={true}
+                                    onSearch={this.onSearch}
+                                    variableSelect={'variant_attribute_group'}
+                                    onChangeSelect={this.props.on_change_product}
+                                    variableInputSearch={'name'}
+                                    onChangeInput={this.props.onChangeVariantAttributeGroup}
                                     handleCreate={this.handleCreate}
                                 />
 
@@ -195,34 +195,34 @@ class product_introduce extends Component {
 const mapStateToProps = state => {
     return {
         data_product: state.product.data_product,
-        data_brands: state.brand.data_brands,
-        data_brand: state.brand.data_brand,
+        dataBrands: state.brand.dataBrands,
+        dataBrand: state.brand.dataBrand,
         dataTags: state.tag.dataTags,
         dataTag: state.tag.dataTag,
-        data_categorys: state.category.data_categorys,
-        data_category: state.category.data_category,
-        data_variant_attribute_groups: state.variant_attribute_group.data_variant_attribute_groups,
-        data_variant_attribute_group: state.variant_attribute_group.data_variant_attribute_group,
+        dataCategorys: state.category.dataCategorys,
+        dataCategory: state.category.dataCategory,
+        dataVariantAttributeGroups: state.variant_attribute_group.dataVariantAttributeGroups,
+        dataVariantAttributeGroup: state.variant_attribute_group.dataVariantAttributeGroup,
         is_edit: state.product.is_edit,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_brand: (dataFilter) => dispatch(actions.get_list_brand_redux(dataFilter)),
-        on_change_brand: (event, id,) => dispatch(actions.on_change_brand_redux(event, id,)),
-        create_brand: (data) => dispatch(actions.create_brand_redux(data)),
+        getListBrand: (dataFilter) => dispatch(actions.getListBrandRedux(dataFilter)),
+        onChangeBrand: (event, id,) => dispatch(actions.onChangeBrandRedux(event, id,)),
+        createBrand: (data) => dispatch(actions.createBrandRedux(data)),
 
         getListTag: (dataFilter) => dispatch(actions.getListTagRedux(dataFilter)),
         onChangeTag: (event, id,) => dispatch(actions.onChangeTagRedux(event, id,)),
         createTag: (data) => dispatch(actions.createTagRedux(data)),
 
-        get_list_category: (dataFilter) => dispatch(actions.get_list_category_redux(dataFilter)),
-        on_change_category: (event, id,) => dispatch(actions.on_change_category_redux(event, id,)),
-        create_category: (data) => dispatch(actions.create_category_redux(data)),
+        getListCategory: (dataFilter) => dispatch(actions.getListCategoryRedux(dataFilter)),
+        onChangeCategory: (event, id,) => dispatch(actions.onChangeCategoryRedux(event, id,)),
+        createCategory: (data) => dispatch(actions.createCategoryRedux(data)),
 
-        get_list_variant_attribute_group: (dataFilter) => dispatch(actions.get_list_variant_attribute_group_redux(dataFilter)),
-        on_change_variant_attribute_group: (event, id,) => dispatch(actions.on_change_variant_attribute_group_redux(event, id,)),
-        create_variant_attribute_group: (data) => dispatch(actions.create_variant_attribute_group_redux(data)),
+        getListVariantAttributeGroup: (dataFilter) => dispatch(actions.getListVariantAttributeGroupRedux(dataFilter)),
+        onChangeVariantAttributeGroup: (event, id,) => dispatch(actions.onChangeVariantAttributeGroupRedux(event, id,)),
+        createVariantAttributeGroup: (data) => dispatch(actions.createVariantAttributeGroupRedux(data)),
 
         on_change_product: (event, id,) => dispatch(actions.on_change_product_redux(event, id,)),
 

@@ -24,7 +24,7 @@ class index extends Component {
             await this.props.edit_flash_sale_item(data_flash_sale_item.id, data_flash_sale_item);
             let isResult = this.props.isResult;
             if (isResult) {
-                await this.props.get_flash_sale(data_flash_sale.id);
+                await this.props.getDataFlashSale(data_flash_sale.id);
                 this.props.openModal("edit", false);
             }
         } else {
@@ -68,7 +68,7 @@ const mapDispatchToProps = dispatch => {
     return {
         edit_flash_sale_item: (id, data) => dispatch(actions.edit_flash_sale_item_redux(id, data)),
         on_change_flash_sale_item: (id, value) => dispatch(actions.on_change_flash_sale_item_redux(id, value)),
-        get_flash_sale: (id) => dispatch(actions.get_flash_sale_redux(id)),
+        getDataFlashSale: (id) => dispatch(actions.getDataFlashSaleRedux(id)),
 
     };
 };

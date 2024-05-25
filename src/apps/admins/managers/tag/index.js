@@ -44,28 +44,31 @@ class index extends Component {
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataTag, getDataTag } = this.props;
         const actions = {
-            setData: this.props.setDataTag,
-            getData: this.props.getDataTag,
+            setData: setDataTag,
+            getData: getDataTag,
         };
         const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
         this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
         const { listItemSelected, typeItemDropButton, dataFilter } = this.state;
+        const { deleteListTag, editListTag, getListTag } = this.props;
         const actions = {
-            deleteList: this.props.deleteListTag,
-            editList: this.props.editListTag,
-            getList: this.props.getListTag
+            deleteList: deleteListTag,
+            editList: editListTag,
+            getList: getListTag
         };
         const newListItemSelected = await handleFuncDropButtonHeaderOfTable(typeItemDropButton, listItemSelected, dataFilter, actions);
         this.setState({ listItemSelected: newListItemSelected });
     }
     onChangePage = async (pageValue, pageType,) => {
         const { dataFilter } = this.state;
+        const { getListTag } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
         this.setState({ dataFilter: newDataFilter });
-        await this.props.getListTag(newDataFilter);
+        await getListTag(newDataFilter);
     }
     render() {
         const columns = [

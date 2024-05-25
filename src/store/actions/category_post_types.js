@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_category_post, get_category_post, create_category_post, delete_category_post, edit_category_post } from '@services/category_post_service';
+import { getListCategoryPost, getDataCategoryPost, createCategoryPost, deleteCategoryPost, editCategoryPost } from '@services/category_post_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_category_post_redux = (dataFilter) => {
+export const getListCategoryPostRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(category_post_start());
-            let data = await get_list_category_post(dataFilter);
+            let data = await getListCategoryPost(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_category_post_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_list_category_post_redux = (dataFilter) => {
         }
     }
 }
-export const get_category_post_redux = (id) => {
+export const getDataCategoryPostRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(category_post_start());
-            let data = await get_category_post(id);
+            let data = await getDataCategoryPost(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_category_post_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_category_post_redux = (id) => {
         }
     }
 }
-export const create_category_post_redux = (data_category_post) => {
+export const createCategoryPostRedux = (dataCategoryPost) => {
     return async (dispatch, getState) => {
         try {
             dispatch(category_post_start());
-            let data = await create_category_post(data_category_post);
+            let data = await createCategoryPost(dataCategoryPost);
             if (data && data.data && data.data.success === 1) {
                 dispatch(category_post_success());
                 message.success('Thành công');
@@ -55,12 +55,12 @@ export const create_category_post_redux = (data_category_post) => {
         }
     }
 }
-export const delete_list_category_post_redux = (list_id) => {
+export const deleteListCategoryPostRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(category_post_start());
         for (const id of list_id) {
             try {
-                let data = await delete_category_post(id);
+                let data = await deleteCategoryPost(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -73,12 +73,12 @@ export const delete_list_category_post_redux = (list_id) => {
         dispatch(category_post_success());
     }
 }
-export const edit_list_category_post_redux = (list_id, data_category_post) => {
+export const editListCategoryPostRedux = (list_id, dataCategoryPost) => {
     return async (dispatch, getState) => {
         dispatch(category_post_start());
         for (const id of list_id) {
             try {
-                let data = await edit_category_post(id, data_category_post);
+                let data = await editCategoryPost(id, dataCategoryPost);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_category_post_redux = (list_id, data_category_post) => {
         dispatch(category_post_success());
     }
 }
-export const edit_category_post_redux = (id, data_category_post) => {
+export const editCategoryPostRedux = (id, dataCategoryPost) => {
     return async (dispatch, getState) => {
         try {
             dispatch(category_post_start());
-            let data = await edit_category_post(id, data_category_post);
+            let data = await editCategoryPost(id, dataCategoryPost);
             if (data && data.data && data.data.success === 1) {
                 dispatch(category_post_success());
                 message.success('Thành công');
@@ -127,12 +127,12 @@ export const get_category_post_success = (data) => ({
     type: action_types.GET_CATEGORY_POST_SUCCESS,
     data
 })
-export const on_change_category_post_redux = (value, id) => ({
+export const onChangeCategoryPostRedux = (value, id) => ({
     type: action_types.ON_CHANGE_CATEGORY_POST,
     value,
     id,
 })
-export const set_data_category_post_redux = (data) => ({
+export const setDataCategoryPostRedux = (data) => ({
     type: action_types.SET_DATA_CATEGORY_POST,
     data,
 })

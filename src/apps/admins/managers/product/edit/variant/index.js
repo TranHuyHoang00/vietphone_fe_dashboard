@@ -25,7 +25,7 @@ class index extends Component {
             data_media_raws: [],
             data_atbvl_ids: [],
 
-            data_attributes: [],
+            dataAttributes: [],
             dataPermissionsAfterCheck: {},
         }
     }
@@ -39,12 +39,12 @@ class index extends Component {
         if (prevProps.data_variant_ids !== this.props.data_variant_ids) {
             let data_variant_ids = this.props.data_variant_ids;
             let data_product = this.props.data_product;
-            let data_attributes;
+            let dataAttributes;
             if (data_product?.variant_attribute_group?.attribute) {
-                data_attributes = data_product.variant_attribute_group.attribute;
+                dataAttributes = data_product.variant_attribute_group.attribute;
             }
             if (data_variant_ids && data_variant_ids.length !== 0) {
-                this.setState({ data_variant_ids: data_variant_ids, data_attributes: data_attributes });
+                this.setState({ data_variant_ids: data_variant_ids, dataAttributes: dataAttributes });
                 await this.get_list_variant(data_variant_ids);
             }
         }
@@ -100,12 +100,12 @@ class index extends Component {
         let data_variant = this.props.data_variant;
         if (data_variant?.id) {
             let data_atbvl_ids = this.state.data_atbvl_ids;
-            let data_attributes = this.state.data_attributes;
+            let dataAttributes = this.state.dataAttributes;
             if (this.props.is_edit) {
                 if (data_variant.attribute_values?.[0]?.id) { delete data_variant.attribute_values; }
                 if (data_atbvl_ids.length === 0) { delete data_variant.attribute_values; }
                 else {
-                    if (data_atbvl_ids.length !== data_attributes.length) {
+                    if (data_atbvl_ids.length !== dataAttributes.length) {
                         message.error('Thông số chưa đủ, vui chọn đầy đủ');
                         return;
                     } else {
@@ -168,7 +168,7 @@ class index extends Component {
                                 </div>
                             </div>
                             <VariantAttributeValue
-                                data_attributes={data_product?.variant_attribute_group?.attribute}
+                                dataAttributes={data_product?.variant_attribute_group?.attribute}
                                 data_atbvl_raws={data_variant?.attribute_values}
                                 get_data_atbvl={this.get_data_atbvl} />
                         </div>

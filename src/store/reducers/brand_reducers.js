@@ -1,8 +1,8 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_brands: [],
-    data_brand: {},
+    dataBrands: [],
+    dataBrand: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -33,7 +33,7 @@ const brand_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_brands: action.data.brands,
+                dataBrands: action.data.brands,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_BRAND_SUCCESS:
@@ -41,7 +41,7 @@ const brand_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_brand: action.data
+                dataBrand: action.data
             }
         case action_types.CREATE_BRAND_SUCCESS:
             return {
@@ -70,14 +70,14 @@ const brand_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_BRAND:
             return {
                 ...state,
-                data_brand: action.data,
+                dataBrand: action.data,
             }
         case action_types.ON_CHANGE_BRAND:
-            let copyState = { ...state.data_brand };
+            let copyState = { ...state.dataBrand };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_brand: {
+                dataBrand: {
                     ...copyState,
                 }
             }

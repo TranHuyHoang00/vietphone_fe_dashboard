@@ -23,40 +23,39 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        let result = this.validationData(this.props.data_category_post);
+        const { dataCategoryPost, isResult, openModal, getListCategoryPost, createCategoryPost, dataFilter } = this.props;
+        const result = this.validationData(dataCategoryPost);
         if (result.check) {
-            await this.props.create_category_post(this.props.data_category_post);
-            let isResult = this.props.isResult;
+            await createCategoryPost(dataCategoryPost);
             if (isResult) {
-                this.props.openModal("create", false);
-                await this.props.get_list_category_post(this.props.dataFilter);
+                await getListCategoryPost(dataFilter);
+                openModal("create", false);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        let data_category_post = this.props.data_category_post;
-        let isLoading = this.props.isLoading;
+        const { dataCategoryPost, isLoading, onChangeCategoryPost, modalCreate, openModal } = this.props;
         return (
 
-            <Modal title="TẠO MỚI" open={this.props.modalCreate}
-                onCancel={() => this.props.openModal("create", false)} width={400}
+            <Modal title="TẠO MỚI" open={modalCreate}
+                onCancel={() => openModal("create", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'create'}
+                    <ModalFooter openModal={openModal} type={'create'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleCreate} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Tiêu đề'} variable={'title'} value={data_category_post.title}
+                        <FormInput name={'Tiêu đề'} variable={'title'} value={dataCategoryPost.title}
                             important={true}
-                            onChangeInput={this.props.on_change_category_post} />
+                            onChangeInput={onChangeCategoryPost} />
 
-                        <FormInput name={'Slug'} variable={'slug'} value={data_category_post.slug}
+                        <FormInput name={'Slug'} variable={'slug'} value={dataCategoryPost.slug}
                             important={true}
-                            onChangeInput={this.props.on_change_category_post} />
+                            onChangeInput={onChangeCategoryPost} />
 
                     </div>
                 </Spin>
@@ -67,16 +66,16 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_category_post: state.category_post.data_category_post,
+        dataCategoryPost: state.category_post.dataCategoryPost,
         isLoading: state.category_post.isLoading,
         isResult: state.category_post.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_category_post: (dataFilter) => dispatch(actions.get_list_category_post_redux(dataFilter)),
-        create_category_post: (data) => dispatch(actions.create_category_post_redux(data)),
-        on_change_category_post: (id, value) => dispatch(actions.on_change_category_post_redux(id, value)),
+        getListCategoryPost: (dataFilter) => dispatch(actions.getListCategoryPostRedux(dataFilter)),
+        createCategoryPost: (data) => dispatch(actions.createCategoryPostRedux(data)),
+        onChangeCategoryPost: (id, value) => dispatch(actions.onChangeCategoryPostRedux(id, value)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

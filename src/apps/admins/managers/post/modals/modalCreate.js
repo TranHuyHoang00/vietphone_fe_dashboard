@@ -12,11 +12,11 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            body: '',
         }
     }
     async componentDidMount() {
-        this.props.get_list_category_post({ page: 1, limit: 100, search: '' });
+        const { getListCategoryPost } = this.props;
+        getListCategoryPost({ page: 1, limit: 100, search: '' });
     }
     validationData = (data) => {
         if (!data.title) {
@@ -31,53 +31,46 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        let data_post = this.props.data_post;
-        data_post.body = this.state.body;
-        let result = this.validationData(data_post);
+        const { dataPost, isResult, openModal, getListPost, createPost, dataFilter } = this.props;
+        const result = this.validationData(dataPost);
         if (result.check) {
-            await this.props.create_post(data_post);
-            let isResult = this.props.isResult;
+            await createPost(dataPost);
             if (isResult) {
-                this.props.openModal("create", false);
-                await this.props.get_list_post(this.props.dataFilter);
+                await getListPost(dataFilter);
+                openModal("create", false);
             }
         } else {
             message.error(result.mess);
         }
     }
-    onchange_ReactQuill = (value) => {
-        this.setState({ body: value });
-    }
     render() {
-        let data_post = this.props.data_post;
-        let isLoading = this.props.isLoading;
-        let data_category_posts = this.props.data_category_posts;
+        const { dataPost, isLoading, onChangePost, modalCreate, openModal, dataCategoryPosts } = this.props;
         return (
 
-            <Modal title="TẠO MỚI" open={this.props.modalCreate}
-                onCancel={() => this.props.openModal("create", false)} width={800}
+            <Modal title="TẠO MỚI" open={modalCreate}
+                onCancel={() => openModal("create", false)} width={800}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'create'}
+                    <ModalFooter openModal={openModal} type={'create'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleCreate} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
                         <div className='flex flex-col flex-wrap sm:flex-row gap-[10px]'>
-                            <FormInput name={'Tiêu đề'} variable={'title'} value={data_post.title}
+                            <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost.title}
                                 important={true}
-                                onChangeInput={this.props.on_change_post} />
+                                onChangeInput={onChangePost} />
 
-                            <FormInput name={'Slug'} variable={'slug'} value={data_post.slug}
+                            <FormInput name={'Slug'} variable={'slug'} value={dataPost.slug}
                                 important={true}
-                                onChangeInput={this.props.on_change_post} />
-                            <FormSelectInput name={'Loại bài viết'} variable={'category'} value={data_post.category}
+                                onChangeInput={onChangePost} />
+                            <FormSelectInput name={'Loại bài viết'} variable={'category'} value={dataPost.category}
                                 important={true} width={200}
-                                options={data_category_posts.map((item) => ({
+                                options={dataCategoryPosts.map((item) => ({
                                     label: item.title,
                                     value: item.id,
                                 }))}
-                                onChangeInput={this.props.on_change_post} />
+                                onChangeInput={onChangePost} />
                         </div>
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>
@@ -88,8 +81,8 @@ class index extends Component {
                                 modules={index.modules}
                                 formats={index.formats}
                                 bounds={'.app'}
-                                value={this.state.body}
-                                onChange={(value) => this.onchange_ReactQuill(value)}
+                                value={dataPost.body}
+                                onChange={(value) => onChangePost(value, 'body')}
                             />
                         </div>
                     </div>
@@ -101,18 +94,18 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_category_posts: state.category_post.data_category_posts,
-        data_post: state.post.data_post,
+        dataCategoryPosts: state.category_post.dataCategoryPosts,
+        dataPost: state.post.dataPost,
         isLoading: state.post.isLoading,
         isResult: state.post.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_post: (dataFilter) => dispatch(actions.get_list_post_redux(dataFilter)),
-        create_post: (data) => dispatch(actions.create_post_redux(data)),
-        on_change_post: (id, value) => dispatch(actions.on_change_post_redux(id, value)),
-        get_list_category_post: (dataFilter) => dispatch(actions.get_list_category_post_redux(dataFilter)),
+        getListPost: (dataFilter) => dispatch(actions.getListPostRedux(dataFilter)),
+        createPost: (data) => dispatch(actions.createPostRedux(data)),
+        onChangePost: (id, value) => dispatch(actions.onChangePostRedux(id, value)),
+        getListCategoryPost: (dataFilter) => dispatch(actions.getListCategoryPostRedux(dataFilter)),
 
     };
 };

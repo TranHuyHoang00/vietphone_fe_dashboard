@@ -31,7 +31,7 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_flash_sale(this.state.dataFilter);
+        this.props.getListFlashSale(this.state.dataFilter);
         let dataPermissionsAfterCheck = await handleCheckPermission(data_flash_sale_items, this.props.dataUserPermissions, this.props.isSuperUser);
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
@@ -62,7 +62,7 @@ class index extends Component {
     funcDropButtonHeaderOfTable = async () => {
         let listItemSelected = this.state.listItemSelected;
         if (this.state.typeItemDropButton === 1) { await this.props.delete_list_flash_sale_item(listItemSelected); }
-        await this.props.get_flash_sale(this.props.data_flash_sale.id);
+        await this.props.getDataFlashSale(this.props.data_flash_sale.id);
         if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
     }
     render() {
@@ -137,7 +137,7 @@ class index extends Component {
                                             label: item.name,
                                             value: item.id,
                                         }))}
-                                        onChangeInput={this.props.get_flash_sale}
+                                        onChangeInput={this.props.getDataFlashSale}
                                     />
                                 </div>
                                 <div>
@@ -189,8 +189,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_flash_sale: (dataFilter) => dispatch(actions.get_list_flash_sale_redux(dataFilter)),
-        get_flash_sale: (id) => dispatch(actions.get_flash_sale_redux(id)),
+        getListFlashSale: (dataFilter) => dispatch(actions.getListFlashSaleRedux(dataFilter)),
+        getDataFlashSale: (id) => dispatch(actions.getDataFlashSaleRedux(id)),
         delete_list_flash_sale_item: (id) => dispatch(actions.delete_list_flash_sale_item_redux(id)),
         get_flash_sale_item: (id) => dispatch(actions.get_flash_sale_item_redux(id)),
 

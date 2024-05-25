@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Modal, Button, Spin } from 'antd';
 import { textLine13, imageLine13 } from '@components/displays/line13';
-
 class index extends Component {
     constructor(props) {
         super(props);
@@ -13,26 +12,23 @@ class index extends Component {
     async componentDidMount() {
     }
     render() {
-        let data_brand = this.props.data_brand;
-        let isLoading = this.props.isLoading;
+        const { dataBrand, isLoading, modalDetail, openModal } = this.props;
         return (
-            <Modal title="CHI TIẾT" open={this.props.modalDetail}
-                onCancel={() => this.props.openModal("detail", false)} width={400}
+            <Modal title="CHI TIẾT" open={modalDetail}
+                onCancel={() => openModal("detail", false)} width={400}
                 footer={[
-                    <>
-                        <Button onClick={() => this.props.openModal("detail", false)}
-                            className='bg-[#e94138] text-white'>
-                            Hủy bỏ
-                        </Button>
-                    </>
+                    <Button onClick={() => openModal("detail", false)}
+                        className='bg-[#e94138] text-white'>
+                        Hủy bỏ
+                    </Button>
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {imageLine13('Ảnh', data_brand.image, 100, 50)}
-                        {textLine13('Tên danh mục', data_brand.name)}
-                        {textLine13('Icon', data_brand.icon)}
-                        {textLine13('Mô tả', data_brand.description)}
-                        {textLine13('Trạng thái', (data_brand && data_brand.is_active ? 'Mở' : 'Khóa'))}
+                        {imageLine13('Ảnh', dataBrand.image, 100, 50)}
+                        {textLine13('Tên danh mục', dataBrand.name)}
+                        {textLine13('Icon', dataBrand.icon)}
+                        {textLine13('Mô tả', dataBrand.description)}
+                        {textLine13('Trạng thái', (dataBrand && dataBrand.is_active ? 'Mở' : 'Khóa'))}
                     </div>
                 </Spin>
             </Modal>
@@ -42,7 +38,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_brand: state.brand.data_brand,
+        dataBrand: state.brand.dataBrand,
         isLoading: state.brand.isLoading,
     };
 };

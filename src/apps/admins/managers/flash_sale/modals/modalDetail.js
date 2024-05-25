@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Modal, Button, Spin } from 'antd';
 import { textLine13 } from '@components/displays/line13';
 import moment from 'moment';
-
 class index extends Component {
     constructor(props) {
         super(props);
@@ -14,26 +13,23 @@ class index extends Component {
     async componentDidMount() {
     }
     render() {
-        let data_flash_sale = this.props.data_flash_sale;
-        let isLoading = this.props.isLoading;
+        const { dataFlashSale, isLoading, modalDetail, openModal } = this.props;
         return (
-            <Modal title="CHI TIẾT" open={this.props.modalDetail}
-                onCancel={() => this.props.openModal("detail", false)} width={400}
+            <Modal title="CHI TIẾT" open={modalDetail}
+                onCancel={() => openModal("detail", false)} width={400}
                 footer={[
-                    <>
-                        <Button onClick={() => this.props.openModal("detail", false)}
-                            className='bg-[#e94138] text-white'>
-                            Hủy bỏ
-                        </Button>
-                    </>
+                    <Button onClick={() => openModal("detail", false)}
+                        className='bg-[#e94138] text-white'>
+                        Hủy bỏ
+                    </Button>
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {textLine13('Tên flash sale', data_flash_sale.name)}
-                        {textLine13('Ngày bắt đầu', moment(data_flash_sale.start_time).format('HH:mm DD/MM/YYYY '))}
-                        {textLine13('Ngày kết thúc', moment(data_flash_sale.end_time).format('HH:mm DD/MM/YYYY '))}
-                        {textLine13('Trạng thái', (data_flash_sale && data_flash_sale.is_active ? 'Mở' : 'Khóa'))}
-                        {textLine13('Mô tả', data_flash_sale.description)}
+                        {textLine13('Tên flash sale', dataFlashSale.name)}
+                        {textLine13('Ngày bắt đầu', moment(dataFlashSale.start_time).format('HH:mm DD/MM/YYYY '))}
+                        {textLine13('Ngày kết thúc', moment(dataFlashSale.end_time).format('HH:mm DD/MM/YYYY '))}
+                        {textLine13('Trạng thái', (dataFlashSale && dataFlashSale.is_active ? 'Mở' : 'Khóa'))}
+                        {textLine13('Mô tả', dataFlashSale.description)}
                     </div>
                 </Spin>
             </Modal>
@@ -43,7 +39,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_flash_sale: state.flash_sale.data_flash_sale,
+        dataFlashSale: state.flash_sale.dataFlashSale,
         isLoading: state.flash_sale.isLoading,
 
     };

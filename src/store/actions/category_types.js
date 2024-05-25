@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_category, get_category, create_category, delete_category, edit_category } from '@services/category_service';
+import { getListCategory, getDataCategory, createCategory, deleteCategory, editCategory } from '@services/category_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_category_redux = (dataFilter) => {
+export const getListCategoryRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(category_start());
-            let data = await get_list_category(dataFilter);
+            let data = await getListCategory(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_category_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_list_category_redux = (dataFilter) => {
         }
     }
 }
-export const get_category_redux = (id) => {
+export const getDataCategoryRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(category_start());
-            let data = await get_category(id);
+            let data = await getDataCategory(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_category_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_category_redux = (id) => {
         }
     }
 }
-export const create_category_redux = (data_category) => {
+export const createCategoryRedux = (dataCategory) => {
     return async (dispatch, getState) => {
         try {
             dispatch(category_start());
-            let data = await create_category(data_category);
+            let data = await createCategory(dataCategory);
             if (data && data.data && data.data.success === 1) {
                 dispatch(category_success());
                 message.success('Thành công');
@@ -55,12 +55,12 @@ export const create_category_redux = (data_category) => {
         }
     }
 }
-export const delete_list_category_redux = (list_id) => {
+export const deleteListCategoryRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(category_start());
         for (const id of list_id) {
             try {
-                let data = await delete_category(id);
+                let data = await deleteCategory(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -73,12 +73,12 @@ export const delete_list_category_redux = (list_id) => {
         dispatch(category_success());
     }
 }
-export const edit_list_category_redux = (list_id, data_category) => {
+export const editListCategoryRedux = (list_id, dataCategory) => {
     return async (dispatch, getState) => {
         dispatch(category_start());
         for (const id of list_id) {
             try {
-                let data = await edit_category(id, data_category);
+                let data = await editCategory(id, dataCategory);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_category_redux = (list_id, data_category) => {
         dispatch(category_success());
     }
 }
-export const edit_category_redux = (id, data_category) => {
+export const editCategoryRedux = (id, dataCategory) => {
     return async (dispatch, getState) => {
         try {
             dispatch(category_start());
-            let data = await edit_category(id, data_category);
+            let data = await editCategory(id, dataCategory);
             if (data && data.data && data.data.success === 1) {
                 dispatch(category_success());
                 message.success('Thành công');
@@ -127,12 +127,12 @@ export const get_category_success = (data) => ({
     type: action_types.GET_CATEGORY_SUCCESS,
     data
 })
-export const on_change_category_redux = (value, id) => ({
+export const onChangeCategoryRedux = (value, id) => ({
     type: action_types.ON_CHANGE_CATEGORY,
     value,
     id,
 })
-export const set_data_category_redux = (data) => ({
+export const setDataCategoryRedux = (data) => ({
     type: action_types.SET_DATA_CATEGORY,
     data,
 })

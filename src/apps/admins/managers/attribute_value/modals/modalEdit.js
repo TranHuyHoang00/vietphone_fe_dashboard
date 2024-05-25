@@ -40,7 +40,7 @@ class index extends Component {
     }
     render() {
         let data_attribute_value = this.props.data_attribute_value;
-        let data_attributes = this.props.data_attributes;
+        let dataAttributes = this.props.dataAttributes;
         let isLoading = this.props.isLoading;
         return (
             <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
@@ -63,7 +63,7 @@ class index extends Component {
 
                         <FormSelectInput name={'Thông số'} variable={'attribute'} value={(data_attribute_value?.attribute?.id) ? (data_attribute_value?.attribute?.id) : (data_attribute_value?.attribute)}
                             important={true} width={'100%'}
-                            options={data_attributes.map((item) => ({
+                            options={dataAttributes.map((item) => ({
                                 label: item.name,
                                 value: item.id,
                             }))}
@@ -80,7 +80,7 @@ const mapStateToProps = state => {
         data_attribute_value: state.attribute_value.data_attribute_value,
         isLoading: state.attribute_value.isLoading,
         isResult: state.attribute_value.isResult,
-        data_attributes: state.attribute.data_attributes,
+        dataAttributes: state.attribute.dataAttributes,
 
     };
 };
@@ -89,7 +89,7 @@ const mapDispatchToProps = dispatch => {
         get_list_attribute_value: (dataFilter) => dispatch(actions.get_list_attribute_value_redux(dataFilter)),
         edit_attribute_value: (id, data) => dispatch(actions.edit_attribute_value_redux(id, data)),
         on_change_attribute_value: (id, value) => dispatch(actions.on_change_attribute_value_redux(id, value)),
-        get_list_attribute: (dataFilter) => dispatch(actions.get_list_attribute_redux(dataFilter)),
+        getListAttribute: (dataFilter) => dispatch(actions.getListAttributeRedux(dataFilter)),
 
     };
 };

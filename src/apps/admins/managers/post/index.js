@@ -11,7 +11,10 @@ import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
-import { data_posts } from '@datas/dataPermissionsOrigin';
+import { dataPosts } from '@datas/dataPermissionsOrigin';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -31,47 +34,40 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_post(this.state.dataFilter);
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_posts, this.props.dataUserPermissions, this.props.isSuperUser);
+        const { dataFilter } = this.state;
+        const { getListPost, dataUserPermissions, isSuperUser } = this.props;
+        await getListPost(dataFilter);
+        const dataPermissionsAfterCheck = await handleCheckPermission(dataPosts, dataUserPermissions, isSuperUser);
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    openModal = async (name, value, id) => {
-        this.props.set_data_post({});
-        if (name === 'create') {
-            this.setState({ modalCreate: value });
-        }
-        if (name === 'detail') {
-            if (id === undefined) {
-                this.setState({ modalDetail: value, data_post: {} });
-            } else {
-                this.setState({ modalDetail: value });
-                await this.props.get_post(id);
-            }
-        }
-        if (name === 'edit') {
-            if (id === undefined) {
-                this.setState({ modalEdit: value, data_post: {} });
-            } else {
-                this.setState({ modalEdit: value });
-                await this.props.get_post(id);
-            }
-        }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataPost, getDataPost } = this.props;
+        const actions = {
+            setData: setDataPost,
+            getData: getDataPost,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
-        let listItemSelected = this.state.listItemSelected;
-        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_post(listItemSelected); }
-        await this.props.get_list_post(this.state.dataFilter);
-        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+        const { listItemSelected, typeItemDropButton, dataFilter } = this.state;
+        const { deleteListPost, editListPost, getListPost } = this.props;
+        const actions = {
+            deleteList: deleteListPost,
+            editList: editListPost,
+            getList: getListPost
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(typeItemDropButton, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_post(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListPost } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListPost(newDataFilter);
     }
     render() {
         const columns = [
@@ -104,20 +100,19 @@ class index extends Component {
             },
 
         ];
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, typeItemDropButton,
+            modalCreate, modalEdit } = this.state;
+        const { isLoading, dataPosts, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['post.delete_post'] },
         ];
-        const listItemSelected = this.state.listItemSelected;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dataFilter = this.state.dataFilter;
-        let typeItemDropButton = this.state.typeItemDropButton;
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Button disabled={!dataPermissionsAfterCheck['post.add_post']}
@@ -150,23 +145,23 @@ class index extends Component {
                             <Divider>BÀI VIẾT</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_posts} pagination={false}
+                                    columns={columns} dataSource={dataPosts} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modalCreate && dataPermissionsAfterCheck['post.add_post'] &&
-                    <ModalCreate modalCreate={this.state.modalCreate}
+                {modalCreate && dataPermissionsAfterCheck['post.add_post'] &&
+                    <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
-                {this.state.modalEdit && dataPermissionsAfterCheck['post.change_post'] &&
-                    <ModalEdit modalEdit={this.state.modalEdit}
+                        dataFilter={dataFilter} />}
+                {modalEdit && dataPermissionsAfterCheck['post.change_post'] &&
+                    <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
+                        dataFilter={dataFilter} />}
             </>
         );
     }
@@ -174,8 +169,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_posts: state.post.data_posts,
-        data_post: state.post.data_post,
+        dataPosts: state.post.dataPosts,
+        dataPost: state.post.dataPost,
         dataMeta: state.post.dataMeta,
         isLoading: state.post.isLoading,
         isResult: state.post.isResult,
@@ -186,11 +181,11 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_post: (dataFilter) => dispatch(actions.get_list_post_redux(dataFilter)),
-        get_post: (id) => dispatch(actions.get_post_redux(id)),
-        edit_list_post: (id, data) => dispatch(actions.edit_list_post_redux(id, data)),
-        delete_list_post: (id) => dispatch(actions.delete_list_post_redux(id)),
-        set_data_post: (id) => dispatch(actions.set_data_post_redux(id)),
+        getListPost: (dataFilter) => dispatch(actions.getListPostRedux(dataFilter)),
+        getDataPost: (id) => dispatch(actions.getDataPostRedux(id)),
+        editListPost: (id, data) => dispatch(actions.editListPostRedux(id, data)),
+        deleteListPost: (id) => dispatch(actions.deleteListPostRedux(id)),
+        setDataPost: (id) => dispatch(actions.setDataPostRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

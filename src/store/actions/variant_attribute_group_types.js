@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_variant_attribute_group, get_variant_attribute_group, create_variant_attribute_group, delete_variant_attribute_group, edit_variant_attribute_group } from '@services/variant_attribute_group_service';
+import { getListVariantAttributeGroup, getDataVariantAttributeGroup, createVariantAttributeGroup, delete_variant_attribute_group, editVariantAttributeGroup } from '@services/variant_attribute_group_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_variant_attribute_group_redux = (dataFilter) => {
+export const getListVariantAttributeGroupRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variant_attribute_group_start());
-            let data = await get_list_variant_attribute_group(dataFilter);
+            let data = await getListVariantAttributeGroup(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_variant_attribute_group_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_list_variant_attribute_group_redux = (dataFilter) => {
         }
     }
 }
-export const get_variant_attribute_group_redux = (id) => {
+export const getDataVariantAttributeGroupRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variant_attribute_group_start());
-            let data = await get_variant_attribute_group(id);
+            let data = await getDataVariantAttributeGroup(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_variant_attribute_group_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_variant_attribute_group_redux = (id) => {
         }
     }
 }
-export const create_variant_attribute_group_redux = (data_variant_attribute_group) => {
+export const createVariantAttributeGroupRedux = (dataVariantAttributeGroup) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variant_attribute_group_start());
-            let data = await create_variant_attribute_group(data_variant_attribute_group);
+            let data = await createVariantAttributeGroup(dataVariantAttributeGroup);
             if (data && data.data && data.data.success === 1) {
                 dispatch(variant_attribute_group_success());
                 message.success('Thành công');
@@ -55,7 +55,7 @@ export const create_variant_attribute_group_redux = (data_variant_attribute_grou
         }
     }
 }
-export const delete_list_variant_attribute_group_redux = (list_id) => {
+export const deleteListVariantAttributeGroupRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(variant_attribute_group_start());
         for (const id of list_id) {
@@ -73,12 +73,12 @@ export const delete_list_variant_attribute_group_redux = (list_id) => {
         dispatch(variant_attribute_group_success());
     }
 }
-export const edit_list_variant_attribute_group_redux = (list_id, data_variant_attribute_group) => {
+export const editListVariantAttributeGroupRedux = (list_id, dataVariantAttributeGroup) => {
     return async (dispatch, getState) => {
         dispatch(variant_attribute_group_start());
         for (const id of list_id) {
             try {
-                let data = await edit_variant_attribute_group(id, data_variant_attribute_group);
+                let data = await editVariantAttributeGroup(id, dataVariantAttributeGroup);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_variant_attribute_group_redux = (list_id, data_variant_at
         dispatch(variant_attribute_group_success());
     }
 }
-export const edit_variant_attribute_group_redux = (id, data_variant_attribute_group) => {
+export const editVariantAttributeGroupRedux = (id, dataVariantAttributeGroup) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variant_attribute_group_start());
-            let data = await edit_variant_attribute_group(id, data_variant_attribute_group);
+            let data = await editVariantAttributeGroup(id, dataVariantAttributeGroup);
             if (data && data.data && data.data.success === 1) {
                 dispatch(variant_attribute_group_success());
                 message.success('Thành công');
@@ -127,12 +127,12 @@ export const get_variant_attribute_group_success = (data) => ({
     type: action_types.GET_VARIANT_ATTRIBUTE_GROUP_SUCCESS,
     data
 })
-export const on_change_variant_attribute_group_redux = (value, id) => ({
+export const onChangeVariantAttributeGroupRedux = (value, id) => ({
     type: action_types.ON_CHANGE_VARIANT_ATTRIBUTE_GROUP,
     value,
     id,
 })
-export const set_data_variant_attribute_group_redux = (data) => ({
+export const setDataVariantAttributeGroupRedux = (data) => ({
     type: action_types.SET_DATA_VARIANT_ATTRIBUTE_GROUP,
     data,
 })

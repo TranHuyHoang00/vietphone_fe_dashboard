@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_flash_sale, get_flash_sale, create_flash_sale, delete_flash_sale, edit_flash_sale } from '@services/flash_sale_service';
+import { getListFlashSale, getDataFlashSale, createFlashSale, deleteFlashSale, editFlashSale } from '@services/flash_sale_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_flash_sale_redux = (dataFilter) => {
+export const getListFlashSaleRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flash_sale_start());
-            let data = await get_list_flash_sale(dataFilter);
+            let data = await getListFlashSale(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_flash_sale_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_list_flash_sale_redux = (dataFilter) => {
         }
     }
 }
-export const get_flash_sale_redux = (id) => {
+export const getDataFlashSaleRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flash_sale_start());
-            let data = await get_flash_sale(id);
+            let data = await getDataFlashSale(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_flash_sale_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_flash_sale_redux = (id) => {
         }
     }
 }
-export const create_flash_sale_redux = (data_flash_sale) => {
+export const createFlashSaleRedux = (dataFlashSale) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flash_sale_start());
-            let data = await create_flash_sale(data_flash_sale);
+            let data = await createFlashSale(dataFlashSale);
             if (data && data.data && data.data.success === 1) {
                 dispatch(flash_sale_success());
                 message.success('Thành công');
@@ -59,12 +59,12 @@ export const create_flash_sale_redux = (data_flash_sale) => {
         }
     }
 }
-export const delete_list_flash_sale_redux = (list_id) => {
+export const deleteListFlashSaleRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(flash_sale_start());
         for (const id of list_id) {
             try {
-                let data = await delete_flash_sale(id);
+                let data = await deleteFlashSale(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -77,12 +77,12 @@ export const delete_list_flash_sale_redux = (list_id) => {
         dispatch(flash_sale_success());
     }
 }
-export const edit_list_flash_sale_redux = (list_id, data_flash_sale) => {
+export const editListFlashSaleRedux = (list_id, dataFlashSale) => {
     return async (dispatch, getState) => {
         dispatch(flash_sale_start());
         for (const id of list_id) {
             try {
-                let data = await edit_flash_sale(id, data_flash_sale);
+                let data = await editFlashSale(id, dataFlashSale);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,11 +95,11 @@ export const edit_list_flash_sale_redux = (list_id, data_flash_sale) => {
         dispatch(flash_sale_success());
     }
 }
-export const edit_flash_sale_redux = (id, data_flash_sale) => {
+export const editFlashSaleRedux = (id, dataFlashSale) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flash_sale_start());
-            let data = await edit_flash_sale(id, data_flash_sale);
+            let data = await editFlashSale(id, dataFlashSale);
             if (data && data.data && data.data.success === 1) {
                 dispatch(flash_sale_success());
                 message.success('Thành công');
@@ -131,12 +131,12 @@ export const get_flash_sale_success = (data) => ({
     type: action_types.GET_FLASH_SALE_SUCCESS,
     data
 })
-export const on_change_flash_sale_redux = (value, id) => ({
+export const onChangeFlashSaleRedux = (value, id) => ({
     type: action_types.ON_CHANGE_FLASH_SALE,
     value,
     id,
 })
-export const set_data_flash_sale_redux = (data) => ({
+export const setDataFlashSaleRedux = (data) => ({
     type: action_types.SET_DATA_FLASH_SALE,
     data,
 })

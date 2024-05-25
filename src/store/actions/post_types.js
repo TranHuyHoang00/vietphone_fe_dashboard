@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_post, get_post, create_post, delete_post, edit_post } from '@services/post_service';
+import { getListPost, getDataPost, createPost, deletePost, editPost } from '@services/post_service';
 import { message } from 'antd';
 import { show_notification } from '@utils/show_notification';
 
-export const get_list_post_redux = (dataFilter) => {
+export const getListPostRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(post_start());
-            let data = await get_list_post(dataFilter);
+            let data = await getListPost(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_post_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_list_post_redux = (dataFilter) => {
         }
     }
 }
-export const get_post_redux = (id) => {
+export const getDataPostRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(post_start());
-            let data = await get_post(id);
+            let data = await getDataPost(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_post_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_post_redux = (id) => {
         }
     }
 }
-export const create_post_redux = (data_post) => {
+export const createPostRedux = (dataPost) => {
     return async (dispatch, getState) => {
         try {
             dispatch(post_start());
-            let data = await create_post(data_post);
+            let data = await createPost(dataPost);
             if (data && data.data && data.data.success === 1) {
                 dispatch(post_success());
                 message.success('Thành công');
@@ -55,12 +55,12 @@ export const create_post_redux = (data_post) => {
         }
     }
 }
-export const delete_list_post_redux = (list_id) => {
+export const deleteListPostRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(post_start());
         for (const id of list_id) {
             try {
-                let data = await delete_post(id);
+                let data = await deletePost(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -73,12 +73,12 @@ export const delete_list_post_redux = (list_id) => {
         dispatch(post_success());
     }
 }
-export const edit_list_post_redux = (list_id, data_post) => {
+export const editListPostRedux = (list_id, dataPost) => {
     return async (dispatch, getState) => {
         dispatch(post_start());
         for (const id of list_id) {
             try {
-                let data = await edit_post(id, data_post);
+                let data = await editPost(id, dataPost);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_post_redux = (list_id, data_post) => {
         dispatch(post_success());
     }
 }
-export const edit_post_redux = (id, data_post) => {
+export const editPostRedux = (id, dataPost) => {
     return async (dispatch, getState) => {
         try {
             dispatch(post_start());
-            let data = await edit_post(id, data_post);
+            let data = await editPost(id, dataPost);
             if (data && data.data && data.data.success === 1) {
                 dispatch(post_success());
                 message.success('Thành công');
@@ -127,12 +127,12 @@ export const get_post_success = (data) => ({
     type: action_types.GET_POST_SUCCESS,
     data
 })
-export const on_change_post_redux = (value, id) => ({
+export const onChangePostRedux = (value, id) => ({
     type: action_types.ON_CHANGE_POST,
     value,
     id,
 })
-export const set_data_post_redux = (data) => ({
+export const setDataPostRedux = (data) => ({
     type: action_types.SET_DATA_POST,
     data,
 })

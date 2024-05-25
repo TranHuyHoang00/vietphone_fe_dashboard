@@ -3,30 +3,30 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Collapse, Typography, Button, Card, message } from 'antd';
-import FormSelectItem from '@components/selects/form_select_item';
+import FormSelectItem from '@components/selects/formSelectItem';
 import { DeleteOutlined } from '@ant-design/icons';
 class variant_attribute_value extends Component {
     constructor(props) {
         super(props);
         this.state = {
             disable_atbvl: true,
-            disabled_button: true,
+            disabledButtonCreate: true,
 
             is_edit: '',
             data_atbvl_raws: [],
             data_atbvl_ids: [],
             data_atbvl_uniques: [],
 
-            data_attributes: [],
+            dataAttributes: [],
         }
     }
     async componentDidMount() {
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.is_edit !== this.props.is_edit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws || prevProps.data_attributes !== this.props.data_attributes) {
+        if (prevProps.is_edit !== this.props.is_edit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws || prevProps.dataAttributes !== this.props.dataAttributes) {
             this.props.set_data_attribute({});
             this.props.set_data_attribute_value({});
-            let data_attributes = this.props.data_attributes;
+            let dataAttributes = this.props.dataAttributes;
             let data_atbvl_raws = this.props.data_atbvl_raws;
             if (data_atbvl_raws && data_atbvl_raws.length !== 0) {
                 this.handle_data_unique(this.props.data_atbvl_raws);
@@ -35,40 +35,40 @@ class variant_attribute_value extends Component {
                     data_atbvl_raws: this.props.data_atbvl_raws,
                 })
             }
-            if (data_attributes && data_attributes.length !== 0) {
+            if (dataAttributes && dataAttributes.length !== 0) {
                 this.setState({
-                    data_attributes: this.props.data_attributes,
+                    dataAttributes: this.props.dataAttributes,
                 })
             }
             this.setState({
                 disable_atbvl: true,
-                disabled_button: true,
+                disabledButtonCreate: true,
             })
         }
     }
-    on_search = (value, form_name) => {
+    onSearch = (value, nameFormSelect) => {
 
     }
-    handleCreate = async (form_name) => {
-        if (form_name === 'attribute_value') {
+    handleCreate = async (nameFormSelect) => {
+        if (nameFormSelect === 'attribute_value') {
             if (!this.props.data_attribute_value.value) { message.error('Thiếu giá trị'); return; }
             await this.props.create_attribute_value(this.props.data_attribute_value);
             await this.props.get_attribute(this.props.data_attribute_value.attribute);
         }
     }
 
-    on_select = async (value, form_name) => {
-        if (form_name === 'attribute') {
+    on_select = async (value, nameFormSelect) => {
+        if (nameFormSelect === 'attribute') {
             await this.props.get_attribute(value);
             this.props.set_data_attribute_value({ attribute: this.props.data_attribute.id });
             this.setState({
                 disable_atbvl: false,
             })
         }
-        if (form_name === 'attribute_value') {
+        if (nameFormSelect === 'attribute_value') {
             await this.props.get_attribute_value(value);
             this.setState({
-                disabled_button: false,
+                disabledButtonCreate: false,
             })
         }
     }
@@ -138,7 +138,7 @@ class variant_attribute_value extends Component {
         let data_attribute_value = this.props.data_attribute_value;
         let data_atbvl_uniques = this.state.data_atbvl_uniques;
         let data_atbvl_raws = this.state.data_atbvl_raws;
-        let data_attributes = this.state.data_attributes;
+        let dataAttributes = this.state.dataAttributes;
         return (
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Thông số kĩ thuật" key="1">
@@ -149,20 +149,20 @@ class variant_attribute_value extends Component {
                                     <Typography.Text italic strong>Thông số</Typography.Text>
                                     <FormSelectItem width={'100%'}
                                         placeholder={'Thông số'}
-                                        form_name={'attribute'}
-                                        options={data_attributes.map((item) => ({
+                                        nameFormSelect={'attribute'}
+                                        options={dataAttributes.map((item) => ({
                                             label: item.name,
                                             value: item.id,
                                         }))}
                                         value={data_attribute.id}
-                                        disabled_select={!this.props.is_edit}
-                                        disabled_button={true}
-                                        disabled_search={true}
-                                        on_search={this.on_search}
-                                        variable_select={'attribute'}
-                                        on_change_select={this.on_select}
-                                        variable_input={'name'}
-                                        on_change_input={this.props.on_change_attribute}
+                                        disabledSelect={!this.props.is_edit}
+                                        disabledButtonCreate={true}
+                                        disabledSearch={true}
+                                        onSearch={this.onSearch}
+                                        variableSelect={'attribute'}
+                                        onChangeSelect={this.on_select}
+                                        variableInputSearch={'name'}
+                                        onChangeInput={this.props.on_change_attribute}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -172,18 +172,18 @@ class variant_attribute_value extends Component {
                                     <Typography.Text italic strong>Giá trị</Typography.Text>
                                     <FormSelectItem width={'100%'}
                                         placeholder={'Giá trị'}
-                                        form_name={'attribute_value'}
+                                        nameFormSelect={'attribute_value'}
                                         options={data_attribute && data_attribute.attribute_values && data_attribute.attribute_values.map((item) => ({
                                             label: item.value,
                                             value: item.id,
                                         }))}
                                         value={data_attribute_value.id}
-                                        disabled_select={this.state.disable_atbvl}
-                                        on_search={this.on_search}
-                                        variable_select={'attribute_value'}
-                                        on_change_select={this.on_select}
-                                        variable_input={'value'}
-                                        on_change_input={this.props.on_change_attribute_value}
+                                        disabledSelect={this.state.disable_atbvl}
+                                        onSearch={this.onSearch}
+                                        variableSelect={'attribute_value'}
+                                        onChangeSelect={this.on_select}
+                                        variableInputSearch={'value'}
+                                        onChangeInput={this.props.on_change_attribute_value}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -193,7 +193,7 @@ class variant_attribute_value extends Component {
                             <div className='w-1/4'>
                                 <Button className='w-full bg-[#0e97ff] text-white'
                                     onClick={() => this.handle_add_atbvl()}
-                                    disabled={this.state.disabled_button}>Thêm </Button>
+                                    disabled={this.state.disabledButtonCreate}>Thêm </Button>
                             </div>
                         </div>
 

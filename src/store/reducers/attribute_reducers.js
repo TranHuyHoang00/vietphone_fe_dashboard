@@ -1,7 +1,7 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_attributes: [],
+    dataAttributes: [],
     data_attribute: {},
     dataMeta: {},
     isLoading: false,
@@ -33,7 +33,7 @@ const attribute_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_attributes: action.data.attributes,
+                dataAttributes: action.data.attributes,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_ATTRIBUTE_SUCCESS:
