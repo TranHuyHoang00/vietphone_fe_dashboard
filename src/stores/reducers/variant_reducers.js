@@ -1,7 +1,7 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_variants: [],
+    dataVariants: [],
     data_variant: {},
     dataMeta: {},
     isLoading: false,
@@ -39,7 +39,7 @@ const variant_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_variants: action.data.product_variants,
+                dataVariants: action.data.product_variants,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_VARIANT_SUCCESS:

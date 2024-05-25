@@ -5,7 +5,7 @@ import * as actions from '@actions';
 import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormSelectItem from '@components/selects/formSelectItem';
-import FormSelectInput from '@components/selects/formSelectInput';
+import FormSelectSingle from '@components/selects/formSelectSingle';
 import ModalFooter from '@components/modal/modalFooter';
 class index extends Component {
     constructor(props) {
@@ -14,15 +14,15 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_group({ page: 1, limit: 100, search: '' });
-
+        const { getListGroup } = this.props;
+        getListGroup({ page: 1, limit: 100, search: '' });
     }
     validation_phone = (phone_number) => {
         const re = /^(?:\+84|0)(?:3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-46-9])(?:\d{7}|\d{7})$/;
         return re.test(phone_number);
     }
     validationData = (data) => {
-        let regex = /^(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+        const regex = /^(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
         if (!data.full_name) {
             return { mess: "Không được bỏ trống 'Họ và tên' ", check: false };
         }
@@ -50,49 +50,46 @@ class index extends Component {
         return { check: true };
     }
     handleEdit = async () => {
-        let result = this.validationData(this.props.data_user);
+        const { dataUser, isResult, openModal, getListUser, editUser, dataFilter } = this.props;
+        const result = this.validationData(dataUser);
         if (result.check) {
-            let data_user = this.props.data_user;
-            await this.props.edit_user(data_user.id, data_user);
-            let isResult = this.props.isResult;
+            await editUser(dataUser.id, dataUser);
             if (isResult) {
-                this.props.openModal("edit", false);
-                await this.props.get_list_user(this.props.dataFilter);
+                openModal("edit", false);
+                await getListUser(dataFilter);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        let data_user = this.props.data_user;
-        let data_groups = this.props.data_groups;
-        let isLoading = this.props.isLoading;
+        const { dataUser, isLoading, onChangeUser, modalEdit, openModal, dataGroups } = this.props;
         return (
-            <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
-                onCancel={() => this.props.openModal("edit", false)} width={400}
+            <Modal title="CHỈNH SỬA" open={modalEdit}
+                onCancel={() => openModal("edit", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'edit'}
+                    <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Họ và tên'} variable={'full_name'} value={data_user.full_name}
+                        <FormInput name={'Họ và tên'} variable={'full_name'} value={dataUser.full_name}
                             important={true}
-                            onChangeInput={this.props.on_change_user} />
+                            onChangeInput={onChangeUser} />
 
-                        <FormInput name={'Số điện thoại'} variable={'phone'} value={data_user.phone}
+                        <FormInput name={'Số điện thoại'} variable={'phone'} value={dataUser.phone}
                             important={true}
-                            onChangeInput={this.props.on_change_user} />
+                            onChangeInput={onChangeUser} />
 
-                        <FormInput name={'Mật khẩu'} variable={'password'} value={data_user.password}
+                        <FormInput name={'Mật khẩu'} variable={'password'} value={dataUser.password}
                             important={true}
-                            onChangeInput={this.props.on_change_user} />
+                            onChangeInput={onChangeUser} />
 
-                        <FormInput name={'Nhập lại mật khẩu'} variable={'password2'} value={data_user.password2}
+                        <FormInput name={'Nhập lại mật khẩu'} variable={'password2'} value={dataUser.password2}
                             important={true}
-                            onChangeInput={this.props.on_change_user} />
+                            onChangeInput={onChangeUser} />
 
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>
@@ -101,8 +98,8 @@ class index extends Component {
                             </Typography.Text>
                             <FormSelectItem width={'100%'} placeholder={'Phân quyền'}
                                 mode={'multiple'}
-                                value={data_user.groups}
-                                options={data_groups.map((item) => ({
+                                value={dataUser.groups}
+                                options={dataGroups.map((item) => ({
                                     label: item.name,
                                     value: item.id,
                                 }))}
@@ -110,16 +107,16 @@ class index extends Component {
                                 disabledButtonCreate={true}
                                 disabledSearch={true}
                                 variableSelect={'groups'}
-                                onChangeSelect={this.props.on_change_user}
+                                onChangeSelect={onChangeUser}
                             />
                         </div>
-                        <FormSelectInput name={'Trạng thái'} variable={'is_active'} value={data_user.is_active}
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataUser.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },
                                 { value: false, label: 'Khóa' },
                             ]}
-                            onChangeInput={this.props.on_change_user} />
+                            onChangeInput={onChangeUser} />
                     </div>
                 </Spin>
             </Modal>
@@ -129,19 +126,19 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_user: state.user.data_user,
+        dataUser: state.user.dataUser,
         isLoading: state.user.isLoading,
         isResult: state.user.isResult,
-        data_groups: state.group.data_groups,
+        dataGroups: state.group.dataGroups,
 
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_user: (dataFilter) => dispatch(actions.get_list_user_redux(dataFilter)),
-        edit_user: (id, data) => dispatch(actions.edit_user_redux(id, data)),
-        on_change_user: (id, value) => dispatch(actions.on_change_user_redux(id, value)),
-        get_list_group: (dataFilter) => dispatch(actions.get_list_group_redux(dataFilter)),
+        getListUser: (dataFilter) => dispatch(actions.getListUserRedux(dataFilter)),
+        editUser: (id, data) => dispatch(actions.editUserRedux(id, data)),
+        onChangeUser: (id, value) => dispatch(actions.onChangeUserRedux(id, value)),
+        getListGroup: (dataFilter) => dispatch(actions.getListGroupRedux(dataFilter)),
 
     };
 };

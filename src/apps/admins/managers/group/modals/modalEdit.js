@@ -39,7 +39,7 @@ class index extends Component {
         let isResult = this.props.isResult;
         if (isResult) {
             this.props.openModal("edit", false);
-            await this.props.get_list_group(this.props.dataFilter);
+            await this.props.getListGroup(this.props.dataFilter);
         }
     }
     onchange_checkbox = (value) => {
@@ -126,7 +126,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_group: (dataFilter) => dispatch(actions.get_list_group_redux(dataFilter)),
+        getListGroup: (dataFilter) => dispatch(actions.getListGroupRedux(dataFilter)),
         edit_group: (id, data) => dispatch(actions.edit_group_redux(id, data)),
         on_change_group: (id, value) => dispatch(actions.on_change_group_redux(id, value)),
         get_list_permission: (dataFilter) => dispatch(actions.get_list_permission_redux(dataFilter)),

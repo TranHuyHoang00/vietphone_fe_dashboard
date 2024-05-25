@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_variant, get_variant, create_variant, delete_variant, edit_variant } from '@services/variant_service';
+import { getListVariant, get_variant, create_variant, delete_variant, edit_variant } from '@services/variant_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
-export const get_list_variant_redux = (dataFilter) => {
+export const getListVariantRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variant_start());
-            let data = await get_list_variant(dataFilter);
+            let data = await getListVariant(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_variant_success(data.data.data));
             } else {

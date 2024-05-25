@@ -11,14 +11,14 @@ class variant_overview extends Component {
     async componentDidMount() {
     }
     render() {
-        let data_variants = this.props.data_variants;
+        let dataVariants = this.props.dataVariants;
         return (
             <Collapse defaultActiveKey={['1']}>
                 <Collapse.Panel header="Phiên bản" key="1">
                     <Radio.Group className='w-full' value={this.props.active_variant}
                         onChange={(value) => this.props.select_variant(value.target.value)}>
                         <div className='space-y-[10px] '>
-                            {data_variants && data_variants.map((item, index) => {
+                            {dataVariants && dataVariants.map((item, index) => {
                                 return (
                                     <div key={index} onClick={() => this.props.select_variant(index)}
                                         className='flex gap-[10px] cursor-pointer '>

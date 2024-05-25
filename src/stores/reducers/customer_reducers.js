@@ -1,8 +1,8 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_customers: [],
-    data_customer: {},
+    dataCustomers: [],
+    dataCustomer: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -33,7 +33,7 @@ const customer_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_customers: action.data.customers,
+                dataCustomers: action.data.customers,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_CUSTOMER_SUCCESS:
@@ -41,7 +41,7 @@ const customer_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_customer: action.data
+                dataCustomer: action.data
             }
         case action_types.CREATE_CUSTOMER_SUCCESS:
             return {
@@ -70,14 +70,14 @@ const customer_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_CUSTOMER:
             return {
                 ...state,
-                data_customer: action.data,
+                dataCustomer: action.data,
             }
         case action_types.ON_CHANGE_CUSTOMER:
-            let copyState = { ...state.data_customer };
+            let copyState = { ...state.dataCustomer };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_customer: {
+                dataCustomer: {
                     ...copyState,
                 }
             }

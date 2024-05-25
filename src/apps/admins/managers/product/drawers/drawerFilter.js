@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Drawer, Typography, Radio } from 'antd';
-import FormSelectInput from '@components/selects/formSelectInput'
-class drawer_filter extends Component {
+import FormSelectSingle from '@components/selects/formSelectSingle'
+class drawerFilter extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,7 +17,7 @@ class drawer_filter extends Component {
         let dataCategorys = [{ name: 'TẤT CẢ', id: '' }, ...this.props.dataCategorys];
 
         return (
-            <Drawer title="Bộ lọc nâng cao" onClose={() => this.props.open_drawer('filter', false)} open={this.props.drawer_filter}>
+            <Drawer title="Bộ lọc nâng cao" onClose={() => this.props.openDrawer('filter', false)} open={this.props.drawerFilter}>
                 <div className='space-y-[10px]'>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Trạng thái</Typography.Text>
@@ -35,21 +35,21 @@ class drawer_filter extends Component {
                             <Radio.Button value={false}>Chưa đăng</Radio.Button>
                         </Radio.Group>
                     </div>
-                    <FormSelectInput name={'Loại sản phẩm'} variable={'category'} value={dataFilter.category}
+                    <FormSelectSingle name={'Loại sản phẩm'} variable={'category'} value={dataFilter.category}
                         important={false} width={'100%'}
                         options={dataCategorys.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}
                         onChangeInput={this.props.onChangePage} />
-                    <FormSelectInput name={'Thương hiệu'} variable={'product_brand'} value={dataFilter.product_brand}
+                    <FormSelectSingle name={'Thương hiệu'} variable={'product_brand'} value={dataFilter.product_brand}
                         important={false} width={'100%'}
                         options={dataBrands.map((item) => ({
                             label: item.name,
                             value: item.id,
                         }))}
                         onChangeInput={this.props.onChangePage} />
-                    <FormSelectInput name={'Tag'} variable={'tag'} value={dataFilter.tag}
+                    <FormSelectSingle name={'Tag'} variable={'tag'} value={dataFilter.tag}
                         important={false} width={'100%'}
                         options={dataTags.map((item) => ({
                             label: item.name,
@@ -62,4 +62,4 @@ class drawer_filter extends Component {
     }
 
 }
-export default withRouter(drawer_filter);
+export default withRouter(drawerFilter);

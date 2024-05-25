@@ -1,12 +1,12 @@
 import action_types from '@actions/action_types';
-import { get_list_user, get_user, create_user, delete_user, edit_user, get_list_user_permission } from '@services/user_service';
+import { getListUser, getDataUser, createUser, deleteUser, editUser, getListUserPermission } from '@services/user_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
-export const get_list_user_redux = (dataFilter) => {
+export const getListUserRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(user_start());
-            let data = await get_list_user(dataFilter);
+            let data = await getListUser(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_user_success(data.data.data));
             } else {
@@ -19,11 +19,11 @@ export const get_list_user_redux = (dataFilter) => {
         }
     }
 }
-export const get_user_redux = (id) => {
+export const getDataUserRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(user_start());
-            let data = await get_user(id);
+            let data = await getDataUser(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_user_success(data.data.data));
             } else {
@@ -36,11 +36,11 @@ export const get_user_redux = (id) => {
         }
     }
 }
-export const create_user_redux = (data_user) => {
+export const createUserRedux = (dataUser) => {
     return async (dispatch, getState) => {
         try {
             dispatch(user_start());
-            let data = await create_user(data_user);
+            let data = await createUser(dataUser);
             if (data && data.data && data.data.success === 1) {
                 dispatch(user_success());
                 message.success('Thành công');
@@ -54,12 +54,12 @@ export const create_user_redux = (data_user) => {
         }
     }
 }
-export const delete_list_user_redux = (list_id) => {
+export const deleteListUserRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(user_start());
         for (const id of list_id) {
             try {
-                let data = await delete_user(id);
+                let data = await deleteUser(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -72,12 +72,12 @@ export const delete_list_user_redux = (list_id) => {
         dispatch(user_success());
     }
 }
-export const edit_list_user_redux = (list_id, data_user) => {
+export const editListUserRedux = (list_id, dataUser) => {
     return async (dispatch, getState) => {
         dispatch(user_start());
         for (const id of list_id) {
             try {
-                let data = await edit_user(id, data_user);
+                let data = await editUser(id, dataUser);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -90,11 +90,11 @@ export const edit_list_user_redux = (list_id, data_user) => {
         dispatch(user_success());
     }
 }
-export const edit_user_redux = (id, data_user) => {
+export const editUserRedux = (id, dataUser) => {
     return async (dispatch, getState) => {
         try {
             dispatch(user_start());
-            let data = await edit_user(id, data_user);
+            let data = await editUser(id, dataUser);
             if (data && data.data && data.data.success === 1) {
                 dispatch(user_success());
                 message.success('Thành công');
@@ -112,7 +112,7 @@ export const get_list_user_permission_redux = () => {
     return async (dispatch, getState) => {
         try {
             dispatch(user_start());
-            let data = await get_list_user_permission();
+            let data = await getListUserPermission();
             if (data && data.data && data.data.success === 1) {
                 let data_raw = data.data.data;
                 if (data_raw?.isSuperUser === true) {
@@ -150,12 +150,12 @@ export const get_user_success = (data) => ({
     type: action_types.GET_USER_SUCCESS,
     data
 })
-export const on_change_user_redux = (value, id) => ({
+export const onChangeUserRedux = (value, id) => ({
     type: action_types.ON_CHANGE_USER,
     value,
     id,
 })
-export const set_data_user_redux = (data) => ({
+export const setDataUserRedux = (data) => ({
     type: action_types.SET_DATA_USER,
     data,
 })

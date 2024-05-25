@@ -8,7 +8,7 @@ import {
 } from 'antd';
 import { AiOutlineMenu } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
-import DrawerFilter from './drawers/drawer_filter';
+import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
 import { data_products } from '@datas/dataPermissionsOrigin';
 class index extends Component {
@@ -19,7 +19,7 @@ class index extends Component {
             modalDetail: false,
             modalCreate: false,
             modalEdit: false,
-            drawer_filter: false,
+            drawerFilter: false,
             dataFilter: {},
 
             dataPermissionsAfterCheck: {},
@@ -59,9 +59,9 @@ class index extends Component {
             }
         }
     }
-    open_drawer = async (name, value) => {
+    openDrawer = async (name, value) => {
         if (name === 'filter') {
-            this.setState({ drawer_filter: value });
+            this.setState({ drawerFilter: value });
         }
     }
     funcDropButtonHeaderOfTable = async () => {
@@ -188,7 +188,7 @@ class index extends Component {
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Space>
                                 <Button disabled={!dataPermissionsAfterCheck['product.view_product']}
-                                    onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                    onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiOutlineMenu />
                                         Bộ lọc
@@ -215,9 +215,9 @@ class index extends Component {
                         </div>
                     </div >
                 </Spin>
-                {this.state.drawer_filter && dataPermissionsAfterCheck['product.view_product'] &&
-                    <DrawerFilter drawer_filter={this.state.drawer_filter}
-                        open_drawer={this.open_drawer} dataFilter={this.state.dataFilter}
+                {this.state.drawerFilter && dataPermissionsAfterCheck['product.view_product'] &&
+                    <DrawerFilter drawerFilter={this.state.drawerFilter}
+                        openDrawer={this.openDrawer} dataFilter={this.state.dataFilter}
                         onChangePage={this.onChangePage}
                         dataBrands={this.props.dataBrands} dataTags={this.props.dataTags}
                         dataCategorys={this.props.dataCategorys} />

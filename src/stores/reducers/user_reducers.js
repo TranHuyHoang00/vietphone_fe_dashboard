@@ -1,8 +1,8 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_users: [],
-    data_user: {},
+    dataUsers: [],
+    dataUser: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -36,7 +36,7 @@ const user_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_users: action.data.users,
+                dataUsers: action.data.users,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_USER_SUCCESS:
@@ -44,7 +44,7 @@ const user_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_user: action.data
+                dataUser: action.data
             }
         case action_types.CREATE_USER_SUCCESS:
             return {
@@ -73,14 +73,14 @@ const user_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_USER:
             return {
                 ...state,
-                data_user: action.data,
+                dataUser: action.data,
             }
         case action_types.ON_CHANGE_USER:
-            let copyState = { ...state.data_user };
+            let copyState = { ...state.dataUser };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_user: {
+                dataUser: {
                     ...copyState,
                 }
             }

@@ -10,14 +10,14 @@ class header extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_user: {},
+            dataUser: {},
             dark_mode: '',
         }
     }
     async componentDidMount() {
-        let data_user = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+        let dataUser = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
         let dark_mode = await getDataLocal(process.env.REACT_APP_LOCALHOST_DARK_MODE);
-        if (data_user) {
+        if (dataUser) {
             if (!dark_mode) {
                 dark_mode = { data: false };
                 setDataLocal(process.env.REACT_APP_LOCALHOST_DARK_MODE, false);
@@ -25,7 +25,7 @@ class header extends Component {
                 document.documentElement.classList.toggle('dark', dark_mode.data);
             }
             this.props.set_dark_mode(dark_mode.data);
-            this.setState({ data_user: data_user.data.user, dark_mode: dark_mode.data });
+            this.setState({ dataUser: dataUser.data.user, dark_mode: dark_mode.data });
         }
     }
     handle_logout = () => {
@@ -40,7 +40,7 @@ class header extends Component {
         document.documentElement.classList.toggle('dark', value);
     }
     render() {
-        let data_user = this.state.data_user;
+        let dataUser = this.state.dataUser;
         let dark_mode = this.state.dark_mode;
         const items = [
             {
@@ -82,7 +82,7 @@ class header extends Component {
                             <Space>
                                 <Avatar src={AvatarNone} size={40} />
                                 <div className='max-w-[70px] truncate'>
-                                    <h1 className='font-medium text-gray-900 dark:text-white'>{data_user && data_user.full_name}</h1>
+                                    <h1 className='font-medium text-gray-900 dark:text-white'>{dataUser && dataUser.full_name}</h1>
                                 </div>
                             </Space>
                         </Dropdown>

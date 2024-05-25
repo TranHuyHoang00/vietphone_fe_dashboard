@@ -6,7 +6,7 @@ import { Modal, message, Spin } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormTextare from '@components/inputs/formTextare';
 import FormDate from '@components/inputs/form_date';
-import FormSelectInput from '@components/selects/formSelectInput';
+import FormSelectSingle from '@components/selects/formSelectSingle';
 import ModalFooter from '@components/modal/modalFooter';
 import dayjs from 'dayjs';
 class index extends Component {
@@ -71,7 +71,7 @@ class index extends Component {
                             important={false}
                             onChangeInput={onChangeFlashSale} />
 
-                        <FormSelectInput name={'Trạng thái'} variable={'is_active'} value={dataFlashSale.is_active}
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataFlashSale.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },

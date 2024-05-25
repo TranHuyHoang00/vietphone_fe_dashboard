@@ -26,7 +26,7 @@ class index extends Component {
             let isResult = this.props.isResult;
             if (isResult) {
                 this.props.openModal("create", false);
-                await this.props.get_list_group(this.props.dataFilter);
+                await this.props.getListGroup(this.props.dataFilter);
             }
         } else {
             message.error(result.mess);
@@ -67,7 +67,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_group: (dataFilter) => dispatch(actions.get_list_group_redux(dataFilter)),
+        getListGroup: (dataFilter) => dispatch(actions.getListGroupRedux(dataFilter)),
         create_group: (data) => dispatch(actions.create_group_redux(data)),
         on_change_group: (id, value) => dispatch(actions.on_change_group_redux(id, value)),
     };

@@ -5,15 +5,15 @@ const get_list_flash_sale_item = (date_filter) => {
 const create_flash_sale_item = (data) => {
     return apiAdmin.post(`/promotion/api/v1/create-flash-sale-item`, data);
 }
-const get_flash_sale_item = (id) => {
+const getDataFlashSaleItem = (id) => {
     return apiAdmin.get(`/promotion/api/v1/get-flash-sale-item/${id}`);
 }
 const delete_flash_sale_item = (id) => {
     return apiAdmin.delete(`/promotion/api/v1/delete-flash-sale-item/${id}`);
 }
-const edit_flash_sale_item = (id, data) => {
+const editFlashSaleItem = (id, data) => {
     return apiAdmin.put(`/promotion/api/v1/update-flash-sale-item/${id}`, data);
 }
 export {
-    get_list_flash_sale_item, create_flash_sale_item, get_flash_sale_item, delete_flash_sale_item, edit_flash_sale_item
+    get_list_flash_sale_item, create_flash_sale_item, getDataFlashSaleItem, delete_flash_sale_item, editFlashSaleItem
 }

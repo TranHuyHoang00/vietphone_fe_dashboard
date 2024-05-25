@@ -5,7 +5,7 @@ import * as actions from '@actions';
 import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import ModalFooter from '@components/modal/modalFooter';
-import FormSelectInput from '@components/selects/formSelectInput';
+import FormSelectSingle from '@components/selects/formSelectSingle';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 class index extends Component {
@@ -64,7 +64,7 @@ class index extends Component {
                             <FormInput name={'Slug'} variable={'slug'} value={dataPost.slug}
                                 important={true}
                                 onChangeInput={onChangePost} />
-                            <FormSelectInput name={'Loại bài viết'} variable={'category'} value={dataPost.category}
+                            <FormSelectSingle name={'Loại bài viết'} variable={'category'} value={dataPost.category}
                                 important={true} width={200}
                                 options={dataCategoryPosts.map((item) => ({
                                     label: item.title,

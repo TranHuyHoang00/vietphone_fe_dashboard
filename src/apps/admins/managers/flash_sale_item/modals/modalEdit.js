@@ -13,42 +13,37 @@ class index extends Component {
     }
     async componentDidMount() {
     }
-    validationData = (data) => {
+    validationData = () => {
         return { check: true };
     }
     handleEdit = async () => {
-        let result = this.validationData(this.props.data_flash_sale_item);
+        const { dataFlashSaleItem, dataFlashSale, isResult, openModal, getDataFlashSale, editFlashSaleItem } = this.props;
+        const result = this.validationData(dataFlashSaleItem);
         if (result.check) {
-            let data_flash_sale_item = this.props.data_flash_sale_item;
-            let data_flash_sale = this.props.data_flash_sale;
-            await this.props.edit_flash_sale_item(data_flash_sale_item.id, data_flash_sale_item);
-            let isResult = this.props.isResult;
+            await editFlashSaleItem(dataFlashSaleItem.id, dataFlashSaleItem);
             if (isResult) {
-                await this.props.getDataFlashSale(data_flash_sale.id);
-                this.props.openModal("edit", false);
+                await getDataFlashSale(dataFlashSale.id);
+                openModal("edit", false);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        let data_flash_sale_item = this.props.data_flash_sale_item;
-        let isLoading = this.props.isLoading;
+        const { dataFlashSaleItem, isLoading, openModal, modalEdit, onChangeFlashSaleItem } = this.props;
         return (
-            <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
-                onCancel={() => this.props.openModal("edit", false)} width={400}
+            <Modal title="CHỈNH SỬA" open={modalEdit}
+                onCancel={() => openModal("edit", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'edit'}
+                    <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
-
-                        <FormInput name={'Giá khuyến mãi'} variable={'discount_price'} value={data_flash_sale_item.discount_price}
+                        <FormInput name={'Giá khuyến mãi'} variable={'discount_price'} value={dataFlashSaleItem.discount_price}
                             important={true}
-                            onChangeInput={this.props.on_change_flash_sale_item}
-                        />
+                            onChangeInput={onChangeFlashSaleItem} />
                     </div>
                 </Spin>
             </Modal>
@@ -58,18 +53,17 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_flash_sale_item: state.flash_sale_item.data_flash_sale_item,
+        dataFlashSaleItem: state.flash_sale_item.dataFlashSaleItem,
         isLoading: state.flash_sale_item.isLoading,
         isResult: state.flash_sale_item.isResult,
-        data_flash_sale: state.flash_sale.data_flash_sale,
+        dataFlashSale: state.flash_sale.dataFlashSale,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        edit_flash_sale_item: (id, data) => dispatch(actions.edit_flash_sale_item_redux(id, data)),
-        on_change_flash_sale_item: (id, value) => dispatch(actions.on_change_flash_sale_item_redux(id, value)),
+        editFlashSaleItem: (id, data) => dispatch(actions.editFlashSaleItemRedux(id, data)),
+        onChangeFlashSaleItem: (id, value) => dispatch(actions.onChangeFlashSaleItemRedux(id, value)),
         getDataFlashSale: (id) => dispatch(actions.getDataFlashSaleRedux(id)),
-
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

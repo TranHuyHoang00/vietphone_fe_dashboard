@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_group, get_group, create_group, delete_group, edit_group } from '@services/group_service';
+import { getListGroup, get_group, create_group, delete_group, edit_group } from '@services/group_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
-export const get_list_group_redux = (dataFilter) => {
+export const getListGroupRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(group_start());
-            let data = await get_list_group(dataFilter);
+            let data = await getListGroup(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_group_success(data.data.data));
             } else {

@@ -1,7 +1,7 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_groups: [],
+    dataGroups: [],
     data_group: {},
     dataMeta: {},
     isLoading: false,
@@ -33,7 +33,7 @@ const group_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_groups: action.data.groups,
+                dataGroups: action.data.groups,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_GROUP_SUCCESS:

@@ -1,5 +1,5 @@
 import apiAdmin from '@auths/apiAdmin';
-const get_list_group = (date_filter) => {
+const getListGroup = (date_filter) => {
     return apiAdmin.get(`/auth/api/v1/list-group?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
 }
 const create_group = (data) => {
@@ -15,5 +15,5 @@ const edit_group = (id, data) => {
     return apiAdmin.put(`/auth/api/v1/update-group/${id}`, data);
 }
 export {
-    get_list_group, create_group, get_group, delete_group, edit_group
+    getListGroup, create_group, get_group, delete_group, edit_group
 }

@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import {
-    Modal, Input, Table, Divider, Popconfirm,
-    Spin, Pagination, Typography, Dropdown,
-} from 'antd';
+import { Modal, Input, Table, Divider, Spin, Pagination, Typography, } from 'antd';
 import ModalFooter from '@components/modal/modalFooter';
 import FormSelectPage from '@components/selects/formSelectPage';
+import { handleOnChangePage } from '@utils/handleFuncPage';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -22,32 +20,25 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_variant(this.state.dataFilter);
+        const { getListVariant } = this.props;
+        const { dataFilter } = this.state;
+        getListVariant(dataFilter);
     }
-    funcDropButtonHeaderOfTable = async () => {
-        let listItemSelected = this.state.listItemSelected;
-        let data_flash_sale = this.props.data_flash_sale;
-        if (this.state.dropButtonType === 1) {
-            if (data_flash_sale.id) {
-                await this.props.create_list_flash_sale_item(data_flash_sale.id, listItemSelected);
-            }
-        }
-        if (this.props.isResult) {
-            await this.props.getDataFlashSale(data_flash_sale.id);
-            this.props.openModal("create", false);
-            if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
-        }
+    handleCreate = async () => {
+        const { dataFlashSale, createListFlashSaleItem, getDataFlashSale, openModal } = this.props;
+        const { listItemSelected } = this.state;
+        await createListFlashSaleItem(dataFlashSale.id, listItemSelected);
+        await getDataFlashSale(dataFlashSale.id);
+        openModal("create", false);
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_variant(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListVariant } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListVariant(newDataFilter);
     }
     render() {
-        let isLoading = this.props.isLoading;
         const columns = [
             {
                 title: 'ID', dataIndex: 'id', width: 60, responsive: ['sm'],
@@ -59,23 +50,20 @@ class index extends Component {
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
         ];
-        const items = [
-            { key: 1, label: 'Thêm' },
-        ];
-        const listItemSelected = this.state.listItemSelected;
+        const { isLoading, modalCreate, openModal, dataMeta, dataVariants } = this.props;
+        const { listItemSelected, dataFilter } = this.state;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dropButtonType = this.state.dropButtonType;
         return (
 
-            <Modal title="THÊM MỚI" open={this.props.modalCreate}
-                onCancel={() => this.props.openModal("create", false)} width={900}
+            <Modal title="THÊM MỚI" open={modalCreate}
+                onCancel={() => openModal("create", false)} width={900}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'create'}
-                        isLoading={isLoading} selectFuncFooterModal={this.funcDropButtonHeaderOfTable} />
+                    <ModalFooter openModal={openModal} type={'create'}
+                        isLoading={isLoading} selectFuncFooterModal={this.handleCreate} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
@@ -84,27 +72,15 @@ class index extends Component {
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={this.state.dataFilter.limit} onChangePage={this.onChangePage} />
-                                <div>
-                                    <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
-                                        title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
-                                        placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
-                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
-                                            <div>
-                                                {dropButtonType === 1 && <span>Thêm</span>}
-                                                <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
-                                            </div>
-                                        </Dropdown.Button>
-                                    </Popconfirm>
-                                </div>
+                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
                             </div>
                             <Divider>SẢN PHẨM</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_variants} pagination={false}
+                                    columns={columns} dataSource={dataVariants} pagination={false}
                                     size="middle" bordered scroll={{}} />
-                                <Pagination responsive current={this.state.dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={this.state.dataFilter.limit}
+                                <Pagination responsive current={dataFilter.page}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
@@ -117,19 +93,18 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_variants: state.variant.data_variants,
+        dataVariants: state.variant.dataVariants,
         dataMeta: state.variant.dataMeta,
         isLoading: state.variant.isLoading,
-        data_flash_sale: state.flash_sale.data_flash_sale,
+        dataFlashSale: state.flash_sale.dataFlashSale,
         isResult: state.flash_sale_item.isResult,
-
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         getDataFlashSale: (id) => dispatch(actions.getDataFlashSaleRedux(id)),
-        get_list_variant: (dataFilter) => dispatch(actions.get_list_variant_redux(dataFilter)),
-        create_list_flash_sale_item: (id, list_it) => dispatch(actions.create_list_flash_sale_item_redux(id, list_it)),
+        getListVariant: (dataFilter) => dispatch(actions.getListVariantRedux(dataFilter)),
+        createListFlashSaleItem: (id, data) => dispatch(actions.createListFlashSaleItemRedux(id, data)),
 
     };
 };

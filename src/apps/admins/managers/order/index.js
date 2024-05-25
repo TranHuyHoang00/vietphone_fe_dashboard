@@ -8,21 +8,23 @@ import {
 } from 'antd';
 import { AiFillEye, AiOutlineMenu } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
-import { format_money } from '@utils/format_money';
+import { formatMoney, formatDay } from '@utils/handleFuncFormat';
 import { textLine13 } from '@components/displays/line13';
-import { format_day } from '@utils/format_day';
 import ModalDetail from './modals/modalDetail';
-import DrawerFilter from './drawers/drawer_filter';
+import DrawerFilter from './drawers/drawerFilter';
 import AvatarNone from '@assets/images/avatarNone.jpg';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
-import { data_orders } from '@datas/dataPermissionsOrigin';
+import { dataOrders } from '@datas/dataPermissionsOrigin';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
             listItemSelected: [],
             modalDetail: false,
-            drawer_filter: false,
+            drawerFilter: false,
             dataFilter: {
                 page: 1,
                 limit: 5,
@@ -34,44 +36,56 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_order(this.state.dataFilter);
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_orders, this.props.dataUserPermissions, this.props.isSuperUser);
+        const { dataFilter } = this.state;
+        const { getListOrder, dataUserPermissions, isSuperUser } = this.props;
+        await getListOrder(dataFilter);
+        const dataPermissionsAfterCheck = await handleCheckPermission(dataOrders, dataUserPermissions, isSuperUser);
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    openModal = async (name, value, id) => {
-        if (name === 'detail') {
-            if (id === undefined) {
-                this.setState({ modalDetail: value, data_order: {} });
-            } else {
-                this.setState({ modalDetail: value });
-                await this.props.get_order(id);
-            }
-        }
-    }
-    open_drawer = async (name, value) => {
-        if (name === 'filter') {
-            this.setState({ drawer_filter: value });
-        }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataOrder, getDataOrder } = this.props;
+        const actions = {
+            setData: setDataOrder,
+            getData: getDataOrder,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
+        const { listItemSelected, dropButtonType, dataFilter } = this.state;
+        const { deleteListOrder, editListOrder, getListOrder } = this.props;
+        const actions = {
+            deleteList: deleteListOrder,
+            editList: editListOrder,
+            getList: getListOrder
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        if (type === 'status') { dataFilter.status = value; dataFilter.page = 1; }
-        if (type === 'source') { dataFilter.source = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_order(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListOrder } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListOrder(newDataFilter);
+    }
+
+    openDrawer = async (drawerName, drawerValue) => {
+        switch (drawerName) {
+            case 'filter':
+                this.setState({ drawerFilter: drawerValue });
+                break;
+            default:
+                return;
+        }
     }
     render() {
         const columns = [
             {
                 title: 'Ngày tạo', dataIndex: 'created_at', width: 140, responsive: ['sm'],
-                render: (created_at) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{format_day(created_at)}</Typography.Text>,
+                render: (created_at) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{formatDay(created_at)}</Typography.Text>,
                 sorter: (a, b) => a.created_at - b.created_at,
             },
             {
@@ -82,7 +96,7 @@ class index extends Component {
                         <div>
                             <Typography.Text strong className='text-[#0574b8] dark:text-white'>{user.full_name}</Typography.Text><br />
                             <Typography.Text italic strong>{user.phone}</Typography.Text><br />
-                            {item.email === '' || item.email === null ?
+                            {item.email ?
                                 <Typography.Text italic>none@gmail.com</Typography.Text>
                                 :
                                 <Typography.Text italic>{item.email}</Typography.Text>
@@ -95,8 +109,8 @@ class index extends Component {
                 render: (id, item) =>
                     <div >
                         {textLine13('Mã ĐH', item.code, 'font-medium')}
-                        {textLine13('Khấu trừ', format_money(item.total_discount), 'font-medium text-red-500')}
-                        {textLine13('Tổng tiền', format_money(item.total), 'font-medium text-red-500')}
+                        {textLine13('Khấu trừ', formatMoney(item.total_discount), 'font-medium text-red-500')}
+                        {textLine13('Tổng tiền', formatMoney(item.total), 'font-medium text-red-500')}
                         {textLine13('Nguồn', item.source)}
                         {textLine13('Trạng thái', item.status,)}
                     </div>
@@ -112,21 +126,20 @@ class index extends Component {
             },
 
         ];
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
-        const listItemSelected = this.state.listItemSelected;
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, modalDetail, drawerFilter } = this.state;
+        const { isLoading, dataOrders, dataMeta } = this.props;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dataFilter = this.state.dataFilter;
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Space>
                                 <Button disabled={!dataPermissionsAfterCheck['order.view_order']}
-                                    onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                    onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiOutlineMenu />
                                         Bộ lọc
@@ -142,21 +155,21 @@ class index extends Component {
                             <Divider >ĐƠN HÀNG</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_orders} pagination={false}
+                                    columns={columns} dataSource={dataOrders} pagination={false}
                                     size="middle" bordered scroll={{ x: 600 }} />
                                 <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modalDetail && dataPermissionsAfterCheck['order.view_order'] &&
-                    <ModalDetail modalDetail={this.state.modalDetail}
+                {modalDetail && dataPermissionsAfterCheck['order.view_order'] &&
+                    <ModalDetail modalDetail={modalDetail}
                         openModal={this.openModal} />}
-                {this.state.drawer_filter && dataPermissionsAfterCheck['order.view_order'] &&
-                    <DrawerFilter drawer_filter={this.state.drawer_filter}
-                        open_drawer={this.open_drawer} dataFilter={this.state.dataFilter}
+                {drawerFilter && dataPermissionsAfterCheck['order.view_order'] &&
+                    <DrawerFilter drawerFilter={drawerFilter}
+                        openDrawer={this.openDrawer} dataFilter={dataFilter}
                         onChangePage={this.onChangePage} />}
             </>
         );
@@ -165,8 +178,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_orders: state.order.data_orders,
-        data_order: state.order.data_order,
+        dataOrders: state.order.dataOrders,
+        dataOrder: state.order.dataOrder,
         dataMeta: state.order.dataMeta,
         isLoading: state.order.isLoading,
         isResult: state.order.isResult,
@@ -177,11 +190,11 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_order: (dataFilter) => dispatch(actions.get_list_order_redux(dataFilter)),
-        get_order: (id) => dispatch(actions.get_order_redux(id)),
-        edit_list_order: (id, data) => dispatch(actions.edit_list_order_redux(id, data)),
-        delete_list_order: (id) => dispatch(actions.delete_list_order_redux(id)),
-        set_data_order: (id) => dispatch(actions.set_data_order_redux(id)),
+        getListOrder: (dataFilter) => dispatch(actions.getListOrderRedux(dataFilter)),
+        getDataOrder: (id) => dispatch(actions.getDataOrderRedux(id)),
+        editListOrder: (id, data) => dispatch(actions.editListOrderRedux(id, data)),
+        deleteListOrder: (id) => dispatch(actions.deleteListOrderRedux(id)),
+        setDataOrder: (id) => dispatch(actions.setDataOrderRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

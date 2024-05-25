@@ -11,7 +11,7 @@ import viVN from 'antd/es/locale/vi_VN';
 ReactDOM.render(
   <React.StrictMode>
     <ConfigProvider locale={viVN}>
-      <Provider stores={reduxStore}>
+      <Provider store={reduxStore}>
         <BrowserRouter>
           <App />
         </BrowserRouter>

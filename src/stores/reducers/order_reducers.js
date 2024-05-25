@@ -1,8 +1,8 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_orders: [],
-    data_order: {},
+    dataOrders: [],
+    dataOrder: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -33,7 +33,7 @@ const order_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_orders: action.data.orders,
+                dataOrders: action.data.orders,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_ORDER_SUCCESS:
@@ -41,7 +41,7 @@ const order_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_order: action.data
+                dataOrder: action.data
             }
         case action_types.CREATE_ORDER_SUCCESS:
             return {
@@ -70,14 +70,14 @@ const order_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_ORDER:
             return {
                 ...state,
-                data_order: action.data,
+                dataOrder: action.data,
             }
         case action_types.ON_CHANGE_ORDER:
-            let copyState = { ...state.data_order };
+            let copyState = { ...state.dataOrder };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_order: {
+                dataOrder: {
                     ...copyState,
                 }
             }

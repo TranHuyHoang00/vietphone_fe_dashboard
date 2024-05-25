@@ -15,7 +15,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_variants: [],
+            dataVariants: [],
             data_variant_ids: [],
 
             data_variant: {},
@@ -45,18 +45,18 @@ class index extends Component {
             }
             if (data_variant_ids && data_variant_ids.length !== 0) {
                 this.setState({ data_variant_ids: data_variant_ids, dataAttributes: dataAttributes });
-                await this.get_list_variant(data_variant_ids);
+                await this.getListVariant(data_variant_ids);
             }
         }
     }
-    get_list_variant = async (data_variant_ids) => {
-        let data_variants = [];
+    getListVariant = async (data_variant_ids) => {
+        let dataVariants = [];
         for (const id of data_variant_ids) {
             await this.props.get_variant(id);
             let data_variant = this.props.data_variant;
-            data_variants.push(data_variant);
+            dataVariants.push(data_variant);
         }
-        this.setState({ data_variants: data_variants, active_variant: (data_variants.length) - 1 });
+        this.setState({ dataVariants: dataVariants, active_variant: (dataVariants.length) - 1 });
     }
     select_variant = async (index) => {
         let is_edit = this.props.is_edit;
@@ -64,9 +64,9 @@ class index extends Component {
             message.error('Bạn vui lòng lưu lại thay đôi');
             return;
         } else {
-            let data_variants = this.state.data_variants;
+            let dataVariants = this.state.dataVariants;
             this.setState({ active_variant: index })
-            await this.props.get_variant(data_variants[index].id);
+            await this.props.get_variant(dataVariants[index].id);
         }
 
     }
@@ -153,7 +153,7 @@ class index extends Component {
                     </div>
                     <div className='lg:grid grid-cols-3 gap-[10px] space-y-[10px] lg:space-y-0 '>
                         <div>
-                            <VariantOverview data_variants={this.state.data_variants}
+                            <VariantOverview dataVariants={this.state.dataVariants}
                                 select_variant={this.select_variant}
                                 active_variant={this.state.active_variant} />
                         </div>

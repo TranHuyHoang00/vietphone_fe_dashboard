@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Collapse, Input, Typography, Select } from 'antd';
 import { textLine13 } from '@components/displays/line13';
-import { format_money } from '@utils/format_money';
+import { formatMoney } from '@utils/handleFuncFormat';
 class variant_introduce extends Component {
     constructor(props) {
         super(props);
@@ -39,7 +39,7 @@ class variant_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Input disabled={!this.props.is_edit} value={this.props.is_edit ? (data_variant.regular_price) : format_money(data_variant.regular_price)}
+                                <Input disabled={!this.props.is_edit} value={this.props.is_edit ? (data_variant.regular_price) : formatMoney(data_variant.regular_price)}
                                     onChange={(event) => this.props.on_change_variant(event.target.value, 'regular_price')} />
                             </div>
                         </div>
@@ -49,7 +49,7 @@ class variant_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Input disabled={!this.props.is_edit} value={this.props.is_edit ? (data_variant.discount_price) : format_money(data_variant.discount_price)}
+                                <Input disabled={!this.props.is_edit} value={this.props.is_edit ? (data_variant.discount_price) : formatMoney(data_variant.discount_price)}
                                     onChange={(event) => this.props.on_change_variant(event.target.value, 'discount_price')} />
                             </div>
                         </div>

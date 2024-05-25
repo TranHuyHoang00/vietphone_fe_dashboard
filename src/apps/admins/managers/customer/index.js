@@ -11,7 +11,10 @@ import FormSelectPage from '@components/selects/formSelectPage';
 import ModalDetail from './modals/modalDetail';
 import AvatarNone from '@assets/images/avatarNone.jpg';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
-import { data_customers } from '@datas/dataPermissionsOrigin';
+import { dataCustomers } from '@datas/dataPermissionsOrigin';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -27,31 +30,40 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_customer(this.state.dataFilter);
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_customers, this.props.dataUserPermissions, this.props.isSuperUser);
+        const { dataFilter } = this.state;
+        const { getListCustomer, dataUserPermissions, isSuperUser } = this.props;
+        await getListCustomer(dataFilter);
+        const dataPermissionsAfterCheck = await handleCheckPermission(dataCustomers, dataUserPermissions, isSuperUser);
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    openModal = async (name, value, id) => {
-        if (name === 'detail') {
-            if (id === undefined) {
-                this.setState({ modalDetail: value, data_customer: {} });
-            } else {
-                this.setState({ modalDetail: value });
-                await this.props.get_customer(id);
-            }
-        }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataCustomer, getDataCustomer } = this.props;
+        const actions = {
+            setData: setDataCustomer,
+            getData: getDataCustomer,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
+        const { listItemSelected, dropButtonType, dataFilter } = this.state;
+        const { deleteListCustomer, editListCustomer, getListCustomer } = this.props;
+        const actions = {
+            deleteList: deleteListCustomer,
+            editList: editListCustomer,
+            getList: getListCustomer
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_customer(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListCustomer } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListCustomer(newDataFilter);
     }
     render() {
         const columns = [
@@ -68,7 +80,7 @@ class index extends Component {
                         <div>
                             <Typography.Text strong className='text-[#0574b8] dark:text-white'>{user.full_name}</Typography.Text><br />
                             <Typography.Text italic strong>{user.phone}</Typography.Text><br />
-                            {item.email === '' || item.email === null ?
+                            {item?.email ?
                                 <Typography.Text italic>none@gmail.com</Typography.Text>
                                 :
                                 <Typography.Text italic>{item.email}</Typography.Text>
@@ -86,16 +98,15 @@ class index extends Component {
             },
 
         ];
-        const listItemSelected = this.state.listItemSelected;
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, modalDetail } = this.state;
+        const { isLoading, dataCustomers, dataMeta } = this.props;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dataFilter = this.state.dataFilter;
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <div>
@@ -109,17 +120,17 @@ class index extends Component {
                             <Divider>KHÁCH HÀNG</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_customers} pagination={false}
+                                    columns={columns} dataSource={dataCustomers} pagination={false}
                                     size="middle" bcustomered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modalDetail && dataPermissionsAfterCheck['account.view_customer'] &&
-                    <ModalDetail modalDetail={this.state.modalDetail}
+                {modalDetail && dataPermissionsAfterCheck['account.view_customer'] &&
+                    <ModalDetail modalDetail={modalDetail}
                         openModal={this.openModal} />}
             </>
         );
@@ -128,8 +139,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_customers: state.customer.data_customers,
-        data_customer: state.customer.data_customer,
+        dataCustomers: state.customer.dataCustomers,
+        dataCustomer: state.customer.dataCustomer,
         dataMeta: state.customer.dataMeta,
         isLoading: state.customer.isLoading,
         isResult: state.customer.isResult,
@@ -140,11 +151,11 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_customer: (dataFilter) => dispatch(actions.get_list_customer_redux(dataFilter)),
-        get_customer: (id) => dispatch(actions.get_customer_redux(id)),
-        edit_list_customer: (id, data) => dispatch(actions.edit_list_customer_redux(id, data)),
-        delete_list_customer: (id) => dispatch(actions.delete_list_customer_redux(id)),
-        set_data_customer: (id) => dispatch(actions.set_data_customer_redux(id)),
+        getListCustomer: (dataFilter) => dispatch(actions.getListCustomerRedux(dataFilter)),
+        getDataCustomer: (id) => dispatch(actions.getDataCustomerRedux(id)),
+        editListCustomer: (id, data) => dispatch(actions.editListCustomerRedux(id, data)),
+        deleteListCustomer: (id) => dispatch(actions.deleteListCustomerRedux(id)),
+        setDataCustomer: (id) => dispatch(actions.setDataCustomerRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

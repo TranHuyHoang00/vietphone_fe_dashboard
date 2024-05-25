@@ -1,8 +1,8 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_flash_sale_items: [],
-    data_flash_sale_item: {},
+    dataFlashSaleItems: [],
+    dataFlashSaleItem: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -33,7 +33,7 @@ const flash_sale_item_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_flash_sale_items: action.data.flash_sale_items,
+                dataFlashSaleItems: action.data.flash_sale_items,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_FLASH_SALE_ITEM_SUCCESS:
@@ -41,7 +41,7 @@ const flash_sale_item_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_flash_sale_item: action.data
+                dataFlashSaleItem: action.data
             }
         case action_types.CREATE_FLASH_SALE_ITEM_SUCCESS:
             return {
@@ -76,14 +76,14 @@ const flash_sale_item_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_FLASH_SALE_ITEM:
             return {
                 ...state,
-                data_flash_sale_item: action.data,
+                dataFlashSaleItem: action.data,
             }
         case action_types.ON_CHANGE_FLASH_SALE_ITEM:
-            let copyState = { ...state.data_flash_sale_item };
+            let copyState = { ...state.dataFlashSaleItem };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_flash_sale_item: {
+                dataFlashSaleItem: {
                     ...copyState,
                 }
             }

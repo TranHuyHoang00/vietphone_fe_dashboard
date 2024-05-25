@@ -11,9 +11,12 @@ import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import AvatarNone from '@assets/images/avatarNone.jpg';
-import DrawerFilter from './drawers/drawer_filter';
+import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
-import { data_users } from '@datas/dataPermissionsOrigin';
+import { dataUsers } from '@datas/dataPermissionsOrigin';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -22,63 +25,65 @@ class index extends Component {
             listItemSelected: [],
             modalDetail: false,
             modalCreate: false,
-            drawer_filter: false,
+            drawerFilter: false,
             dataFilter: {
                 page: 1,
                 limit: 5,
                 search: '',
                 is_active: true,
-                isSuperUser: '',
+                is_superuser: '',
                 groups: '',
             },
             dataPermissionsAfterCheck: {},
         }
     }
     async componentDidMount() {
-        this.props.get_list_user(this.state.dataFilter);
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_users, this.props.dataUserPermissions, this.props.isSuperUser);
+        const { dataFilter } = this.state;
+        const { getListUser, dataUserPermissions, isSuperUser } = this.props;
+        await getListUser(dataFilter);
+        const dataPermissionsAfterCheck = await handleCheckPermission(dataUsers, dataUserPermissions, isSuperUser);
+        console.log(dataPermissionsAfterCheck);
+
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    openModal = async (name, value, id) => {
-        this.props.set_data_user({});
-        if (name === 'create') {
-            this.setState({ modalCreate: value });
-        }
-        if (name === 'edit') {
-            if (id === undefined) {
-                this.setState({ modalEdit: value, data_user: {} });
-            } else {
-                this.setState({ modalEdit: value });
-                await this.props.get_user(id);
-            }
-        }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataUser, getDataUser } = this.props;
+        const actions = {
+            setData: setDataUser,
+            getData: getDataUser,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
     }
-    open_drawer = async (name, value) => {
-        if (name === 'filter') {
-            this.props.get_list_group({ page: 1, limit: 50, search: '' });
-            this.setState({ drawer_filter: value });
+
+    openDrawer = async (drawerName, drawerValue) => {
+        switch (drawerName) {
+            case 'filter':
+                this.setState({ drawerFilter: drawerValue });
+                break;
+            default:
+                return;
         }
     }
     funcDropButtonHeaderOfTable = async () => {
-        let listItemSelected = this.state.listItemSelected;
-        if (this.state.dropButtonType === 1) { await this.props.delete_list_user(listItemSelected); }
-        if (this.state.dropButtonType === 2) { await this.props.edit_list_user(listItemSelected, { is_active: false }); }
-        if (this.state.dropButtonType === 3) { await this.props.edit_list_user(listItemSelected, { is_active: true }); }
-        await this.props.get_list_user(this.state.dataFilter);
-        if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
+        const { listItemSelected, dropButtonType, dataFilter } = this.state;
+        const { deleteListUser, editListUser, getListUser } = this.props;
+        const actions = {
+            deleteList: deleteListUser,
+            editList: editListUser,
+            getList: getListUser
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        if (type === 'is_active') { dataFilter.is_active = value; dataFilter.page = 1; }
-        if (type === 'isSuperUser') { dataFilter.isSuperUser = value; dataFilter.page = 1; }
-        if (type === 'groups') { dataFilter.groups = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_user(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListUser } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListUser(newDataFilter);
     }
     render() {
         const columns = [
@@ -139,7 +144,7 @@ class index extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Tag color={`${item.isSuperUser ? "green" : "red"}`}>{item.isSuperUser ? "Yes" : "No"}</Tag>
+                                <Tag color={`${item.is_superuser ? "green" : "red"}`}>{item.is_superuser ? "Yes" : "No"}</Tag>
                             </div>
                         </div>
                     </div>
@@ -156,22 +161,21 @@ class index extends Component {
             },
 
         ];
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, dropButtonType,
+            modalCreate, modalEdit, drawerFilter } = this.state;
+        const { isLoading, dataUsers, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['account.delete_user'] },
             { key: 2, label: 'Khóa', disabled: !dataPermissionsAfterCheck['account.change_user'] },
             { key: 3, label: 'Mở', disabled: !dataPermissionsAfterCheck['account.change_user'] },
         ];
-        const listItemSelected = this.state.listItemSelected;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dataFilter = this.state.dataFilter;
-        let dropButtonType = this.state.dropButtonType;
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex flex-wrap items-center justify-between gap-[10px]'>
                             <div>
@@ -181,7 +185,7 @@ class index extends Component {
                                         Tạo mới
                                     </Space>
                                 </Button>
-                                <Button onClick={() => this.open_drawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                <Button onClick={() => this.openDrawer('filter', true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiOutlineMenu />
                                         Bộ lọc
@@ -212,27 +216,27 @@ class index extends Component {
                             <Divider>TÀI KHOẢN</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_users} pagination={false}
+                                    columns={columns} dataSource={dataUsers} pagination={false}
                                     size="middle" busered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modalCreate && dataPermissionsAfterCheck['account.add_user'] &&
-                    <ModalCreate modalCreate={this.state.modalCreate}
+                {modalCreate && dataPermissionsAfterCheck['account.add_user'] &&
+                    <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
-                {this.state.modalEdit && dataPermissionsAfterCheck['account.change_user'] &&
-                    <ModalEdit modalEdit={this.state.modalEdit}
+                        dataFilter={dataFilter} />}
+                {modalEdit && dataPermissionsAfterCheck['account.change_user'] &&
+                    <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
-                {this.state.drawer_filter &&
-                    <DrawerFilter drawer_filter={this.state.drawer_filter}
-                        open_drawer={this.open_drawer} dataFilter={this.state.dataFilter}
-                        onChangePage={this.onChangePage} data_groups={this.props.data_groups} />
+                        dataFilter={dataFilter} />}
+                {drawerFilter &&
+                    <DrawerFilter drawerFilter={drawerFilter}
+                        openDrawer={this.openDrawer} dataFilter={dataFilter}
+                        onChangePage={this.onChangePage} />
                 }
             </>
         );
@@ -241,25 +245,22 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_users: state.user.data_users,
-        data_user: state.user.data_user,
+        dataUsers: state.user.dataUsers,
+        dataUser: state.user.dataUser,
         dataMeta: state.user.dataMeta,
         isLoading: state.user.isLoading,
         isResult: state.user.isResult,
-        data_groups: state.group.data_groups,
-
         dataUserPermissions: state.user.dataUserPermissions,
         isSuperUser: state.user.isSuperUser,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_user: (dataFilter) => dispatch(actions.get_list_user_redux(dataFilter)),
-        get_user: (id) => dispatch(actions.get_user_redux(id)),
-        edit_list_user: (id, data) => dispatch(actions.edit_list_user_redux(id, data)),
-        delete_list_user: (id) => dispatch(actions.delete_list_user_redux(id)),
-        set_data_user: (id) => dispatch(actions.set_data_user_redux(id)),
-        get_list_group: (dataFilter) => dispatch(actions.get_list_group_redux(dataFilter)),
+        getListUser: (dataFilter) => dispatch(actions.getListUserRedux(dataFilter)),
+        getDataUser: (id) => dispatch(actions.getDataUserRedux(id)),
+        editListUser: (id, data) => dispatch(actions.editListUserRedux(id, data)),
+        deleteListUser: (id) => dispatch(actions.deleteListUserRedux(id)),
+        setDataUser: (id) => dispatch(actions.setDataUserRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

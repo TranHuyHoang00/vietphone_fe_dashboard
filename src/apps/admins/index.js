@@ -65,7 +65,7 @@ class index extends Component {
         let data_db = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
         if (data_db) {
             this.setState({ logged_in_db: true });
-            await this.props.get_list_user_permission();
+            await this.props.getListUserPermission();
             await this.get_dataPermissionsAfterCheck();
         }
     }
@@ -351,7 +351,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_user_permission: (dataFilter) => dispatch(actions.get_list_user_permission_redux(dataFilter)),
+        getListUserPermission: (dataFilter) => dispatch(actions.get_list_user_permission_redux(dataFilter)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

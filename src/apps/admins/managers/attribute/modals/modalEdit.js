@@ -5,7 +5,7 @@ import * as actions from '@actions';
 import { Modal, message, Spin } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormTextare from '@components/inputs/formTextare';
-import FormSelectInput from '@components/selects/formSelectInput';
+import FormSelectSingle from '@components/selects/formSelectSingle';
 import ModalFooter from '@components/modal/modalFooter';
 class index extends Component {
     constructor(props) {
@@ -57,7 +57,7 @@ class index extends Component {
                             important={false}
                             onChangeInput={onChangeAttribute} />
 
-                        <FormSelectInput name={'Loại thông số'} variable={'group_attribute'} value={dataAttribute.group_attribute}
+                        <FormSelectSingle name={'Loại thông số'} variable={'group_attribute'} value={dataAttribute.group_attribute}
                             important={true} width={'100%'}
                             options={dataGroupAttributes.map((item) => ({
                                 label: item.name,

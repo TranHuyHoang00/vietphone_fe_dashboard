@@ -26,7 +26,7 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_group(this.state.dataFilter);
+        this.props.getListGroup(this.state.dataFilter);
     }
     openModal = async (name, value, id) => {
         this.props.set_data_group({});
@@ -45,7 +45,7 @@ class index extends Component {
     funcDropButtonHeaderOfTable = async () => {
         let listItemSelected = this.state.listItemSelected;
         if (this.state.dropButtonType === 1) { await this.props.delete_list_group(listItemSelected); }
-        await this.props.get_list_group(this.state.dataFilter);
+        await this.props.getListGroup(this.state.dataFilter);
         if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
     }
     onChangePage = async (value, type) => {
@@ -54,7 +54,7 @@ class index extends Component {
         if (type === 'page') { dataFilter.page = value; }
         if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
         this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_group(dataFilter);
+        await this.props.getListGroup(dataFilter);
     }
     render() {
         const columns = [
@@ -121,7 +121,7 @@ class index extends Component {
                             <Divider>PHÂN QUYỀN</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_groups} pagination={false}
+                                    columns={columns} dataSource={this.props.dataGroups} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
                                     showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
@@ -145,7 +145,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_groups: state.group.data_groups,
+        dataGroups: state.group.dataGroups,
         data_group: state.group.data_group,
         dataMeta: state.group.dataMeta,
         isLoading: state.group.isLoading,
@@ -154,7 +154,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_group: (dataFilter) => dispatch(actions.get_list_group_redux(dataFilter)),
+        getListGroup: (dataFilter) => dispatch(actions.getListGroupRedux(dataFilter)),
         get_group: (id) => dispatch(actions.get_group_redux(id)),
         edit_list_group: (id, data) => dispatch(actions.edit_list_group_redux(id, data)),
         delete_list_group: (id) => dispatch(actions.delete_list_group_redux(id)),

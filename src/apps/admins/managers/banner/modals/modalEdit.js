@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, message, Spin, Typography, Carousel, Image, Button } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import FormSelectInput from '@components/selects/formSelectInput';
+import FormSelectSingle from '@components/selects/formSelectSingle';
 import ModalFooter from '@components/modal/modalFooter';
 import { convertImageToBase64 } from '@utils/base64';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -169,7 +169,7 @@ class index extends Component {
                             important={true}
                             onChangeInput={this.props.onChangeBanner} />
 
-                        <FormSelectInput name={'Vị trí'} variable={'location'} value={dataBanner.location}
+                        <FormSelectSingle name={'Vị trí'} variable={'location'} value={dataBanner.location}
                             important={true} width={'100%'}
                             options={dataLocations.map((item) => ({
                                 label: item.name,
