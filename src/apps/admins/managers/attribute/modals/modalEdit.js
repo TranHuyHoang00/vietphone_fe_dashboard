@@ -14,7 +14,8 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_group_attribute({ page: 1, limit: 100, search: '' });
+        const { getListGroupAttribute } = this.props;
+        getListGroupAttribute({ page: 1, limit: 100, search: '' });
     }
     validationData = (data) => {
         if (!data.name) {
@@ -23,49 +24,46 @@ class index extends Component {
         return { check: true };
     }
     handleEdit = async () => {
-        let result = this.validationData(this.props.data_attribute);
+        const { dataAttribute, isResult, openModal, getListAttribute, editAttribute, dataFilter } = this.props;
+        const result = this.validationData(dataAttribute);
         if (result.check) {
-            let data_attribute = this.props.data_attribute;
-            await this.props.edit_attribute(data_attribute.id, data_attribute);
-            let isResult = this.props.isResult;
+            await editAttribute(dataAttribute.id, dataAttribute);
             if (isResult) {
-                this.props.openModal("edit", false);
-                await this.props.getListAttribute(this.props.dataFilter);
+                openModal("edit", false);
+                await getListAttribute(dataFilter);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        let data_attribute = this.props.data_attribute;
-        let data_group_attributes = this.props.data_group_attributes;
-        let isLoading = this.props.isLoading;
+        const { dataAttribute, isLoading, onChangeAttribute, modalEdit, openModal, dataGroupAttributes } = this.props;
         return (
-            <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
-                onCancel={() => this.props.openModal("edit", false)} width={400}
+            <Modal title="CHỈNH SỬA" open={modalEdit}
+                onCancel={() => openModal("edit", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'edit'}
+                    <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Tên thông số'} variable={'name'} value={data_attribute.name}
+                        <FormInput name={'Tên thông số'} variable={'name'} value={dataAttribute.name}
                             important={true}
-                            onChangeInput={this.props.on_change_attribute} />
+                            onChangeInput={onChangeAttribute} />
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={data_attribute.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataAttribute.description}
                             important={false}
-                            onChangeInput={this.props.on_change_attribute} />
+                            onChangeInput={onChangeAttribute} />
 
-                        <FormSelectInput name={'Loại thông số'} variable={'group_attribute'} value={data_attribute.group_attribute}
+                        <FormSelectInput name={'Loại thông số'} variable={'group_attribute'} value={dataAttribute.group_attribute}
                             important={true} width={'100%'}
-                            options={data_group_attributes.map((item) => ({
+                            options={dataGroupAttributes.map((item) => ({
                                 label: item.name,
                                 value: item.id,
                             }))}
-                            onChangeInput={this.props.on_change_attribute} />
+                            onChangeInput={onChangeAttribute} />
                     </div>
                 </Spin>
             </Modal>
@@ -75,19 +73,19 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_attribute: state.attribute.data_attribute,
+        dataAttribute: state.attribute.dataAttribute,
         isLoading: state.attribute.isLoading,
         isResult: state.attribute.isResult,
-        data_group_attributes: state.group_attribute.data_group_attributes,
+        dataGroupAttributes: state.group_attribute.dataGroupAttributes,
 
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         getListAttribute: (dataFilter) => dispatch(actions.getListAttributeRedux(dataFilter)),
-        edit_attribute: (id, data) => dispatch(actions.edit_attribute_redux(id, data)),
-        on_change_attribute: (id, value) => dispatch(actions.on_change_attribute_redux(id, value)),
-        get_list_group_attribute: (dataFilter) => dispatch(actions.get_list_group_attribute_redux(dataFilter)),
+        editAttribute: (id, data) => dispatch(actions.editAttributeRedux(id, data)),
+        onChangeAttribute: (id, value) => dispatch(actions.onChangeAttributeRedux(id, value)),
+        getListGroupAttribute: (dataFilter) => dispatch(actions.getListGroupAttributeRedux(dataFilter)),
 
     };
 };

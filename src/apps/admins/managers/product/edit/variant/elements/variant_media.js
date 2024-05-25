@@ -9,7 +9,7 @@ class variant_media extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_media_ids: [],
+            dataMediaIds: [],
             data_media_raws: [],
         }
     }
@@ -20,19 +20,19 @@ class variant_media extends Component {
         }
     }
     handle_data_id = (data) => {
-        let data_media_ids = [];
+        let dataMediaIds = [];
         if (data && data.length !== 0) {
             for (const item of data) {
-                data_media_ids.push(item.id);
+                dataMediaIds.push(item.id);
             }
         }
         this.setState({
-            data_media_ids: data_media_ids,
+            dataMediaIds: dataMediaIds,
         })
     }
     onChangeImage = async (event, type, index, id) => {
         let data_media_raws = this.state.data_media_raws;
-        let data_media_ids = this.state.data_media_ids;
+        let dataMediaIds = this.state.dataMediaIds;
         if (type === 'create') {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
@@ -42,12 +42,12 @@ class variant_media extends Component {
         }
         if (type === 'delete') {
             if (id !== undefined) {
-                data_media_ids = data_media_ids.filter(item => item !== id);
+                dataMediaIds = dataMediaIds.filter(item => item !== id);
             }
             data_media_raws.splice(index, 1);
         }
-        this.setState({ data_media_raws: data_media_raws, data_media_ids: data_media_ids });
-        this.props.get_data_media(data_media_ids, data_media_raws);
+        this.setState({ data_media_raws: data_media_raws, dataMediaIds: dataMediaIds });
+        this.props.get_data_media(dataMediaIds, data_media_raws);
     }
     render() {
         let data_media_raws = this.state.data_media_raws;

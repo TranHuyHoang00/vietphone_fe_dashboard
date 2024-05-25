@@ -13,7 +13,7 @@ import { IoStatsChart, IoLogoChrome, IoBarChartSharp, IoBookSharp } from "react-
 import { FaUserNurse, FaAndroid, FaUserShield } from "react-icons/fa6";
 
 import { withRouter } from 'react-router-dom';
-import { get_data_local } from '@auths/local_storage';
+import { getDataLocal } from '@auths/localStorage';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
 import { data_indexs } from '@datas/dataPermissionsOrigin';
 import HeaderDB from './layouts/header';
@@ -62,7 +62,7 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        let data_db = await get_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+        let data_db = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
         if (data_db) {
             this.setState({ logged_in_db: true });
             await this.props.get_list_user_permission();

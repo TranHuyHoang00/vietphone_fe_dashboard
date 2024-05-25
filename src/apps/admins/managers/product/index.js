@@ -66,11 +66,11 @@ class index extends Component {
     }
     funcDropButtonHeaderOfTable = async () => {
         let listItemSelected = this.state.listItemSelected;
-        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_product(listItemSelected); }
-        if (this.state.typeItemDropButton === 2) { await this.props.edit_list_product(listItemSelected, { is_active: false }); }
-        if (this.state.typeItemDropButton === 3) { await this.props.edit_list_product(listItemSelected, { is_active: true }); }
+        if (this.state.dropButtonType === 1) { await this.props.delete_list_product(listItemSelected); }
+        if (this.state.dropButtonType === 2) { await this.props.edit_list_product(listItemSelected, { is_active: false }); }
+        if (this.state.dropButtonType === 3) { await this.props.edit_list_product(listItemSelected, { is_active: true }); }
         await this.props.get_list_product(this.state.dataFilter);
-        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+        if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
     }
     onChangePage = async (value, type) => {
         let dataFilter = this.state.dataFilter;

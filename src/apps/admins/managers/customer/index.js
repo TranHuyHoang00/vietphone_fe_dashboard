@@ -9,7 +9,7 @@ import {
 import { AiFillEye } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalDetail from './modals/modalDetail';
-import AvatarNone from '@assets/images/avatar_none.jpg';
+import AvatarNone from '@assets/images/avatarNone.jpg';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
 import { data_customers } from '@datas/dataPermissionsOrigin';
 class index extends Component {

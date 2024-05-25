@@ -11,12 +11,15 @@ import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
-import { data_group_attributes } from '@datas/dataPermissionsOrigin';
+import { dataGroupAttributes } from '@datas/dataPermissionsOrigin';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            typeItemDropButton: 1,
+            dropButtonType: 1,
             listItemSelected: [],
             modalDetail: false,
             modalCreate: false,
@@ -30,39 +33,40 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_group_attribute(this.state.dataFilter);
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_group_attributes, this.props.dataUserPermissions, this.props.isSuperUser);
+        const { dataFilter } = this.state;
+        const { getListGroupAttribute, dataUserPermissions, isSuperUser } = this.props;
+        await getListGroupAttribute(dataFilter);
+        const dataPermissionsAfterCheck = await handleCheckPermission(dataGroupAttributes, dataUserPermissions, isSuperUser);
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    openModal = async (name, value, id) => {
-        this.props.set_data_group_attribute({});
-        if (name === 'create') {
-            this.setState({ modalCreate: value });
-        }
-        if (name === 'edit') {
-            if (id === undefined) {
-                this.setState({ modalEdit: value, data_group_attribute: {} });
-            } else {
-                this.setState({ modalEdit: value });
-                await this.props.get_group_attribute(id);
-            }
-        }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataGroupAttribute, getDataGroupAttribute } = this.props;
+        const actions = {
+            setData: setDataGroupAttribute,
+            getData: getDataGroupAttribute,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
-        let listItemSelected = this.state.listItemSelected;
-        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_group_attribute(listItemSelected); }
-        await this.props.get_list_group_attribute(this.state.dataFilter);
-        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+        const { listItemSelected, dropButtonType, dataFilter } = this.state;
+        const { deleteListGroupAttribute, editListGroupAttribute, getListGroupAttribute } = this.props;
+        const actions = {
+            deleteList: deleteListGroupAttribute,
+            editList: editListGroupAttribute,
+            getList: getListGroupAttribute
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_group_attribute(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListGroupAttribute } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListGroupAttribute(newDataFilter);
     }
     render() {
         const columns = [
@@ -95,20 +99,19 @@ class index extends Component {
             },
 
         ];
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, dropButtonType,
+            modalCreate, modalEdit } = this.state;
+        const { isLoading, dataGroupAttributes, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['product.delete_groupattribute'] },
         ];
-        const listItemSelected = this.state.listItemSelected;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dataFilter = this.state.dataFilter;
-        let typeItemDropButton = this.state.typeItemDropButton;
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Button disabled={!dataPermissionsAfterCheck['product.add_groupattribute']}
@@ -129,9 +132,9 @@ class index extends Component {
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
                                             disabled={!dataPermissionsAfterCheck['product.delete_groupattribute']}
-                                            menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
+                                            menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {typeItemDropButton === 1 && <span>Xóa</span>}
+                                                {dropButtonType === 1 && <span>Xóa</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
@@ -141,23 +144,23 @@ class index extends Component {
                             <Divider>LOẠI DANH MỤC</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_group_attributes} pagination={false}
+                                    columns={columns} dataSource={dataGroupAttributes} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modalCreate && dataPermissionsAfterCheck['product.add_groupattribute'] &&
-                    <ModalCreate modalCreate={this.state.modalCreate}
+                {modalCreate && dataPermissionsAfterCheck['product.add_groupattribute'] &&
+                    <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
-                {this.state.modalEdit && dataPermissionsAfterCheck['product.change_groupattribute'] &&
-                    <ModalEdit modalEdit={this.state.modalEdit}
+                        dataFilter={dataFilter} />}
+                {modalEdit && dataPermissionsAfterCheck['product.change_groupattribute'] &&
+                    <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
+                        dataFilter={dataFilter} />}
             </>
         );
     }
@@ -165,8 +168,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_group_attributes: state.group_attribute.data_group_attributes,
-        data_group_attribute: state.group_attribute.data_group_attribute,
+        dataGroupAttributes: state.group_attribute.dataGroupAttributes,
+        dataGroupAttribute: state.group_attribute.dataGroupAttribute,
         dataMeta: state.group_attribute.dataMeta,
         isLoading: state.group_attribute.isLoading,
         isResult: state.group_attribute.isResult,
@@ -177,11 +180,11 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_group_attribute: (dataFilter) => dispatch(actions.get_list_group_attribute_redux(dataFilter)),
-        get_group_attribute: (id) => dispatch(actions.get_group_attribute_redux(id)),
-        edit_list_group_attribute: (id, data) => dispatch(actions.edit_list_group_attribute_redux(id, data)),
-        delete_list_group_attribute: (id) => dispatch(actions.delete_list_group_attribute_redux(id)),
-        set_data_group_attribute: (id) => dispatch(actions.set_data_group_attribute_redux(id)),
+        getListGroupAttribute: (dataFilter) => dispatch(actions.getListGroupAttributeRedux(dataFilter)),
+        getDataGroupAttribute: (id) => dispatch(actions.getDataGroupAttributeRedux(id)),
+        editListGroupAttribute: (id, data) => dispatch(actions.editListGroupAttributeRedux(id, data)),
+        deleteListGroupAttribute: (id) => dispatch(actions.deleteListGroupAttributeRedux(id)),
+        setDataGroupAttribute: (id) => dispatch(actions.setDataGroupAttributeRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

@@ -1,9 +1,9 @@
-const handleCheckPermission = (data_after_checks, dataUserPermissions, isSuperUser) => {
+const handleCheckPermission = (dataPermissionsBeforeCheck, dataUserPermissions, isSuperUser) => {
     let dataPermissionsAfterCheck = {};
     if (isSuperUser !== undefined && isSuperUser !== null) {
         if (isSuperUser === false) {
-            if (data_after_checks && data_after_checks.length !== 0) {
-                for (const item of data_after_checks) {
+            if (dataPermissionsBeforeCheck && dataPermissionsBeforeCheck.length !== 0) {
+                for (const item of dataPermissionsBeforeCheck) {
                     if (dataUserPermissions.includes(item)) {
                         dataPermissionsAfterCheck[item] = true;
                     } else {
@@ -12,8 +12,8 @@ const handleCheckPermission = (data_after_checks, dataUserPermissions, isSuperUs
                 }
             }
         } else {
-            if (data_after_checks && data_after_checks.length !== 0) {
-                for (const item of data_after_checks) {
+            if (dataPermissionsBeforeCheck && dataPermissionsBeforeCheck.length !== 0) {
+                for (const item of dataPermissionsBeforeCheck) {
                     dataPermissionsAfterCheck[item] = true;
                 }
             }

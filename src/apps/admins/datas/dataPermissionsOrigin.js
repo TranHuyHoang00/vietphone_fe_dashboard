@@ -27,19 +27,19 @@ const data_products = [
 const data_flash_sale_items = [
     "promotion.view_flashsaleitem", "promotion.change_flashsaleitem", "promotion.delete_flashsaleitem", "promotion.add_flashsaleitem",
 ];
-const data_banners = [
+const dataBanners = [
     "settings.view_banner", "settings.change_banner", "settings.delete_banner", "settings.add_banner",
 ];
-const data_locations = [
+const dataLocations = [
     "settings.view_location", "settings.change_location", "settings.delete_location", "settings.add_location",
 ];
-const data_attribute_values = [
+const dataAttributeValues = [
     "product.view_attributevalue", "product.change_attributevalue", "product.delete_attributevalue", "product.add_attributevalue",
 ];
 const dataAttributes = [
     "product.view_attribute", "product.change_attribute", "product.delete_attribute", "product.add_attribute",
 ];
-const data_group_attributes = [
+const dataGroupAttributes = [
     "product.view_groupattribute", "product.change_groupattribute", "product.delete_groupattribute", "product.add_groupattribute",
 ];
 const dataVariantAttributeGroups = [
@@ -74,8 +74,8 @@ export {
     data_customers, data_users, data_groups,
     data_orders,
     data_products, data_flash_sale_items,
-    data_banners, data_locations,
-    data_attribute_values, dataAttributes, data_group_attributes, dataVariantAttributeGroups,
+    dataBanners, dataLocations,
+    dataAttributeValues, dataAttributes, dataGroupAttributes, dataVariantAttributeGroups,
     dataTags, dataBrands, dataCategorys, dataFlashSales,
     dataPosts, dataCategoryPosts,
     data_syncs, data_tasks,

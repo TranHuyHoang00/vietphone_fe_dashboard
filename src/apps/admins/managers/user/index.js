@@ -10,7 +10,7 @@ import { AiOutlinePlus, AiFillEdit, AiOutlineMenu } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
-import AvatarNone from '@assets/images/avatar_none.jpg';
+import AvatarNone from '@assets/images/avatarNone.jpg';
 import DrawerFilter from './drawers/drawer_filter';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
 import { data_users } from '@datas/dataPermissionsOrigin';
@@ -18,7 +18,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            typeItemDropButton: 1,
+            dropButtonType: 1,
             listItemSelected: [],
             modalDetail: false,
             modalCreate: false,
@@ -63,11 +63,11 @@ class index extends Component {
     }
     funcDropButtonHeaderOfTable = async () => {
         let listItemSelected = this.state.listItemSelected;
-        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_user(listItemSelected); }
-        if (this.state.typeItemDropButton === 2) { await this.props.edit_list_user(listItemSelected, { is_active: false }); }
-        if (this.state.typeItemDropButton === 3) { await this.props.edit_list_user(listItemSelected, { is_active: true }); }
+        if (this.state.dropButtonType === 1) { await this.props.delete_list_user(listItemSelected); }
+        if (this.state.dropButtonType === 2) { await this.props.edit_list_user(listItemSelected, { is_active: false }); }
+        if (this.state.dropButtonType === 3) { await this.props.edit_list_user(listItemSelected, { is_active: true }); }
         await this.props.get_list_user(this.state.dataFilter);
-        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+        if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
     }
     onChangePage = async (value, type) => {
         let dataFilter = this.state.dataFilter;
@@ -168,7 +168,7 @@ class index extends Component {
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
         let dataFilter = this.state.dataFilter;
-        let typeItemDropButton = this.state.typeItemDropButton;
+        let dropButtonType = this.state.dropButtonType;
         return (
             <>
                 <Spin size='large' spinning={this.props.isLoading}>
@@ -198,11 +198,11 @@ class index extends Component {
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button disabled={!dataPermissionsAfterCheck['account.delete_user']}
-                                            menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
+                                            menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {typeItemDropButton === 1 && <span>Xóa</span>}
-                                                {typeItemDropButton === 2 && <span>Khóa</span>}
-                                                {typeItemDropButton === 3 && <span>Mở</span>}
+                                                {dropButtonType === 1 && <span>Xóa</span>}
+                                                {dropButtonType === 2 && <span>Khóa</span>}
+                                                {dropButtonType === 3 && <span>Mở</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

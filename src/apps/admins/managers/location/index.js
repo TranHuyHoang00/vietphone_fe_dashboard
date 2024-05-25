@@ -11,12 +11,15 @@ import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
-import { data_locations } from '@datas/dataPermissionsOrigin';
+import { dataLocations } from '@datas/dataPermissionsOrigin';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            typeItemDropButton: 1,
+            dropButtonType: 1,
             listItemSelected: [],
             modalCreate: false,
             modalEdit: false,
@@ -29,39 +32,40 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_location(this.state.dataFilter);
-        let dataPermissionsAfterCheck = await handleCheckPermission(data_locations, this.props.dataUserPermissions, this.props.isSuperUser);
+        const { dataFilter } = this.state;
+        const { getListLocation, dataUserPermissions, isSuperUser } = this.props;
+        await getListLocation(dataFilter);
+        const dataPermissionsAfterCheck = await handleCheckPermission(dataLocations, dataUserPermissions, isSuperUser);
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    openModal = async (name, value, id) => {
-        this.props.set_data_location({});
-        if (name === 'create') {
-            this.setState({ modalCreate: value });
-        }
-        if (name === 'edit') {
-            if (id === undefined) {
-                this.setState({ modalEdit: value, data_location: {} });
-            } else {
-                this.setState({ modalEdit: value });
-                await this.props.get_location(id);
-            }
-        }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataLocation, getDataLocation } = this.props;
+        const actions = {
+            setData: setDataLocation,
+            getData: getDataLocation,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
-        let listItemSelected = this.state.listItemSelected;
-        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_location(listItemSelected); }
-        await this.props.get_list_location(this.state.dataFilter);
-        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+        const { listItemSelected, dropButtonType, dataFilter } = this.state;
+        const { deleteListLocation, editListLocation, getListLocation } = this.props;
+        const actions = {
+            deleteList: deleteListLocation,
+            editList: editListLocation,
+            getList: getListLocation
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_location(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListLocation } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListLocation(newDataFilter);
     }
     render() {
         const columns = [
@@ -91,20 +95,19 @@ class index extends Component {
             },
 
         ];
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, dropButtonType,
+            modalCreate, modalEdit } = this.state;
+        const { isLoading, dataLocations, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['settings.delete_location'] },
         ];
-        const listItemSelected = this.state.listItemSelected;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dataFilter = this.state.dataFilter;
-        let typeItemDropButton = this.state.typeItemDropButton;
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Button disabled={!dataPermissionsAfterCheck['settings.add_location']}
@@ -125,9 +128,9 @@ class index extends Component {
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
                                             disabled={!dataPermissionsAfterCheck['settings.delete_location']}
-                                            menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
+                                            menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {typeItemDropButton === 1 && <span>Xóa</span>}
+                                                {dropButtonType === 1 && <span>Xóa</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
@@ -137,23 +140,23 @@ class index extends Component {
                             <Divider>VỊ TRÍ</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_locations} pagination={false}
+                                    columns={columns} dataSource={dataLocations} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modalCreate && dataPermissionsAfterCheck['settings.add_location'] &&
-                    <ModalCreate modalCreate={this.state.modalCreate}
+                {modalCreate && dataPermissionsAfterCheck['settings.add_location'] &&
+                    <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
-                {this.state.modalEdit && dataPermissionsAfterCheck['settings.change_location'] &&
-                    <ModalEdit modalEdit={this.state.modalEdit}
+                        dataFilter={dataFilter} />}
+                {modalEdit && dataPermissionsAfterCheck['settings.change_location'] &&
+                    <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
+                        dataFilter={dataFilter} />}
             </>
         );
     }
@@ -161,8 +164,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_locations: state.location.data_locations,
-        data_location: state.location.data_location,
+        dataLocations: state.location.dataLocations,
+        dataLocation: state.location.dataLocation,
         dataMeta: state.location.dataMeta,
         isLoading: state.location.isLoading,
         isResult: state.location.isResult,
@@ -173,11 +176,11 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_location: (dataFilter) => dispatch(actions.get_list_location_redux(dataFilter)),
-        get_location: (id) => dispatch(actions.get_location_redux(id)),
-        edit_list_location: (id, data) => dispatch(actions.edit_list_location_redux(id, data)),
-        delete_list_location: (id) => dispatch(actions.delete_list_location_redux(id)),
-        set_data_location: (id) => dispatch(actions.set_data_location_redux(id)),
+        getListLocation: (dataFilter) => dispatch(actions.getListLocationRedux(dataFilter)),
+        getDataLocation: (id) => dispatch(actions.getDataLocationRedux(id)),
+        editListLocation: (id, data) => dispatch(actions.editListLocationRedux(id, data)),
+        deleteListLocation: (id) => dispatch(actions.deleteListLocationRedux(id)),
+        setDataLocation: (id) => dispatch(actions.setDataLocationRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

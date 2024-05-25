@@ -12,11 +12,14 @@ import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
 import { dataAttributes } from '@datas/dataPermissionsOrigin';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            typeItemDropButton: 1,
+            dropButtonType: 1,
             listItemSelected: [],
             modalCreate: false,
             modalEdit: false,
@@ -29,39 +32,40 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.getListAttribute(this.state.dataFilter);
-        let dataPermissionsAfterCheck = await handleCheckPermission(dataAttributes, this.props.dataUserPermissions, this.props.isSuperUser);
+        const { dataFilter } = this.state;
+        const { getListAttribute, dataUserPermissions, isSuperUser } = this.props;
+        await getListAttribute(dataFilter);
+        const dataPermissionsAfterCheck = await handleCheckPermission(dataAttributes, dataUserPermissions, isSuperUser);
         this.setState({
             dataPermissionsAfterCheck: dataPermissionsAfterCheck,
         });
     }
-    openModal = async (name, value, id) => {
-        this.props.set_data_attribute({});
-        if (name === 'create') {
-            this.setState({ modalCreate: value });
-        }
-        if (name === 'edit') {
-            if (id === undefined) {
-                this.setState({ modalEdit: value, data_attribute: {} });
-            } else {
-                this.setState({ modalEdit: value });
-                await this.props.get_attribute(id);
-            }
-        }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataAttribute, getDataAttribute } = this.props;
+        const actions = {
+            setData: setDataAttribute,
+            getData: getDataAttribute,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
-        let listItemSelected = this.state.listItemSelected;
-        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_attribute(listItemSelected); }
-        await this.props.getListAttribute(this.state.dataFilter);
-        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+        const { listItemSelected, dropButtonType, dataFilter } = this.state;
+        const { deleteListAttribute, editListAttribute, getListAttribute } = this.props;
+        const actions = {
+            deleteList: deleteListAttribute,
+            editList: editListAttribute,
+            getList: getListAttribute
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.getListAttribute(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListAttribute } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListAttribute(newDataFilter);
     }
     render() {
         const columns = [
@@ -90,20 +94,19 @@ class index extends Component {
             },
 
         ];
-        let dataPermissionsAfterCheck = this.state.dataPermissionsAfterCheck;
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, dropButtonType,
+            modalCreate, modalEdit } = this.state;
+        const { isLoading, dataAttributes, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataPermissionsAfterCheck['product.delete_attribute'] },
         ];
-        const listItemSelected = this.state.listItemSelected;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dataFilter = this.state.dataFilter;
-        let typeItemDropButton = this.state.typeItemDropButton;
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Button disabled={!dataPermissionsAfterCheck['product.add_attribute']}
@@ -124,9 +127,9 @@ class index extends Component {
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
                                             disabled={!dataPermissionsAfterCheck['product.delete_attribute']}
-                                            menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
+                                            menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {typeItemDropButton === 1 && <span>Xóa</span>}
+                                                {dropButtonType === 1 && <span>Xóa</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
@@ -136,23 +139,23 @@ class index extends Component {
                             <Divider>THÔNG SỐ</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.dataAttributes} pagination={false}
+                                    columns={columns} dataSource={dataAttributes} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modalCreate && dataPermissionsAfterCheck['product.add_attribute'] &&
-                    <ModalCreate modalCreate={this.state.modalCreate}
+                {modalCreate && dataPermissionsAfterCheck['product.add_attribute'] &&
+                    <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
-                {this.state.modalEdit && dataPermissionsAfterCheck['product.change_attribute'] &&
-                    <ModalEdit modalEdit={this.state.modalEdit}
+                        dataFilter={dataFilter} />}
+                {modalEdit && dataPermissionsAfterCheck['product.change_attribute'] &&
+                    <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
+                        dataFilter={dataFilter} />}
             </>
         );
     }
@@ -161,7 +164,7 @@ class index extends Component {
 const mapStateToProps = state => {
     return {
         dataAttributes: state.attribute.dataAttributes,
-        data_attribute: state.attribute.data_attribute,
+        dataAttribute: state.attribute.dataAttribute,
         dataMeta: state.attribute.dataMeta,
         isLoading: state.attribute.isLoading,
         isResult: state.attribute.isResult,
@@ -173,10 +176,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getListAttribute: (dataFilter) => dispatch(actions.getListAttributeRedux(dataFilter)),
-        get_attribute: (id) => dispatch(actions.get_attribute_redux(id)),
-        edit_list_attribute: (id, data) => dispatch(actions.edit_list_attribute_redux(id, data)),
-        delete_list_attribute: (id) => dispatch(actions.delete_list_attribute_redux(id)),
-        set_data_attribute: (id) => dispatch(actions.set_data_attribute_redux(id)),
+        getDataAttribute: (id) => dispatch(actions.getDataAttributeRedux(id)),
+        editListAttribute: (id, data) => dispatch(actions.editListAttributeRedux(id, data)),
+        deleteListAttribute: (id) => dispatch(actions.deleteListAttributeRedux(id)),
+        setDataAttribute: (id) => dispatch(actions.setDataAttributeRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

@@ -12,7 +12,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            typeItemDropButton: 1,
+            dropButtonType: 1,
             listItemSelected: [],
             dataFilter: {
                 page: 1,
@@ -27,7 +27,7 @@ class index extends Component {
     funcDropButtonHeaderOfTable = async () => {
         let listItemSelected = this.state.listItemSelected;
         let data_flash_sale = this.props.data_flash_sale;
-        if (this.state.typeItemDropButton === 1) {
+        if (this.state.dropButtonType === 1) {
             if (data_flash_sale.id) {
                 await this.props.create_list_flash_sale_item(data_flash_sale.id, listItemSelected);
             }
@@ -35,7 +35,7 @@ class index extends Component {
         if (this.props.isResult) {
             await this.props.getDataFlashSale(data_flash_sale.id);
             this.props.openModal("create", false);
-            if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+            if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
         }
     }
     onChangePage = async (value, type) => {
@@ -67,7 +67,7 @@ class index extends Component {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let typeItemDropButton = this.state.typeItemDropButton;
+        let dropButtonType = this.state.dropButtonType;
         return (
 
             <Modal title="THÊM MỚI" open={this.props.modalCreate}
@@ -89,9 +89,9 @@ class index extends Component {
                                     <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
-                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
+                                        <Dropdown.Button menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {typeItemDropButton === 1 && <span>Thêm</span>}
+                                                {dropButtonType === 1 && <span>Thêm</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

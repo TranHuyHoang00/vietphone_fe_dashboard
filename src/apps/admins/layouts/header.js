@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { get_data_local, remove_data_local, set_data_local } from '@auths/local_storage';
+import { getDataLocal, deleteDataLocal, setDataLocal } from '@auths/localStorage';
 import { Avatar, Dropdown, Space } from 'antd';
 import { LogoutOutlined, MenuOutlined } from '@ant-design/icons';
-import AvatarNone from '@assets/images/avatar_none1.png'
+import AvatarNone from '@assets/images/avatarNone1.png'
 class header extends Component {
     constructor(props) {
         super(props);
@@ -15,12 +15,12 @@ class header extends Component {
         }
     }
     async componentDidMount() {
-        let data_user = await get_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
-        let dark_mode = await get_data_local(process.env.REACT_APP_LOCALHOST_DARK_MODE);
+        let data_user = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+        let dark_mode = await getDataLocal(process.env.REACT_APP_LOCALHOST_DARK_MODE);
         if (data_user) {
             if (!dark_mode) {
                 dark_mode = { data: false };
-                set_data_local(process.env.REACT_APP_LOCALHOST_DARK_MODE, false);
+                setDataLocal(process.env.REACT_APP_LOCALHOST_DARK_MODE, false);
             } else {
                 document.documentElement.classList.toggle('dark', dark_mode.data);
             }
@@ -30,12 +30,12 @@ class header extends Component {
     }
     handle_logout = () => {
         this.props.handle_logout_db();
-        remove_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+        deleteDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
         this.props.history.push(`/admin/login`);
     }
     handle_dark_mode = (value) => {
         this.setState({ dark_mode: value });
-        set_data_local(process.env.REACT_APP_LOCALHOST_DARK_MODE, value);
+        setDataLocal(process.env.REACT_APP_LOCALHOST_DARK_MODE, value);
         this.props.set_dark_mode(value);
         document.documentElement.classList.toggle('dark', value);
     }

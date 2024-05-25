@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { set_data_local } from '@auths/local_storage';
+import { setDataLocal } from '@auths/localStorage';
 import { Login } from '@services/login_services';
 import { message, Spin } from 'antd';
 import bg from '@assets/images/bg.jpg';
@@ -52,7 +52,7 @@ class login extends Component {
             try {
                 let data = await Login(this.state.phone, this.state.password);
                 if (data && data.data && data.data.success === 1) {
-                    set_data_local(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
+                    setDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
                     this.props.history.push(`/admin`);
                     this.props.handle_login_db();
                 }

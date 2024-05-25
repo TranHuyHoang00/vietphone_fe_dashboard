@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ModalWebCam from './modals/web_cam';
 import { Button, Collapse, Typography, Image, Tag } from 'antd';
-import AvatarNone from '@assets/images/avatar_none.jpg';
+import AvatarNone from '@assets/images/avatarNone.jpg';
 class index extends Component {
     constructor(props) {
         super(props);

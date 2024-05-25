@@ -13,7 +13,7 @@ import { textLine13 } from '@components/displays/line13';
 import { format_day } from '@utils/format_day';
 import ModalDetail from './modals/modalDetail';
 import DrawerFilter from './drawers/drawer_filter';
-import AvatarNone from '@assets/images/avatar_none.jpg';
+import AvatarNone from '@assets/images/avatarNone.jpg';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
 import { data_orders } from '@datas/dataPermissionsOrigin';
 class index extends Component {

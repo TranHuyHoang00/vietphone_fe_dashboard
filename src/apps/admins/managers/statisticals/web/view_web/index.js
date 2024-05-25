@@ -27,28 +27,28 @@ class index extends Component {
         await this.props.get_view_web(data_statistical);
         this.handle_data_top(this.state.labels, this.props.data_view_webs);
     }
-    handle_day = (typeItemDropButton, day) => {
+    handle_day = (dropButtonType, day) => {
         let start, end;
         end = dayjs(day).format('YYYY-MM-DD');
-        if (typeItemDropButton === 'day') { start = dayjs(day).subtract(this.state.display_number, 'day').format('YYYY-MM-DD'); }
-        if (typeItemDropButton === 'month') { start = dayjs(day).subtract(this.state.display_number, 'month').format('YYYY-MM-DD'); }
-        if (typeItemDropButton === 'year') { start = dayjs(day).subtract(this.state.display_number, 'year').format('YYYY-MM-DD'); }
+        if (dropButtonType === 'day') { start = dayjs(day).subtract(this.state.display_number, 'day').format('YYYY-MM-DD'); }
+        if (dropButtonType === 'month') { start = dayjs(day).subtract(this.state.display_number, 'month').format('YYYY-MM-DD'); }
+        if (dropButtonType === 'year') { start = dayjs(day).subtract(this.state.display_number, 'year').format('YYYY-MM-DD'); }
 
         let labels = [];
         for (let i = 0; i <= this.state.display_number; i++) {
             let previous_day;
-            if (typeItemDropButton === 'day') { previous_day = dayjs(day).subtract(i, 'day').format('DD-MM'); }
-            if (typeItemDropButton === 'month') { previous_day = dayjs(day).subtract(i, 'month').format('MM-YYYY'); }
-            if (typeItemDropButton === 'year') { previous_day = dayjs(day).subtract(i, 'year').format('YYYY'); }
+            if (dropButtonType === 'day') { previous_day = dayjs(day).subtract(i, 'day').format('DD-MM'); }
+            if (dropButtonType === 'month') { previous_day = dayjs(day).subtract(i, 'month').format('MM-YYYY'); }
+            if (dropButtonType === 'year') { previous_day = dayjs(day).subtract(i, 'year').format('YYYY'); }
             labels.unshift(previous_day);
         }
         this.setState({ labels: labels })
         return { start, end }
     }
-    onchange_menu = async (typeItemDropButton) => {
+    onchange_menu = async (dropButtonType) => {
         let data_statistical = this.props.data_statistical;
-        let data_day = this.handle_day(typeItemDropButton, data_statistical.end);
-        data_statistical.type = typeItemDropButton;
+        let data_day = this.handle_day(dropButtonType, data_statistical.end);
+        data_statistical.type = dropButtonType;
         data_statistical.start = data_day.start;
         data_statistical.end = data_day.end;
         this.props.set_statistical(data_statistical);

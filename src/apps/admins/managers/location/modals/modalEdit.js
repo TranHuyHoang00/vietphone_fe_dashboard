@@ -23,40 +23,38 @@ class index extends Component {
         return { check: true };
     }
     handleEdit = async () => {
-        let result = this.validationData(this.props.data_location);
+        const { dataLocation, isResult, openModal, getListLocation, editLocation, dataFilter } = this.props;
+        const result = this.validationData(dataLocation);
         if (result.check) {
-            let data_location = this.props.data_location;
-            await this.props.edit_location(data_location.id, data_location);
-            let isResult = this.props.isResult;
+            await editLocation(dataLocation.id, dataLocation);
             if (isResult) {
-                this.props.openModal("edit", false);
-                await this.props.get_list_location(this.props.dataFilter);
+                openModal("edit", false);
+                await getListLocation(dataFilter);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        let data_location = this.props.data_location;
-        let isLoading = this.props.isLoading;
+        const { dataLocation, isLoading, onChangeLocation, modalEdit, openModal } = this.props;
         return (
-            <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
-                onCancel={() => this.props.openModal("edit", false)} width={400}
+            <Modal title="CHỈNH SỬA" open={modalEdit}
+                onCancel={() => openModal("edit", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'edit'}
+                    <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Code'} variable={'code'} value={data_location.code}
+                        <FormInput name={'Code'} variable={'code'} value={dataLocation.code}
                             important={false}
-                            onChangeInput={this.props.on_change_location} />
+                            onChangeInput={onChangeLocation} />
 
-                        <FormInput name={'Tên vị trí'} variable={'name'} value={data_location.name}
+                        <FormInput name={'Tên vị trí'} variable={'name'} value={dataLocation.name}
                             important={true}
-                            onChangeInput={this.props.on_change_location} />
+                            onChangeInput={onChangeLocation} />
 
                     </div>
                 </Spin>
@@ -67,16 +65,16 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_location: state.location.data_location,
+        dataLocation: state.location.dataLocation,
         isLoading: state.location.isLoading,
         isResult: state.location.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_location: (dataFilter) => dispatch(actions.get_list_location_redux(dataFilter)),
-        edit_location: (id, data) => dispatch(actions.edit_location_redux(id, data)),
-        on_change_location: (id, value) => dispatch(actions.on_change_location_redux(id, value)),
+        getListLocation: (dataFilter) => dispatch(actions.getListLocationRedux(dataFilter)),
+        editLocation: (id, data) => dispatch(actions.editLocationRedux(id, data)),
+        onChangeLocation: (id, value) => dispatch(actions.onChangeLocationRedux(id, value)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

@@ -24,8 +24,8 @@ class variant_attribute_value extends Component {
     }
     async componentDidUpdate(prevProps) {
         if (prevProps.is_edit !== this.props.is_edit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws || prevProps.dataAttributes !== this.props.dataAttributes) {
-            this.props.set_data_attribute({});
-            this.props.set_data_attribute_value({});
+            this.props.setDataAttribute({});
+            this.props.setDataAttributeValue({});
             let dataAttributes = this.props.dataAttributes;
             let data_atbvl_raws = this.props.data_atbvl_raws;
             if (data_atbvl_raws && data_atbvl_raws.length !== 0) {
@@ -51,22 +51,22 @@ class variant_attribute_value extends Component {
     }
     handleCreate = async (nameFormSelect) => {
         if (nameFormSelect === 'attribute_value') {
-            if (!this.props.data_attribute_value.value) { message.error('Thiếu giá trị'); return; }
-            await this.props.create_attribute_value(this.props.data_attribute_value);
-            await this.props.get_attribute(this.props.data_attribute_value.attribute);
+            if (!this.props.dataAttributeValue.value) { message.error('Thiếu giá trị'); return; }
+            await this.props.createAttributeValue(this.props.dataAttributeValue);
+            await this.props.getDataAttribute(this.props.dataAttributeValue.attribute);
         }
     }
 
     on_select = async (value, nameFormSelect) => {
         if (nameFormSelect === 'attribute') {
-            await this.props.get_attribute(value);
-            this.props.set_data_attribute_value({ attribute: this.props.data_attribute.id });
+            await this.props.getDataAttribute(value);
+            this.props.setDataAttributeValue({ attribute: this.props.dataAttribute.id });
             this.setState({
                 disable_atbvl: false,
             })
         }
         if (nameFormSelect === 'attribute_value') {
-            await this.props.get_attribute_value(value);
+            await this.props.getDataAttributeValue(value);
             this.setState({
                 disabledButtonCreate: false,
             })
@@ -99,20 +99,20 @@ class variant_attribute_value extends Component {
         })
     }
     handle_add_atbvl = async () => {
-        let data_attribute_value = this.props.data_attribute_value;
+        let dataAttributeValue = this.props.dataAttributeValue;
         let data_atbvl_ids = this.state.data_atbvl_ids;
         let data_atbvl_raws = this.state.data_atbvl_raws;
-        if (data_atbvl_ids.includes(data_attribute_value.id)) {
+        if (data_atbvl_ids.includes(dataAttributeValue.id)) {
             message.error('Đã tồn tại giá trị này');
             return;
         }
-        const index = data_atbvl_raws.findIndex(item => item.attribute.id === data_attribute_value.attribute.id);
+        const index = data_atbvl_raws.findIndex(item => item.attribute.id === dataAttributeValue.attribute.id);
         if (index !== -1) {
             message.error('Đã tồn tại thông số này');
             return;
         }
-        data_atbvl_ids.push(data_attribute_value.id);
-        data_atbvl_raws.push(data_attribute_value);
+        data_atbvl_ids.push(dataAttributeValue.id);
+        data_atbvl_raws.push(dataAttributeValue);
         await this.handle_data_unique(data_atbvl_raws);
         this.props.get_data_atbvl(data_atbvl_ids);
         this.setState({
@@ -134,8 +134,8 @@ class variant_attribute_value extends Component {
         });
     }
     render() {
-        let data_attribute = this.props.data_attribute;
-        let data_attribute_value = this.props.data_attribute_value;
+        let dataAttribute = this.props.dataAttribute;
+        let dataAttributeValue = this.props.dataAttributeValue;
         let data_atbvl_uniques = this.state.data_atbvl_uniques;
         let data_atbvl_raws = this.state.data_atbvl_raws;
         let dataAttributes = this.state.dataAttributes;
@@ -154,7 +154,7 @@ class variant_attribute_value extends Component {
                                             label: item.name,
                                             value: item.id,
                                         }))}
-                                        value={data_attribute.id}
+                                        value={dataAttribute.id}
                                         disabledSelect={!this.props.is_edit}
                                         disabledButtonCreate={true}
                                         disabledSearch={true}
@@ -162,7 +162,7 @@ class variant_attribute_value extends Component {
                                         variableSelect={'attribute'}
                                         onChangeSelect={this.on_select}
                                         variableInputSearch={'name'}
-                                        onChangeInput={this.props.on_change_attribute}
+                                        onChangeInput={this.props.onChangeAttribute}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -173,17 +173,17 @@ class variant_attribute_value extends Component {
                                     <FormSelectItem width={'100%'}
                                         placeholder={'Giá trị'}
                                         nameFormSelect={'attribute_value'}
-                                        options={data_attribute && data_attribute.attribute_values && data_attribute.attribute_values.map((item) => ({
+                                        options={dataAttribute && dataAttribute.attribute_values && dataAttribute.attribute_values.map((item) => ({
                                             label: item.value,
                                             value: item.id,
                                         }))}
-                                        value={data_attribute_value.id}
+                                        value={dataAttributeValue.id}
                                         disabledSelect={this.state.disable_atbvl}
                                         onSearch={this.onSearch}
                                         variableSelect={'attribute_value'}
                                         onChangeSelect={this.on_select}
                                         variableInputSearch={'value'}
-                                        onChangeInput={this.props.on_change_attribute_value}
+                                        onChangeInput={this.props.onChangeAttributeValue}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -245,22 +245,22 @@ const mapStateToProps = state => {
         data_product: state.product.data_product,
         is_edit: state.variant.is_edit,
 
-        data_attribute: state.attribute.data_attribute,
+        dataAttribute: state.attribute.dataAttribute,
 
-        data_attribute_value: state.attribute_value.data_attribute_value,
+        dataAttributeValue: state.attribute_value.dataAttributeValue,
 
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
 
-        get_attribute: (id) => dispatch(actions.get_attribute_redux(id)),
-        set_data_attribute: (data) => dispatch(actions.set_data_attribute_redux(data)),
+        getDataAttribute: (id) => dispatch(actions.getDataAttributeRedux(id)),
+        setDataAttribute: (data) => dispatch(actions.setDataAttributeRedux(data)),
 
-        get_attribute_value: (id) => dispatch(actions.get_attribute_value_redux(id)),
-        create_attribute_value: (data) => dispatch(actions.create_attribute_value_redux(data)),
-        on_change_attribute_value: (id, value) => dispatch(actions.on_change_attribute_value_redux(id, value)),
-        set_data_attribute_value: (data) => dispatch(actions.set_data_attribute_value_redux(data)),
+        getDataAttributeValue: (id) => dispatch(actions.getDataAttributeValueRedux(id)),
+        createAttributeValue: (data) => dispatch(actions.createAttributeValueRedux(data)),
+        onChangeAttributeValue: (id, value) => dispatch(actions.onChangeAttributeValueRedux(id, value)),
+        setDataAttributeValue: (data) => dispatch(actions.setDataAttributeValueRedux(data)),
 
     };
 };

@@ -23,27 +23,27 @@ class index extends Component {
         await this.props.get_view_product(data_statistical);
     }
 
-    handle_day = (typeItemDropButton, day) => {
+    handle_day = (dropButtonType, day) => {
         let start, end;
-        if (typeItemDropButton === 'day') {
+        if (dropButtonType === 'day') {
             start = dayjs(day).format('YYYY-MM-DD');
             end = dayjs(day).format('YYYY-MM-DD');
         }
-        if (typeItemDropButton === 'month') {
+        if (dropButtonType === 'month') {
             start = (dayjs(day).startOf('month')).format('YYYY-MM-DD');
             end = (dayjs(day).endOf('month')).format('YYYY-MM-DD');
         }
-        if (typeItemDropButton === 'year') {
+        if (dropButtonType === 'year') {
             start = (dayjs(day).startOf('year')).format('YYYY-MM-DD');
             end = (dayjs(day).endOf('year')).format('YYYY-MM-DD');
         }
 
         return { start, end }
     }
-    onchange_menu = async (typeItemDropButton) => {
+    onchange_menu = async (dropButtonType) => {
         let data_statistical = this.props.data_statistical;
-        let data_day = this.handle_day(typeItemDropButton, new Date());
-        data_statistical.type = typeItemDropButton;
+        let data_day = this.handle_day(dropButtonType, new Date());
+        data_statistical.type = dropButtonType;
         data_statistical.start = data_day.start;
         data_statistical.end = data_day.end;
         this.props.set_statistical(data_statistical);

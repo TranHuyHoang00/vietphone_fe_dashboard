@@ -13,11 +13,11 @@ class product_media extends Component {
         super(props);
         this.state = {
             is_edit: false,
-            typeItemDropButton: 1,
+            dropButtonType: 1,
             modal_video: false,
 
             data_media_raws: [],
-            data_media_ids: [],
+            dataMediaIds: [],
         }
     }
     async componentDidMount() {
@@ -31,19 +31,19 @@ class product_media extends Component {
         }
     }
     handle_data_id = (data) => {
-        let data_media_ids = [];
+        let dataMediaIds = [];
         if (data && data.length !== 0) {
             for (const item of data) {
-                data_media_ids.push(item.id);
+                dataMediaIds.push(item.id);
             }
         }
         this.setState({
-            data_media_ids: data_media_ids,
+            dataMediaIds: dataMediaIds,
         })
     }
     onChangeImage = async (event, type, index, id) => {
         let data_media_raws = this.state.data_media_raws;
-        let data_media_ids = this.state.data_media_ids;
+        let dataMediaIds = this.state.dataMediaIds;
 
         if (type === 'create') {
             const files = event.target.files;
@@ -54,22 +54,22 @@ class product_media extends Component {
         }
         if (type === 'delete') {
             if (id !== undefined) {
-                data_media_ids = data_media_ids.filter(item => item !== id);
+                dataMediaIds = dataMediaIds.filter(item => item !== id);
             }
             data_media_raws.splice(index, 1);
         }
-        this.setState({ data_media_raws: data_media_raws, data_media_ids: data_media_ids });
-        this.props.get_data_media(data_media_ids, data_media_raws);
+        this.setState({ data_media_raws: data_media_raws, dataMediaIds: dataMediaIds });
+        this.props.get_data_media(dataMediaIds, data_media_raws);
     }
     openModal = async (name, value) => {
         if (name === 'video') { this.setState({ modal_video: value }); }
     }
     onchange_video = (value) => {
         let data_media_raws = this.state.data_media_raws;
-        let data_media_ids = this.state.data_media_ids;
+        let dataMediaIds = this.state.dataMediaIds;
         data_media_raws.push({ external_url: value, media_type: 'video', alt: this.props.data_product.name });
         this.setState({ data_media_raws: data_media_raws });
-        this.props.get_data_media(data_media_ids, data_media_raws);
+        this.props.get_data_media(dataMediaIds, data_media_raws);
     }
     render() {
         const responsive = {
@@ -81,7 +81,7 @@ class product_media extends Component {
             { key: 2, label: 'Thêm video' },
         ];
         let is_edit = this.props.is_edit;
-        let typeItemDropButton = this.state.typeItemDropButton;
+        let dropButtonType = this.state.dropButtonType;
         let data_media_raws = this.state.data_media_raws;
         return (
             <>
@@ -90,10 +90,10 @@ class product_media extends Component {
                         <div className='space-y-[10px]'>
                             <input id="media_product" type="file" accept="image/*" hidden multiple
                                 onChange={(event) => this.onChangeImage(event, 'create')} />
-                            <Dropdown.Button disabled={!is_edit} menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
+                            <Dropdown.Button disabled={!is_edit} menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                 <div>
-                                    {typeItemDropButton === 1 && <label htmlFor="media_product">Thêm ảnh</label>}
-                                    {typeItemDropButton === 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
+                                    {dropButtonType === 1 && <label htmlFor="media_product">Thêm ảnh</label>}
+                                    {dropButtonType === 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
                                 </div>
                             </Dropdown.Button>
                             {data_media_raws && data_media_raws.length !== 0 &&

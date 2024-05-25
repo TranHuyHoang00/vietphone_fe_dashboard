@@ -21,44 +21,43 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        let result = this.validationData(this.props.data_group_attribute);
+        const { dataGroupAttribute, isResult, openModal, getListGroupAttribute, createGroupAttribute, dataFilter } = this.props;
+        const result = this.validationData(dataGroupAttribute);
         if (result.check) {
-            await this.props.create_group_attribute(this.props.data_group_attribute);
-            let isResult = this.props.isResult;
+            await createGroupAttribute(dataGroupAttribute);
             if (isResult) {
-                this.props.openModal("create", false);
-                await this.props.get_list_group_attribute(this.props.dataFilter);
+                await getListGroupAttribute(dataFilter);
+                openModal("create", false);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        let data_group_attribute = this.props.data_group_attribute;
-        let isLoading = this.props.isLoading;
+        const { dataGroupAttribute, isLoading, onChangeGroupAttribute, modalCreate, openModal } = this.props;
         return (
 
-            <Modal title="TẠO MỚI" open={this.props.modalCreate}
-                onCancel={() => this.props.openModal("create", false)} width={400}
+            <Modal title="TẠO MỚI" open={modalCreate}
+                onCancel={() => openModal("create", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'create'}
+                    <ModalFooter openModal={openModal} type={'create'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleCreate} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Tên loại thông số'} variable={'name'} value={data_group_attribute.name}
+                        <FormInput name={'Tên loại thông số'} variable={'name'} value={dataGroupAttribute.name}
                             important={true}
-                            onChangeInput={this.props.on_change_group_attribute} />
+                            onChangeInput={onChangeGroupAttribute} />
 
-                        <FormInput name={'Thứ tự'} variable={'priority'} value={data_group_attribute.priority}
+                        <FormInput name={'Thứ tự'} variable={'priority'} value={dataGroupAttribute.priority}
                             important={false}
-                            onChangeInput={this.props.on_change_group_attribute} />
+                            onChangeInput={onChangeGroupAttribute} />
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={data_group_attribute.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataGroupAttribute.description}
                             important={false}
-                            onChangeInput={this.props.on_change_group_attribute} />
+                            onChangeInput={onChangeGroupAttribute} />
 
                     </div>
                 </Spin>
@@ -69,16 +68,16 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_group_attribute: state.group_attribute.data_group_attribute,
+        dataGroupAttribute: state.group_attribute.dataGroupAttribute,
         isLoading: state.group_attribute.isLoading,
         isResult: state.group_attribute.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_group_attribute: (dataFilter) => dispatch(actions.get_list_group_attribute_redux(dataFilter)),
-        create_group_attribute: (data) => dispatch(actions.create_group_attribute_redux(data)),
-        on_change_group_attribute: (id, value) => dispatch(actions.on_change_group_attribute_redux(id, value)),
+        getListGroupAttribute: (dataFilter) => dispatch(actions.getListGroupAttributeRedux(dataFilter)),
+        createGroupAttribute: (data) => dispatch(actions.createGroupAttributeRedux(data)),
+        onChangeGroupAttribute: (id, value) => dispatch(actions.onChangeGroupAttributeRedux(id, value)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

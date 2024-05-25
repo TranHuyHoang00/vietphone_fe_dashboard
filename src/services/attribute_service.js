@@ -1,19 +1,19 @@
-import api_admin from '@auths/api_admin';
+import apiAdmin from '@auths/apiAdmin';
 const getListAttribute = (date_filter) => {
-    return api_admin.get(`/product/api/v1/list-attribute?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
+    return apiAdmin.get(`/product/api/v1/list-attribute?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
 }
-const create_attribute = (data) => {
-    return api_admin.post(`/product/api/v1/create-attribute`, data);
+const createAttribute = (data) => {
+    return apiAdmin.post(`/product/api/v1/create-attribute`, data);
 }
-const get_attribute = (id) => {
-    return api_admin.get(`/product/api/v1/get-attribute/${id}`);
+const getDataAttribute = (id) => {
+    return apiAdmin.get(`/product/api/v1/get-attribute/${id}`);
 }
-const delete_attribute = (id) => {
-    return api_admin.delete(`/product/api/v1/delete-attribute/${id}`);
+const deleteAttribute = (id) => {
+    return apiAdmin.delete(`/product/api/v1/delete-attribute/${id}`);
 }
-const edit_attribute = (id, data) => {
-    return api_admin.put(`/product/api/v1/update-attribute/${id}`, data);
+const editAttribute = (id, data) => {
+    return apiAdmin.put(`/product/api/v1/update-attribute/${id}`, data);
 }
 export {
-    getListAttribute, create_attribute, get_attribute, delete_attribute, edit_attribute
+    getListAttribute, createAttribute, getDataAttribute, deleteAttribute, editAttribute
 }

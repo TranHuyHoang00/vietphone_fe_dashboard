@@ -8,22 +8,23 @@ import FormSelectInput from '@components/selects/formSelectInput';
 import ModalFooter from '@components/modal/modalFooter';
 import { convertImageToBase64 } from '@utils/base64';
 import { DeleteOutlined } from '@ant-design/icons';
-import { create_media_base } from '@services/media_base_service';
-import { show_notification } from '@utils/show_notification';
+import { createMediaBase } from '@services/media_base_service';
+import { showNotification } from '@utils/handleFuncNotification';
 
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_medias: [],
-            data_media_ids: [],
+            dataMedias: [],
         }
     }
     async componentDidMount() {
-        this.props.get_list_location({ page: 1, limit: 100, search: '' });
+        const { getListLocation } = this.props;
+        getListLocation({ page: 1, limit: 100, search: '' });
     }
     validationData = (data) => {
-        if (this.state.data_medias.length === 0) {
+        const { dataMedias } = this.state;
+        if (dataMedias.length === 0) {
             return { mess: "Không được bỏ trống 'Hình ảnh' ", check: false };
         }
         if (!data.name) {
@@ -35,72 +36,70 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        let result = this.validationData(this.props.data_banner);
+        const { dataBanner, isResult, openModal, getListBanner, createBanner, dataFilter } = this.props;
+        const result = this.validationData(dataBanner);
+        const { dataMedias } = this.state;
         if (result.check) {
-            let data_banner = this.props.data_banner;
-            if (this.state.data_medias.length !== 0) {
-                let media = await this.handle_create_media(this.state.data_medias);
-                data_banner.media = media;
+            let newDataBanner = { ...dataBanner };
+            if (dataMedias.length !== 0) {
+                const media = await this.createMedia(dataMedias);
+                newDataBanner.media = media;
             }
-            await this.props.create_banner(data_banner);
-            let isResult = this.props.isResult;
+            await createBanner(newDataBanner);
             if (isResult) {
-                this.props.openModal("create", false);
-                this.setState({ data_medias: [], data_media_ids: [] })
-                await this.props.get_list_banner(this.props.dataFilter);
+                openModal("create", false);
+                this.setState({ dataMedias: [] })
+                await getListBanner(dataFilter);
             }
         } else {
             message.error(result.mess);
         }
     }
-    onChangeImage = async (event, type, index, id) => {
-        let data_medias = this.state.data_medias;
-        let data_media_ids = this.state.data_media_ids;
-        if (type === 'create') {
-            const files = event.target.files;
-            for (let i = 0; i < files.length; i++) {
-                let image_new = await convertImageToBase64(event, i);
-                data_medias.push({ image: image_new, media_type: 'image', name: this.props.data_banner.name, alt: this.props.data_banner.name });
-            }
-        }
-        if (type === 'delete') {
-            if (id !== undefined) {
-                data_media_ids = data_media_ids.filter(item => item !== id);
-            }
-            data_medias.splice(index, 1);
-        }
-        this.setState({ data_medias: data_medias, data_media_ids: data_media_ids });
-    }
-    handle_create_media = async (data_medias) => {
-        try {
-            let data_media_ids_new = [];
-            let data_media_ids = this.state.data_media_ids;
-            for (const item of data_medias) {
-                if (!item.id) {
-                    item.alt = this.props.data_banner.name;
-                    let data = await create_media_base(item);
-                    if (data && data.data && data.data.success === 1) {
-                        data_media_ids_new.push(data.data.data.id);
-                    }
+    onChangeImage = async (valueImage, nameFuntion, index, id) => {
+        let { dataMedias } = this.state;
+        const { dataBanner } = this.props;
+        switch (nameFuntion) {
+            case 'create':
+                const files = valueImage.target.files;
+                for (let i = 0; i < files.length; i++) {
+                    const newImage = await convertImageToBase64(valueImage, i);
+                    dataMedias.push({ image: newImage, media_type: 'image', name: dataBanner.name, alt: dataBanner.name });
                 }
-            }
-            return [...data_media_ids_new, ...data_media_ids];
+                break;
+            case 'delete':
+                dataMedias.splice(index, 1);
+                break;
+            default:
+                break;
+        }
+        this.setState({ dataMedias: dataMedias });
+    }
+    createMedia = async (dataMedias) => {
+        try {
+            const mediaPromises = dataMedias.map(async item => {
+                const data = await createMediaBase(item);
+                if (data && data.data && data.data.success === 1) {
+                    return data.data.data.id;
+                }
+                return null;
+            });
+            const newDataMediaIds = (await Promise.all(mediaPromises)).filter(id => id !== null);
+            return newDataMediaIds;
         } catch (error) {
-            show_notification(error);
+            showNotification(error);
+            return [];
         }
     }
     render() {
-        let data_banner = this.props.data_banner;
-        let isLoading = this.props.isLoading;
-        let data_locations = this.props.data_locations;
-        let data_medias = this.state.data_medias;
+        const { dataBanner, isLoading, dataLocations, modalCreate, openModal, onChangeBanner } = this.props;
+        const { dataMedias } = this.state;
         return (
 
-            <Modal title="TẠO MỚI" open={this.props.modalCreate}
-                onCancel={() => this.props.openModal("create", false)} width={400}
+            <Modal title="TẠO MỚI" open={modalCreate}
+                onCancel={() => openModal("create", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'create'}
+                    <ModalFooter openModal={openModal} type={'create'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleCreate} />
                 ]}>
                 <Spin spinning={isLoading}>
@@ -114,12 +113,12 @@ class index extends Component {
                                 <div className='space-y-[5px]'>
                                     <div className='aspect-[3/1]'>
                                         <Carousel className='h-full w-full'>
-                                            {data_medias && data_medias.map((item, index) => {
+                                            {dataMedias && dataMedias.map((item, index) => {
                                                 return (
                                                     <div id={index} className='relative'>
                                                         <Image height={'100px'} width={'100%'} src={item.image} className='object-cover' />
                                                         <div className='absolute top-0 left-0'>
-                                                            <Button onClick={() => this.onChangeImage(null, 'delete', index, item.id)}
+                                                            <Button onClick={() => this.onChangeImage(undefined, 'delete', index, item.id)}
                                                                 className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
                                                         </div>
                                                     </div>
@@ -127,10 +126,10 @@ class index extends Component {
                                             })}
                                         </Carousel>
                                     </div>
-                                    <input id='create_banner' type="file" accept="image/*" hidden multiple
+                                    <input id='createBanner' type="file" accept="image/*" hidden multiple
                                         onChange={(image) => this.onChangeImage(image, 'create')} />
                                     <div className='text-center'>
-                                        <label htmlFor='create_banner'
+                                        <label htmlFor='createBanner'
                                             className='border bg-[#1677ff] text-white px-[10px] py-[3px] cursor-pointer '>
                                             Thêm ảnh
                                         </label>
@@ -139,17 +138,17 @@ class index extends Component {
                             </div>
                         </div>
 
-                        <FormInput name={'Tên băng rôn'} variable={'name'} value={data_banner.name}
+                        <FormInput name={'Tên băng rôn'} variable={'name'} value={dataBanner.name}
                             important={true}
-                            onChangeInput={this.props.on_change_banner} />
+                            onChangeInput={onChangeBanner} />
 
-                        <FormSelectInput name={'Vị trí'} variable={'location'} value={data_banner.location}
+                        <FormSelectInput name={'Vị trí'} variable={'location'} value={dataBanner.location}
                             important={true} width={'100%'}
-                            options={data_locations.map((item) => ({
+                            options={dataLocations.map((item) => ({
                                 label: item.name,
                                 value: item.id,
                             }))}
-                            onChangeInput={this.props.on_change_banner} />
+                            onChangeInput={onChangeBanner} />
                     </div>
                 </Spin>
             </Modal>
@@ -159,18 +158,18 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_banner: state.banner.data_banner,
+        dataBanner: state.banner.dataBanner,
         isLoading: state.banner.isLoading,
         isResult: state.banner.isResult,
-        data_locations: state.location.data_locations,
+        dataLocations: state.location.dataLocations,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_banner: (dataFilter) => dispatch(actions.get_list_banner_redux(dataFilter)),
-        create_banner: (data) => dispatch(actions.create_banner_redux(data)),
-        on_change_banner: (id, value) => dispatch(actions.on_change_banner_redux(id, value)),
-        get_list_location: (dataFilter) => dispatch(actions.get_list_location_redux(dataFilter)),
+        getListBanner: (dataFilter) => dispatch(actions.getListBannerRedux(dataFilter)),
+        createBanner: (data) => dispatch(actions.createBannerRedux(data)),
+        onChangeBanner: (id, value) => dispatch(actions.onChangeBannerRedux(id, value)),
+        getListLocation: (dataFilter) => dispatch(actions.getListLocationRedux(dataFilter)),
 
     };
 };

@@ -19,7 +19,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            typeItemDropButton: 1,
+            dropButtonType: 1,
             listItemSelected: [],
             modalCreate: false,
             modalEdit: false,
@@ -50,14 +50,14 @@ class index extends Component {
         this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
-        const { listItemSelected, typeItemDropButton, dataFilter } = this.state;
+        const { listItemSelected, dropButtonType, dataFilter } = this.state;
         const { deleteListCategoryPost, editListCategoryPost, getListCategoryPost } = this.props;
         const actions = {
             deleteList: deleteListCategoryPost,
             editList: editListCategoryPost,
             getList: getListCategoryPost
         };
-        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(typeItemDropButton, listItemSelected, dataFilter, actions);
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
         this.setState({ listItemSelected: newListItemSelected });
     }
     onChangePage = async (pageValue, pageType,) => {
@@ -94,7 +94,7 @@ class index extends Component {
             },
 
         ];
-        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, typeItemDropButton,
+        const { dataPermissionsAfterCheck, listItemSelected, dataFilter, dropButtonType,
             modalCreate, modalEdit } = this.state;
         const { isLoading, dataCategoryPosts, dataMeta } = this.props;
         const items = [
@@ -126,9 +126,9 @@ class index extends Component {
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button disabled={!dataPermissionsAfterCheck['post.delete_category']}
-                                            menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
+                                            menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {typeItemDropButton === 1 && <span>Xóa</span>}
+                                                {dropButtonType === 1 && <span>Xóa</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

@@ -17,7 +17,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            typeItemDropButton: 1,
+            dropButtonType: 1,
             listItemSelected: [],
             modalDetail: false,
             modalCreate: false,
@@ -61,9 +61,9 @@ class index extends Component {
     }
     funcDropButtonHeaderOfTable = async () => {
         let listItemSelected = this.state.listItemSelected;
-        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_flash_sale_item(listItemSelected); }
+        if (this.state.dropButtonType === 1) { await this.props.delete_list_flash_sale_item(listItemSelected); }
         await this.props.getDataFlashSale(this.props.data_flash_sale.id);
-        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+        if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
     }
     render() {
         const columns = [
@@ -112,7 +112,7 @@ class index extends Component {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let typeItemDropButton = this.state.typeItemDropButton;
+        let dropButtonType = this.state.dropButtonType;
         let data_flash_sale = this.props.data_flash_sale;
         return (
             <>
@@ -146,9 +146,9 @@ class index extends Component {
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
                                             disabled={!dataPermissionsAfterCheck['promotion.delete_flashsaleitem']}
-                                            menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
+                                            menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {typeItemDropButton === 1 && <span>Xóa</span>}
+                                                {dropButtonType === 1 && <span>Xóa</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

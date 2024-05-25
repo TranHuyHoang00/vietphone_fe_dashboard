@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import Admin from './admins/index';
 import NotFound from './admins/pages_error/not_found';
 import { ConfigProvider } from 'antd';
-import { theme_light } from '@assets/themes/theme_light';
-import { theme_dark } from '@assets/themes/theme_dark';
+import { themeLight } from '@assets/themes/themeLight';
+import { themeDark } from '@assets/themes/themeDark';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -19,7 +19,7 @@ class index extends Component {
     render() {
         let dark_mode = this.props.dark_mode;
         return (
-            <ConfigProvider theme={dark_mode ? theme_dark : theme_light}>
+            <ConfigProvider theme={dark_mode ? themeDark : themeLight}>
                 <Switch>
                     <Route path="/admin"><Admin /></Route>
                     <Redirect from="/" exact to="/admin" />

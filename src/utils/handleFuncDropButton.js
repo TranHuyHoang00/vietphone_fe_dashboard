@@ -1,6 +1,6 @@
-const handleFuncDropButtonHeaderOfTable = async (typeItemDropButton, listItemSelected, dataFilter, actions) => {
+const handleFuncDropButtonHeaderOfTable = async (dropButtonType, listItemSelected, dataFilter, actions) => {
     const { deleteList, editList, getList } = actions;
-    switch (typeItemDropButton) {
+    switch (dropButtonType) {
         case 1:
             await deleteList(listItemSelected);
             listItemSelected = [];

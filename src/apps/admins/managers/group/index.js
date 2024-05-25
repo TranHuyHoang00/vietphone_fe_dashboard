@@ -14,7 +14,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            typeItemDropButton: 1,
+            dropButtonType: 1,
             listItemSelected: [],
             modalCreate: false,
             modalEdit: false,
@@ -44,9 +44,9 @@ class index extends Component {
     }
     funcDropButtonHeaderOfTable = async () => {
         let listItemSelected = this.state.listItemSelected;
-        if (this.state.typeItemDropButton === 1) { await this.props.delete_list_group(listItemSelected); }
+        if (this.state.dropButtonType === 1) { await this.props.delete_list_group(listItemSelected); }
         await this.props.get_list_group(this.state.dataFilter);
-        if (this.state.typeItemDropButton === 1) { this.setState({ listItemSelected: [] }); }
+        if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
     }
     onChangePage = async (value, type) => {
         let dataFilter = this.state.dataFilter;
@@ -88,7 +88,7 @@ class index extends Component {
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
         let dataFilter = this.state.dataFilter;
-        let typeItemDropButton = this.state.typeItemDropButton;
+        let dropButtonType = this.state.dropButtonType;
         return (
             <>
                 <Spin size='large' spinning={this.props.isLoading}>
@@ -109,9 +109,9 @@ class index extends Component {
                                     <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
-                                        <Dropdown.Button disabled menu={{ items, onClick: (value) => { this.setState({ typeItemDropButton: parseInt(value.key) }) } }}  >
+                                        <Dropdown.Button disabled menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {typeItemDropButton === 1 && <span>Xóa</span>}
+                                                {dropButtonType === 1 && <span>Xóa</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

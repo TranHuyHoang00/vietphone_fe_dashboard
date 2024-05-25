@@ -9,7 +9,7 @@ import ProductPage from './elements/product_page';
 import ProductContent from './elements/product_content';
 import ProductMedia from './elements/product_media';
 import { create_media } from '@services/media_service';
-import { show_notification } from '@utils/show_notification';
+import { showNotification } from '@utils/handleFuncNotification';
 import { handleCheckPermission } from '@utils/handleFuncPermission';
 import { data_products } from '@datas/dataPermissionsOrigin';
 class index extends Component {
@@ -17,7 +17,7 @@ class index extends Component {
         super(props);
         this.state = {
             data_atbvl_ids: [],
-            data_media_ids: [],
+            dataMediaIds: [],
             data_media_raws: [],
             dataPermissionsAfterCheck: {},
         }
@@ -43,7 +43,7 @@ class index extends Component {
     handle_create_media = async () => {
         try {
             let data_media_ids_new = [];
-            let data_media_ids = this.state.data_media_ids;
+            let dataMediaIds = this.state.dataMediaIds;
             let data_atbvl_raws = this.state.data_media_raws;
             for (const item of data_atbvl_raws) {
                 if (!item.id) {
@@ -53,9 +53,9 @@ class index extends Component {
                     }
                 }
             }
-            return [...data_media_ids_new, ...data_media_ids];
+            return [...data_media_ids_new, ...dataMediaIds];
         } catch (error) {
-            show_notification(error);
+            showNotification(error);
         }
     }
     handle_edit_product = async () => {
@@ -91,8 +91,8 @@ class index extends Component {
     get_data_atbvl = (data_atbvl_ids) => {
         this.setState({ data_atbvl_ids: data_atbvl_ids })
     }
-    get_data_media = (data_media_ids, data_media_raws) => {
-        this.setState({ data_media_ids: data_media_ids, data_media_raws: data_media_raws })
+    get_data_media = (dataMediaIds, data_media_raws) => {
+        this.setState({ dataMediaIds: dataMediaIds, data_media_raws: data_media_raws })
     }
     render() {
         let data_product = this.props.data_product;

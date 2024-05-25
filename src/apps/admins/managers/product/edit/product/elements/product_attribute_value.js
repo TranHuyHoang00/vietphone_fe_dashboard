@@ -21,7 +21,7 @@ class product_attribute_value extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_group_attribute(this.state.dataFilter);
+        this.props.getListGroupAttribute(this.state.dataFilter);
     }
     async componentDidUpdate(prevProps) {
         if (prevProps.is_edit !== this.props.is_edit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws) {
@@ -33,9 +33,9 @@ class product_attribute_value extends Component {
                     data_atbvl_raws: this.props.data_atbvl_raws,
                 })
             }
-            this.props.set_data_group_attribute({});
-            this.props.set_data_attribute({});
-            this.props.set_data_attribute_value({});
+            this.props.setDataGroupAttribute({});
+            this.props.setDataAttribute({});
+            this.props.setDataAttributeValue({});
             this.setState({
                 disable_atb: true,
                 disable_atbvl: true,
@@ -46,30 +46,30 @@ class product_attribute_value extends Component {
     onSearch = (value, nameFormSelect) => {
         let dataFilter = this.state.dataFilter;
         dataFilter.search = value;
-        if (nameFormSelect === 'group_attribute') { this.props.get_list_group_attribute(dataFilter); }
+        if (nameFormSelect === 'group_attribute') { this.props.getListGroupAttribute(dataFilter); }
     }
     handleCreate = async (nameFormSelect) => {
         if (nameFormSelect === 'group_attribute') {
-            if (!this.props.data_group_attribute.name) { message.error('Thiếu tên loại thông số'); return; }
-            await this.props.create_group_attribute(this.props.data_group_attribute);
-            await this.props.get_list_group_attribute(this.state.dataFilter);
+            if (!this.props.dataGroupAttribute.name) { message.error('Thiếu tên loại thông số'); return; }
+            await this.props.createGroupAttribute(this.props.dataGroupAttribute);
+            await this.props.getListGroupAttribute(this.state.dataFilter);
         }
         if (nameFormSelect === 'attribute') {
-            if (!this.props.data_attribute.name) { message.error('Thiếu tên thông số'); return; }
-            await this.props.create_attribute(this.props.data_attribute);
-            await this.props.get_group_attribute(this.props.data_attribute.group_attribute);
+            if (!this.props.dataAttribute.name) { message.error('Thiếu tên thông số'); return; }
+            await this.props.createAttribute(this.props.dataAttribute);
+            await this.props.getDataGroupAttribute(this.props.dataAttribute.group_attribute);
         }
         if (nameFormSelect === 'attribute_value') {
-            if (!this.props.data_attribute_value.value) { message.error('Thiếu giá trị'); return; }
-            await this.props.create_attribute_value(this.props.data_attribute_value);
-            await this.props.get_attribute(this.props.data_attribute_value.attribute);
+            if (!this.props.dataAttributeValue.value) { message.error('Thiếu giá trị'); return; }
+            await this.props.createAttributeValue(this.props.dataAttributeValue);
+            await this.props.getDataAttribute(this.props.dataAttributeValue.attribute);
         }
     }
     on_select = async (value, nameFormSelect) => {
         if (nameFormSelect === 'group_attribute') {
-            await this.props.get_group_attribute(value);
-            this.props.set_data_attribute({ group_attribute: this.props.data_group_attribute.id });
-            this.props.set_data_attribute_value({});
+            await this.props.getDataGroupAttribute(value);
+            this.props.setDataAttribute({ group_attribute: this.props.dataGroupAttribute.id });
+            this.props.setDataAttributeValue({});
             this.setState({
                 disable_atb: false,
                 disable_atbvl: true,
@@ -77,14 +77,14 @@ class product_attribute_value extends Component {
             })
         }
         if (nameFormSelect === 'attribute') {
-            await this.props.get_attribute(value);
-            this.props.set_data_attribute_value({ attribute: this.props.data_attribute.id });
+            await this.props.getDataAttribute(value);
+            this.props.setDataAttributeValue({ attribute: this.props.dataAttribute.id });
             this.setState({
                 disable_atbvl: false,
             })
         }
         if (nameFormSelect === 'attribute_value') {
-            await this.props.get_attribute_value(value);
+            await this.props.getDataAttributeValue(value);
             this.setState({
                 disabledButtonCreate: false,
             })
@@ -117,11 +117,11 @@ class product_attribute_value extends Component {
         })
     }
     handle_add_atbvl = async () => {
-        let data_attribute_value = this.props.data_attribute_value;
+        let dataAttributeValue = this.props.dataAttributeValue;
         let data_atbvl_ids = this.state.data_atbvl_ids;
         let data_atbvl_raws = this.state.data_atbvl_raws;
-        data_atbvl_ids.push(data_attribute_value.id);
-        data_atbvl_raws.push(data_attribute_value);
+        data_atbvl_ids.push(dataAttributeValue.id);
+        data_atbvl_raws.push(dataAttributeValue);
         await this.handle_data_unique(data_atbvl_raws);
         this.props.get_data_atbvl(data_atbvl_ids);
         this.setState({
@@ -140,10 +140,10 @@ class product_attribute_value extends Component {
         });
     }
     render() {
-        let data_group_attributes = this.props.data_group_attributes;
-        let data_group_attribute = this.props.data_group_attribute;
-        let data_attribute = this.props.data_attribute;
-        let data_attribute_value = this.props.data_attribute_value;
+        let dataGroupAttributes = this.props.dataGroupAttributes;
+        let dataGroupAttribute = this.props.dataGroupAttribute;
+        let dataAttribute = this.props.dataAttribute;
+        let dataAttributeValue = this.props.dataAttributeValue;
         let data_atbvl_uniques = this.state.data_atbvl_uniques;
         let data_atbvl_raws = this.state.data_atbvl_raws;
         return (
@@ -157,17 +157,17 @@ class product_attribute_value extends Component {
                                     <FormSelectItem width={'100%'}
                                         placeholder={'Loại thông số'}
                                         nameFormSelect={'group_attribute'}
-                                        options={data_group_attributes.map((item) => ({
+                                        options={dataGroupAttributes.map((item) => ({
                                             label: item.name,
                                             value: item.id,
                                         }))}
-                                        value={data_group_attribute.id}
+                                        value={dataGroupAttribute.id}
                                         disabledSelect={!this.props.is_edit}
                                         onSearch={this.onSearch}
                                         variableSelect={'group_attribute'}
                                         onChangeSelect={this.on_select}
                                         variableInputSearch={'name'}
-                                        onChangeInput={this.props.on_change_group_attribute}
+                                        onChangeInput={this.props.onChangeGroupAttribute}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -178,17 +178,17 @@ class product_attribute_value extends Component {
                                     <FormSelectItem width={'100%'}
                                         placeholder={'Thông số'}
                                         nameFormSelect={'attribute'}
-                                        options={data_group_attribute.attributes && data_group_attribute.attributes.map((item) => ({
+                                        options={dataGroupAttribute.attributes && dataGroupAttribute.attributes.map((item) => ({
                                             label: item.name,
                                             value: item.id,
                                         }))}
-                                        value={data_attribute.id}
+                                        value={dataAttribute.id}
                                         disabledSelect={this.state.disable_atb}
                                         onSearch={this.onSearch}
                                         variableSelect={'attribute'}
                                         onChangeSelect={this.on_select}
                                         variableInputSearch={'name'}
-                                        onChangeInput={this.props.on_change_attribute}
+                                        onChangeInput={this.props.onChangeAttribute}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -201,17 +201,17 @@ class product_attribute_value extends Component {
                                     <FormSelectItem width={'100%'}
                                         placeholder={'Giá trị'}
                                         nameFormSelect={'attribute_value'}
-                                        options={data_attribute.attribute_values && data_attribute.attribute_values.map((item) => ({
+                                        options={dataAttribute.attribute_values && dataAttribute.attribute_values.map((item) => ({
                                             label: item.value,
                                             value: item.id,
                                         }))}
-                                        value={data_attribute_value.id}
+                                        value={dataAttributeValue.id}
                                         disabledSelect={this.state.disable_atbvl}
                                         onSearch={this.onSearch}
                                         variableSelect={'attribute_value'}
                                         onChangeSelect={this.on_select}
                                         variableInputSearch={'value'}
-                                        onChangeInput={this.props.on_change_attribute_value}
+                                        onChangeInput={this.props.onChangeAttributeValue}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -271,32 +271,32 @@ const mapStateToProps = state => {
         data_product: state.product.data_product,
         is_edit: state.product.is_edit,
 
-        data_group_attributes: state.group_attribute.data_group_attributes,
-        data_group_attribute: state.group_attribute.data_group_attribute,
+        dataGroupAttributes: state.group_attribute.dataGroupAttributes,
+        dataGroupAttribute: state.group_attribute.dataGroupAttribute,
 
-        data_attribute: state.attribute.data_attribute,
+        dataAttribute: state.attribute.dataAttribute,
 
-        data_attribute_value: state.attribute_value.data_attribute_value,
+        dataAttributeValue: state.attribute_value.dataAttributeValue,
 
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_group_attribute: (dataFilter) => dispatch(actions.get_list_group_attribute_redux(dataFilter)),
-        create_group_attribute: (data) => dispatch(actions.create_group_attribute_redux(data)),
-        on_change_group_attribute: (id, value) => dispatch(actions.on_change_group_attribute_redux(id, value)),
-        get_group_attribute: (id) => dispatch(actions.get_group_attribute_redux(id)),
-        set_data_group_attribute: (data) => dispatch(actions.set_data_group_attribute_redux(data)),
+        getListGroupAttribute: (dataFilter) => dispatch(actions.getListGroupAttributeRedux(dataFilter)),
+        createGroupAttribute: (data) => dispatch(actions.createGroupAttributeRedux(data)),
+        onChangeGroupAttribute: (id, value) => dispatch(actions.onChangeGroupAttributeRedux(id, value)),
+        getDataGroupAttribute: (id) => dispatch(actions.getDataGroupAttributeRedux(id)),
+        setDataGroupAttribute: (data) => dispatch(actions.setDataGroupAttributeRedux(data)),
 
-        get_attribute: (id) => dispatch(actions.get_attribute_redux(id)),
-        create_attribute: (data) => dispatch(actions.create_attribute_redux(data)),
-        on_change_attribute: (id, value) => dispatch(actions.on_change_attribute_redux(id, value)),
-        set_data_attribute: (data) => dispatch(actions.set_data_attribute_redux(data)),
+        getDataAttribute: (id) => dispatch(actions.getDataAttributeRedux(id)),
+        createAttribute: (data) => dispatch(actions.createAttributeRedux(data)),
+        onChangeAttribute: (id, value) => dispatch(actions.onChangeAttributeRedux(id, value)),
+        setDataAttribute: (data) => dispatch(actions.setDataAttributeRedux(data)),
 
-        get_attribute_value: (id) => dispatch(actions.get_attribute_value_redux(id)),
-        create_attribute_value: (data) => dispatch(actions.create_attribute_value_redux(data)),
-        on_change_attribute_value: (id, value) => dispatch(actions.on_change_attribute_value_redux(id, value)),
-        set_data_attribute_value: (data) => dispatch(actions.set_data_attribute_value_redux(data)),
+        getDataAttributeValue: (id) => dispatch(actions.getDataAttributeValueRedux(id)),
+        createAttributeValue: (data) => dispatch(actions.createAttributeValueRedux(data)),
+        onChangeAttributeValue: (id, value) => dispatch(actions.onChangeAttributeValueRedux(id, value)),
+        setDataAttributeValue: (data) => dispatch(actions.setDataAttributeValueRedux(data)),
 
     };
 };

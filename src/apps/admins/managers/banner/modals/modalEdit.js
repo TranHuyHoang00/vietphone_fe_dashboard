@@ -8,35 +8,35 @@ import FormSelectInput from '@components/selects/formSelectInput';
 import ModalFooter from '@components/modal/modalFooter';
 import { convertImageToBase64 } from '@utils/base64';
 import { DeleteOutlined } from '@ant-design/icons';
-import { create_media_base, get_media_base } from '@services/media_base_service';
-import { show_notification } from '@utils/show_notification';
+import { createMediaBase, get_media_base } from '@services/media_base_service';
+import { showNotification } from '@utils/handleFuncNotification';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_medias: [],
-            data_media_ids: [],
-            data_banner: {},
+            dataMedias: [],
+            dataMediaIds: [],
+            dataBanner: {},
         }
     }
     async componentDidMount() {
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.data_banner !== this.props.data_banner) {
-            this.props.get_list_location({ page: 1, limit: 100, search: '' });
-            this.setState({ data_media_ids: this.props.data_banner.media });
-            if (this.props.data_banner.media && this.props.data_banner.media.length !== 0) {
-                await this.get_list_media(this.props.data_banner.media);
+        if (prevProps.dataBanner !== this.props.dataBanner) {
+            this.props.getListLocation({ page: 1, limit: 100, search: '' });
+            this.setState({ dataMediaIds: this.props.dataBanner.media });
+            if (this.props.dataBanner.media && this.props.dataBanner.media.length !== 0) {
+                await this.get_list_media(this.props.dataBanner.media);
             }
         }
     }
     get_list_media = async (media) => {
-        let data_medias = [];
+        let dataMedias = [];
         for (const item of media) {
             let data = await this.get_media(item);
-            data_medias.push(data);
+            dataMedias.push(data);
         }
-        this.setState({ data_medias: data_medias });
+        this.setState({ dataMedias: dataMedias });
     }
     get_media = async (id) => {
         try {
@@ -45,11 +45,11 @@ class index extends Component {
                 return data.data.data
             }
         } catch (error) {
-            show_notification(error);
+            showNotification(error);
         }
     }
     validationData = (data) => {
-        if (this.state.data_medias.length === 0) {
+        if (this.state.dataMedias.length === 0) {
             return { mess: "Không được bỏ trống 'Hình ảnh' ", check: false };
         }
         if (!data.name) {
@@ -61,65 +61,65 @@ class index extends Component {
         return { check: true };
     }
     handleEdit = async () => {
-        let result = this.validationData(this.props.data_banner);
+        let result = this.validationData(this.props.dataBanner);
         if (result.check) {
-            let data_banner = this.props.data_banner;
-            if (this.state.data_medias.length !== 0) {
-                let media = await this.handle_create_media(this.state.data_medias);
-                data_banner.media = media;
+            let dataBanner = this.props.dataBanner;
+            if (this.state.dataMedias.length !== 0) {
+                let media = await this.handle_create_media(this.state.dataMedias);
+                dataBanner.media = media;
             }
-            await this.props.edit_banner(data_banner.id, data_banner);
+            await this.props.editBanner(dataBanner.id, dataBanner);
             let isResult = this.props.isResult;
             if (isResult) {
                 this.props.openModal("edit", false);
-                this.setState({ data_medias: [], data_media_ids: [] })
-                await this.props.get_list_banner(this.props.dataFilter);
+                this.setState({ dataMedias: [], dataMediaIds: [] })
+                await this.props.getListBanner(this.props.dataFilter);
             }
         } else {
             message.error(result.mess);
         }
     }
     onChangeImage = async (event, type, index, id) => {
-        let data_medias = this.state.data_medias;
-        let data_media_ids = this.state.data_media_ids;
+        let dataMedias = this.state.dataMedias;
+        let dataMediaIds = this.state.dataMediaIds;
         if (type === 'create') {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
                 let image_new = await convertImageToBase64(event, i);
-                data_medias.push({ image: image_new, media_type: 'image', name: this.props.data_banner.name, alt: this.props.data_banner.name });
+                dataMedias.push({ image: image_new, media_type: 'image', name: this.props.dataBanner.name, alt: this.props.dataBanner.name });
             }
         }
         if (type === 'delete') {
             if (id !== undefined) {
-                data_media_ids = data_media_ids.filter(item => item !== id);
+                dataMediaIds = dataMediaIds.filter(item => item !== id);
             }
-            data_medias.splice(index, 1);
+            dataMedias.splice(index, 1);
         }
-        this.setState({ data_medias: data_medias, data_media_ids: data_media_ids });
+        this.setState({ dataMedias: dataMedias, dataMediaIds: dataMediaIds });
     }
-    handle_create_media = async (data_medias) => {
+    handle_create_media = async (dataMedias) => {
         try {
             let data_media_ids_new = [];
-            let data_media_ids = this.state.data_media_ids;
-            for (const item of data_medias) {
+            let dataMediaIds = this.state.dataMediaIds;
+            for (const item of dataMedias) {
                 if (!item.id) {
-                    item.alt = this.props.data_banner.name;
-                    let data = await create_media_base(item);
+                    item.alt = this.props.dataBanner.name;
+                    let data = await createMediaBase(item);
                     if (data && data.data && data.data.success === 1) {
                         data_media_ids_new.push(data.data.data.id);
                     }
                 }
             }
-            return [...data_media_ids_new, ...data_media_ids];
+            return [...data_media_ids_new, ...dataMediaIds];
         } catch (error) {
-            show_notification(error);
+            showNotification(error);
         }
     }
     render() {
-        let data_banner = this.props.data_banner;
+        let dataBanner = this.props.dataBanner;
         let isLoading = this.props.isLoading;
-        let data_locations = this.props.data_locations;
-        let data_medias = this.state.data_medias;
+        let dataLocations = this.props.dataLocations;
+        let dataMedias = this.state.dataMedias;
 
         return (
             <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
@@ -140,7 +140,7 @@ class index extends Component {
                                 <div className='space-y-[5px]'>
                                     <div className='aspect-[3/1]'>
                                         <Carousel className='h-full w-full'>
-                                            {data_medias && data_medias.map((item, index) => {
+                                            {dataMedias && dataMedias.map((item, index) => {
                                                 return (
                                                     <div id={index} className='relative'>
                                                         <Image height={'100px'} width={'100%'} src={item.image} className='object-cover' />
@@ -153,10 +153,10 @@ class index extends Component {
                                             })}
                                         </Carousel>
                                     </div>
-                                    <input id='edit_banner' type="file" accept="image/*" hidden multiple
+                                    <input id='editBanner' type="file" accept="image/*" hidden multiple
                                         onChange={(image) => this.onChangeImage(image, 'create')} />
                                     <div className='text-center'>
-                                        <label htmlFor='edit_banner'
+                                        <label htmlFor='editBanner'
                                             className='border bg-[#1677ff] text-white px-[10px] py-[3px] cursor-pointer '>
                                             Thêm ảnh
                                         </label>
@@ -165,17 +165,17 @@ class index extends Component {
                             </div>
                         </div>
 
-                        <FormInput name={'Tên băng rôn'} variable={'name'} value={data_banner.name}
+                        <FormInput name={'Tên băng rôn'} variable={'name'} value={dataBanner.name}
                             important={true}
-                            onChangeInput={this.props.on_change_banner} />
+                            onChangeInput={this.props.onChangeBanner} />
 
-                        <FormSelectInput name={'Vị trí'} variable={'location'} value={data_banner.location}
+                        <FormSelectInput name={'Vị trí'} variable={'location'} value={dataBanner.location}
                             important={true} width={'100%'}
-                            options={data_locations.map((item) => ({
+                            options={dataLocations.map((item) => ({
                                 label: item.name,
                                 value: item.id,
                             }))}
-                            onChangeInput={this.props.on_change_banner} />
+                            onChangeInput={this.props.onChangeBanner} />
                     </div>
                 </Spin>
             </Modal>
@@ -185,18 +185,18 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_banner: state.banner.data_banner,
+        dataBanner: state.banner.dataBanner,
         isLoading: state.banner.isLoading,
         isResult: state.banner.isResult,
-        data_locations: state.location.data_locations,
+        dataLocations: state.location.dataLocations,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_banner: (dataFilter) => dispatch(actions.get_list_banner_redux(dataFilter)),
-        edit_banner: (id, data) => dispatch(actions.edit_banner_redux(id, data)),
-        on_change_banner: (id, value) => dispatch(actions.on_change_banner_redux(id, value)),
-        get_list_location: (dataFilter) => dispatch(actions.get_list_location_redux(dataFilter)),
+        getListBanner: (dataFilter) => dispatch(actions.getListBannerRedux(dataFilter)),
+        editBanner: (id, data) => dispatch(actions.editBannerRedux(id, data)),
+        onChangeBanner: (id, value) => dispatch(actions.onChangeBannerRedux(id, value)),
+        getListLocation: (dataFilter) => dispatch(actions.getListLocationRedux(dataFilter)),
 
     };
 };
