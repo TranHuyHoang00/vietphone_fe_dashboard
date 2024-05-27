@@ -5,16 +5,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListAttributeValueRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(attribute_value_start());
-            let data = await getListAttributeValue(dataFilter);
+            dispatch(attributeValueStart());
+            const data = await getListAttributeValue(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_attribute_value_success(data.data.data));
+                dispatch(getListAttributeValueSuccess(data.data.data));
             } else {
-                dispatch(attribute_value_faided());
+                dispatch(attributeValueFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(attribute_value_faided());
+            dispatch(attributeValueFaided());
             showNotification(error);
         }
     }
@@ -22,16 +22,16 @@ export const getListAttributeValueRedux = (dataFilter) => {
 export const getDataAttributeValueRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(attribute_value_start());
-            let data = await getAttributeValueDetail(id);
+            dispatch(attributeValueStart());
+            const data = await getAttributeValueDetail(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_attribute_value_success(data.data.data));
+                dispatch(getAttributeValueSuccess(data.data.data));
             } else {
-                dispatch(attribute_value_faided());
+                dispatch(attributeValueFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(attribute_value_faided());
+            dispatch(attributeValueFaided());
             showNotification(error);
         }
     }
@@ -39,90 +39,90 @@ export const getDataAttributeValueRedux = (id) => {
 export const createAttributeValueRedux = (dataAttributeValue) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(attribute_value_start());
-            let data = await createAttributeValue(dataAttributeValue);
+            dispatch(attributeValueStart());
+            const data = await createAttributeValue(dataAttributeValue);
             if (data && data.data && data.data.success === 1) {
-                dispatch(attribute_value_success());
+                dispatch(attributeValueSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(attribute_value_faided());
+                dispatch(attributeValueFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(attribute_value_faided());
+            dispatch(attributeValueFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListAttributeValueRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(attribute_value_start());
+        dispatch(attributeValueStart());
         for (const id of list_id) {
             try {
-                let data = await deleteAttributeValue(id);
+                const data = await deleteAttributeValue(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(attribute_value_faided());
+                dispatch(attributeValueFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(attribute_value_success());
+        dispatch(attributeValueSuccess());
     }
 }
 export const editListAttributeValueRedux = (list_id, dataAttributeValue) => {
     return async (dispatch, getState) => {
-        dispatch(attribute_value_start());
+        dispatch(attributeValueStart());
         for (const id of list_id) {
             try {
-                let data = await editAttributeValue(id, dataAttributeValue);
+                const data = await editAttributeValue(id, dataAttributeValue);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(attribute_value_faided());
+                dispatch(attributeValueFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(attribute_value_success());
+        dispatch(attributeValueSuccess());
     }
 }
 export const editAttributeValueRedux = (id, dataAttributeValue) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(attribute_value_start());
-            let data = await editAttributeValue(id, dataAttributeValue);
+            dispatch(attributeValueStart());
+            const data = await editAttributeValue(id, dataAttributeValue);
             if (data && data.data && data.data.success === 1) {
-                dispatch(attribute_value_success());
+                dispatch(attributeValueSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(attribute_value_faided());
+                dispatch(attributeValueFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(attribute_value_faided());
+            dispatch(attributeValueFaided());
             showNotification(error);
         }
     }
 }
-export const attribute_value_start = () => ({
+export const attributeValueStart = () => ({
     type: action_types.ATTRIBUTE_VALUE_START,
 })
-export const attribute_value_success = () => ({
+export const attributeValueSuccess = () => ({
     type: action_types.ATTRIBUTE_VALUE_SUCCESS,
 })
-export const attribute_value_faided = () => ({
+export const attributeValueFaided = () => ({
     type: action_types.ATTRIBUTE_VALUE_FAIDED,
 })
 
-export const get_list_attribute_value_success = (data) => ({
+export const getListAttributeValueSuccess = (data) => ({
     type: action_types.GET_LIST_ATTRIBUTE_VALUE_SUCCESS,
     data
 })
-export const get_attribute_value_success = (data) => ({
+export const getAttributeValueSuccess = (data) => ({
     type: action_types.GET_ATTRIBUTE_VALUE_SUCCESS,
     data
 })

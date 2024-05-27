@@ -108,7 +108,7 @@ export const editUserRedux = (id, dataUser) => {
         }
     }
 }
-export const get_list_user_permission_redux = () => {
+export const getListUserPermissionRedux = () => {
     return async (dispatch, getState) => {
         try {
             dispatch(user_start());

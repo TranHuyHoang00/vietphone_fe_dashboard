@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListBannerRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(banner_start());
-            let data = await getListBanner(dataFilter);
+            dispatch(bannerStart());
+            const data = await getListBanner(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_banner_success(data.data.data));
+                dispatch(getListBannerSuccess(data.data.data));
             } else {
-                dispatch(banner_faided());
+                dispatch(bannerFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(banner_faided());
+            dispatch(bannerFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListBannerRedux = (dataFilter) => {
 export const getDataBannerRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(banner_start());
-            let data = await getDataBanner(id);
+            dispatch(bannerStart());
+            const data = await getDataBanner(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_banner_success(data.data.data));
+                dispatch(getBannerSuccess(data.data.data));
             } else {
-                dispatch(banner_faided());
+                dispatch(bannerFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(banner_faided());
+            dispatch(bannerFaided());
             showNotification(error);
         }
     }
@@ -40,90 +40,90 @@ export const getDataBannerRedux = (id) => {
 export const createBannerRedux = (dataBanner) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(banner_start());
-            let data = await createBanner(dataBanner);
+            dispatch(bannerStart());
+            const data = await createBanner(dataBanner);
             if (data && data.data && data.data.success === 1) {
-                dispatch(banner_success());
+                dispatch(bannerSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(banner_faided());
+                dispatch(bannerFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(banner_faided());
+            dispatch(bannerFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListBannerRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(banner_start());
+        dispatch(bannerStart());
         for (const id of list_id) {
             try {
-                let data = await deleteBanner(id);
+                const data = await deleteBanner(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(banner_faided());
+                dispatch(bannerFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(banner_success());
+        dispatch(bannerSuccess());
     }
 }
 export const editListBannerRedux = (list_id, dataBanner) => {
     return async (dispatch, getState) => {
-        dispatch(banner_start());
+        dispatch(bannerStart());
         for (const id of list_id) {
             try {
-                let data = await editBanner(id, dataBanner);
+                const data = await editBanner(id, dataBanner);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(banner_faided());
+                dispatch(bannerFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(banner_success());
+        dispatch(bannerSuccess());
     }
 }
 export const editBannerRedux = (id, dataBanner) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(banner_start());
-            let data = await editBanner(id, dataBanner);
+            dispatch(bannerStart());
+            const data = await editBanner(id, dataBanner);
             if (data && data.data && data.data.success === 1) {
-                dispatch(banner_success());
+                dispatch(bannerSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(banner_faided());
+                dispatch(bannerFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(banner_faided());
+            dispatch(bannerFaided());
             showNotification(error);
         }
     }
 }
-export const banner_start = () => ({
+export const bannerStart = () => ({
     type: action_types.BANNER_START,
 })
-export const banner_success = () => ({
+export const bannerSuccess = () => ({
     type: action_types.BANNER_SUCCESS,
 })
-export const banner_faided = () => ({
+export const bannerFaided = () => ({
     type: action_types.BANNER_FAIDED,
 })
 
-export const get_list_banner_success = (data) => ({
+export const getListBannerSuccess = (data) => ({
     type: action_types.GET_LIST_BANNER_SUCCESS,
     data
 })
-export const get_banner_success = (data) => ({
+export const getBannerSuccess = (data) => ({
     type: action_types.GET_BANNER_SUCCESS,
     data
 })

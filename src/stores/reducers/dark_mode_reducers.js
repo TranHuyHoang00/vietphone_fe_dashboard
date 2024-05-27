@@ -1,7 +1,7 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    dark_mode: false,
+    darkMode: false,
 }
 
 const dark_mode_reducers = (state = initialState, action) => {
@@ -9,7 +9,7 @@ const dark_mode_reducers = (state = initialState, action) => {
         case action_types.SET_DARK_MODE:
             return {
                 ...state,
-                dark_mode: action.data,
+                darkMode: action.data,
             }
         default:
             return state;

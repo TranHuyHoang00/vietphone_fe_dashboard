@@ -12,33 +12,33 @@ class login extends Component {
             password: '',
             phone: '',
             isLoading: false,
-            is_show_password: false,
+            isShowPassword: false,
         }
     }
     async componentDidMount() {
     }
-    handle_loading = (value) => {
+    handleLoading = (value) => {
         this.setState({ isLoading: value });
     }
-    onchange_password = (event) => {
+    onChangePassword = (event) => {
         this.setState({ password: (event.target.value).replace(/\s/g, '') })
     }
-    onchange_phone = (event) => {
-        this.setState({ phone: (event.target.value).replace(/\s/g, '') })
+    onChangePhone = (event) => {
+        this.setState({ phone: (event.target.value).replace(/\s/g, '') });
     }
     isCheckEmpty = (value) => {
         return value.trim().length
     }
-    validation_phone = (phone_number) => {
+    validationPhone = (phone_number) => {
         const re = /^(?:\+84|0)(?:3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-46-9])(?:\d{7}|\d{7})$/;
         return re.test(phone_number);
     }
     validationData = (phone, password) => {
-        this.handle_loading(true);
+        this.handleLoading(true);
         if (this.isCheckEmpty(phone) === 0) {
             return { mess: "Số điện thoại không được bỏ trống!", check: false };
         }
-        if (!this.validation_phone(phone)) {
+        if (!this.validationPhone(phone)) {
             return { mess: "Số điện thoại sai định dạng", check: false };
         }
         if (this.isCheckEmpty(password) === 0) {
@@ -46,15 +46,17 @@ class login extends Component {
         }
         return { check: true };
     }
-    handle_login = async () => {
-        let result = this.validationData(this.state.phone, this.state.password);
+    handleLogin = async () => {
+        const { phone, password } = this.state;
+        const result = this.validationData(phone, password);
+        const { handleLoginAdmin } = this.props;
         if (result.check) {
             try {
-                let data = await Login(this.state.phone, this.state.password);
+                let data = await Login(phone, password);
                 if (data && data.data && data.data.success === 1) {
                     setDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
                     this.props.history.push(`/admin`);
-                    this.props.handle_login_db();
+                    handleLoginAdmin();
                 }
                 else {
                     message.error("Tài khoản hoặc mật khẩu không chính xác!")
@@ -65,12 +67,14 @@ class login extends Component {
         } else {
             message.error(result.mess);
         }
-        this.handle_loading(false);
+        this.handleLoading(false);
     }
-    handle_show_password = () => {
-        this.setState({ is_show_password: !this.state.is_show_password })
+    onShowPassword = () => {
+        const { isShowPassword } = this.state;
+        this.setState({ isShowPassword: !isShowPassword })
     }
     render() {
+        const { isShowPassword, isLoading } = this.state;
         return (
             <div className="h-screen w-screen font-sans bg-no-repeat bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: `url(${bg})` }}>
                 <div className="leading-loose">
@@ -78,7 +82,7 @@ class login extends Component {
                         <p className="text-white font-medium text-center text-[22px] ">ADMIN</p>
                         <div className="space-y-[5px]">
                             <label className="block  text-sm text-white" for="email">Số điện thoại</label>
-                            <input onChange={(event) => this.onchange_phone(event)}
+                            <input onChange={(event) => this.onChangePhone(event)}
                                 className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded focus:outline-none focus:bg-white"
                                 type="text" id="phone" aria-label="phone" required />
                         </div>
@@ -87,21 +91,22 @@ class login extends Component {
                             <div className='relative'>
                                 <input className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded focus:outline-none focus:bg-white"
                                     id="password" arial-label="password" required
-                                    type={this.state.is_show_password === false ? 'password' : 'text'} onChange={(event) => this.onchange_password(event)} />
-                                <div onClick={() => this.handle_show_password()}
+                                    type={isShowPassword ? 'text' : 'password'} onChange={(event) => this.onChangePassword(event)} />
+                                <div onClick={() => this.onShowPassword()}
                                     className='absolute top-[12px] right-[12px] cursor-pointer'>
-                                    {this.state.is_show_password === false ?
-                                        <AiFillEye className='text-gray-700' />
-                                        :
+                                    {isShowPassword ?
                                         <AiFillEyeInvisible className='text-gray-700' />
+                                        :
+                                        <AiFillEye className='text-gray-700' />
+
                                     }
                                 </div>
                             </div>
 
                         </div>
                         <div className="pt-[10px]">
-                            <Spin spinning={this.state.isLoading}>
-                                <button disabled={this.state.isLoading} onClick={() => this.handle_login()}
+                            <Spin spinning={isLoading}>
+                                <button disabled={isLoading} onClick={() => this.handleLogin()}
                                     className="px-4 py-[10px] w-full flex justify-center font-medium text-white tracking-wider bg-gray-900 hover:bg-gray-800 rounded" type="submit">
                                     ĐĂNG NHẬP
                                 </button>

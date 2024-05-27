@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListAttributeRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(attribute_start());
-            let data = await getListAttribute(dataFilter);
+            dispatch(attributeStart());
+            const data = await getListAttribute(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_attribute_success(data.data.data));
+                dispatch(getListAttributeSuccess(data.data.data));
             } else {
-                dispatch(attribute_faided());
+                dispatch(attributeFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(attribute_faided());
+            dispatch(attributeFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListAttributeRedux = (dataFilter) => {
 export const getDataAttributeRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(attribute_start());
-            let data = await getDataAttribute(id);
+            dispatch(attributeStart());
+            const data = await getDataAttribute(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_attribute_success(data.data.data));
+                dispatch(getAttributeSuccess(data.data.data));
             } else {
-                dispatch(attribute_faided());
+                dispatch(attributeFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(attribute_faided());
+            dispatch(attributeFaided());
             showNotification(error);
         }
     }
@@ -40,90 +40,90 @@ export const getDataAttributeRedux = (id) => {
 export const createAttributeRedux = (dataAttribute) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(attribute_start());
-            let data = await createAttribute(dataAttribute);
+            dispatch(attributeStart());
+            const data = await createAttribute(dataAttribute);
             if (data && data.data && data.data.success === 1) {
-                dispatch(attribute_success());
+                dispatch(attributeSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(attribute_faided());
+                dispatch(attributeFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(attribute_faided());
+            dispatch(attributeFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListAttributeRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(attribute_start());
+        dispatch(attributeStart());
         for (const id of list_id) {
             try {
-                let data = await deleteAttribute(id);
+                const data = await deleteAttribute(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(attribute_faided());
+                dispatch(attributeFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(attribute_success());
+        dispatch(attributeSuccess());
     }
 }
 export const editListAttributeRedux = (list_id, dataAttribute) => {
     return async (dispatch, getState) => {
-        dispatch(attribute_start());
+        dispatch(attributeStart());
         for (const id of list_id) {
             try {
-                let data = await editAttribute(id, dataAttribute);
+                const data = await editAttribute(id, dataAttribute);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(attribute_faided());
+                dispatch(attributeFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(attribute_success());
+        dispatch(attributeSuccess());
     }
 }
 export const editAttributeRedux = (id, dataAttribute) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(attribute_start());
-            let data = await editAttribute(id, dataAttribute);
+            dispatch(attributeStart());
+            const data = await editAttribute(id, dataAttribute);
             if (data && data.data && data.data.success === 1) {
-                dispatch(attribute_success());
+                dispatch(attributeSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(attribute_faided());
+                dispatch(attributeFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(attribute_faided());
+            dispatch(attributeFaided());
             showNotification(error);
         }
     }
 }
-export const attribute_start = () => ({
+export const attributeStart = () => ({
     type: action_types.ATTRIBUTE_START,
 })
-export const attribute_success = () => ({
+export const attributeSuccess = () => ({
     type: action_types.ATTRIBUTE_SUCCESS,
 })
-export const attribute_faided = () => ({
+export const attributeFaided = () => ({
     type: action_types.ATTRIBUTE_FAIDED,
 })
 
-export const get_list_attribute_success = (data) => ({
+export const getListAttributeSuccess = (data) => ({
     type: action_types.GET_LIST_ATTRIBUTE_SUCCESS,
     data
 })
-export const get_attribute_success = (data) => ({
+export const getAttributeSuccess = (data) => ({
     type: action_types.GET_ATTRIBUTE_SUCCESS,
     data
 })

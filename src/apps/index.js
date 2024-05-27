@@ -17,9 +17,9 @@ class index extends Component {
     async componentDidMount() {
     }
     render() {
-        let dark_mode = this.props.dark_mode;
+        const { darkMode } = this.props;
         return (
-            <ConfigProvider theme={dark_mode ? themeDark : themeLight}>
+            <ConfigProvider theme={darkMode ? themeDark : themeLight}>
                 <Switch>
                     <Route path="/admin"><Admin /></Route>
                     <Redirect from="/" exact to="/admin" />
@@ -32,7 +32,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dark_mode: state.dark_mode.dark_mode,
+        darkMode: state.dark_mode.darkMode,
     };
 };
 const mapDispatchToProps = dispatch => {

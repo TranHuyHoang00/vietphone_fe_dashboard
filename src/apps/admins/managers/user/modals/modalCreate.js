@@ -17,7 +17,7 @@ class index extends Component {
         const { getListGroup } = this.props;
         getListGroup({ page: 1, limit: 100, search: '' });
     }
-    validation_phone = (phone_number) => {
+    validationPhone = (phone_number) => {
         const re = /^(?:\+84|0)(?:3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-46-9])(?:\d{7}|\d{7})$/;
         return re.test(phone_number);
     }
@@ -29,7 +29,7 @@ class index extends Component {
         if (!data.phone) {
             return { mess: "Không được bỏ trống 'Số điện thoại' ", check: false };
         }
-        if (!this.validation_phone(data?.phone)) {
+        if (!this.validationPhone(data?.phone)) {
             return { mess: "Số điện thoại sai định dạng", check: false };
         }
         if (!data.password) {

@@ -56,48 +56,47 @@ class index extends Component {
             collapsed: false,
             url: '/admin/',
             value: {},
-            logged_in_db: false,
-            is_form_drawer: false,
+            loggedIn: false,
+            drawerMenu: false,
             dataCheckPermis: {},
         }
     }
     async componentDidMount() {
-        let data_db = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
-        if (data_db) {
-            this.setState({ logged_in_db: true });
-            await this.props.getListUserPermission();
-            await this.get_dataPermissionsAfterCheck();
+        const dataAccount = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+        const { getListUserPermission } = this.props;
+        if (dataAccount) {
+            this.setState({ loggedIn: true });
+            await getListUserPermission();
+            await this.checkPermis();
         }
     }
-    get_dataPermissionsAfterCheck = async () => {
-        let isSuperUser = this.props.isSuperUser;
-        let dataUserPermis;
-        if (isSuperUser && isSuperUser === true) { dataUserPermis = []; }
-        else { dataUserPermis = this.props.dataUserPermis; }
-        let dataCheckPermis = await handleCheckPermis(dataPermiViews, dataUserPermis, isSuperUser);
-        this.setState({
-            dataCheckPermis: dataCheckPermis,
-        });
+    checkPermis = async () => {
+        const { dataUserPermis, isSuperUser } = this.props;
+        const dataCheckPermis = await handleCheckPermis(dataPermiViews, dataUserPermis, isSuperUser);
+        this.setState({ dataCheckPermis: dataCheckPermis, });
     }
     setCollapsed = () => {
-        this.setState({ collapsed: !this.state.collapsed })
+        const { collapsed } = this.state;
+        this.setState({ collapsed: !collapsed })
     }
     onClickPage = (value) => {
         this.props.history.push(`/admin/${value.key}`);
     }
-    handle_login_db = () => {
-        this.setState({ logged_in_db: true });
+    handleLoginAdmin = () => {
+        this.setState({ loggedIn: true });
     }
-    handle_logout_db = () => {
-        this.setState({ logged_in_db: false });
+    handleLogoutAdmin = () => {
+        this.setState({ loggedIn: false });
     }
-    open_drawer_form = () => {
-        this.setState({ is_form_drawer: true })
+    openDrawerMenu = () => {
+        this.setState({ drawerMenu: true })
     }
-    close_DrawerForm = () => {
-        this.setState({ is_form_drawer: false })
+    closeDrawerMenu = () => {
+        this.setState({ drawerMenu: false })
     }
     render() {
+        const { dataCheckPermis, loggedIn, url, collapsed, drawerMenu } = this.state;
+
         const items = [
             {
                 key: 'menu_dashboard', icon: <AiFillDashboard />, label: 'Dashboard', children: [
@@ -127,15 +126,15 @@ class index extends Component {
                 key: 'menu_user', icon: <FaUserShield />, label: 'Người dùng', children: [
                     {
                         key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng',
-                        disabled: !this.state.dataCheckPermis['account.view_customer']
+                        disabled: !dataCheckPermis['account.view_customer']
                     },
                     {
                         key: 'manager/user', icon: <AiOutlineUserSwitch />, label: 'Tài khoản',
-                        disabled: !this.state.dataCheckPermis['account.view_user']
+                        disabled: !dataCheckPermis['account.view_user']
                     },
                     {
                         key: 'manager/group', icon: <AiFillRobot />, label: 'Phân quyền',
-                        disabled: !this.state.dataCheckPermis['group.view_group']
+                        disabled: !dataCheckPermis['group.view_group']
                     },
                 ],
             },
@@ -143,7 +142,7 @@ class index extends Component {
                 key: 'menu_order', icon: <AiFillContainer />, label: 'Đơn đặt', children: [
                     {
                         key: '', icon: <AiFillFileMarkdown />, label: 'Đơn hàng',
-                        disabled: !this.state.dataCheckPermis['order.view_order']
+                        disabled: !dataCheckPermis['order.view_order']
                     },
                 ],
             },
@@ -151,11 +150,11 @@ class index extends Component {
                 key: 'menu_product', icon: <AiFillShop />, label: 'Cửa hàng', children: [
                     {
                         key: 'manager/product', icon: <AiFillMobile />, label: 'Sản phẩm',
-                        disabled: !this.state.dataCheckPermis['product.view_product']
+                        disabled: !dataCheckPermis['product.view_product']
                     },
                     {
                         key: 'manager/flash_sale_item', icon: <AiFillPayCircle />, label: 'Flash sale',
-                        disabled: !this.state.dataCheckPermis['promotion.view_flashsaleitem']
+                        disabled: !dataCheckPermis['promotion.view_flashsaleitem']
                     },
                 ],
             },
@@ -163,11 +162,11 @@ class index extends Component {
                 key: 'advertisement', icon: <AiFillProject />, label: 'Quảng cáo', children: [
                     {
                         key: 'manager/banner', icon: <AiFillBehanceSquare />, label: 'Băng rôn',
-                        disabled: !this.state.dataCheckPermis['settings.view_banner']
+                        disabled: !dataCheckPermis['settings.view_banner']
                     },
                     {
                         key: 'manager/location', icon: <AiFillEnvironment />, label: 'Vị trí',
-                        disabled: !this.state.dataCheckPermis['settings.view_location']
+                        disabled: !dataCheckPermis['settings.view_location']
                     },
                 ],
             },
@@ -175,19 +174,19 @@ class index extends Component {
                 key: 'menu_specification', icon: <AiFillSetting />, label: 'Thông số', children: [
                     {
                         key: 'manager/attribute_value', icon: <AiFillRocket />, label: 'Giá trị',
-                        disabled: !this.state.dataCheckPermis['product.view_attributevalue']
+                        disabled: !dataCheckPermis['product.view_attributevalue']
                     },
                     {
                         key: 'manager/attribute', icon: <AiFillUsb />, label: 'Thông số',
-                        disabled: !this.state.dataCheckPermis['product.view_attribute']
+                        disabled: !dataCheckPermis['product.view_attribute']
                     },
                     {
                         key: 'manager/group_attribute', icon: <AiFillFire />, label: 'Loại thông số',
-                        disabled: !this.state.dataCheckPermis['product.view_groupattribute']
+                        disabled: !dataCheckPermis['product.view_groupattribute']
                     },
                     {
                         key: 'manager/variant_attribute_group', icon: <AiFillCrown />, label: 'Loại TS-SP',
-                        disabled: !this.state.dataCheckPermis['product.view_variantattributegroup']
+                        disabled: !dataCheckPermis['product.view_variantattributegroup']
                     },
                 ],
             },
@@ -195,19 +194,19 @@ class index extends Component {
                 key: 'menu_category', icon: <AiFillHdd />, label: 'Danh mục', children: [
                     {
                         key: 'manager/tag', icon: <AiFillTag />, label: 'Tag',
-                        disabled: !this.state.dataCheckPermis['product.view_tag']
+                        disabled: !dataCheckPermis['product.view_tag']
                     },
                     {
                         key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu',
-                        disabled: !this.state.dataCheckPermis['product.view_brand']
+                        disabled: !dataCheckPermis['product.view_brand']
                     },
                     {
                         key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục',
-                        disabled: !this.state.dataCheckPermis['product.view_category']
+                        disabled: !dataCheckPermis['product.view_category']
                     },
                     {
                         key: 'manager/flash_sale', icon: <AiFillMoneyCollect />, label: 'Flash_sale',
-                        disabled: !this.state.dataCheckPermis['promotion.view_flashsale']
+                        disabled: !dataCheckPermis['promotion.view_flashsale']
                     },
 
                 ],
@@ -216,11 +215,11 @@ class index extends Component {
                 key: 'menu_post', icon: <AiFillBook />, label: 'Bài đăng', children: [
                     {
                         key: 'manager/post', icon: <AiOutlineBook />, label: 'Bài viết',
-                        disabled: !this.state.dataCheckPermis['post.view_post']
+                        disabled: !dataCheckPermis['post.view_post']
                     },
                     {
                         key: 'manager/category_post', icon: <AiFillBuild />, label: 'Loại bài viết',
-                        disabled: !this.state.dataCheckPermis['post.view_category']
+                        disabled: !dataCheckPermis['post.view_category']
                     },
                 ],
             },
@@ -228,38 +227,35 @@ class index extends Component {
                 key: 'menu_system', icon: <AiFillAndroid />, label: 'Hệ thống', children: [
                     {
                         key: 'manager/sync_data', icon: <AiFillControl />, label: 'Đồng bộ',
-                        disabled: !this.state.dataCheckPermis['sync.view_sync']
+                        disabled: !dataCheckPermis['sync.view_sync']
                     },
                     {
                         key: 'manager/task', icon: <AiFillSwitcher />, label: 'Lịch sử',
-                        disabled: !this.state.dataCheckPermis['task.view_task']
+                        disabled: !dataCheckPermis['task.view_task']
                     },
                 ],
             },
         ];
-        let url = this.state.url;
-        let logged_in_db = this.state.logged_in_db;
-        let dataCheckPermis = this.state.dataCheckPermis;
         return (
 
             <>
-                {logged_in_db ?
+                {loggedIn ?
                     <Layout hasSider style={{ minHeight: '100vh', }} >
                         <Layout.Sider theme='dark' className='overflow-y-auto h-screen md:block hidden'
-                            collapsible collapsed={this.state.collapsed} breakpoint="lg"
+                            collapsible collapsed={collapsed} breakpoint="lg"
                             onCollapse={() => this.setCollapsed()}>
                             <Menu theme='dark' mode="inline" items={items} defaultSelectedKeys={['manager']}
                                 onClick={(value) => this.onClickPage(value)} />
                         </Layout.Sider>
                         <Drawer title="Menu" placement={'left'} width={250} className='md:hidden block'
-                            onClose={() => this.close_DrawerForm()}
-                            open={this.state.is_form_drawer}>
+                            onClose={() => this.closeDrawerMenu()}
+                            open={drawerMenu}>
                             <Menu className='border p-[5px] shadow-sm rounded-[5px]'
                                 theme="light" mode="inline" items={items} defaultSelectedKeys={['manager']}
                                 onClick={(value) => this.onClickPage(value)} />
                         </Drawer>
                         <Layout className='overflow-auto h-screen'>
-                            <HeaderDB open_drawer_form={this.open_drawer_form} handle_logout_db={this.handle_logout_db} />
+                            <HeaderDB openDrawerMenu={this.openDrawerMenu} handleLogoutAdmin={this.handleLogoutAdmin} />
                             <Layout.Content className='py-[10px]'>
                                 <Switch>
                                     <Route exact path={`${url}statistical/view_web`}><StatisticalViewWeb /></Route>
@@ -331,7 +327,7 @@ class index extends Component {
                         <Switch>
                             <Route exact path={`${url}`}><NotLogged /></Route>
                             <Route exact path={`${url}login`}>
-                                <LoginDB handle_login_db={this.handle_login_db} />
+                                <LoginDB handleLoginAdmin={this.handleLoginAdmin} />
                             </Route>
                             <Route ><NotFound /></Route>
                         </Switch>
@@ -350,7 +346,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        getListUserPermission: (dataFilter) => dispatch(actions.get_list_user_permission_redux(dataFilter)),
+        getListUserPermission: (dataFilter) => dispatch(actions.getListUserPermissionRedux(dataFilter)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));
