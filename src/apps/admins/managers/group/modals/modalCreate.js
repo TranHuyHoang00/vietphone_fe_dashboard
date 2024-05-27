@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, message, Spin } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -20,36 +20,35 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        let result = this.validationData(this.props.data_group);
+        const { dataGroup, isResult, openModal, getListGroup, createGroup, dataFilter } = this.props;
+        const result = this.validationData(dataGroup);
         if (result.check) {
-            await this.props.create_group(this.props.data_group);
-            let isResult = this.props.isResult;
+            await createGroup(dataGroup);
             if (isResult) {
-                this.props.openModal("create", false);
-                await this.props.getListGroup(this.props.dataFilter);
+                await getListGroup(dataFilter);
+                openModal("create", false);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        let data_group = this.props.data_group;
-        let isLoading = this.props.isLoading;
+        const { dataGroup, isLoading, onChangeGroup, modalCreate, openModal } = this.props;
         return (
 
-            <Modal title="TẠO MỚI" open={this.props.modalCreate}
-                onCancel={() => this.props.openModal("create", false)} width={400}
+            <Modal title="TẠO MỚI" open={modalCreate}
+                onCancel={() => openModal("create", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'create'}
+                    <ModalFooter openModal={openModal} type={'create'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleCreate} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Tên quyền'} variable={'name'} value={data_group.name}
+                        <FormInput name={'Tên quyền'} variable={'name'} value={dataGroup.name}
                             important={true}
-                            onChangeInput={this.props.on_change_group} />
+                            onChangeInput={onChangeGroup} />
 
                     </div>
                 </Spin>
@@ -60,7 +59,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_group: state.group.data_group,
+        dataGroup: state.group.dataGroup,
         isLoading: state.group.isLoading,
         isResult: state.group.isResult,
     };
@@ -68,8 +67,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getListGroup: (dataFilter) => dispatch(actions.getListGroupRedux(dataFilter)),
-        create_group: (data) => dispatch(actions.create_group_redux(data)),
-        on_change_group: (id, value) => dispatch(actions.on_change_group_redux(id, value)),
+        createGroup: (data) => dispatch(actions.createGroupRedux(data)),
+        onChangeGroup: (id, value) => dispatch(actions.onChangeGroupRedux(id, value)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

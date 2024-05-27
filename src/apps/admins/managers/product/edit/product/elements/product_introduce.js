@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Collapse, Select, message, Input } from 'antd';
-import FormSelectItem from '@components/selects/formSelectItem';
+import FormSelectMultiple from '@components/selects/formSelectMultiple';
 class product_introduce extends Component {
     constructor(props) {
         super(props);
@@ -71,7 +71,7 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <FormSelectItem width={'100%'} placeholder={'Tên thương hiệu'}
+                                <FormSelectMultiple width={'100%'} placeholder={'Tên thương hiệu'}
                                     nameFormSelect={'brand'}
                                     value={data_product.product_brand}
                                     options={dataBrands.map((item) => ({
@@ -99,7 +99,7 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <FormSelectItem width={'100%'} placeholder={'Tên tag'}
+                                <FormSelectMultiple width={'100%'} placeholder={'Tên tag'}
                                     nameFormSelect={'tag'} mode={'multiple'}
                                     value={data_product.tags}
                                     options={dataTags.map((item) => ({
@@ -125,7 +125,7 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <FormSelectItem width={'100%'} placeholder={'Tên danh mục'}
+                                <FormSelectMultiple width={'100%'} placeholder={'Tên danh mục'}
                                     nameFormSelect={'category'} mode={'multiple'}
                                     value={data_product.categories}
                                     options={dataCategorys.map((item) => ({
@@ -151,7 +151,7 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <FormSelectItem width={'100%'} placeholder={'Tên SP-TS'}
+                                <FormSelectMultiple width={'100%'} placeholder={'Tên SP-TS'}
                                     nameFormSelect={'variant_attribute_group'}
                                     value={(data_product?.variant_attribute_group?.id) ? (data_product.variant_attribute_group.id) : data_product.variant_attribute_group}
                                     options={dataVariantAttributeGroups.map((item) => ({

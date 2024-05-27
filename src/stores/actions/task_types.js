@@ -1,5 +1,5 @@
 import action_types from '@actions/action_types';
-import { getListTask, getDataTask, create_task, delete_task, edit_task } from '@services/task_service';
+import { getListTask, getDataTask, createTask, deleteTask, editTask } from '@services/task_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -41,7 +41,7 @@ export const create_task_redux = (dataTask) => {
     return async (dispatch, getState) => {
         try {
             dispatch(task_start());
-            let data = await create_task(dataTask);
+            let data = await createTask(dataTask);
             if (data && data.data && data.data.success === 1) {
                 dispatch(task_success());
                 message.success('Thành công');
@@ -60,7 +60,7 @@ export const deleteListTaskRedux = (list_id) => {
         dispatch(task_start());
         for (const id of list_id) {
             try {
-                let data = await delete_task(id);
+                let data = await deleteTask(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +78,7 @@ export const editListRaskRedux = (list_id, dataTask) => {
         dispatch(task_start());
         for (const id of list_id) {
             try {
-                let data = await edit_task(id, dataTask);
+                let data = await editTask(id, dataTask);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +95,7 @@ export const edit_task_redux = (id, dataTask) => {
     return async (dispatch, getState) => {
         try {
             dispatch(task_start());
-            let data = await edit_task(id, dataTask);
+            let data = await editTask(id, dataTask);
             if (data && data.data && data.data.success === 1) {
                 dispatch(task_success());
                 message.success('Thành công');

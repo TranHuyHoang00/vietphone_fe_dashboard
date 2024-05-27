@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Card, Radio, Typography, Statistic, List, DatePicker, Spin } from 'antd';
+import { Card, Radio, Typography, Statistic, DatePicker, Spin } from 'antd';
 import dayjs from 'dayjs';
 import { Bar } from 'react-chartjs-2';
-// import Chart from 'chart.js/auto';
-import { formatNumber } from '@utils/handleFuncFormat';
+// eslint-disable-next-line
+import Chart from 'chart.js/auto';
 import { ArrowDownOutlined, ArrowUpOutlined, EyeOutlined } from '@ant-design/icons';
 
 class index extends Component {
@@ -14,147 +14,154 @@ class index extends Component {
         super(props);
         this.state = {
             labels: [],
-            display_number: 9,
-            data_top_view_web: [],
+            displayNumber: 9,
+            dataTopViewWebs: [],
         }
     }
     async componentDidMount() {
-        let data_day = this.handle_day('day', dayjs(new Date()).format('YYYY-MM-DD'));
-        let data_statistical = this.props.data_statistical;
-        data_statistical.start = data_day.start;
-        data_statistical.end = data_day.end;
-        await this.props.set_statistical(data_statistical);
-        await this.props.get_view_web(data_statistical);
-        this.handle_data_top(this.state.labels, this.props.data_view_webs);
+        this.getData('day', new Date());
     }
-    handle_day = (dropButtonType, day) => {
+    handleDay = (itemGroupButtonType, day) => {
         let start, end;
-        end = dayjs(day).format('YYYY-MM-DD');
-        if (dropButtonType === 'day') { start = dayjs(day).subtract(this.state.display_number, 'day').format('YYYY-MM-DD'); }
-        if (dropButtonType === 'month') { start = dayjs(day).subtract(this.state.display_number, 'month').format('YYYY-MM-DD'); }
-        if (dropButtonType === 'year') { start = dayjs(day).subtract(this.state.display_number, 'year').format('YYYY-MM-DD'); }
-
         let labels = [];
-        for (let i = 0; i <= this.state.display_number; i++) {
-            let previous_day;
-            if (dropButtonType === 'day') { previous_day = dayjs(day).subtract(i, 'day').format('DD-MM'); }
-            if (dropButtonType === 'month') { previous_day = dayjs(day).subtract(i, 'month').format('MM-YYYY'); }
-            if (dropButtonType === 'year') { previous_day = dayjs(day).subtract(i, 'year').format('YYYY'); }
-            labels.unshift(previous_day);
+        end = dayjs(day).format('YYYY-MM-DD');
+        const { displayNumber } = this.state;
+        switch (itemGroupButtonType) {
+            case 'day':
+                start = dayjs(day).subtract(displayNumber, 'day').format('YYYY-MM-DD');
+                break;
+            case 'month':
+                start = dayjs(day).subtract(displayNumber, 'month').format('YYYY-MM-DD');
+                break;
+            case 'year':
+                start = dayjs(day).subtract(displayNumber, 'year').format('YYYY-MM-DD');
+                break;
+            default:
+                break;
+        }
+
+        for (let i = 0; i <= displayNumber; i++) {
+            let previousDay;
+            switch (itemGroupButtonType) {
+                case 'day':
+                    previousDay = dayjs(day).subtract(i, 'day').format('DD-MM');
+                    break;
+                case 'month':
+                    previousDay = dayjs(day).subtract(i, 'month').format('MM-YYYY');
+                    break;
+                case 'year':
+                    previousDay = dayjs(day).subtract(i, 'year').format('YYYY');
+                    break;
+                default:
+                    break;
+            }
+            labels.unshift(previousDay);
         }
         this.setState({ labels: labels })
-        return { start, end }
+        return { start, end, labels }
     }
-    onchange_menu = async (dropButtonType) => {
-        let data_statistical = this.props.data_statistical;
-        let data_day = this.handle_day(dropButtonType, data_statistical.end);
-        data_statistical.type = dropButtonType;
-        data_statistical.start = data_day.start;
-        data_statistical.end = data_day.end;
-        this.props.set_statistical(data_statistical);
-        await this.props.get_view_web(data_statistical);
-        this.handle_data_top(this.state.labels, this.props.data_view_webs);
+    onChangeGroupButton = async (itemGroupButtonType) => {
+        this.getData(itemGroupButtonType, new Date());
     }
+    onChangeDayPicker = async (event, dayPicker) => {
+        const { dataStatistical } = this.props;
+        this.getData(dataStatistical.type, dayPicker);
+    }
+    getData = async (typeFilter, dayPicker) => {
+        const { getViewWeb, dataStatistical, setDataStatistical } = this.props;
+        const dataDay = this.handleDay(typeFilter, dayPicker);
+        const newDataStatistical = {
+            ...dataStatistical,
+            start: dataDay.start,
+            end: dataDay.end,
+            type: typeFilter,
+        };
+        await setDataStatistical(newDataStatistical);
+        await getViewWeb(newDataStatistical);
 
-    onchange_daypicker = async (event, day_picker) => {
-        let data_statistical = this.props.data_statistical;
-        let data_day = this.handle_day(data_statistical.type, day_picker);
-        data_statistical.start = data_day.start;
-        data_statistical.end = data_day.end;
-        await this.props.get_view_web(data_statistical);
-        this.handle_data_top(this.state.labels, this.props.data_view_webs);
     }
-    disabled_day = (current) => {
+    disabledDay = (current) => {
         return current && current > dayjs().endOf('day');
     };
-    handle_sum_total = (data) => {
-        if (data) {
-            const sum = data.reduce((a, b) => { return a + b; }, 0);
-            return sum;
-        }
+    handleSumTotal = (data) => {
+        return data.reduce((a, b) => { return a + b; }, 0);
     }
-    handle_data_top = (labels, datas) => {
-        const sorted_datas = [...datas].sort((a, b) => b - a);
-        const top5B = sorted_datas.slice(0, 5);
-        const datas_new = top5B.map(value => {
-            const index = datas.indexOf(value);
-            return { name: labels[index], value: value };
-        });
-        this.setState({ data_top_view_web: datas_new })
-    }
-    check_ratio = (data_view_webs, type) => {
-        if (data_view_webs) {
-            let final_first_item = data_view_webs?.[data_view_webs.length - 1];
-            let final_second_item = data_view_webs?.[data_view_webs.length - 2];
+    checkRatio = (dataViewWebs, type) => {
+        if (dataViewWebs) {
+            const finalFirstItem = dataViewWebs?.[dataViewWebs.length - 1];
+            const finalSecondItem = dataViewWebs?.[dataViewWebs.length - 2];
             let ratio;
-            if (final_second_item && final_second_item !== 0) {
-                let number = Math.round(((final_first_item - final_second_item) / final_second_item) * 100)
+            if (finalSecondItem && finalSecondItem !== 0) {
+                const number = Math.round(((finalFirstItem - finalSecondItem) / finalSecondItem) * 100)
                 ratio = number < 0 ? -number : number;
             } else {
                 ratio = 100;
             }
-            if (final_first_item >= final_second_item) {
-                if (type === 'prefix') {
-                    return <ArrowUpOutlined />
-                }
-                if (type === 'valueStyle') {
-                    return { color: '#00db28' }
-                }
-                if (type === 'value') {
-                    return ratio
+            if (finalFirstItem >= finalSecondItem) {
+                switch (type) {
+                    case 'prefix':
+                        return <ArrowUpOutlined />
+                    case 'valueStyle':
+                        return { color: '#00db28' }
+                    case 'value':
+                        return ratio
+                    default:
+                        break;
                 }
             } else {
-                if (type === 'prefix') {
-                    return <ArrowDownOutlined />
-                }
-                if (type === 'valueStyle') {
-                    return { color: '#ed3b00' }
-                }
-                if (type === 'value') {
-                    return ratio
+                switch (type) {
+                    case 'prefix':
+                        return <ArrowDownOutlined />
+                    case 'valueStyle':
+                        return { color: '#ed3b00' }
+                    case 'value':
+                        return ratio
+                    default:
+                        break;
                 }
             }
         }
 
     }
     render() {
-        let labels = this.state.labels
+        const { labels, displayNumber } = this.state;
+        const { dataStatistical, isLoading, dataViewWebs } = this.props;
         return (
             <div className='px-[10px]'>
                 <Card title={`Lượt truy cập từ ${labels?.[0]} đến ${labels?.[labels.length - 1]}`}
                     extra={
                         <div className='md:flex hidden items-center space-x-[10px]'>
-                            <Radio.Group value={this.props.data_statistical?.type} onChange={(event) => this.onchange_menu(event.target.value)} className='flex'>
+                            <Radio.Group value={dataStatistical?.type} onChange={(event) => this.onChangeGroupButton(event.target.value)} className='flex'>
                                 <Radio.Button value="day">Ngày</Radio.Button>
                                 <Radio.Button value="month">Tháng</Radio.Button>
                                 <Radio.Button value="year">Năm</Radio.Button>
                             </Radio.Group>
-                            <DatePicker allowClear={false} onChange={(event, value) => this.onchange_daypicker(event, value)} picker={this.props.data_statistical?.type}
-                                disabledDate={(day) => this.disabled_day(day)} value={dayjs(this.props.data_statistical?.end)} />
+                            <DatePicker allowClear={false} onChange={(event, value) => this.onChangeDayPicker(event, value)} picker={dataStatistical?.type}
+                                disabledDate={(day) => this.disabledDay(day)} value={dayjs(dataStatistical?.end)} />
                         </div>
                     }>
-                    <Spin spinning={this.props.isLoading}>
+                    <Spin spinning={isLoading}>
                         <div className='space-y-[10px]'>
                             <div className='md:hidden flex items-center gap-x-[10px]'>
-                                <Radio.Group value={this.props.data_statistical?.type} onChange={(event) => this.onchange_menu(event.target.value)} className='flex'>
+                                <Radio.Group value={dataStatistical?.type} onChange={(event) => this.onChangeGroupButton(event.target.value)} className='flex'>
                                     <Radio.Button value="day">Ngày</Radio.Button>
                                     <Radio.Button value="month">Tháng</Radio.Button>
                                     <Radio.Button value="year">Năm</Radio.Button>
                                 </Radio.Group>
-                                <DatePicker allowClear={false} onChange={(event, value) => this.onchange_daypicker(event, value)} picker={this.props.data_statistical?.type}
-                                    disabledDate={(day) => this.disabled_day(day)} value={dayjs(this.props.data_statistical?.end)} />
+                                <DatePicker allowClear={false} onChange={(event, value) => this.onChangeDayPicker(event, value)} picker={dataStatistical?.type}
+                                    disabledDate={(day) => this.disabledDay(day)} value={dayjs(dataStatistical?.end)} />
                             </div>
                             <div className='lg:grid lg:grid-cols-3 py-[10px] gap-[20px]'>
                                 <div className='col-span-2'>
                                     <div className='space-y-[10px]'>
                                         <Typography.Text strong className='text-blue-500 dark:text-white'>Biểu đồ cột lượt truy cập</Typography.Text>
                                         <Bar data={{
-                                            labels: this.state.labels,
+                                            labels: labels,
                                             datasets: [
                                                 {
                                                     label: 'Lượt truy cập',
                                                     backgroundColor: '#4285f4',
-                                                    data: this.props.data_view_webs,
+                                                    data: dataViewWebs,
                                                 },
                                             ],
                                         }} />
@@ -164,24 +171,24 @@ class index extends Component {
                                     <div className='flex justify-between space-x-[5px] pb-[10px] border-b'>
                                         <Statistic
                                             title={<Typography.Text className='text-blue-500 dark:text-white' strong>Tổng lượt truy cập</Typography.Text>}
-                                            value={this.handle_sum_total(this.props.data_view_webs)}
+                                            value={this.handleSumTotal(dataViewWebs)}
                                             valueStyle={{ color: '#ed3b00' }}
                                             prefix={<EyeOutlined />}
                                             suffix="lượt" />
                                         <Statistic
                                             title={
                                                 <>
-                                                    {this.props.data_statistical?.type === 'day' &&
+                                                    {dataStatistical?.type === 'day' &&
                                                         <Typography.Text className='text-blue-500 dark:text-white' strong>So với ngày trước</Typography.Text>}
-                                                    {this.props.data_statistical?.type === 'month' &&
+                                                    {dataStatistical?.type === 'month' &&
                                                         <Typography.Text className='text-blue-500 dark:text-white' strong>So với tháng trước</Typography.Text>}
-                                                    {this.props.data_statistical?.type === 'year' &&
+                                                    {dataStatistical?.type === 'year' &&
                                                         <Typography.Text className='text-blue-500 dark:text-white' strong>So với năm trước</Typography.Text>}
                                                 </>
                                             }
-                                            value={this.check_ratio(this.props.data_view_webs, 'value')}
-                                            valueStyle={this.check_ratio(this.props.data_view_webs, 'valueStyle')}
-                                            prefix={this.check_ratio(this.props.data_view_webs, 'prefix')}
+                                            value={this.checkRatio(dataViewWebs, 'value')}
+                                            valueStyle={this.checkRatio(dataViewWebs, 'valueStyle')}
+                                            prefix={this.checkRatio(dataViewWebs, 'prefix')}
                                             suffix="%"
                                         />
                                     </div>
@@ -189,42 +196,18 @@ class index extends Component {
                                         <Statistic
                                             title={
                                                 <>
-                                                    {this.props.data_statistical?.type === 'day' &&
+                                                    {dataStatistical?.type === 'day' &&
                                                         <Typography.Text className='text-blue-500 dark:text-white' strong>Trung bình ngày</Typography.Text>}
-                                                    {this.props.data_statistical?.type === 'month' &&
+                                                    {dataStatistical?.type === 'month' &&
                                                         <Typography.Text className='text-blue-500 dark:text-white' strong>Trung bình tháng</Typography.Text>}
-                                                    {this.props.data_statistical?.type === 'year' &&
+                                                    {dataStatistical?.type === 'year' &&
                                                         <Typography.Text className='text-blue-500 dark:text-white' strong>Trung bình năm</Typography.Text>}
                                                 </>
                                             }
-                                            value={Math.round(this.handle_sum_total(this.props.data_view_webs) / this.state.display_number)}
+                                            value={Math.round(this.handleSumTotal(dataViewWebs) / displayNumber)}
                                             valueStyle={{ color: '#ed3b00' }}
                                             prefix={<EyeOutlined />}
                                             suffix="lượt" />
-                                    </div>
-                                    <div className='space-y-[10px]'>
-                                        <Typography.Text className='text-blue-500 dark:text-white' strong>Top 5 lượt truy cập</Typography.Text>
-                                        <List itemLayout="horizontal" size='small'
-                                            dataSource={this.state.data_top_view_web}
-                                            renderItem={(item, index) => (
-                                                <List.Item>
-                                                    <List.Item.Meta
-                                                        avatar={
-                                                            <div className='rounded-full h-[25px] w-[25px] border flex items-center justify-center bg-gray-700 '>
-                                                                <Typography.Text className='text-white' strong>{index + 1}</Typography.Text>
-                                                            </div>
-                                                        }
-                                                        title={
-                                                            <div className='flex items-center justify-between'>
-                                                                <Typography.Text strong>{item.name}</Typography.Text>
-                                                                <Typography.Text italic>{formatNumber(item.value)} lượt</Typography.Text>
-                                                                <Typography.Text italic strong>{Math.round(formatNumber(item.value) / this.handle_sum_total(this.props.data_view_webs) * 100)} %</Typography.Text>
-                                                            </div>
-                                                        }
-                                                    />
-                                                </List.Item>
-                                            )}
-                                        />
                                     </div>
                                 </div>
                             </div>
@@ -238,16 +221,16 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_view_webs: state.statistical.data_view_webs,
-        data_statistical: state.statistical.data_statistical,
+        dataViewWebs: state.statistical.dataViewWebs,
+        dataStatistical: state.statistical.dataStatistical,
         isLoading: state.statistical.isLoading,
         isResult: state.statistical.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_view_web: (data) => dispatch(actions.get_view_web_redux(data)),
-        set_statistical: (data) => dispatch(actions.set_statistical_redux(data)),
+        getViewWeb: (data) => dispatch(actions.getViewWebRedux(data)),
+        setDataStatistical: (data) => dispatch(actions.setDataStatisticalRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

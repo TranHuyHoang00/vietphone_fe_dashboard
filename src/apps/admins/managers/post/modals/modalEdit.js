@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 import FormSelectSingle from '@components/selects/formSelectSingle';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';

@@ -85,7 +85,6 @@ class index extends Component {
             {
                 title: 'Trạng thái', dataIndex: 'status', responsive: ['md'],
                 sorter: (a, b) => a.status.localeCompare(b.status),
-
             },
             {
                 title: 'HĐ', width: 80,
@@ -141,8 +140,7 @@ class index extends Component {
                     </div >
                 </Spin>
                 {modalDetail && dataCheckPermis['task.view_task'] &&
-                    <ModalDetail modalDetail={modalDetail}
-                        openModal={this.openModal} />}
+                    <ModalDetail modalDetail={modalDetail} openModal={this.openModal} />}
             </>
         );
     }

@@ -5,7 +5,7 @@ import * as actions from '@actions';
 import { Modal, message, Spin, Typography, Carousel, Image, Button } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormSelectSingle from '@components/selects/formSelectSingle';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 import { convertImageToBase64 } from '@utils/handleFuncImage';
 import { DeleteOutlined } from '@ant-design/icons';
 import { createMediaBase } from '@services/media_base_service';

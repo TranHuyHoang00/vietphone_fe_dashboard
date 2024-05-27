@@ -5,9 +5,9 @@ import * as actions from '@actions';
 import { Modal, message, Spin } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormTextare from '@components/inputs/formTextare';
-import FormDate from '@components/inputs/form_date';
+import FormDate from '@components/inputs/formDate';
 import FormSelectSingle from '@components/selects/formSelectSingle';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 import dayjs from 'dayjs';
 class index extends Component {
     constructor(props) {

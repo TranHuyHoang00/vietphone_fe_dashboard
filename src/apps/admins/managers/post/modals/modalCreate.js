@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 import FormSelectSingle from '@components/selects/formSelectSingle';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -46,7 +46,6 @@ class index extends Component {
     render() {
         const { dataPost, isLoading, onChangePost, modalCreate, openModal, dataCategoryPosts } = this.props;
         return (
-
             <Modal title="TẠO MỚI" open={modalCreate}
                 onCancel={() => openModal("create", false)} width={800}
                 maskClosable={!isLoading}
@@ -60,7 +59,6 @@ class index extends Component {
                             <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost.title}
                                 important={true}
                                 onChangeInput={onChangePost} />
-
                             <FormInput name={'Slug'} variable={'slug'} value={dataPost.slug}
                                 important={true}
                                 onChangeInput={onChangePost} />

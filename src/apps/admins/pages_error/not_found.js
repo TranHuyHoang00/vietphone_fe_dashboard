@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button, Result } from 'antd';
-class not_found extends Component {
+class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,4 +21,4 @@ class not_found extends Component {
     }
 
 }
-export default withRouter(not_found);
+export default withRouter(index);

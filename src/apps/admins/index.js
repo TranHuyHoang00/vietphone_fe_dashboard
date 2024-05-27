@@ -15,7 +15,7 @@ import { FaUserNurse, FaAndroid, FaUserShield } from "react-icons/fa6";
 import { withRouter } from 'react-router-dom';
 import { getDataLocal } from '@auths/localStorage';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
-import { data_indexs } from '@datas/dataPermissionsOrigin';
+import { dataPermiViews } from '@datas/dataPermissionsOrigin';
 import HeaderDB from './layouts/header';
 import LoginDB from './pages/login';
 import NotLogged from './pages_error/not_logged';
@@ -74,7 +74,7 @@ class index extends Component {
         let dataUserPermis;
         if (isSuperUser && isSuperUser === true) { dataUserPermis = []; }
         else { dataUserPermis = this.props.dataUserPermis; }
-        let dataCheckPermis = await handleCheckPermis(data_indexs, dataUserPermis, isSuperUser);
+        let dataCheckPermis = await handleCheckPermis(dataPermiViews, dataUserPermis, isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
         });

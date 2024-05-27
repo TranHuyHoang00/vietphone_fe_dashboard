@@ -1,7 +1,7 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_statistical: {
+    dataStatistical: {
         type: 'day',
         start: '',
         end: '',
@@ -9,8 +9,8 @@ const initialState = {
     isLoading: false,
     isResult: false,
 
-    data_view_webs: [],
-    data_view_products: [],
+    dataViewWebs: [],
+    dataViewProducts: [],
 }
 
 const statistical_reducers = (state = initialState, action) => {
@@ -39,26 +39,26 @@ const statistical_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_view_webs: action.data,
+                dataViewWebs: action.data,
             }
         case action_types.GET_VIEW_PRODUCT_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_view_products: action.data,
+                dataViewProducts: action.data,
             }
         case action_types.SET_STATISTICAL:
             return {
                 ...state,
-                data_statistical: action.data,
+                dataStatistical: action.data,
             }
         case action_types.ON_CHANGE_STATISTICAL:
-            let copyState = { ...state.data_statistical };
+            let copyState = { ...state.dataStatistical };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_statistical: {
+                dataStatistical: {
                     ...copyState,
                 }
             }

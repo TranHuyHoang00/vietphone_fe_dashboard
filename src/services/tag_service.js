@@ -8,12 +8,12 @@ const createTag = (data) => {
 const getDataTag = (id) => {
     return apiAdmin.get(`/product/api/v1/get-tag/${id}`);
 }
-const delete_tag = (id) => {
+const deleteTag = (id) => {
     return apiAdmin.delete(`/product/api/v1/delete-tag/${id}`);
 }
 const editTag = (id, data) => {
     return apiAdmin.put(`/product/api/v1/update-tag/${id}`, data);
 }
 export {
-    getListTag, createTag, getDataTag, delete_tag, editTag
+    getListTag, createTag, getDataTag, deleteTag, editTag
 }

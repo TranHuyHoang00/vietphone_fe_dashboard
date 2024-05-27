@@ -2,7 +2,7 @@ import action_types from '@actions/action_types';
 
 const initialState = {
     dataGroups: [],
-    data_group: {},
+    dataGroup: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -41,7 +41,7 @@ const group_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_group: action.data
+                dataGroup: action.data
             }
         case action_types.CREATE_GROUP_SUCCESS:
             return {
@@ -70,14 +70,14 @@ const group_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_GROUP:
             return {
                 ...state,
-                data_group: action.data,
+                dataGroup: action.data,
             }
         case action_types.ON_CHANGE_GROUP:
-            let copyState = { ...state.data_group };
+            let copyState = { ...state.dataGroup };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_group: {
+                dataGroup: {
                     ...copyState,
                 }
             }

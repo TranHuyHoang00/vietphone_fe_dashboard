@@ -1,4 +1,4 @@
-const data_indexs = [
+const dataPermiViews = [
     "account.view_customer", "account.view_user", "group.view_group",
     "order.view_order",
     "product.view_product", "promotion.view_flashsaleitem",
@@ -63,14 +63,14 @@ const dataPosts = [
 const dataCategoryPosts = [
     "post.view_category", "post.change_category", "post.delete_category", "post.add_category",
 ];
-const data_syncs = [
+const dataSyncs = [
     "sync.view_task", "sync.change_sync", "sync.delete_sync", "sync.add_sync",
 ];
 const dataTasks = [
     "task.view_task", "task.change_task", "task.delete_task", "task.add_task",
 ];
 export {
-    data_indexs,
+    dataPermiViews,
     dataCustomers, dataUsers, dataGroups,
     dataOrders,
     data_products, dataFlashSaleItems,
@@ -78,5 +78,5 @@ export {
     dataAttributeValues, dataAttributes, dataGroupAttributes, dataVariantAttributeGroups,
     dataTags, dataBrands, dataCategorys, dataFlashSales,
     dataPosts, dataCategoryPosts,
-    data_syncs, dataTasks,
+    dataSyncs, dataTasks,
 }

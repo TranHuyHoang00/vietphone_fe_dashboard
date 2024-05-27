@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Modal, Button, Spin } from 'antd';
 import { textLine13 } from '@components/displays/line13';
-
 class index extends Component {
     constructor(props) {
         super(props);

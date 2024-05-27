@@ -1,5 +1,5 @@
 import action_types from '@actions/action_types';
-import { getListGroup, get_group, create_group, delete_group, edit_group } from '@services/group_service';
+import { getListGroup, getDataGroup, createGroup, deleteGroup, editGroup } from '@services/group_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -20,11 +20,11 @@ export const getListGroupRedux = (dataFilter) => {
         }
     }
 }
-export const get_group_redux = (id) => {
+export const getDataGroupRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(group_start());
-            let data = await get_group(id);
+            let data = await getDataGroup(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_group_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_group_redux = (id) => {
         }
     }
 }
-export const create_group_redux = (data_group) => {
+export const createGroupRedux = (dataGroup) => {
     return async (dispatch, getState) => {
         try {
             dispatch(group_start());
-            let data = await create_group(data_group);
+            let data = await createGroup(dataGroup);
             if (data && data.data && data.data.success === 1) {
                 dispatch(group_success());
                 message.success('Thành công');
@@ -55,12 +55,12 @@ export const create_group_redux = (data_group) => {
         }
     }
 }
-export const delete_list_group_redux = (list_id) => {
+export const deleteListGroupRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(group_start());
         for (const id of list_id) {
             try {
-                let data = await delete_group(id);
+                let data = await deleteGroup(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -73,12 +73,12 @@ export const delete_list_group_redux = (list_id) => {
         dispatch(group_success());
     }
 }
-export const edit_list_group_redux = (list_id, data_group) => {
+export const editListGroupRedux = (list_id, dataGroup) => {
     return async (dispatch, getState) => {
         dispatch(group_start());
         for (const id of list_id) {
             try {
-                let data = await edit_group(id, data_group);
+                let data = await editGroup(id, dataGroup);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_group_redux = (list_id, data_group) => {
         dispatch(group_success());
     }
 }
-export const edit_group_redux = (id, data_group) => {
+export const editGroupRedux = (id, dataGroup) => {
     return async (dispatch, getState) => {
         try {
             dispatch(group_start());
-            let data = await edit_group(id, data_group);
+            let data = await editGroup(id, dataGroup);
             if (data && data.data && data.data.success === 1) {
                 dispatch(group_success());
                 message.success('Thành công');
@@ -127,12 +127,12 @@ export const get_group_success = (data) => ({
     type: action_types.GET_GROUP_SUCCESS,
     data
 })
-export const on_change_group_redux = (value, id) => ({
+export const onChangeGroupRedux = (value, id) => ({
     type: action_types.ON_CHANGE_GROUP,
     value,
     id,
 })
-export const set_data_group_redux = (data) => ({
+export const setDataGroupRedux = (data) => ({
     type: action_types.SET_DATA_GROUP,
     data,
 })

@@ -10,6 +10,9 @@ import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -26,35 +29,36 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.getListGroup(this.state.dataFilter);
+        const { dataFilter } = this.state;
+        const { getListGroup } = this.props;
+        await getListGroup(dataFilter);
     }
-    openModal = async (name, value, id) => {
-        this.props.set_data_group({});
-        if (name === 'create') {
-            this.setState({ modalCreate: value });
-        }
-        if (name === 'edit') {
-            if (id === undefined) {
-                this.setState({ modalEdit: value, data_group: {} });
-            } else {
-                this.setState({ modalEdit: value });
-                await this.props.get_group(id);
-            }
-        }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataGroup, getDataGroup } = this.props;
+        const actions = {
+            setData: setDataGroup,
+            getData: getDataGroup,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
-        let listItemSelected = this.state.listItemSelected;
-        if (this.state.dropButtonType === 1) { await this.props.delete_list_group(listItemSelected); }
-        await this.props.getListGroup(this.state.dataFilter);
-        if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
+        const { listItemSelected, dropButtonType, dataFilter } = this.state;
+        const { deleteListGroup, editListGroup, getListGroup } = this.props;
+        const actions = {
+            deleteList: deleteListGroup,
+            editList: editListGroup,
+            getList: getListGroup
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        this.setState({ dataFilter: dataFilter })
-        await this.props.getListGroup(dataFilter);
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListGroup } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListGroup(newDataFilter);
     }
     render() {
         const columns = [
@@ -79,19 +83,19 @@ class index extends Component {
             },
 
         ];
+        const { listItemSelected, dataFilter, dropButtonType,
+            modalCreate, modalEdit } = this.state;
+        const { isLoading, dataGroups, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa' },
         ];
-        const listItemSelected = this.state.listItemSelected;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        let dataFilter = this.state.dataFilter;
-        let dropButtonType = this.state.dropButtonType;
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Button onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
@@ -121,23 +125,23 @@ class index extends Component {
                             <Divider>PHÂN QUYỀN</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.dataGroups} pagination={false}
+                                    columns={columns} dataSource={dataGroups} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={dataFilter.limit}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.modalCreate &&
-                    <ModalCreate modalCreate={this.state.modalCreate}
+                {modalCreate &&
+                    <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
-                {this.state.modalEdit &&
-                    <ModalEdit modalEdit={this.state.modalEdit}
+                        dataFilter={dataFilter} />}
+                {modalEdit &&
+                    <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
-                        dataFilter={this.state.dataFilter} />}
+                        dataFilter={dataFilter} />}
             </>
         );
     }
@@ -146,7 +150,7 @@ class index extends Component {
 const mapStateToProps = state => {
     return {
         dataGroups: state.group.dataGroups,
-        data_group: state.group.data_group,
+        dataGroup: state.group.dataGroup,
         dataMeta: state.group.dataMeta,
         isLoading: state.group.isLoading,
         isResult: state.group.isResult,
@@ -155,10 +159,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getListGroup: (dataFilter) => dispatch(actions.getListGroupRedux(dataFilter)),
-        get_group: (id) => dispatch(actions.get_group_redux(id)),
-        edit_list_group: (id, data) => dispatch(actions.edit_list_group_redux(id, data)),
-        delete_list_group: (id) => dispatch(actions.delete_list_group_redux(id)),
-        set_data_group: (id) => dispatch(actions.set_data_group_redux(id)),
+        getDataGroup: (id) => dispatch(actions.getDataGroupRedux(id)),
+        editListGroup: (id, data) => dispatch(actions.editListGroupRedux(id, data)),
+        deleteListGroup: (id) => dispatch(actions.deleteListGroupRedux(id)),
+        setDataGroup: (id) => dispatch(actions.setDataGroupRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

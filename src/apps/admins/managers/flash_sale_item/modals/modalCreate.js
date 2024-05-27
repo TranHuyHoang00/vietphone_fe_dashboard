@@ -3,14 +3,13 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, Input, Table, Divider, Spin, Pagination, Typography, } from 'antd';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 import FormSelectPage from '@components/selects/formSelectPage';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dropButtonType: 1,
             listItemSelected: [],
             dataFilter: {
                 page: 1,
@@ -105,7 +104,6 @@ const mapDispatchToProps = dispatch => {
         getDataFlashSale: (id) => dispatch(actions.getDataFlashSaleRedux(id)),
         getListVariant: (dataFilter) => dispatch(actions.getListVariantRedux(dataFilter)),
         createListFlashSaleItem: (id, data) => dispatch(actions.createListFlashSaleItemRedux(id, data)),
-
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

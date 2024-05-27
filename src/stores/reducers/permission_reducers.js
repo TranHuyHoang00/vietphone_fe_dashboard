@@ -1,7 +1,7 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_permissions: [],
+    dataPermissions: [],
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -32,7 +32,7 @@ const permission_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_permissions: action.data.permissions,
+                dataPermissions: action.data.permissions,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_PERMISSION_SUCCESS:

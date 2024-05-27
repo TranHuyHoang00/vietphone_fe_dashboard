@@ -6,7 +6,7 @@ import { Modal, message, Spin } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormTextare from '@components/inputs/formTextare';
 import FormSelectSingle from '@components/selects/formSelectSingle';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 class index extends Component {
     constructor(props) {
         super(props);

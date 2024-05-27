@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, message, Spin } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 class index extends Component {
     constructor(props) {
         super(props);

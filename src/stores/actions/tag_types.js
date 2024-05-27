@@ -1,5 +1,5 @@
 import action_types from '@actions/action_types';
-import { getListTag, getDataTag, createTag, delete_tag, editTag } from '@services/tag_service';
+import { getListTag, getDataTag, createTag, deleteTag, editTag } from '@services/tag_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -60,7 +60,7 @@ export const deleteListTagRedux = (list_id) => {
         dispatch(tag_start());
         for (const id of list_id) {
             try {
-                let data = await delete_tag(id);
+                let data = await deleteTag(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }

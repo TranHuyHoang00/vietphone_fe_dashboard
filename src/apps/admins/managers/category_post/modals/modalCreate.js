@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, message, Spin } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -38,7 +38,6 @@ class index extends Component {
     render() {
         const { dataCategoryPost, isLoading, onChangeCategoryPost, modalCreate, openModal } = this.props;
         return (
-
             <Modal title="TẠO MỚI" open={modalCreate}
                 onCancel={() => openModal("create", false)} width={400}
                 maskClosable={!isLoading}
@@ -48,15 +47,12 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
-
                         <FormInput name={'Tiêu đề'} variable={'title'} value={dataCategoryPost.title}
                             important={true}
                             onChangeInput={onChangeCategoryPost} />
-
                         <FormInput name={'Slug'} variable={'slug'} value={dataCategoryPost.slug}
                             important={true}
                             onChangeInput={onChangeCategoryPost} />
-
                     </div>
                 </Spin>
             </Modal>

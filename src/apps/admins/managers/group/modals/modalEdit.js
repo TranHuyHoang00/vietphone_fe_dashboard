@@ -3,66 +3,71 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, Spin, Collapse, Checkbox } from 'antd';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_permission_uniques: [],
-            data_permission_ids: [],
+            dataPermisUniques: [],
+            dataPermisIds: [],
+            isLoadingHandleDataUnique: false,
         }
     }
     async componentDidMount() {
-        await this.props.get_list_permission({ page: 1, limit: 1000, search: '' });
-        await this.handle_data_unique(this.props.data_permissions);
-        this.setState({ data_permission_ids: this.props.data_group.permissions })
+        const { getListPermission, dataPermissions, dataGroup, isResultPermis } = this.props;
+        await getListPermission({ page: 1, limit: 1000, search: '' });
+        if (isResultPermis) {
+            await this.handleDataUnique(dataPermissions);
+            this.setState({ dataPermisIds: dataGroup.permissions })
+        }
     }
-    handle_data_unique = async (data) => {
+    handleDataUnique = async (data) => {
+        this.setState({ isLoadingHandleDataUnique: true });
         if (data && data.length !== 0) {
-            let unique_ids = new Set();
-            let unique_datas = [];
+            let uniqueIds = new Set();
+            let uniqueDatas = [];
             for (const obj of data) {
                 if (obj?.content_type?.id) {
-                    if (!unique_ids.has(obj.content_type.id)) {
-                        unique_ids.add(obj.content_type.id);
-                        unique_datas.push(obj.content_type);
+                    if (!uniqueIds.has(obj.content_type.id)) {
+                        uniqueIds.add(obj.content_type.id);
+                        uniqueDatas.push(obj.content_type);
                     }
                 }
             }
-            this.setState({ data_permission_uniques: unique_datas });
+            this.setState({ dataPermisUniques: uniqueDatas, isLoadingHandleDataUnique: false });
         }
     }
     handleEdit = async () => {
-        let data_group = this.props.data_group;
-        data_group.permissions = this.state.data_permission_ids;
-        await this.props.edit_group(data_group.id, data_group);
-        let isResult = this.props.isResult;
+        const { dataGroup, editGroup, isResult, openModal, dataFilter, getListGroup } = this.props;
+        const { dataPermisIds } = this.state;
+        const newDataGroup = {
+            ...dataGroup,
+            permissions: dataPermisIds
+        };
+        await editGroup(newDataGroup.id, newDataGroup);
         if (isResult) {
-            this.props.openModal("edit", false);
-            await this.props.getListGroup(this.props.dataFilter);
+            openModal("edit", false);
+            await getListGroup(dataFilter);
         }
     }
-    onchange_checkbox = (value) => {
-        let data_permission_ids = this.state.data_permission_ids;
-        const index = data_permission_ids.indexOf(value);
+    onChangeCheckbox = (value) => {
+        const { dataPermisIds } = this.state;
+        const index = dataPermisIds.indexOf(value);
         if (index !== -1) {
-            data_permission_ids.splice(index, 1);
+            dataPermisIds.splice(index, 1);
         } else {
-            data_permission_ids.push(value)
+            dataPermisIds.push(value)
         }
-        this.setState({ data_permission_ids: data_permission_ids })
+        this.setState({ dataPermisIds: dataPermisIds })
 
     }
-    handle_checked = (id) => {
+    handleChecked = (id) => {
         if (id) {
-            let data_group = this.props.data_group;
-            if (data_group?.permissions) {
-                const found = (data_group.permissions).includes(id);
-                if (found) {
-                    return true
-                } else {
-                    return false
-                }
+            const { dataGroup } = this.props;
+            if (dataGroup?.permissions) {
+                const found = (dataGroup.permissions).includes(id);
+                if (found) { return true }
+                else { return false }
             } else {
                 return false
             }
@@ -72,32 +77,30 @@ class index extends Component {
 
     }
     render() {
-        let isLoading = this.props.isLoading;
-        let data_permission_uniques = this.state.data_permission_uniques;
-        let data_permissions = this.props.data_permissions;
+        const { dataPermisUniques, isLoadingHandleDataUnique } = this.state;
+        const { dataPermissions, isLoadingGroup, isLoadingPermis, modalEdit, openModal } = this.props;
         return (
-            <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
-                onCancel={() => this.props.openModal("edit", false)} width={600}
-                maskClosable={!isLoading}
+            <Modal title="CHỈNH SỬA" open={modalEdit}
+                onCancel={() => openModal("edit", false)} width={600}
+                maskClosable={!isLoadingGroup}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'edit'}
-                        isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
+                    <ModalFooter openModal={openModal} type={'edit'}
+                        isLoading={isLoadingGroup} selectFuncFooterModal={this.handleEdit} />
                 ]}>
-                <Spin spinning={isLoading}>
+                <Spin spinning={isLoadingGroup || isLoadingPermis || isLoadingHandleDataUnique}>
                     <div className="overflow-y-scroll">
                         <div className='h-[350px] space-y-[10px] '>
-                            {data_permission_uniques && data_permission_uniques.map((permission, index) => {
+                            {dataPermisUniques && dataPermisUniques.map((permission, index) => {
                                 return (
                                     <div key={permission.id}>
                                         <Collapse defaultActiveKey={permission.id}>
                                             <Collapse.Panel
-                                                header={`${permission.app_label} - ${permission.model}`} key={permission.id}
-                                            >
-                                                {data_permissions && data_permissions.map((item, index) => {
+                                                header={`${permission.app_label} - ${permission.model}`} key={permission.id}>
+                                                {dataPermissions && dataPermissions.map((item, index) => {
                                                     return (
-                                                        <div key={item.id} className=''>
+                                                        <div key={item.id}>
                                                             {permission?.id === item?.content_type?.id &&
-                                                                <Checkbox checked={this.handle_checked(item.id)} onChange={(event) => this.onchange_checkbox(event.target.value)} value={item.id}>{item.name}</Checkbox>
+                                                                <Checkbox checked={this.handleChecked(item.id)} onChange={(event) => this.onChangeCheckbox(event.target.value)} value={item.id}>{item.name}</Checkbox>
                                                             }
                                                         </div>
                                                     )
@@ -117,20 +120,24 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_group: state.group.data_group,
-        isLoading: state.group.isLoading,
+        dataGroup: state.group.dataGroup,
+        isLoadingGroup: state.group.isLoading,
+        isLoadingPermis: state.permission.isLoading,
+
         isResult: state.group.isResult,
-        data_permissions: state.permission.data_permissions,
+
+        dataPermissions: state.permission.dataPermissions,
+        isResultPermis: state.permission.isResult,
 
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         getListGroup: (dataFilter) => dispatch(actions.getListGroupRedux(dataFilter)),
-        edit_group: (id, data) => dispatch(actions.edit_group_redux(id, data)),
-        on_change_group: (id, value) => dispatch(actions.on_change_group_redux(id, value)),
-        get_list_permission: (dataFilter) => dispatch(actions.get_list_permission_redux(dataFilter)),
-        set_data_group: (data) => dispatch(actions.set_data_group_redux(data)),
+        editGroup: (id, data) => dispatch(actions.editGroupRedux(id, data)),
+        onChangeGroup: (id, value) => dispatch(actions.onChangeGroupRedux(id, value)),
+        getListPermission: (dataFilter) => dispatch(actions.getListPermissionRedux(dataFilter)),
+        setDataGroup: (data) => dispatch(actions.setDataGroupRedux(data)),
 
     };
 };

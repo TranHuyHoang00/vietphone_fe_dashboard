@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import FormSelectItem from '@components/selects/formSelectItem';
-import ModalFooter from '@components/modal/modalFooter';
+import FormSelectMultiple from '@components/selects/formSelectMultiple';
+import ModalFooter from '@components/modals/modalFooter';
 import FormSelectSingle from '@components/selects/formSelectSingle';
 class index extends Component {
     constructor(props) {
@@ -104,7 +104,7 @@ class index extends Component {
                                 Phân quyền
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
-                            <FormSelectItem width={'100%'} placeholder={'Phân quyền'}
+                            <FormSelectMultiple width={'100%'} placeholder={'Phân quyền'}
                                 mode={'multiple'}
                                 value={dataUser.groups}
                                 options={dataGroups.map((item) => ({

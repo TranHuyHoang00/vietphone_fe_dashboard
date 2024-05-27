@@ -1,5 +1,5 @@
 import action_types from '@actions/action_types';
-import { get_list_flash_sale_item, getDataFlashSaleItem, create_flash_sale_item, delete_flash_sale_item, editFlashSaleItem } from '@services/flash_sale_item_service';
+import { getListFlashSaleItem, getDataFlashSaleItem, createFlashSaleItem, deleteFlashSaleItem, editFlashSaleItem } from '@services/flash_sale_item_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -7,7 +7,7 @@ export const get_list_flash_sale_item_redux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flash_sale_item_start());
-            let data = await get_list_flash_sale_item(dataFilter);
+            let data = await getListFlashSaleItem(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_flash_sale_item_success(data.data.data));
             } else {
@@ -41,7 +41,7 @@ export const create_flash_sale_item_redux = (dataFlashSaleItem) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flash_sale_item_start());
-            let data = await create_flash_sale_item(dataFlashSaleItem);
+            let data = await createFlashSaleItem(dataFlashSaleItem);
             if (data && data.data && data.data.success === 1) {
                 dispatch(flash_sale_item_success());
                 message.success('Thành công');
@@ -60,7 +60,7 @@ export const createListFlashSaleItemRedux = (flash_sale_id, list_variant_id) => 
         dispatch(flash_sale_item_start());
         for (const id of list_variant_id) {
             try {
-                let data = await create_flash_sale_item({ flash_sale: flash_sale_id, product_variant: id });
+                let data = await createFlashSaleItem({ flash_sale: flash_sale_id, product_variant: id });
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi tạo ID=${id}`);
                 }
@@ -68,8 +68,8 @@ export const createListFlashSaleItemRedux = (flash_sale_id, list_variant_id) => 
                 dispatch(flash_sale_item_faided());
             }
         }
-        message.success('Thành công');
         dispatch(flash_sale_item_success());
+        message.success('Thành công');
     }
 }
 export const deleteListFlashSaleItemRedux = (list_id) => {
@@ -77,7 +77,7 @@ export const deleteListFlashSaleItemRedux = (list_id) => {
         dispatch(flash_sale_item_start());
         for (const id of list_id) {
             try {
-                let data = await delete_flash_sale_item(id);
+                let data = await deleteFlashSaleItem(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }

@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Collapse, Typography, Button, Card, message } from 'antd';
-import FormSelectItem from '@components/selects/formSelectItem';
+import FormSelectMultiple from '@components/selects/formSelectMultiple';
 import { DeleteOutlined } from '@ant-design/icons';
 class variant_attribute_value extends Component {
     constructor(props) {
@@ -147,7 +147,7 @@ class variant_attribute_value extends Component {
                             <div className='w-1/2'>
                                 <div className='space-y-[3px]'>
                                     <Typography.Text italic strong>Thông số</Typography.Text>
-                                    <FormSelectItem width={'100%'}
+                                    <FormSelectMultiple width={'100%'}
                                         placeholder={'Thông số'}
                                         nameFormSelect={'attribute'}
                                         options={dataAttributes.map((item) => ({
@@ -170,7 +170,7 @@ class variant_attribute_value extends Component {
                             <div className='w-1/2'>
                                 <div className='space-y-[3px]'>
                                     <Typography.Text italic strong>Giá trị</Typography.Text>
-                                    <FormSelectItem width={'100%'}
+                                    <FormSelectMultiple width={'100%'}
                                         placeholder={'Giá trị'}
                                         nameFormSelect={'attribute_value'}
                                         options={dataAttribute && dataAttribute.attribute_values && dataAttribute.attribute_values.map((item) => ({

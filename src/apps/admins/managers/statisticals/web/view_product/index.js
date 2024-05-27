@@ -9,98 +9,91 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            labels: [],
-            display_number: 9,
-            data_top_view_product: [],
         }
     }
     async componentDidMount() {
-        let data_day = this.handle_day('day', new Date());
-        let data_statistical = this.props.data_statistical;
-        data_statistical.start = data_day.start;
-        data_statistical.end = data_day.end;
-        await this.props.set_statistical(data_statistical);
-        await this.props.get_view_product(data_statistical);
+        this.getData('day', new Date());
     }
-
-    handle_day = (dropButtonType, day) => {
+    handleDay = (itemGroupButtonType, day) => {
         let start, end;
-        if (dropButtonType === 'day') {
-            start = dayjs(day).format('YYYY-MM-DD');
-            end = dayjs(day).format('YYYY-MM-DD');
+        switch (itemGroupButtonType) {
+            case 'day':
+                start = dayjs(day).format('YYYY-MM-DD');
+                end = dayjs(day).format('YYYY-MM-DD');
+                break;
+            case 'month':
+                start = (dayjs(day).startOf('month')).format('YYYY-MM-DD');
+                end = (dayjs(day).endOf('month')).format('YYYY-MM-DD');
+                break;
+            case 'year':
+                start = (dayjs(day).startOf('year')).format('YYYY-MM-DD');
+                end = (dayjs(day).endOf('year')).format('YYYY-MM-DD');
+                break;
+            default:
+                break;
         }
-        if (dropButtonType === 'month') {
-            start = (dayjs(day).startOf('month')).format('YYYY-MM-DD');
-            end = (dayjs(day).endOf('month')).format('YYYY-MM-DD');
-        }
-        if (dropButtonType === 'year') {
-            start = (dayjs(day).startOf('year')).format('YYYY-MM-DD');
-            end = (dayjs(day).endOf('year')).format('YYYY-MM-DD');
-        }
-
         return { start, end }
     }
-    onchange_menu = async (dropButtonType) => {
-        let data_statistical = this.props.data_statistical;
-        let data_day = this.handle_day(dropButtonType, new Date());
-        data_statistical.type = dropButtonType;
-        data_statistical.start = data_day.start;
-        data_statistical.end = data_day.end;
-        this.props.set_statistical(data_statistical);
-        await this.props.get_view_product(data_statistical);
+    onChangeGroupButton = async (itemGroupButtonType) => {
+        this.getData(itemGroupButtonType, new Date());
     }
 
-    onchange_daypicker = async (event, day_picker) => {
-        let data_statistical = this.props.data_statistical;
-        let data_day = this.handle_day(data_statistical.type, day_picker);
-        data_statistical.start = data_day.start;
-        data_statistical.end = data_day.end;
-        await this.props.get_view_product(data_statistical);
+    onChangeDayPicker = async (event, dayPicker) => {
+        const { dataStatistical } = this.props;
+        this.getData(dataStatistical.type, dayPicker);
     }
-    disabled_day = (current) => {
+    getData = async (typeFilter, dayPicker) => {
+        const { getViewProduct, dataStatistical, setDataStatistical } = this.props;
+        const dataDay = this.handleDay(typeFilter, dayPicker);
+        const newDataStatistical = {
+            ...dataStatistical,
+            start: dataDay.start,
+            end: dataDay.end,
+            type: typeFilter,
+        };
+        await setDataStatistical(newDataStatistical);
+        await getViewProduct(newDataStatistical);
+
+    }
+    disabledDay = (current) => {
         return current && current > dayjs().endOf('day');
     };
-    handle_sum_total = (data) => {
-        let sum = 0;
-        for (const item of data) {
-            sum += item?.view_count;
-        }
-        return sum
+    handleSumTotal = (data) => {
+        return data.reduce((sum, item) => sum + (item?.view_count || 0), 0);
     }
     render() {
-        let data_view_products = this.props.data_view_products;
-        let data_statistical = this.props.data_statistical;
+        const { dataViewProducts, dataStatistical, isLoading } = this.props;
         return (
             <div className='px-[10px]'>
-                <Card title={`Top sản phẩm từ ${data_statistical?.start} đến ${data_statistical?.end}`}
+                <Card title={`Top sản phẩm từ ${dataStatistical?.start} đến ${dataStatistical?.end}`}
                     extra={
                         <div className='md:flex hidden items-center space-x-[10px]'>
-                            <Radio.Group value={this.props.data_statistical?.type} onChange={(event) => this.onchange_menu(event.target.value)} className='flex'>
+                            <Radio.Group value={dataStatistical?.type} onChange={(event) => this.onChangeGroupButton(event.target.value)} className='flex'>
                                 <Radio.Button value="day">Ngày</Radio.Button>
                                 <Radio.Button value="month">Tháng</Radio.Button>
                                 <Radio.Button value="year">Năm</Radio.Button>
                             </Radio.Group>
-                            <DatePicker allowClear={false} onChange={(event, value) => this.onchange_daypicker(event, value)} picker={this.props.data_statistical?.type}
-                                disabledDate={(day) => this.disabled_day(day)} value={dayjs(this.props.data_statistical?.end)} />
+                            <DatePicker allowClear={false} onChange={(event, value) => this.onChangeDayPicker(event, value)} picker={dataStatistical?.type}
+                                disabledDate={(day) => this.disabledDay(day)} value={dayjs(dataStatistical?.end)} />
                         </div>
                     }>
-                    <Spin spinning={this.props.isLoading}>
+                    <Spin spinning={isLoading}>
                         <div className='space-y-[10px]'>
                             <div className='md:hidden flex items-center gap-x-[10px]'>
-                                <Radio.Group value={this.props.data_statistical?.type} onChange={(event) => this.onchange_menu(event.target.value)} className='flex'>
+                                <Radio.Group value={dataStatistical?.type} onChange={(event) => this.onChangeGroupButton(event.target.value)} className='flex'>
                                     <Radio.Button value="day">Ngày</Radio.Button>
                                     <Radio.Button value="month">Tháng</Radio.Button>
                                     <Radio.Button value="year">Năm</Radio.Button>
                                 </Radio.Group>
-                                <DatePicker allowClear={false} onChange={(event, value) => this.onchange_daypicker(event, value)} picker={this.props.data_statistical?.type}
-                                    disabledDate={(day) => this.disabled_day(day)} value={dayjs(this.props.data_statistical?.end)} />
+                                <DatePicker allowClear={false} onChange={(event, value) => this.onChangeDayPicker(event, value)} picker={dataStatistical?.type}
+                                    disabledDate={(day) => this.disabledDay(day)} value={dayjs(dataStatistical?.end)} />
                             </div>
                             <div className='lg:grid lg:grid-cols-3 py-[10px] gap-[20px]'>
                                 <div className='col-span-2'>
                                     <div className='space-y-[10px]'>
                                         <Typography.Text className='text-blue-500 dark:text-white' strong>Top 10 sản phẩm xem nhiều</Typography.Text>
                                         <div className=''>
-                                            {data_view_products && data_view_products.map((item, index) => {
+                                            {dataViewProducts && dataViewProducts.map((item, index) => {
                                                 return (
                                                     <div key={item?.product?.id} className='flex items-center space-x-[5px] border-b py-[10px] '>
                                                         <div>
@@ -111,7 +104,7 @@ class index extends Component {
                                                             <div className='line-clamp-1'>
                                                                 <Typography.Text className='text-black dark:text-white'>{item?.product?.name}</Typography.Text>
                                                             </div>
-                                                            <Progress percent={Math.round((item?.view_count / this.handle_sum_total(data_view_products)) * 100)} />
+                                                            <Progress percent={Math.round((item?.view_count / this.handleSumTotal(dataViewProducts)) * 100)} />
 
                                                             <div className='flex items-center justify-between'>
                                                                 <Button className='text-black dark:text-white border border-black dark:border-white cursor-default' size='small'>
@@ -149,16 +142,16 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_view_products: state.statistical.data_view_products,
-        data_statistical: state.statistical.data_statistical,
+        dataViewProducts: state.statistical.dataViewProducts,
+        dataStatistical: state.statistical.dataStatistical,
         isLoading: state.statistical.isLoading,
         isResult: state.statistical.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_view_product: (data) => dispatch(actions.get_view_product_redux(data)),
-        set_statistical: (data) => dispatch(actions.set_statistical_redux(data)),
+        getViewProduct: (data) => dispatch(actions.getViewProductRedux(data)),
+        setDataStatistical: (data) => dispatch(actions.setDataStatisticalRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

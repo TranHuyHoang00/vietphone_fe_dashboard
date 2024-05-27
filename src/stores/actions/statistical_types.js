@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_view_web, get_view_product } from '@services/statistical_service';
+import { getViewWeb, getViewProduct } from '@services/statistical_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
-export const get_view_web_redux = (value) => {
+export const getViewWebRedux = (value) => {
     return async (dispatch, getState) => {
         try {
             dispatch(statistical_start());
-            let data = await get_view_web(value);
+            let data = await getViewWeb(value);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_view_web_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_view_web_redux = (value) => {
         }
     }
 }
-export const get_view_product_redux = (value) => {
+export const getViewProductRedux = (value) => {
     return async (dispatch, getState) => {
         try {
             dispatch(statistical_start());
-            let data = await get_view_product(value);
+            let data = await getViewProduct(value);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_view_product_success(data.data.data));
             } else {
@@ -60,7 +60,7 @@ export const on_change_statistical_redux = (value, id) => ({
     value,
     id,
 })
-export const set_statistical_redux = (data) => ({
+export const setDataStatisticalRedux = (data) => ({
     type: action_types.SET_STATISTICAL,
     data,
 })

@@ -1,10 +1,10 @@
 import apiAdmin from '@auths/apiAdmin';
-const get_view_product = (data) => {
+const getViewProduct = (data) => {
     return apiAdmin.post(`/logger/api/v1/get-top-product-tracking`, data);
 }
-const get_view_web = (data) => {
+const getViewWeb = (data) => {
     return apiAdmin.post(`/logger/api/v1/get-visit-tracking`, data);
 }
 export {
-    get_view_web, get_view_product
+    getViewWeb, getViewProduct
 }

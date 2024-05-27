@@ -10,16 +10,17 @@ class index extends Component {
     async componentDidMount() {
     }
     render() {
+        const { name, important, value, onChangeInput, variable } = this.props;
         return (
             <div className='space-y-[3px]'>
                 <Typography.Text italic strong>
-                    {this.props.name}
-                    {this.props.important && <Typography.Text type="danger" strong> *</Typography.Text>}
+                    {name}
+                    {important && <Typography.Text type="danger" strong> *</Typography.Text>}
                 </Typography.Text>
                 <div>
                     <input className='border w-full h-[35px] px-[5px]'
-                        type='datetime-local' value={this.props.value}
-                        onChange={(event) => this.props.onChangeInput(event.target.value, this.props.variable)} />
+                        type='datetime-local' value={value}
+                        onChange={(event) => onChangeInput(event.target.value, variable)} />
                 </div>
             </div>
         );

@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import ModalFooter from '@components/modal/modalFooter';
-import FormSelectItem from '@components/selects/formSelectItem';
+import ModalFooter from '@components/modals/modalFooter';
+import FormSelectMultiple from '@components/selects/formSelectMultiple';
 
 class index extends Component {
     constructor(props) {
@@ -59,7 +59,7 @@ class index extends Component {
                             <Typography.Text italic strong>Thông số
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
-                            <FormSelectItem width={'100%'} mode={'multiple'}
+                            <FormSelectMultiple width={'100%'} mode={'multiple'}
                                 variableSelect={'attribute'}
                                 value={dataVariantAttributeGroup.variant_attribute_group}
                                 onChangeSelect={onChangeVariantAttributeGroup}

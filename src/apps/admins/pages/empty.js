@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-class empty extends Component {
+class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,4 +17,4 @@ class empty extends Component {
     }
 
 }
-export default withRouter(empty);
+export default withRouter(index);

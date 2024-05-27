@@ -5,10 +5,10 @@ import * as actions from '@actions';
 import { Modal, message, Spin, Typography, Carousel, Image, Button } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormSelectSingle from '@components/selects/formSelectSingle';
-import ModalFooter from '@components/modal/modalFooter';
+import ModalFooter from '@components/modals/modalFooter';
 import { convertImageToBase64 } from '@utils/handleFuncImage';
 import { DeleteOutlined } from '@ant-design/icons';
-import { createMediaBase, get_media_base } from '@services/media_base_service';
+import { createMediaBase, getDataMediaBase } from '@services/media_base_service';
 import { showNotification } from '@utils/handleFuncNotification';
 class index extends Component {
     constructor(props) {
@@ -22,11 +22,12 @@ class index extends Component {
     async componentDidMount() {
     }
     async componentDidUpdate(prevProps) {
+        const { dataBanner, getListLocation } = this.props;
         if (prevProps.dataBanner !== this.props.dataBanner) {
-            this.props.getListLocation({ page: 1, limit: 100, search: '' });
-            this.setState({ dataMediaIds: this.props.dataBanner.media });
-            if (this.props.dataBanner.media && this.props.dataBanner.media.length !== 0) {
-                await this.get_list_media(this.props.dataBanner.media);
+            getListLocation({ page: 1, limit: 100, search: '' });
+            this.setState({ dataMediaIds: dataBanner.media });
+            if (dataBanner.media && dataBanner.media.length !== 0) {
+                await this.get_list_media(dataBanner.media);
             }
         }
     }
@@ -40,7 +41,7 @@ class index extends Component {
     }
     get_media = async (id) => {
         try {
-            let data = await get_media_base(id);
+            let data = await getDataMediaBase(id);
             if (data && data.data && data.data.success === 1) {
                 return data.data.data
             }
@@ -116,17 +117,14 @@ class index extends Component {
         }
     }
     render() {
-        let dataBanner = this.props.dataBanner;
-        let isLoading = this.props.isLoading;
-        let dataLocations = this.props.dataLocations;
-        let dataMedias = this.state.dataMedias;
-
+        const { dataBanner, isLoading, dataLocations, modalEdit, openModal, onChangeBanner } = this.props;
+        const { dataMedias } = this.state;
         return (
-            <Modal title="CHỈNH SỬA" open={this.props.modalEdit}
-                onCancel={() => this.props.openModal("edit", false)} width={400}
+            <Modal title="CHỈNH SỬA" open={modalEdit}
+                onCancel={() => openModal("edit", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={this.props.openModal} type={'edit'}
+                    <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
                 ]}>
                 <Spin spinning={isLoading}>
@@ -167,7 +165,7 @@ class index extends Component {
 
                         <FormInput name={'Tên băng rôn'} variable={'name'} value={dataBanner.name}
                             important={true}
-                            onChangeInput={this.props.onChangeBanner} />
+                            onChangeInput={onChangeBanner} />
 
                         <FormSelectSingle name={'Vị trí'} variable={'location'} value={dataBanner.location}
                             important={true} width={'100%'}
@@ -175,7 +173,7 @@ class index extends Component {
                                 label: item.name,
                                 value: item.id,
                             }))}
-                            onChangeInput={this.props.onChangeBanner} />
+                            onChangeInput={onChangeBanner} />
                     </div>
                 </Spin>
             </Modal>
