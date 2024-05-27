@@ -14,24 +14,24 @@ class product_page extends Component {
         this.props.set_data_product_page({});
         if (this.props.match && this.props.match.params) {
             let product_id = this.props.match.params.id;
-            if (product_id) { this.props.get_product_page(product_id); }
+            if (product_id) { this.props.getDataProductPage(product_id); }
         }
     }
     handle_delete = () => {
-        let data_product_page = this.props.data_product_page;
-        if (data_product_page && data_product_page.id) {
-            this.props.delete_list_product_page([data_product_page.id]);
+        let dataProductPage = this.props.dataProductPage;
+        if (dataProductPage && dataProductPage.id) {
+            this.props.delete_list_product_page([dataProductPage.id]);
             if (this.props.isResult) {
                 this.props.set_data_product_page({});
             }
         }
     }
     render() {
-        let data_product_page = this.props.data_product_page;
+        let dataProductPage = this.props.dataProductPage;
         return (
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Sản phẩm trên Website" key="1"
-                    extra={<Button onClick={() => this.handle_delete()} className='bg-[#e94138] text-white' disabled={(this.props.is_edit === true && data_product_page?.id) ? false : true}>Xóa bài</Button>}>
+                    extra={<Button onClick={() => this.handle_delete()} className='bg-[#e94138] text-white' disabled={(this.props.isEdit === true && dataProductPage?.id) ? false : true}>Xóa bài</Button>}>
                     <Spin spinning={this.props.isLoading}>
                         <div className='space-y-[5px]'>
                             <div className='flex items-center gap-[5px]'>
@@ -40,7 +40,7 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={data_product_page.title} width={'100%'} disabled={!this.props.is_edit}
+                                    <Input value={dataProductPage.title} width={'100%'} disabled={!this.props.isEdit}
                                         onChange={(event) => this.props.on_change_product_page(event.target.value, 'title')} />
                                 </div>
                             </div>
@@ -50,7 +50,7 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={data_product_page.slug} width={'100%'} disabled={!this.props.is_edit}
+                                    <Input value={dataProductPage.slug} width={'100%'} disabled={!this.props.isEdit}
                                         onChange={(event) => this.props.on_change_product_page(event.target.value, 'slug')} />
                                 </div>
                             </div>
@@ -60,7 +60,7 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <textarea className='w-full border p-[5px]' rows={4} value={data_product_page.search_description} width={'100%'} disabled={!this.props.is_edit}
+                                    <textarea className='w-full border p-[5px]' rows={4} value={dataProductPage.search_description} width={'100%'} disabled={!this.props.isEdit}
                                         onChange={(event) => this.props.on_change_product_page(event.target.value, 'search_description')} />
                                 </div>
                             </div>
@@ -70,7 +70,7 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={data_product_page.keywords} width={'100%'} disabled={!this.props.is_edit}
+                                    <Input value={dataProductPage.keywords} width={'100%'} disabled={!this.props.isEdit}
                                         onChange={(event) => this.props.on_change_product_page(event.target.value, 'keywords')} />
                                 </div>
                             </div>
@@ -84,18 +84,18 @@ class product_page extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_product_page: state.product_page.data_product_page,
+        dataProductPage: state.product_page.dataProductPage,
         isLoading: state.product_page.isLoading,
-        is_edit: state.product.is_edit,
+        isEdit: state.product.isEdit,
         isResult: state.tag.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_product_page: (id) => dispatch(actions.get_product_page_redux(id)),
+        getDataProductPage: (id) => dispatch(actions.getDataProductPageRedux(id)),
         on_change_product_page: (id, value) => dispatch(actions.on_change_product_page_redux(id, value)),
         set_data_product_page: (id) => dispatch(actions.set_data_product_page_redux(id)),
-        delete_list_product_page: (id) => dispatch(actions.delete_list_product_page_redux(id)),
+        delete_list_product_page: (id) => dispatch(actions.deleteListProductPageRedux(id)),
 
     };
 };

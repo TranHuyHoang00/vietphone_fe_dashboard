@@ -27,19 +27,19 @@ class index extends Component {
             getListLocation({ page: 1, limit: 100, search: '' });
             this.setState({ dataMediaIds: dataBanner.media });
             if (dataBanner.media && dataBanner.media.length !== 0) {
-                await this.get_list_media(dataBanner.media);
+                await this.getListMedia(dataBanner.media);
             }
         }
     }
-    get_list_media = async (media) => {
+    getListMedia = async (media) => {
         let dataMedias = [];
         for (const item of media) {
-            let data = await this.get_media(item);
+            let data = await this.getDatamedia(item);
             dataMedias.push(data);
         }
         this.setState({ dataMedias: dataMedias });
     }
-    get_media = async (id) => {
+    getDatamedia = async (id) => {
         try {
             let data = await getDataMediaBase(id);
             if (data && data.data && data.data.success === 1) {

@@ -32,7 +32,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        darkMode: state.dark_mode.darkMode,
+        darkMode: state.darkMode.darkMode,
     };
 };
 const mapDispatchToProps = dispatch => {

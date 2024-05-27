@@ -37,7 +37,7 @@ export const getDataTaskRedux = (id) => {
         }
     }
 }
-export const create_task_redux = (dataTask) => {
+export const createTaskRedux = (dataTask) => {
     return async (dispatch, getState) => {
         try {
             dispatch(task_start());
@@ -91,7 +91,7 @@ export const editListRaskRedux = (list_id, dataTask) => {
         dispatch(task_success());
     }
 }
-export const edit_task_redux = (id, dataTask) => {
+export const editTaskRedux = (id, dataTask) => {
     return async (dispatch, getState) => {
         try {
             dispatch(task_start());

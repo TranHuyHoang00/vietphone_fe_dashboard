@@ -13,7 +13,7 @@ class product_attribute_value extends Component {
             disable_atb: true,
             disable_atbvl: true,
             disabledButtonCreate: true,
-            is_edit: '',
+            isEdit: '',
             data_atbvl_raws: [],
             data_atbvl_ids: [],
             data_atbvl_uniques: [],
@@ -24,7 +24,7 @@ class product_attribute_value extends Component {
         this.props.getListGroupAttribute(this.state.dataFilter);
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.is_edit !== this.props.is_edit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws) {
+        if (prevProps.isEdit !== this.props.isEdit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws) {
             let data_atbvl_raws = this.props.data_atbvl_raws;
             if (data_atbvl_raws && data_atbvl_raws.length !== 0) {
                 this.handle_data_unique(this.props.data_atbvl_raws);
@@ -162,7 +162,7 @@ class product_attribute_value extends Component {
                                             value: item.id,
                                         }))}
                                         value={dataGroupAttribute.id}
-                                        disabledSelect={!this.props.is_edit}
+                                        disabledSelect={!this.props.isEdit}
                                         onSearch={this.onSearch}
                                         variableSelect={'group_attribute'}
                                         onChangeSelect={this.on_select}
@@ -242,7 +242,7 @@ class product_attribute_value extends Component {
                                                                         <Typography.Text class="break-word">{data.value}</Typography.Text>
                                                                     </div>
                                                                     <div className='min-w-0 flex-shrink-0'>
-                                                                        <Button disabled={!this.props.is_edit}
+                                                                        <Button disabled={!this.props.isEdit}
                                                                             onClick={() => this.handle_delete_atbvl(data.id)}
                                                                             className='bg-[#e94138] text-white' size='small'
                                                                             icon={<DeleteOutlined />}>
@@ -268,8 +268,8 @@ class product_attribute_value extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_product: state.product.data_product,
-        is_edit: state.product.is_edit,
+        dataProduct: state.product.dataProduct,
+        isEdit: state.product.isEdit,
 
         dataGroupAttributes: state.group_attribute.dataGroupAttributes,
         dataGroupAttribute: state.group_attribute.dataGroupAttribute,

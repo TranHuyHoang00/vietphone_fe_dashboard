@@ -16,12 +16,12 @@ class variant_introduce extends Component {
     async componentDidUpdate() {
     }
     render() {
-        let data_variant = this.props.data_variant;
+        let dataVariant = this.props.dataVariant;
         return (
             <Collapse defaultActiveKey={['1']}>
                 <Collapse.Panel header="Phiên bản" key="1">
-                    {textLine13('Mã SKU', data_variant.sku)}
-                    {textLine13('Mã Barcode', data_variant.barcode)}
+                    {textLine13('Mã SKU', dataVariant.sku)}
+                    {textLine13('Mã Barcode', dataVariant.barcode)}
                     <div className='space-y-[5px]'>
                         <div className='flex gap-[5px]'>
                             <div className='w-1/3 flex justify-between space-x-[5px]'>
@@ -29,7 +29,7 @@ class variant_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Input disabled={!this.props.is_edit} value={data_variant.name}
+                                <Input disabled={!this.props.isEdit} value={dataVariant.name}
                                     onChange={(event) => this.props.on_change_variant(event.target.value, 'name')} />
                             </div>
                         </div>
@@ -39,7 +39,7 @@ class variant_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Input disabled={!this.props.is_edit} value={this.props.is_edit ? (data_variant.regular_price) : formatMoney(data_variant.regular_price)}
+                                <Input disabled={!this.props.isEdit} value={this.props.isEdit ? (dataVariant.regular_price) : formatMoney(dataVariant.regular_price)}
                                     onChange={(event) => this.props.on_change_variant(event.target.value, 'regular_price')} />
                             </div>
                         </div>
@@ -49,18 +49,18 @@ class variant_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Input disabled={!this.props.is_edit} value={this.props.is_edit ? (data_variant.discount_price) : formatMoney(data_variant.discount_price)}
+                                <Input disabled={!this.props.isEdit} value={this.props.isEdit ? (dataVariant.discount_price) : formatMoney(dataVariant.discount_price)}
                                     onChange={(event) => this.props.on_change_variant(event.target.value, 'discount_price')} />
                             </div>
                         </div>
-                        {textLine13('Số lượng', `${data_variant.quantity} cái`)}
+                        {textLine13('Số lượng', `${dataVariant.quantity} cái`)}
                         <div className='flex items-center gap-[5px]'>
                             <div className='w-1/3 flex items-center justify-between'>
                                 <Typography.Text type="secondary">Trạng thái</Typography.Text>
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Select disabled={!this.props.is_edit} style={{ width: '100%' }} value={data_variant.is_active}
+                                <Select disabled={!this.props.isEdit} style={{ width: '100%' }} value={dataVariant.is_active}
                                     onChange={(event) => this.props.on_change_variant(event, 'is_active')}
                                     options={[
                                         { value: true, label: 'Mở' },
@@ -77,8 +77,8 @@ class variant_introduce extends Component {
 }
 const mapStateToProps = state => {
     return {
-        is_edit: state.variant.is_edit,
-        data_variant: state.variant.data_variant,
+        isEdit: state.variant.isEdit,
+        dataVariant: state.variant.dataVariant,
     };
 };
 const mapDispatchToProps = dispatch => {

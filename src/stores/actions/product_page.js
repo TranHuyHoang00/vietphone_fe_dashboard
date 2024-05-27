@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_product_page, get_product_page, create_product_page, delete_product_page, edit_product_page } from '@services/product_page_service';
+import { getListProductPage, getDataProductPage, createProductPage, deleteProductPage, editProductPage } from '@services/product_page_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
-export const get_list_product_page_redux = (dataFilter) => {
+export const getListProductPageRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(product_page_start());
-            let data = await get_list_product_page(dataFilter);
+            let data = await getListProductPage(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_product_page_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_list_product_page_redux = (dataFilter) => {
         }
     }
 }
-export const get_product_page_redux = (id) => {
+export const getDataProductPageRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(product_page_start());
-            let data = await get_product_page(id);
+            let data = await getDataProductPage(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_product_page_success(data.data.data));
             } else {
@@ -36,11 +36,11 @@ export const get_product_page_redux = (id) => {
         }
     }
 }
-export const create_product_page_redux = (data_product_page) => {
+export const createProductPageRedux = (dataProductPage) => {
     return async (dispatch, getState) => {
         try {
             dispatch(product_page_start());
-            let data = await create_product_page(data_product_page);
+            let data = await createProductPage(dataProductPage);
             if (data && data.data && data.data.success === 1) {
                 dispatch(product_page_success());
             } else {
@@ -52,12 +52,12 @@ export const create_product_page_redux = (data_product_page) => {
         }
     }
 }
-export const delete_list_product_page_redux = (list_id) => {
+export const deleteListProductPageRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(product_page_start());
         for (const id of list_id) {
             try {
-                let data = await delete_product_page(id);
+                let data = await deleteProductPage(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -70,12 +70,12 @@ export const delete_list_product_page_redux = (list_id) => {
         dispatch(product_page_success());
     }
 }
-export const edit_list_product_page_redux = (list_id, data_product_page) => {
+export const editListProductPageRedux = (list_id, dataProductPage) => {
     return async (dispatch, getState) => {
         dispatch(product_page_start());
         for (const id of list_id) {
             try {
-                let data = await edit_product_page(id, data_product_page);
+                let data = await editProductPage(id, dataProductPage);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -88,11 +88,11 @@ export const edit_list_product_page_redux = (list_id, data_product_page) => {
         dispatch(product_page_success());
     }
 }
-export const edit_product_page_redux = (id, data_product_page) => {
+export const editProductPageRedux = (id, dataProductPage) => {
     return async (dispatch, getState) => {
         try {
             dispatch(product_page_start());
-            let data = await edit_product_page(id, data_product_page);
+            let data = await editProductPage(id, dataProductPage);
             if (data && data.data && data.data.success === 1) {
                 dispatch(product_page_success());
             } else {

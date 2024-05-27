@@ -1,13 +1,13 @@
 import action_types from '@actions/action_types';
-import { get_list_product, get_product, create_product, delete_product, edit_product } from '@services/product_service';
+import { getListProduct, getDataProduct, createProduct, deleteProduct, editProduct } from '@services/product_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
-export const get_list_product_redux = (dataFilter) => {
+export const getListProductRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(product_start());
-            let data = await get_list_product(dataFilter);
+            let data = await getListProduct(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_list_product_success(data.data.data));
             } else {
@@ -20,11 +20,11 @@ export const get_list_product_redux = (dataFilter) => {
         }
     }
 }
-export const get_product_redux = (id) => {
+export const getDataProductRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(product_start());
-            let data = await get_product(id);
+            let data = await getDataProduct(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_product_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_product_redux = (id) => {
         }
     }
 }
-export const create_product_redux = (data_product) => {
+export const createProductRedux = (dataProduct) => {
     return async (dispatch, getState) => {
         try {
             dispatch(product_start());
-            let data = await create_product(data_product);
+            let data = await createProduct(dataProduct);
             if (data && data.data && data.data.success === 1) {
                 dispatch(product_success());
                 message.success('Thành công');
@@ -55,12 +55,12 @@ export const create_product_redux = (data_product) => {
         }
     }
 }
-export const delete_list_product_redux = (list_id) => {
+export const deleteListProductRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(product_start());
         for (const id of list_id) {
             try {
-                let data = await delete_product(id);
+                let data = await deleteProduct(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -73,12 +73,12 @@ export const delete_list_product_redux = (list_id) => {
         dispatch(product_success());
     }
 }
-export const edit_list_product_redux = (list_id, data_product) => {
+export const editListProductRedux = (list_id, dataProduct) => {
     return async (dispatch, getState) => {
         dispatch(product_start());
         for (const id of list_id) {
             try {
-                let data = await edit_product(id, data_product);
+                let data = await editProduct(id, dataProduct);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_product_redux = (list_id, data_product) => {
         dispatch(product_success());
     }
 }
-export const edit_product_redux = (id, data_product) => {
+export const editProductRedux = (id, dataProduct) => {
     return async (dispatch, getState) => {
         try {
             dispatch(product_start());
-            let data = await edit_product(id, data_product);
+            let data = await editProduct(id, dataProduct);
             if (data && data.data && data.data.success === 1) {
                 dispatch(product_success());
                 message.success('Thành công');

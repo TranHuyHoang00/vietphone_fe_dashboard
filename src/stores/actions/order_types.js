@@ -41,7 +41,7 @@ export const getDataOrderRedux = (id) => {
         }
     }
 }
-export const create_order_redux = (dataOrder) => {
+export const createOrderRedux = (dataOrder) => {
     return async (dispatch, getState) => {
         try {
             dispatch(order_start());
@@ -95,7 +95,7 @@ export const editListOrderRedux = (list_id, dataOrder) => {
         dispatch(order_success());
     }
 }
-export const edit_order_redux = (id, dataOrder) => {
+export const editOrderRedux = (id, dataOrder) => {
     return async (dispatch, getState) => {
         try {
             dispatch(order_start());

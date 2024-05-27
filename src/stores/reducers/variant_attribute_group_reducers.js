@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const variant_attribute_group_reducers = (state = initialState, action) => {
+const variantAttributeGroupReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.VARIANT_ATTRIBUTE_GROUP_START:
             return {
@@ -86,4 +86,4 @@ const variant_attribute_group_reducers = (state = initialState, action) => {
     }
 }
 
-export default variant_attribute_group_reducers;
+export default variantAttributeGroupReducers;

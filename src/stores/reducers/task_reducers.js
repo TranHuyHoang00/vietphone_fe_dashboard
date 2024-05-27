@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const task_reducers = (state = initialState, action) => {
+const taskReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.TASK_START:
             return {
@@ -86,4 +86,4 @@ const task_reducers = (state = initialState, action) => {
     }
 }
 
-export default task_reducers;
+export default taskReducers;

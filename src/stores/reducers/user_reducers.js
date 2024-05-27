@@ -11,7 +11,7 @@ const initialState = {
     isSuperUser: true,
 }
 
-const user_reducers = (state = initialState, action) => {
+const userReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.USER_START:
             return {
@@ -101,4 +101,4 @@ const user_reducers = (state = initialState, action) => {
     }
 }
 
-export default user_reducers;
+export default userReducers;

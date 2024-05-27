@@ -3,7 +3,7 @@ import { getListFlashSaleItem, getDataFlashSaleItem, createFlashSaleItem, delete
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
-export const get_list_flash_sale_item_redux = (dataFilter) => {
+export const getListFlashSaleItemRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flash_sale_item_start());
@@ -37,7 +37,7 @@ export const getDataFlashSaleItemRedux = (id) => {
         }
     }
 }
-export const create_flash_sale_item_redux = (dataFlashSaleItem) => {
+export const createFlashSaleItemRedux = (dataFlashSaleItem) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flash_sale_item_start());
@@ -90,7 +90,7 @@ export const deleteListFlashSaleItemRedux = (list_id) => {
         dispatch(flash_sale_item_success());
     }
 }
-export const edit_list_flash_sale_item_redux = (list_id, dataFlashSaleItem) => {
+export const editListFlashSaleItemRedux = (list_id, dataFlashSaleItem) => {
     return async (dispatch, getState) => {
         dispatch(flash_sale_item_start());
         for (const id of list_id) {

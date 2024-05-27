@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const customer_reducers = (state = initialState, action) => {
+const customerReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.CUSTOMER_START:
             return {
@@ -86,4 +86,4 @@ const customer_reducers = (state = initialState, action) => {
     }
 }
 
-export default customer_reducers;
+export default customerReducers;

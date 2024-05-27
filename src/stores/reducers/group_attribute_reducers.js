@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const group_attribute_reducers = (state = initialState, action) => {
+const groupAttributeReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.GROUP_ATTRIBUTE_START:
             return {
@@ -86,4 +86,4 @@ const group_attribute_reducers = (state = initialState, action) => {
     }
 }
 
-export default group_attribute_reducers;
+export default groupAttributeReducers;

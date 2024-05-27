@@ -14,14 +14,14 @@ class index extends Component {
     async componentDidMount() {
         if (this.props.match && this.props.match.params) {
             let product_id = this.props.match.params.id;
-            if (product_id) { this.props.get_product(product_id); }
+            if (product_id) { this.props.getDataProduct(product_id); }
         }
     }
     handle_go_back = () => {
         this.props.history.push(`/admin/manager/product`)
     }
     render() {
-        let data_product = this.props.data_product;
+        let dataProduct = this.props.dataProduct;
         return (
             <Spin size='large' spinning={this.props.isLoading}>
                 <div className='p-[10px] space-y-[10px]'>
@@ -30,7 +30,7 @@ class index extends Component {
                         Quay lại
                     </Button>
                     <Product />
-                    <Variant data_variant_ids={data_product.variants} />
+                    <Variant data_variant_ids={dataProduct.variants} />
                 </div>
             </Spin>
         );
@@ -40,13 +40,13 @@ class index extends Component {
 
 const mapStateToProps = state => {
     return {
-        data_product: state.product.data_product,
+        dataProduct: state.product.dataProduct,
         isLoading: state.product.isLoading,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_product: (id) => dispatch(actions.get_product_redux(id)),
+        getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

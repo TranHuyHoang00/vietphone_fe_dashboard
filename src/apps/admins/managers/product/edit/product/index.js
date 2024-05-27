@@ -8,10 +8,10 @@ import ProductAttributeValue from './elements/product_attribute_value';
 import ProductPage from './elements/product_page';
 import ProductContent from './elements/product_content';
 import ProductMedia from './elements/product_media';
-import { create_media } from '@services/media_service';
+import { createMedia } from '@services/media_service';
 import { showNotification } from '@utils/handleFuncNotification';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
-import { data_products } from '@datas/dataPermissionsOrigin';
+import { dataProducts } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -23,21 +23,21 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        let dataCheckPermis = await handleCheckPermis(data_products, this.props.dataUserPermis, this.props.isSuperUser);
+        let dataCheckPermis = await handleCheckPermis(dataProducts, this.props.dataUserPermis, this.props.isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
         });
     }
     handle_product_page = async () => {
-        let data_product = this.props.data_product;
-        let data_product_page = this.props.data_product_page;
-        data_product_page.product = data_product.id;
-        if (!data_product_page.id) {
-            await this.props.create_product_page(data_product_page);
-            this.props.get_product_page(data_product.id);
+        let dataProduct = this.props.dataProduct;
+        let dataProductPage = this.props.dataProductPage;
+        dataProductPage.product = dataProduct.id;
+        if (!dataProductPage.id) {
+            await this.props.createProductPage(dataProductPage);
+            this.props.getDataProductPage(dataProduct.id);
         } else {
-            await this.props.edit_product_page(data_product_page.id, data_product_page);
-            this.props.get_product_page(data_product.id);
+            await this.props.editProductPage(dataProductPage.id, dataProductPage);
+            this.props.getDataProductPage(dataProduct.id);
         }
     }
     handle_create_media = async () => {
@@ -47,7 +47,7 @@ class index extends Component {
             let data_atbvl_raws = this.state.data_media_raws;
             for (const item of data_atbvl_raws) {
                 if (!item.id) {
-                    let data = await create_media(item);
+                    let data = await createMedia(item);
                     if (data && data.data && data.data.success === 1) {
                         data_media_ids_new.push(data.data.data.id);
                     }
@@ -59,29 +59,29 @@ class index extends Component {
         }
     }
     handle_edit_product = async () => {
-        let data_product = this.props.data_product;
-        if (data_product?.id) {
-            if (this.props.is_edit) {
-                data_product.description = this.props.description;
-                if (data_product?.variant_attribute_group?.name) { delete data_product.variant_attribute_group; }
-                if (data_product?.attribute_values?.[0]?.id) { delete data_product.attribute_values; }
+        let dataProduct = this.props.dataProduct;
+        if (dataProduct?.id) {
+            if (this.props.isEdit) {
+                dataProduct.description = this.props.description;
+                if (dataProduct?.variant_attribute_group?.name) { delete dataProduct.variant_attribute_group; }
+                if (dataProduct?.attribute_values?.[0]?.id) { delete dataProduct.attribute_values; }
                 let data_atbvl_ids = this.state.data_atbvl_ids;
                 if (data_atbvl_ids && data_atbvl_ids.length === 0) {
-                    delete data_product.attribute_values;
+                    delete dataProduct.attribute_values;
                 } else {
-                    data_product.attribute_values = data_atbvl_ids;
+                    dataProduct.attribute_values = data_atbvl_ids;
                 }
                 let media = await this.handle_create_media();
                 if (media && media.length === 0) {
-                    if (data_product?.media?.[0]?.id) {
-                        delete data_product.media;
+                    if (dataProduct?.media?.[0]?.id) {
+                        delete dataProduct.media;
                     }
                 } else {
-                    data_product.media = media;
+                    dataProduct.media = media;
                 }
-                await this.props.edit_product(data_product.id, data_product);
+                await this.props.editProduct(dataProduct.id, dataProduct);
                 await this.handle_product_page();
-                await this.props.get_product(data_product.id);
+                await this.props.getDataProduct(dataProduct.id);
                 this.props.click_edit_product();
             } else {
                 this.props.click_edit_product()
@@ -95,14 +95,14 @@ class index extends Component {
         this.setState({ dataMediaIds: dataMediaIds, data_media_raws: data_media_raws })
     }
     render() {
-        let data_product = this.props.data_product;
+        let dataProduct = this.props.dataProduct;
         let dataCheckPermis = this.state.dataCheckPermis;
         return (
             <div className='space-y-[10px]'>
                 <div className='flex items-center justify-between'>
-                    <Typography.Title level={4}>{this.props.data_product.name}</Typography.Title>
+                    <Typography.Title level={4}>{this.props.dataProduct.name}</Typography.Title>
                     <Space>
-                        {this.props.is_edit &&
+                        {this.props.isEdit &&
                             <Button onClick={() => this.props.click_edit_product()}
                                 className='bg-[#e94138] text-white'>
                                 Hủy
@@ -110,7 +110,7 @@ class index extends Component {
                         }
                         <Button disabled={!dataCheckPermis['product.change_product']}
                             onClick={() => this.handle_edit_product()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
-                            {this.props.is_edit === false ? 'Chỉnh sửa' : 'Lưu'}
+                            {this.props.isEdit === false ? 'Chỉnh sửa' : 'Lưu'}
                         </Button>
                     </Space>
                 </div>
@@ -119,12 +119,12 @@ class index extends Component {
                         <div className='space-y-[10px]'>
                             <ProductIntroduce />
                             <ProductPage />
-                            <ProductMedia data_media_raws={data_product.media}
+                            <ProductMedia data_media_raws={dataProduct.media}
                                 get_data_media={this.get_data_media} />
                         </div>
                         <div>
                             <ProductAttributeValue get_data_atbvl={this.get_data_atbvl}
-                                data_atbvl_raws={data_product.attribute_values} />
+                                data_atbvl_raws={dataProduct.attribute_values} />
                         </div>
                     </div>
                     <ProductContent />
@@ -137,10 +137,10 @@ class index extends Component {
 
 const mapStateToProps = state => {
     return {
-        data_product: state.product.data_product,
-        is_edit: state.product.is_edit,
+        dataProduct: state.product.dataProduct,
+        isEdit: state.product.isEdit,
         description: state.product.description,
-        data_product_page: state.product_page.data_product_page,
+        dataProductPage: state.product_page.dataProductPage,
 
         dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
@@ -148,13 +148,13 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_product: (id) => dispatch(actions.get_product_redux(id)),
+        getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
         click_edit_product: (value) => dispatch(actions.click_edit_product_redux(value)),
-        edit_product: (id, data) => dispatch(actions.edit_product_redux(id, data)),
+        editProduct: (id, data) => dispatch(actions.editProductRedux(id, data)),
 
-        create_product_page: (data) => dispatch(actions.create_product_page_redux(data)),
-        edit_product_page: (id, data) => dispatch(actions.edit_product_page_redux(id, data)),
-        get_product_page: (id) => dispatch(actions.get_product_page_redux(id)),
+        createProductPage: (data) => dispatch(actions.createProductPageRedux(data)),
+        editProductPage: (id, data) => dispatch(actions.editProductPageRedux(id, data)),
+        getDataProductPage: (id) => dispatch(actions.getDataProductPageRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

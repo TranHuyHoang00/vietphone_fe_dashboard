@@ -12,7 +12,7 @@ class product_media extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            is_edit: false,
+            isEdit: false,
             dropButtonType: 1,
             modal_video: false,
 
@@ -49,7 +49,7 @@ class product_media extends Component {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
                 let image_new = await convertImageToBase64(event, i);
-                data_media_raws.push({ image: image_new, media_type: 'image', alt: this.props.data_product.name });
+                data_media_raws.push({ image: image_new, media_type: 'image', alt: this.props.dataProduct.name });
             }
         }
         if (type === 'delete') {
@@ -67,7 +67,7 @@ class product_media extends Component {
     onchange_video = (value) => {
         let data_media_raws = this.state.data_media_raws;
         let dataMediaIds = this.state.dataMediaIds;
-        data_media_raws.push({ external_url: value, media_type: 'video', alt: this.props.data_product.name });
+        data_media_raws.push({ external_url: value, media_type: 'video', alt: this.props.dataProduct.name });
         this.setState({ data_media_raws: data_media_raws });
         this.props.get_data_media(dataMediaIds, data_media_raws);
     }
@@ -80,7 +80,7 @@ class product_media extends Component {
             { key: 1, label: 'Thêm ảnh' },
             { key: 2, label: 'Thêm video' },
         ];
-        let is_edit = this.props.is_edit;
+        let isEdit = this.props.isEdit;
         let dropButtonType = this.state.dropButtonType;
         let data_media_raws = this.state.data_media_raws;
         return (
@@ -90,7 +90,7 @@ class product_media extends Component {
                         <div className='space-y-[10px]'>
                             <input id="media_product" type="file" accept="image/*" hidden multiple
                                 onChange={(event) => this.onChangeImage(event, 'create')} />
-                            <Dropdown.Button disabled={!is_edit} menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
+                            <Dropdown.Button disabled={!isEdit} menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                 <div>
                                     {dropButtonType === 1 && <label htmlFor="media_product">Thêm ảnh</label>}
                                     {dropButtonType === 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
@@ -118,7 +118,7 @@ class product_media extends Component {
                                                             </iframe>
                                                         }
                                                     </div>
-                                                    <Button disabled={!is_edit} onClick={() => this.onChangeImage(null, 'delete', index, item.id)}
+                                                    <Button disabled={!isEdit} onClick={() => this.onChangeImage(null, 'delete', index, item.id)}
                                                         className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
 
                                                 </div>
@@ -139,8 +139,8 @@ class product_media extends Component {
 }
 const mapStateToProps = state => {
     return {
-        is_edit: state.product.is_edit,
-        data_product: state.product.data_product,
+        isEdit: state.product.isEdit,
+        dataProduct: state.product.dataProduct,
     };
 };
 const mapDispatchToProps = dispatch => {

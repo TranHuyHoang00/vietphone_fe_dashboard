@@ -12,7 +12,7 @@ class variant_attribute_value extends Component {
             disable_atbvl: true,
             disabledButtonCreate: true,
 
-            is_edit: '',
+            isEdit: '',
             data_atbvl_raws: [],
             data_atbvl_ids: [],
             data_atbvl_uniques: [],
@@ -23,7 +23,7 @@ class variant_attribute_value extends Component {
     async componentDidMount() {
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.is_edit !== this.props.is_edit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws || prevProps.dataAttributes !== this.props.dataAttributes) {
+        if (prevProps.isEdit !== this.props.isEdit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws || prevProps.dataAttributes !== this.props.dataAttributes) {
             this.props.setDataAttribute({});
             this.props.setDataAttributeValue({});
             let dataAttributes = this.props.dataAttributes;
@@ -155,7 +155,7 @@ class variant_attribute_value extends Component {
                                             value: item.id,
                                         }))}
                                         value={dataAttribute.id}
-                                        disabledSelect={!this.props.is_edit}
+                                        disabledSelect={!this.props.isEdit}
                                         disabledButtonCreate={true}
                                         disabledSearch={true}
                                         onSearch={this.onSearch}
@@ -216,7 +216,7 @@ class variant_attribute_value extends Component {
                                                                         <Typography.Text class="break-word">{data.value}</Typography.Text>
                                                                     </div>
                                                                     <div className='min-w-0 flex-shrink-0'>
-                                                                        <Button disabled={!this.props.is_edit}
+                                                                        <Button disabled={!this.props.isEdit}
                                                                             onClick={() => this.handle_delete_atbvl(data.id)}
                                                                             className='bg-[#e94138] text-white' size='small'
                                                                             icon={<DeleteOutlined />}>
@@ -242,8 +242,8 @@ class variant_attribute_value extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_product: state.product.data_product,
-        is_edit: state.variant.is_edit,
+        dataProduct: state.product.dataProduct,
+        isEdit: state.variant.isEdit,
 
         dataAttribute: state.attribute.dataAttribute,
 

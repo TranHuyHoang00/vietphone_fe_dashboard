@@ -3,7 +3,7 @@ import { getListMediaBase, getDataMediaBase, createMediaBase, deleteMediaBase, e
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
-export const get_list_media_base_redux = (dataFilter) => {
+export const getListMediaBaseRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(media_base_start());
@@ -20,7 +20,7 @@ export const get_list_media_base_redux = (dataFilter) => {
         }
     }
 }
-export const get_media_base_redux = (id) => {
+export const getDataMediaBaseRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(media_base_start());
@@ -37,11 +37,11 @@ export const get_media_base_redux = (id) => {
         }
     }
 }
-export const create_media_base_redux = (data_media_base) => {
+export const createMediaBaseRedux = (dataMediaBase) => {
     return async (dispatch, getState) => {
         try {
             dispatch(media_base_start());
-            let data = await createMediaBase(data_media_base);
+            let data = await createMediaBase(dataMediaBase);
             if (data && data.data && data.data.success === 1) {
                 dispatch(media_base_success());
                 message.success('Thành công');
@@ -55,7 +55,7 @@ export const create_media_base_redux = (data_media_base) => {
         }
     }
 }
-export const delete_list_media_base_redux = (list_id) => {
+export const deleteListMediaBaseRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(media_base_start());
         for (const id of list_id) {
@@ -73,12 +73,12 @@ export const delete_list_media_base_redux = (list_id) => {
         dispatch(media_base_success());
     }
 }
-export const edit_list_media_base_redux = (list_id, data_media_base) => {
+export const editListMediaBaseRedux = (list_id, dataMediaBase) => {
     return async (dispatch, getState) => {
         dispatch(media_base_start());
         for (const id of list_id) {
             try {
-                let data = await editMediaBase(id, data_media_base);
+                let data = await editMediaBase(id, dataMediaBase);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_media_base_redux = (list_id, data_media_base) => {
         dispatch(media_base_success());
     }
 }
-export const edit_media_base_redux = (id, data_media_base) => {
+export const editMediaBaseRedux = (id, dataMediaBase) => {
     return async (dispatch, getState) => {
         try {
             dispatch(media_base_start());
-            let data = await editMediaBase(id, data_media_base);
+            let data = await editMediaBase(id, dataMediaBase);
             if (data && data.data && data.data.success === 1) {
                 dispatch(media_base_success());
                 message.success('Thành công');

@@ -10,7 +10,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
-import { data_products } from '@datas/dataPermissionsOrigin';
+import { dataProducts } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -26,13 +26,13 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.get_list_product(this.props.dataFilter);
+        this.props.getListProduct(this.props.dataFilter);
         this.props.getListBrand({ page: 1, limit: 100, search: '' });
         this.props.getListTag({ page: 1, limit: 100, search: '' });
         this.props.getListCategory({ page: 1, limit: 100, search: '' });
         this.setState({ dataFilter: this.props.dataFilter });
 
-        let dataCheckPermis = await handleCheckPermis(data_products, this.props.dataUserPermis, this.props.isSuperUser);
+        let dataCheckPermis = await handleCheckPermis(dataProducts, this.props.dataUserPermis, this.props.isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
         });
@@ -44,18 +44,18 @@ class index extends Component {
         }
         if (name === 'detail') {
             if (id === undefined) {
-                this.setState({ modalDetail: value, data_product: {} });
+                this.setState({ modalDetail: value, dataProduct: {} });
             } else {
                 this.setState({ modalDetail: value });
-                await this.props.get_product(id);
+                await this.props.getDataProduct(id);
             }
         }
         if (name === 'edit') {
             if (id === undefined) {
-                this.setState({ modalEdit: value, data_product: {} });
+                this.setState({ modalEdit: value, dataProduct: {} });
             } else {
                 this.setState({ modalEdit: value });
-                await this.props.get_product(id);
+                await this.props.getDataProduct(id);
             }
         }
     }
@@ -69,7 +69,7 @@ class index extends Component {
         if (this.state.dropButtonType === 1) { await this.props.delete_list_product(listItemSelected); }
         if (this.state.dropButtonType === 2) { await this.props.edit_list_product(listItemSelected, { is_active: false }); }
         if (this.state.dropButtonType === 3) { await this.props.edit_list_product(listItemSelected, { is_active: true }); }
-        await this.props.get_list_product(this.state.dataFilter);
+        await this.props.getListProduct(this.state.dataFilter);
         if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
     }
     onChangePage = async (value, type) => {
@@ -84,7 +84,7 @@ class index extends Component {
         if (type === 'has_page') { dataFilter.has_page = value; dataFilter.page = 1; }
 
         this.setState({ dataFilter: dataFilter })
-        await this.props.get_list_product(dataFilter);
+        await this.props.getListProduct(dataFilter);
         this.props.set_dataFilter_product(dataFilter);
     }
     onchange_search = (value) => {
@@ -206,7 +206,7 @@ class index extends Component {
                             <Divider>SẢN PHẨM</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.data_products} pagination={false}
+                                    columns={columns} dataSource={this.props.dataProducts} pagination={false}
                                     size="middle" bordered scroll={{}} />
                                 <Pagination responsive current={this.props.dataFilter.page}
                                     showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={this.props.dataFilter.limit}
@@ -229,8 +229,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_products: state.product.data_products,
-        data_product: state.product.data_product,
+        dataProducts: state.product.dataProducts,
+        dataProduct: state.product.dataProduct,
         dataMeta: state.product.dataMeta,
         isLoading: state.product.isLoading,
         isResult: state.product.isResult,
@@ -245,10 +245,10 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_list_product: (dataFilter) => dispatch(actions.get_list_product_redux(dataFilter)),
-        get_product: (id) => dispatch(actions.get_product_redux(id)),
-        edit_list_product: (id, data) => dispatch(actions.edit_list_product_redux(id, data)),
-        delete_list_product: (id) => dispatch(actions.delete_list_product_redux(id)),
+        getListProduct: (dataFilter) => dispatch(actions.getListProductRedux(dataFilter)),
+        getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
+        edit_list_product: (id, data) => dispatch(actions.editListProductRedux(id, data)),
+        delete_list_product: (id) => dispatch(actions.deleteListProductRedux(id)),
         set_data_product: (id) => dispatch(actions.set_data_product_redux(id)),
         set_dataFilter_product: (data) => dispatch(actions.set_dataFilter_product_redux(data)),
         getListBrand: (dataFilter) => dispatch(actions.getListBrandRedux(dataFilter)),

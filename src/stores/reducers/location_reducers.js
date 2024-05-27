@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const location_reducers = (state = initialState, action) => {
+const locationReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.LOCATION_START:
             return {
@@ -86,4 +86,4 @@ const location_reducers = (state = initialState, action) => {
     }
 }
 
-export default location_reducers;
+export default locationReducers;

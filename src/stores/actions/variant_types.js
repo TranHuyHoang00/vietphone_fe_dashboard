@@ -1,5 +1,5 @@
 import action_types from '@actions/action_types';
-import { getListVariant, get_variant, create_variant, delete_variant, edit_variant } from '@services/variant_service';
+import { getListVariant, getDataVariant, createVariant, deleteVariant, editVariant } from '@services/variant_service';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -20,11 +20,11 @@ export const getListVariantRedux = (dataFilter) => {
         }
     }
 }
-export const get_variant_redux = (id) => {
+export const getDataVariantRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variant_start());
-            let data = await get_variant(id);
+            let data = await getDataVariant(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(get_variant_success(data.data.data));
             } else {
@@ -37,11 +37,11 @@ export const get_variant_redux = (id) => {
         }
     }
 }
-export const create_variant_redux = (data_variant) => {
+export const createVariantRedux = (dataVariant) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variant_start());
-            let data = await create_variant(data_variant);
+            let data = await createVariant(dataVariant);
             if (data && data.data && data.data.success === 1) {
                 dispatch(variant_success());
                 message.success('Thành công');
@@ -55,12 +55,12 @@ export const create_variant_redux = (data_variant) => {
         }
     }
 }
-export const delete_list_variant_redux = (list_id) => {
+export const deleteListVariantRedux = (list_id) => {
     return async (dispatch, getState) => {
         dispatch(variant_start());
         for (const id of list_id) {
             try {
-                let data = await delete_variant(id);
+                let data = await deleteVariant(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -73,12 +73,12 @@ export const delete_list_variant_redux = (list_id) => {
         dispatch(variant_success());
     }
 }
-export const edit_list_variant_redux = (list_id, data_variant) => {
+export const editListVariantRedux = (list_id, dataVariant) => {
     return async (dispatch, getState) => {
         dispatch(variant_start());
         for (const id of list_id) {
             try {
-                let data = await edit_variant(id, data_variant);
+                let data = await editVariant(id, dataVariant);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -91,11 +91,11 @@ export const edit_list_variant_redux = (list_id, data_variant) => {
         dispatch(variant_success());
     }
 }
-export const edit_variant_redux = (id, data_variant) => {
+export const editVariantRedux = (id, dataVariant) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variant_start());
-            let data = await edit_variant(id, data_variant);
+            let data = await editVariant(id, dataVariant);
             if (data && data.data && data.data.success === 1) {
                 dispatch(variant_success());
                 message.success('Thành công');

@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const order_reducers = (state = initialState, action) => {
+const orderReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.ORDER_START:
             return {
@@ -86,4 +86,4 @@ const order_reducers = (state = initialState, action) => {
     }
 }
 
-export default order_reducers;
+export default orderReducers;

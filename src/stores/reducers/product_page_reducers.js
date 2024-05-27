@@ -1,14 +1,14 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_product_pages: [],
-    data_product_page: {},
+    dataProductPages: [],
+    dataProductPage: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
 }
 
-const product_page_reducers = (state = initialState, action) => {
+const productPageReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.PRODUCT_PAGE_START:
             return {
@@ -33,7 +33,7 @@ const product_page_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_product_pages: action.data.product_pages,
+                dataProductPages: action.data.product_pages,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_PRODUCT_PAGE_SUCCESS:
@@ -41,7 +41,7 @@ const product_page_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_product_page: action.data
+                dataProductPage: action.data
             }
         case action_types.CREATE_PRODUCT_PAGE_SUCCESS:
             return {
@@ -70,14 +70,14 @@ const product_page_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_PRODUCT_PAGE:
             return {
                 ...state,
-                data_product_page: action.data,
+                dataProductPage: action.data,
             }
         case action_types.ON_CHANGE_PRODUCT_PAGE:
-            let copyState = { ...state.data_product_page };
+            let copyState = { ...state.dataProductPage };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_product_page: {
+                dataProductPage: {
                     ...copyState,
                 }
             }
@@ -86,4 +86,4 @@ const product_page_reducers = (state = initialState, action) => {
     }
 }
 
-export default product_page_reducers;
+export default productPageReducers;

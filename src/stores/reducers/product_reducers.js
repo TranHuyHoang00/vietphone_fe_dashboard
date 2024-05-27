@@ -1,12 +1,12 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_products: [],
-    data_product: {},
+    dataProducts: [],
+    dataProduct: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
-    is_edit: false,
+    isEdit: false,
     dataFilter: {
         page: 1,
         limit: 5,
@@ -20,7 +20,7 @@ const initialState = {
     description: '',
 }
 
-const product_reducers = (state = initialState, action) => {
+const productReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.PRODUCT_START:
             return {
@@ -45,7 +45,7 @@ const product_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_products: action.data.products,
+                dataProducts: action.data.products,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_PRODUCT_SUCCESS:
@@ -53,7 +53,7 @@ const product_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_product: action.data,
+                dataProduct: action.data,
                 description: action.data.description,
             }
         case action_types.CREATE_PRODUCT_SUCCESS:
@@ -83,14 +83,14 @@ const product_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_PRODUCT:
             return {
                 ...state,
-                data_product: action.data,
+                dataProduct: action.data,
             }
         case action_types.ON_CHANGE_PRODUCT:
-            let copyState = { ...state.data_product };
+            let copyState = { ...state.dataProduct };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_product: {
+                dataProduct: {
                     ...copyState,
                 }
             }
@@ -102,7 +102,7 @@ const product_reducers = (state = initialState, action) => {
         case action_types.CLICK_EDIT_PRODUCT:
             return {
                 ...state,
-                is_edit: !state.is_edit
+                isEdit: !state.isEdit
             }
         case action_types.SET_dataFilter_PRODUCT:
             return {
@@ -114,4 +114,4 @@ const product_reducers = (state = initialState, action) => {
     }
 }
 
-export default product_reducers;
+export default productReducers;

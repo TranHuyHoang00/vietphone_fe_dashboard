@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const category_post_reducers = (state = initialState, action) => {
+const categoryPostReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.CATEGORY_POST_START:
             return {
@@ -86,4 +86,4 @@ const category_post_reducers = (state = initialState, action) => {
     }
 }
 
-export default category_post_reducers;
+export default categoryPostReducers;

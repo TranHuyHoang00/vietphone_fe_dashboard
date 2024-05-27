@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const attribute_reducers = (state = initialState, action) => {
+const attributeReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.ATTRIBUTE_START:
             return {
@@ -86,4 +86,4 @@ const attribute_reducers = (state = initialState, action) => {
     }
 }
 
-export default attribute_reducers;
+export default attributeReducers;

@@ -2,11 +2,11 @@ import action_types from '@actions/action_types';
 
 const initialState = {
     dataVariants: [],
-    data_variant: {},
+    dataVariant: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
-    is_edit: false,
+    isEdit: false,
     dataFilter: {
         page: 1,
         limit: 5,
@@ -14,7 +14,7 @@ const initialState = {
     },
 }
 
-const variant_reducers = (state = initialState, action) => {
+const variantReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.VARIANT_START:
             return {
@@ -47,7 +47,7 @@ const variant_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_variant: action.data
+                dataVariant: action.data
             }
         case action_types.CREATE_VARIANT_SUCCESS:
             return {
@@ -76,21 +76,21 @@ const variant_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_VARIANT:
             return {
                 ...state,
-                data_variant: action.data,
+                dataVariant: action.data,
             }
         case action_types.ON_CHANGE_VARIANT:
-            let copyState = { ...state.data_variant };
+            let copyState = { ...state.dataVariant };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_variant: {
+                dataVariant: {
                     ...copyState,
                 }
             }
         case action_types.CLICK_EDIT_VARIANT:
             return {
                 ...state,
-                is_edit: !state.is_edit
+                isEdit: !state.isEdit
             }
         case action_types.SET_dataFilter_VARIANT:
             return {
@@ -102,4 +102,4 @@ const variant_reducers = (state = initialState, action) => {
     }
 }
 
-export default variant_reducers;
+export default variantReducers;

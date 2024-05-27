@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const group_reducers = (state = initialState, action) => {
+const groupReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.GROUP_START:
             return {
@@ -86,4 +86,4 @@ const group_reducers = (state = initialState, action) => {
     }
 }
 
-export default group_reducers;
+export default groupReducers;

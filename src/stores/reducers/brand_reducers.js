@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const brand_reducers = (state = initialState, action) => {
+const brandReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.BRAND_START:
             return {
@@ -86,4 +86,4 @@ const brand_reducers = (state = initialState, action) => {
     }
 }
 
-export default brand_reducers;
+export default brandReducers;

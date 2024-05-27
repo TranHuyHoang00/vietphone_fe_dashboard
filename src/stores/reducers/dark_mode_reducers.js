@@ -4,7 +4,7 @@ const initialState = {
     darkMode: false,
 }
 
-const dark_mode_reducers = (state = initialState, action) => {
+const darkModeReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.SET_DARK_MODE:
             return {
@@ -16,4 +16,4 @@ const dark_mode_reducers = (state = initialState, action) => {
     }
 }
 
-export default dark_mode_reducers;
+export default darkModeReducers;

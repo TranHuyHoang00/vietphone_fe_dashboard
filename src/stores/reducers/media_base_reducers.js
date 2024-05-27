@@ -1,14 +1,14 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    data_media_bases: [],
-    data_media_base: {},
+    dataMediaBases: [],
+    dataMediaBase: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
 }
 
-const media_base_reducers = (state = initialState, action) => {
+const mediaBaseReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.MEDIA_BASE_START:
             return {
@@ -33,7 +33,7 @@ const media_base_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_media_bases: action.data.media_bases,
+                dataMediaBases: action.data.media_bases,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_MEDIA_BASE_SUCCESS:
@@ -41,7 +41,7 @@ const media_base_reducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                data_media_base: action.data
+                dataMediaBase: action.data
             }
         case action_types.CREATE_MEDIA_BASE_SUCCESS:
             return {
@@ -70,14 +70,14 @@ const media_base_reducers = (state = initialState, action) => {
         case action_types.SET_DATA_MEDIA_BASE:
             return {
                 ...state,
-                data_media_base: action.data,
+                dataMediaBase: action.data,
             }
         case action_types.ON_CHANGE_MEDIA_BASE:
-            let copyState = { ...state.data_media_base };
+            let copyState = { ...state.dataMediaBase };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                data_media_base: {
+                dataMediaBase: {
                     ...copyState,
                 }
             }
@@ -86,4 +86,4 @@ const media_base_reducers = (state = initialState, action) => {
     }
 }
 
-export default media_base_reducers;
+export default mediaBaseReducers;

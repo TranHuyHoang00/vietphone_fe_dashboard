@@ -21,8 +21,8 @@ const dataGroups = [
 const dataOrders = [
     "order.view_order", "order.change_order", "order.delete_order", "order.add_order",
 ];
-const data_products = [
-    "product.view_product", "product.change_product", "product.delete_product", "product.add_product",
+const dataProducts = [
+    "product.view_product", "product.change_product", "product.deleteProduct", "product.add_product",
 ];
 const dataFlashSaleItems = [
     "promotion.view_flashsaleitem", "promotion.change_flashsaleitem", "promotion.delete_flashsaleitem", "promotion.add_flashsaleitem",
@@ -73,7 +73,7 @@ export {
     dataPermiViews,
     dataCustomers, dataUsers, dataGroups,
     dataOrders,
-    data_products, dataFlashSaleItems,
+    dataProducts, dataFlashSaleItems,
     dataBanners, dataLocations,
     dataAttributeValues, dataAttributes, dataGroupAttributes, dataVariantAttributeGroups,
     dataTags, dataBrands, dataCategorys, dataFlashSales,

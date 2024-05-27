@@ -37,7 +37,7 @@ class variant_media extends Component {
             const files = event.target.files;
             for (let i = 0; i < files.length; i++) {
                 let image_new = await convertImageToBase64(event, i);
-                data_media_raws.push({ image: image_new, media_type: 'image', alt: this.props.data_variant.name });
+                data_media_raws.push({ image: image_new, media_type: 'image', alt: this.props.dataVariant.name });
             }
         }
         if (type === 'delete') {
@@ -61,7 +61,7 @@ class variant_media extends Component {
                                     <div key={index}>
                                         <Image height={150} width={150} src={item.image} className='object-cover' />
                                         <div >
-                                            <Button disabled={!this.props.is_edit} onClick={() => this.onChangeImage(null, 'delete', index, item.id)}
+                                            <Button disabled={!this.props.isEdit} onClick={() => this.onChangeImage(null, 'delete', index, item.id)}
                                                 className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
                                         </div>
                                     </div>
@@ -71,7 +71,7 @@ class variant_media extends Component {
                         </Carousel>
                         <input id="media_variant" type="file" accept="image/*" hidden
                             onChange={(event) => this.onChangeImage(event, 'create')} />
-                        <Button disabled={!this.props.is_edit}>
+                        <Button disabled={!this.props.isEdit}>
                             <label className='w-full h-full' htmlFor="media_variant">Thêm ảnh</label>
                         </Button>
                     </div>
@@ -83,8 +83,8 @@ class variant_media extends Component {
 }
 const mapStateToProps = state => {
     return {
-        is_edit: state.variant.is_edit,
-        data_variant: state.variant.data_variant,
+        isEdit: state.variant.isEdit,
+        dataVariant: state.variant.dataVariant,
     };
 };
 const mapDispatchToProps = dispatch => {

@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const post_reducers = (state = initialState, action) => {
+const postReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.POST_START:
             return {
@@ -86,4 +86,4 @@ const post_reducers = (state = initialState, action) => {
     }
 }
 
-export default post_reducers;
+export default postReducers;

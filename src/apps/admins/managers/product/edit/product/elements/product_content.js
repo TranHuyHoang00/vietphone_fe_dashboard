@@ -16,7 +16,7 @@ class product_content extends Component {
 
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Mô tả sản phẩm" key="1">
-                    <ReactQuill theme="snow" readOnly={!this.props.is_edit}
+                    <ReactQuill theme="snow" readOnly={!this.props.isEdit}
                         modules={product_content.modules}
                         formats={product_content.formats}
                         bounds={'.app'}
@@ -31,7 +31,7 @@ class product_content extends Component {
 }
 const mapStateToProps = state => {
     return {
-        is_edit: state.product.is_edit,
+        isEdit: state.product.isEdit,
         description: state.product.description,
     };
 };

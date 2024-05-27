@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const flash_sale_reducers = (state = initialState, action) => {
+const flashSaleReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.FLASH_SALE_START:
             return {
@@ -86,4 +86,4 @@ const flash_sale_reducers = (state = initialState, action) => {
     }
 }
 
-export default flash_sale_reducers;
+export default flashSaleReducers;

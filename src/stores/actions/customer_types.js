@@ -37,7 +37,7 @@ export const getDataCustomerRedux = (id) => {
         }
     }
 }
-export const create_customer_redux = (dataCustomer) => {
+export const createCustomerRedux = (dataCustomer) => {
     return async (dispatch, getState) => {
         try {
             dispatch(customer_start());
@@ -91,7 +91,7 @@ export const editListCustomerRedux = (list_id, dataCustomer) => {
         dispatch(customer_success());
     }
 }
-export const edit_customer_redux = (id, dataCustomer) => {
+export const editCustomerRedux = (id, dataCustomer) => {
     return async (dispatch, getState) => {
         try {
             dispatch(customer_start());

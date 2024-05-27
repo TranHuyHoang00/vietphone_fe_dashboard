@@ -7,10 +7,10 @@ import VariantOverview from './elements/variant_overview';
 import VariantIntroduce from './elements/variant_introduce';
 import VariantMedia from './elements/variant_media';
 import VariantAttributeValue from './elements/variant_attribute_value';
-import { create_media } from '@services/media_service';
+import { createMedia } from '@services/media_service';
 import { showNotification } from '@utils/handleFuncNotification';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
-import { data_products } from '@datas/dataPermissionsOrigin';
+import { dataProducts } from '@datas/dataPermissionsOrigin';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +18,7 @@ class index extends Component {
             dataVariants: [],
             data_variant_ids: [],
 
-            data_variant: {},
+            dataVariant: {},
             active_variant: '',
 
             dataMediaIds: [],
@@ -30,7 +30,7 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        let dataCheckPermis = await handleCheckPermis(data_products, this.props.dataUserPermis, this.props.isSuperUser);
+        let dataCheckPermis = await handleCheckPermis(dataProducts, this.props.dataUserPermis, this.props.isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
         });
@@ -38,10 +38,10 @@ class index extends Component {
     async componentDidUpdate(prevProps) {
         if (prevProps.data_variant_ids !== this.props.data_variant_ids) {
             let data_variant_ids = this.props.data_variant_ids;
-            let data_product = this.props.data_product;
+            let dataProduct = this.props.dataProduct;
             let dataAttributes;
-            if (data_product?.variant_attribute_group?.attribute) {
-                dataAttributes = data_product.variant_attribute_group.attribute;
+            if (dataProduct?.variant_attribute_group?.attribute) {
+                dataAttributes = dataProduct.variant_attribute_group.attribute;
             }
             if (data_variant_ids && data_variant_ids.length !== 0) {
                 this.setState({ data_variant_ids: data_variant_ids, dataAttributes: dataAttributes });
@@ -52,21 +52,21 @@ class index extends Component {
     getListVariant = async (data_variant_ids) => {
         let dataVariants = [];
         for (const id of data_variant_ids) {
-            await this.props.get_variant(id);
-            let data_variant = this.props.data_variant;
-            dataVariants.push(data_variant);
+            await this.props.getDataVariant(id);
+            let dataVariant = this.props.dataVariant;
+            dataVariants.push(dataVariant);
         }
         this.setState({ dataVariants: dataVariants, active_variant: (dataVariants.length) - 1 });
     }
     select_variant = async (index) => {
-        let is_edit = this.props.is_edit;
-        if (is_edit) {
+        let isEdit = this.props.isEdit;
+        if (isEdit) {
             message.error('Bạn vui lòng lưu lại thay đôi');
             return;
         } else {
             let dataVariants = this.state.dataVariants;
             this.setState({ active_variant: index })
-            await this.props.get_variant(dataVariants[index].id);
+            await this.props.getDataVariant(dataVariants[index].id);
         }
 
     }
@@ -80,7 +80,7 @@ class index extends Component {
             let data_atbvl_raws = this.state.data_media_raws;
             for (const item of data_atbvl_raws) {
                 if (!item.id) {
-                    let data = await create_media(item);
+                    let data = await createMedia(item);
                     if (data && data.data && data.data.success === 1) {
                         data_media_ids_new.push(data.data.data.id);
                     }
@@ -97,31 +97,31 @@ class index extends Component {
         this.setState({ data_atbvl_ids: data_atbvl_ids })
     }
     handle_edit_variant = async () => {
-        let data_variant = this.props.data_variant;
-        if (data_variant?.id) {
+        let dataVariant = this.props.dataVariant;
+        if (dataVariant?.id) {
             let data_atbvl_ids = this.state.data_atbvl_ids;
             let dataAttributes = this.state.dataAttributes;
-            if (this.props.is_edit) {
-                if (data_variant.attribute_values?.[0]?.id) { delete data_variant.attribute_values; }
-                if (data_atbvl_ids.length === 0) { delete data_variant.attribute_values; }
+            if (this.props.isEdit) {
+                if (dataVariant.attribute_values?.[0]?.id) { delete dataVariant.attribute_values; }
+                if (data_atbvl_ids.length === 0) { delete dataVariant.attribute_values; }
                 else {
                     if (data_atbvl_ids.length !== dataAttributes.length) {
                         message.error('Thông số chưa đủ, vui chọn đầy đủ');
                         return;
                     } else {
-                        data_variant.attribute_values = this.state.data_atbvl_ids;
+                        dataVariant.attribute_values = this.state.data_atbvl_ids;
                     }
                 }
                 let media = await this.handle_create_media();
                 if (media && media.length === 0) {
-                    if (data_variant?.media?.[0]?.id) { delete data_variant.media; }
+                    if (dataVariant?.media?.[0]?.id) { delete dataVariant.media; }
                 }
-                else { data_variant.media = media; }
+                else { dataVariant.media = media; }
 
-                await this.props.edit_variant(data_variant.id, data_variant);
+                await this.props.editVariant(dataVariant.id, dataVariant);
 
                 if (this.props.is_result_variant) {
-                    await this.props.get_variant(data_variant.id);
+                    await this.props.getDataVariant(dataVariant.id);
                     this.props.click_edit_variant();
                 }
             } else {
@@ -131,15 +131,15 @@ class index extends Component {
 
     }
     render() {
-        let data_product = this.props.data_product;
-        let data_variant = this.props.data_variant;
+        let dataProduct = this.props.dataProduct;
+        let dataVariant = this.props.dataVariant;
         let dataCheckPermis = this.state.dataCheckPermis;
         return (
             <Spin size='large' spinning={this.props.isLoading}>
                 <div className=" space-y-[10px]">
                     <div className='flex items-center justify-end'>
                         <Space>
-                            {this.props.is_edit &&
+                            {this.props.isEdit &&
                                 <Button onClick={() => this.props.click_edit_variant()}
                                     className='bg-[#e94138] text-white'>
                                     Hủy
@@ -147,7 +147,7 @@ class index extends Component {
                             }
                             <Button disabled={!dataCheckPermis['product.change_product']}
                                 onClick={() => this.handle_edit_variant()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
-                                {this.props.is_edit === false ? 'Chỉnh sửa' : 'Lưu'}
+                                {this.props.isEdit === false ? 'Chỉnh sửa' : 'Lưu'}
                             </Button>
                         </Space>
                     </div>
@@ -163,13 +163,13 @@ class index extends Component {
                                     <VariantIntroduce />
                                 </div>
                                 <div>
-                                    <VariantMedia data_media_raws={this.props.data_variant.media}
+                                    <VariantMedia data_media_raws={this.props.dataVariant.media}
                                         get_data_media={this.get_data_media} />
                                 </div>
                             </div>
                             <VariantAttributeValue
-                                dataAttributes={data_product?.variant_attribute_group?.attribute}
-                                data_atbvl_raws={data_variant?.attribute_values}
+                                dataAttributes={dataProduct?.variant_attribute_group?.attribute}
+                                data_atbvl_raws={dataVariant?.attribute_values}
                                 get_data_atbvl={this.get_data_atbvl} />
                         </div>
                     </div>
@@ -181,11 +181,11 @@ class index extends Component {
 const mapStateToProps = state => {
     return {
         isLoading: state.variant.isLoading,
-        data_product: state.product.data_product,
-        data_variant: state.variant.data_variant,
+        dataProduct: state.product.dataProduct,
+        dataVariant: state.variant.dataVariant,
         is_result_variant: state.variant.isResult,
 
-        is_edit: state.variant.is_edit,
+        isEdit: state.variant.isEdit,
 
         dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
@@ -194,9 +194,9 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        get_variant: (id) => dispatch(actions.get_variant_redux(id)),
+        getDataVariant: (id) => dispatch(actions.getDataVariantRedux(id)),
         click_edit_variant: (value) => dispatch(actions.click_edit_variant_redux(value)),
-        edit_variant: (id, data) => dispatch(actions.edit_variant_redux(id, data)),
+        editVariant: (id, data) => dispatch(actions.editVariantRedux(id, data)),
         set_data_variant: (data) => dispatch(actions.set_data_variant_redux(data)),
 
     };

@@ -46,7 +46,7 @@ class product_introduce extends Component {
         }
     }
     render() {
-        let data_product = this.props.data_product;
+        let dataProduct = this.props.dataProduct;
         let dataBrands = this.props.dataBrands;
         let dataTags = this.props.dataTags;
         let dataCategorys = this.props.dataCategorys;
@@ -61,7 +61,7 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Input disabled={!this.props.is_edit} value={data_product.name}
+                                <Input disabled={!this.props.isEdit} value={dataProduct.name}
                                     onChange={(event) => this.props.on_change_product(event.target.value, 'name')} />
                             </div>
                         </div>
@@ -73,12 +73,12 @@ class product_introduce extends Component {
                             <div className='w-2/3'>
                                 <FormSelectMultiple width={'100%'} placeholder={'Tên thương hiệu'}
                                     nameFormSelect={'brand'}
-                                    value={data_product.product_brand}
+                                    value={dataProduct.product_brand}
                                     options={dataBrands.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabledSelect={!this.props.is_edit}
+                                    disabledSelect={!this.props.isEdit}
                                     disabledButtonCreate={false}
                                     disabledSearch={false}
 
@@ -101,12 +101,12 @@ class product_introduce extends Component {
                             <div className='w-2/3'>
                                 <FormSelectMultiple width={'100%'} placeholder={'Tên tag'}
                                     nameFormSelect={'tag'} mode={'multiple'}
-                                    value={data_product.tags}
+                                    value={dataProduct.tags}
                                     options={dataTags.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabledSelect={!this.props.is_edit}
+                                    disabledSelect={!this.props.isEdit}
                                     disabledButtonCreate={false}
                                     disabledSearch={false}
                                     onSearch={this.onSearch}
@@ -127,12 +127,12 @@ class product_introduce extends Component {
                             <div className='w-2/3'>
                                 <FormSelectMultiple width={'100%'} placeholder={'Tên danh mục'}
                                     nameFormSelect={'category'} mode={'multiple'}
-                                    value={data_product.categories}
+                                    value={dataProduct.categories}
                                     options={dataCategorys.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabledSelect={!this.props.is_edit}
+                                    disabledSelect={!this.props.isEdit}
                                     disabledButtonCreate={false}
                                     disabledSearch={false}
                                     onSearch={this.onSearch}
@@ -153,12 +153,12 @@ class product_introduce extends Component {
                             <div className='w-2/3'>
                                 <FormSelectMultiple width={'100%'} placeholder={'Tên SP-TS'}
                                     nameFormSelect={'variant_attribute_group'}
-                                    value={(data_product?.variant_attribute_group?.id) ? (data_product.variant_attribute_group.id) : data_product.variant_attribute_group}
+                                    value={(dataProduct?.variant_attribute_group?.id) ? (dataProduct.variant_attribute_group.id) : dataProduct.variant_attribute_group}
                                     options={dataVariantAttributeGroups.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabledSelect={!this.props.is_edit}
+                                    disabledSelect={!this.props.isEdit}
                                     disabledButtonCreate={true}
                                     disabledSearch={true}
                                     onSearch={this.onSearch}
@@ -177,7 +177,7 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Select disabled={!this.props.is_edit} style={{ width: '100%' }} value={this.props.data_product.is_active}
+                                <Select disabled={!this.props.isEdit} style={{ width: '100%' }} value={this.props.dataProduct.is_active}
                                     onChange={(event) => this.props.on_change_product(event, 'is_active')}
                                     options={[
                                         { value: true, label: 'Mở' },
@@ -194,7 +194,7 @@ class product_introduce extends Component {
 }
 const mapStateToProps = state => {
     return {
-        data_product: state.product.data_product,
+        dataProduct: state.product.dataProduct,
         dataBrands: state.brand.dataBrands,
         dataBrand: state.brand.dataBrand,
         dataTags: state.tag.dataTags,
@@ -203,7 +203,7 @@ const mapStateToProps = state => {
         dataCategory: state.category.dataCategory,
         dataVariantAttributeGroups: state.variant_attribute_group.dataVariantAttributeGroups,
         dataVariantAttributeGroup: state.variant_attribute_group.dataVariantAttributeGroup,
-        is_edit: state.product.is_edit,
+        isEdit: state.product.isEdit,
     };
 };
 const mapDispatchToProps = dispatch => {

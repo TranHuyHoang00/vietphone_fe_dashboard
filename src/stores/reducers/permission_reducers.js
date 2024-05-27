@@ -7,7 +7,7 @@ const initialState = {
     isResult: false,
 }
 
-const permission_reducers = (state = initialState, action) => {
+const permissionReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.PERMISSION_START:
             return {
@@ -48,4 +48,4 @@ const permission_reducers = (state = initialState, action) => {
     }
 }
 
-export default permission_reducers;
+export default permissionReducers;

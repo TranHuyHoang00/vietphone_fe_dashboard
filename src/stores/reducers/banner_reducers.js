@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const banner_reducers = (state = initialState, action) => {
+const bannerReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.BANNER_START:
             return {
@@ -86,4 +86,4 @@ const banner_reducers = (state = initialState, action) => {
     }
 }
 
-export default banner_reducers;
+export default bannerReducers;

@@ -13,7 +13,7 @@ const initialState = {
     dataViewProducts: [],
 }
 
-const statistical_reducers = (state = initialState, action) => {
+const statisticalReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.STATISTICAL_START:
             return {
@@ -67,4 +67,4 @@ const statistical_reducers = (state = initialState, action) => {
     }
 }
 
-export default statistical_reducers;
+export default statisticalReducers;

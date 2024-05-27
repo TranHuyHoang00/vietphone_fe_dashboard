@@ -1,54 +1,54 @@
 import { combineReducers } from 'redux';
-import product_reducers from '@reducers/product_reducers';
-import variant_reducers from '@reducers/variant_reducers';
-import brand_reducers from '@reducers/brand_reducers';
-import tag_reducers from '@reducers/tag_reducers';
-import category_reducers from '@reducers/category_reducers';
-import variant_attribute_group_reducers from '@reducers/variant_attribute_group_reducers';
-import group_attribute_reducers from '@reducers/group_attribute_reducers';
-import attribute_reducers from '@reducers/attribute_reducers';
-import attribute_value_reducers from '@reducers/attribute_value_reducers';
-import order_reducers from '@reducers/order_reducers';
-import customer_reducers from '@reducers/customer_reducers';
-import flash_sale_reducers from '@reducers/flash_sale_reducers';
-import flash_sale_item_reducers from '@reducers/flash_sale_item_reducers';
-import task_reducers from '@reducers/task_reducers';
-import location_reducers from '@reducers/location_reducers';
-import banner_reducers from '@reducers/banner_reducers';
-import product_page_reducers from '@reducers/product_page_reducers';
-import media_base_reducers from '@reducers/media_base_reducers';
-import category_post_reducers from '@reducers/category_post_reducers';
-import post_reducers from '@reducers/post_reducers';
-import group_reducers from '@reducers/group_reducers';
-import permission_reducers from '@reducers/permission_reducers';
-import dark_mode_reducers from '@reducers/dark_mode_reducers';
-import user_reducers from '@reducers/user_reducers';
-import statistical_reducers from '@reducers/statistical_reducers';
+import productReducers from '@reducers/product_reducers';
+import variantReducers from '@reducers/variant_reducers';
+import brandReducers from '@reducers/brand_reducers';
+import tagReducers from '@reducers/tag_reducers';
+import categoryReducers from '@reducers/category_reducers';
+import variantAttributeGroupReducers from '@reducers/variant_attribute_group_reducers';
+import groupAttributeReducers from '@reducers/group_attribute_reducers';
+import attributeReducers from '@reducers/attribute_reducers';
+import attributeValueReducers from '@reducers/attribute_value_reducers';
+import orderReducers from '@reducers/order_reducers';
+import customerReducers from '@reducers/customer_reducers';
+import flashSaleReducers from '@reducers/flash_sale_reducers';
+import flashSaleItemReducers from '@reducers/flash_sale_item_reducers';
+import taskReducers from '@reducers/task_reducers';
+import locationReducers from '@reducers/location_reducers';
+import bannerReducers from '@reducers/banner_reducers';
+import productPageReducers from '@reducers/product_page_reducers';
+import mediaBaseReducers from '@reducers/media_base_reducers';
+import categoryPostReducers from '@reducers/category_post_reducers';
+import postReducers from '@reducers/post_reducers';
+import groupReducers from '@reducers/group_reducers';
+import permissionReducers from '@reducers/permission_reducers';
+import darkModeReducers from '@reducers/dark_mode_reducers';
+import userReducers from '@reducers/user_reducers';
+import statisticalReducers from '@reducers/statistical_reducers';
 
 export default combineReducers({
-    product: product_reducers,
-    customer: customer_reducers,
-    variant: variant_reducers,
-    brand: brand_reducers,
-    tag: tag_reducers,
-    order: order_reducers,
-    category: category_reducers,
-    group_attribute: group_attribute_reducers,
-    attribute: attribute_reducers,
-    attribute_value: attribute_value_reducers,
-    variant_attribute_group: variant_attribute_group_reducers,
-    flash_sale: flash_sale_reducers,
-    flash_sale_item: flash_sale_item_reducers,
-    task: task_reducers,
-    location: location_reducers,
-    banner: banner_reducers,
-    product_page: product_page_reducers,
-    media_base: media_base_reducers,
-    category_post: category_post_reducers,
-    post: post_reducers,
-    group: group_reducers,
-    permission: permission_reducers,
-    dark_mode: dark_mode_reducers,
-    user: user_reducers,
-    statistical: statistical_reducers,
+    product: productReducers,
+    customer: customerReducers,
+    variant: variantReducers,
+    brand: brandReducers,
+    tag: tagReducers,
+    order: orderReducers,
+    category: categoryReducers,
+    group_attribute: groupAttributeReducers,
+    attribute: attributeReducers,
+    attribute_value: attributeValueReducers,
+    variant_attribute_group: variantAttributeGroupReducers,
+    flash_sale: flashSaleReducers,
+    flash_sale_item: flashSaleItemReducers,
+    task: taskReducers,
+    location: locationReducers,
+    banner: bannerReducers,
+    product_page: productPageReducers,
+    media_base: mediaBaseReducers,
+    category_post: categoryPostReducers,
+    post: postReducers,
+    group: groupReducers,
+    permission: permissionReducers,
+    darkMode: darkModeReducers,
+    user: userReducers,
+    statistical: statisticalReducers,
 })

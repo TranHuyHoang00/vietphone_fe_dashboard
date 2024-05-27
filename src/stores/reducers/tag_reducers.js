@@ -8,7 +8,7 @@ const initialState = {
     isResult: false,
 }
 
-const tag_reducers = (state = initialState, action) => {
+const tagReducers = (state = initialState, action) => {
     switch (action.type) {
         case action_types.TAG_START:
             return {
@@ -86,4 +86,4 @@ const tag_reducers = (state = initialState, action) => {
     }
 }
 
-export default tag_reducers;
+export default tagReducers;

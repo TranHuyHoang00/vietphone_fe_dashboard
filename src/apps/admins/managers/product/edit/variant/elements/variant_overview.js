@@ -5,7 +5,7 @@ class variant_overview extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_variant: {},
+            dataVariant: {},
         }
     }
     async componentDidMount() {
