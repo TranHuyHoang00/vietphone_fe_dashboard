@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListFlashSaleItemRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(flash_sale_item_start());
+            dispatch(flashSaleItemStart());
             let data = await getListFlashSaleItem(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_flash_sale_item_success(data.data.data));
+                dispatch(getListFlashSaleItemSuccess(data.data.data));
             } else {
-                dispatch(flash_sale_item_faided());
+                dispatch(flashSaleItemFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(flash_sale_item_faided());
+            dispatch(flashSaleItemFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListFlashSaleItemRedux = (dataFilter) => {
 export const getDataFlashSaleItemRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(flash_sale_item_start());
+            dispatch(flashSaleItemStart());
             let data = await getDataFlashSaleItem(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_flash_sale_item_success(data.data.data));
+                dispatch(getFlashSaleItemSuccess(data.data.data));
             } else {
-                dispatch(flash_sale_item_faided());
+                dispatch(flashSaleItemFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(flash_sale_item_faided());
+            dispatch(flashSaleItemFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataFlashSaleItemRedux = (id) => {
 export const createFlashSaleItemRedux = (dataFlashSaleItem) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(flash_sale_item_start());
+            dispatch(flashSaleItemStart());
             let data = await createFlashSaleItem(dataFlashSaleItem);
             if (data && data.data && data.data.success === 1) {
-                dispatch(flash_sale_item_success());
+                dispatch(flashSaleItemSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(flash_sale_item_faided());
+                dispatch(flashSaleItemFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(flash_sale_item_faided());
+            dispatch(flashSaleItemFaided());
             showNotification(error);
         }
     }
 }
 export const createListFlashSaleItemRedux = (flash_sale_id, list_variant_id) => {
     return async (dispatch, getState) => {
-        dispatch(flash_sale_item_start());
+        dispatch(flashSaleItemStart());
         for (const id of list_variant_id) {
             try {
                 let data = await createFlashSaleItem({ flash_sale: flash_sale_id, product_variant: id });
@@ -65,16 +65,16 @@ export const createListFlashSaleItemRedux = (flash_sale_id, list_variant_id) => 
                     message.error(`Lỗi tạo ID=${id}`);
                 }
             } catch (error) {
-                dispatch(flash_sale_item_faided());
+                dispatch(flashSaleItemFaided());
             }
         }
-        dispatch(flash_sale_item_success());
+        dispatch(flashSaleItemSuccess());
         message.success('Thành công');
     }
 }
 export const deleteListFlashSaleItemRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(flash_sale_item_start());
+        dispatch(flashSaleItemStart());
         for (const id of list_id) {
             try {
                 let data = await deleteFlashSaleItem(id);
@@ -82,17 +82,17 @@ export const deleteListFlashSaleItemRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(flash_sale_item_faided());
+                dispatch(flashSaleItemFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(flash_sale_item_success());
+        dispatch(flashSaleItemSuccess());
     }
 }
 export const editListFlashSaleItemRedux = (list_id, dataFlashSaleItem) => {
     return async (dispatch, getState) => {
-        dispatch(flash_sale_item_start());
+        dispatch(flashSaleItemStart());
         for (const id of list_id) {
             try {
                 let data = await editFlashSaleItem(id, dataFlashSaleItem);
@@ -100,47 +100,47 @@ export const editListFlashSaleItemRedux = (list_id, dataFlashSaleItem) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(flash_sale_item_faided());
+                dispatch(flashSaleItemFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(flash_sale_item_success());
+        dispatch(flashSaleItemSuccess());
     }
 }
 export const editFlashSaleItemRedux = (id, dataFlashSaleItem) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(flash_sale_item_start());
+            dispatch(flashSaleItemStart());
             let data = await editFlashSaleItem(id, dataFlashSaleItem);
             if (data && data.data && data.data.success === 1) {
-                dispatch(flash_sale_item_success());
+                dispatch(flashSaleItemSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(flash_sale_item_faided());
+                dispatch(flashSaleItemFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(flash_sale_item_faided());
+            dispatch(flashSaleItemFaided());
             showNotification(error);
         }
     }
 }
-export const flash_sale_item_start = () => ({
+export const flashSaleItemStart = () => ({
     type: action_types.FLASH_SALE_ITEM_START,
 })
-export const flash_sale_item_success = () => ({
+export const flashSaleItemSuccess = () => ({
     type: action_types.FLASH_SALE_ITEM_SUCCESS,
 })
-export const flash_sale_item_faided = () => ({
+export const flashSaleItemFaided = () => ({
     type: action_types.FLASH_SALE_ITEM_FAIDED,
 })
 
-export const get_list_flash_sale_item_success = (data) => ({
+export const getListFlashSaleItemSuccess = (data) => ({
     type: action_types.GET_LIST_FLASH_SALE_ITEM_SUCCESS,
     data
 })
-export const get_flash_sale_item_success = (data) => ({
+export const getFlashSaleItemSuccess = (data) => ({
     type: action_types.GET_FLASH_SALE_ITEM_SUCCESS,
     data
 })

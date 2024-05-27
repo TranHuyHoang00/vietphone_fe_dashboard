@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListCategoryPostRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(category_post_start());
+            dispatch(categoryPostStart());
             let data = await getListCategoryPost(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_category_post_success(data.data.data));
+                dispatch(getListCategoryPostSuccess(data.data.data));
             } else {
-                dispatch(category_post_faided());
+                dispatch(categoryPostFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(category_post_faided());
+            dispatch(categoryPostFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListCategoryPostRedux = (dataFilter) => {
 export const getDataCategoryPostRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(category_post_start());
+            dispatch(categoryPostStart());
             let data = await getDataCategoryPost(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_category_post_success(data.data.data));
+                dispatch(getCategoryPostSuccess(data.data.data));
             } else {
-                dispatch(category_post_faided());
+                dispatch(categoryPostFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(category_post_faided());
+            dispatch(categoryPostFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataCategoryPostRedux = (id) => {
 export const createCategoryPostRedux = (dataCategoryPost) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(category_post_start());
+            dispatch(categoryPostStart());
             let data = await createCategoryPost(dataCategoryPost);
             if (data && data.data && data.data.success === 1) {
-                dispatch(category_post_success());
+                dispatch(categoryPostSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(category_post_faided());
+                dispatch(categoryPostFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(category_post_faided());
+            dispatch(categoryPostFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListCategoryPostRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(category_post_start());
+        dispatch(categoryPostStart());
         for (const id of list_id) {
             try {
                 let data = await deleteCategoryPost(id);
@@ -65,17 +65,17 @@ export const deleteListCategoryPostRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(category_post_faided());
+                dispatch(categoryPostFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(category_post_success());
+        dispatch(categoryPostSuccess());
     }
 }
 export const editListCategoryPostRedux = (list_id, dataCategoryPost) => {
     return async (dispatch, getState) => {
-        dispatch(category_post_start());
+        dispatch(categoryPostStart());
         for (const id of list_id) {
             try {
                 let data = await editCategoryPost(id, dataCategoryPost);
@@ -83,47 +83,47 @@ export const editListCategoryPostRedux = (list_id, dataCategoryPost) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(category_post_faided());
+                dispatch(categoryPostFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(category_post_success());
+        dispatch(categoryPostSuccess());
     }
 }
 export const editCategoryPostRedux = (id, dataCategoryPost) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(category_post_start());
+            dispatch(categoryPostStart());
             let data = await editCategoryPost(id, dataCategoryPost);
             if (data && data.data && data.data.success === 1) {
-                dispatch(category_post_success());
+                dispatch(categoryPostSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(category_post_faided());
+                dispatch(categoryPostFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(category_post_faided());
+            dispatch(categoryPostFaided());
             showNotification(error);
         }
     }
 }
-export const category_post_start = () => ({
+export const categoryPostStart = () => ({
     type: action_types.CATEGORY_POST_START,
 })
-export const category_post_success = () => ({
+export const categoryPostSuccess = () => ({
     type: action_types.CATEGORY_POST_SUCCESS,
 })
-export const category_post_faided = () => ({
+export const categoryPostFaided = () => ({
     type: action_types.CATEGORY_POST_FAIDED,
 })
 
-export const get_list_category_post_success = (data) => ({
+export const getListCategoryPostSuccess = (data) => ({
     type: action_types.GET_LIST_CATEGORY_POST_SUCCESS,
     data
 })
-export const get_category_post_success = (data) => ({
+export const getCategoryPostSuccess = (data) => ({
     type: action_types.GET_CATEGORY_POST_SUCCESS,
     data
 })

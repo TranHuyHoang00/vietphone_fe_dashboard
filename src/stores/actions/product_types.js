@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListProductRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(product_start());
+            dispatch(productStart());
             let data = await getListProduct(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_product_success(data.data.data));
+                dispatch(getListProductSuccess(data.data.data));
             } else {
-                dispatch(product_faided());
+                dispatch(productFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(product_faided());
+            dispatch(productFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListProductRedux = (dataFilter) => {
 export const getDataProductRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(product_start());
+            dispatch(productStart());
             let data = await getDataProduct(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_product_success(data.data.data));
+                dispatch(getProductSuccess(data.data.data));
             } else {
-                dispatch(product_faided());
+                dispatch(productFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(product_faided());
+            dispatch(productFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataProductRedux = (id) => {
 export const createProductRedux = (dataProduct) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(product_start());
+            dispatch(productStart());
             let data = await createProduct(dataProduct);
             if (data && data.data && data.data.success === 1) {
-                dispatch(product_success());
+                dispatch(productSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(product_faided());
+                dispatch(productFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(product_faided());
+            dispatch(productFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListProductRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(product_start());
+        dispatch(productStart());
         for (const id of list_id) {
             try {
                 let data = await deleteProduct(id);
@@ -65,17 +65,17 @@ export const deleteListProductRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(product_faided());
+                dispatch(productFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(product_success());
+        dispatch(productSuccess());
     }
 }
 export const editListProductRedux = (list_id, dataProduct) => {
     return async (dispatch, getState) => {
-        dispatch(product_start());
+        dispatch(productStart());
         for (const id of list_id) {
             try {
                 let data = await editProduct(id, dataProduct);
@@ -83,65 +83,65 @@ export const editListProductRedux = (list_id, dataProduct) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(product_faided());
+                dispatch(productFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(product_success());
+        dispatch(productSuccess());
     }
 }
 export const editProductRedux = (id, dataProduct) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(product_start());
+            dispatch(productStart());
             let data = await editProduct(id, dataProduct);
             if (data && data.data && data.data.success === 1) {
-                dispatch(product_success());
+                dispatch(productSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(product_faided());
+                dispatch(productFaided());
                 message.error('Lỗi khi sửa sản phẩm');
             }
         } catch (error) {
-            dispatch(product_faided());
+            dispatch(productFaided());
             showNotification(error);
         }
     }
 }
-export const product_start = () => ({
+export const productStart = () => ({
     type: action_types.PRODUCT_START,
 })
-export const product_success = () => ({
+export const productSuccess = () => ({
     type: action_types.PRODUCT_SUCCESS,
 })
-export const product_faided = () => ({
+export const productFaided = () => ({
     type: action_types.PRODUCT_FAIDED,
 })
 
-export const get_list_product_success = (data) => ({
+export const getListProductSuccess = (data) => ({
     type: action_types.GET_LIST_PRODUCT_SUCCESS,
     data
 })
-export const get_product_success = (data) => ({
+export const getProductSuccess = (data) => ({
     type: action_types.GET_PRODUCT_SUCCESS,
     data
 })
-export const on_change_product_redux = (value, id) => ({
+export const onChangeProductRedux = (value, id) => ({
     type: action_types.ON_CHANGE_PRODUCT,
     value,
     id,
 })
-export const set_data_product_redux = (data) => ({
+export const setDataProductRedux = (data) => ({
     type: action_types.SET_DATA_PRODUCT,
     data,
 })
 
-export const click_edit_product_redux = (data) => ({
+export const clickEditProductRedux = (data) => ({
     type: action_types.CLICK_EDIT_PRODUCT,
     data: data
 })
-export const set_dataFilter_product_redux = (data) => ({
+export const setDataFilterProductRedux = (data) => ({
     type: action_types.SET_dataFilter_PRODUCT,
     data,
 })

@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListOrderRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(order_start());
+            dispatch(orderStart());
             let data = await getListOrder(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_order_success(data.data.data));
+                dispatch(getListOrderSuccess(data.data.data));
             } else {
-                dispatch(order_faided());
+                dispatch(orderFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(order_faided());
+            dispatch(orderFaided());
             if (error.response && error.response.status === 400) {
                 message.error('Không có đơn hàng nào cho mục này');
                 return;
@@ -27,16 +27,16 @@ export const getListOrderRedux = (dataFilter) => {
 export const getDataOrderRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(order_start());
+            dispatch(orderStart());
             let data = await getDataOrder(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_order_success(data.data.data));
+                dispatch(getOrderSuccess(data.data.data));
             } else {
-                dispatch(order_faided());
+                dispatch(orderFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(order_faided());
+            dispatch(orderFaided());
             showNotification(error);
         }
     }
@@ -44,24 +44,24 @@ export const getDataOrderRedux = (id) => {
 export const createOrderRedux = (dataOrder) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(order_start());
+            dispatch(orderStart());
             let data = await createOrder(dataOrder);
             if (data && data.data && data.data.success === 1) {
-                dispatch(order_success());
+                dispatch(orderSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(order_faided());
+                dispatch(orderFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(order_faided());
+            dispatch(orderFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListOrderRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(order_start());
+        dispatch(orderStart());
         for (const id of list_id) {
             try {
                 let data = await deleteOrder(id);
@@ -69,17 +69,17 @@ export const deleteListOrderRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(order_faided());
+                dispatch(orderFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(order_success());
+        dispatch(orderSuccess());
     }
 }
 export const editListOrderRedux = (list_id, dataOrder) => {
     return async (dispatch, getState) => {
-        dispatch(order_start());
+        dispatch(orderStart());
         for (const id of list_id) {
             try {
                 let data = await editOrder(id, dataOrder);
@@ -87,51 +87,51 @@ export const editListOrderRedux = (list_id, dataOrder) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(order_faided());
+                dispatch(orderFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(order_success());
+        dispatch(orderSuccess());
     }
 }
 export const editOrderRedux = (id, dataOrder) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(order_start());
+            dispatch(orderStart());
             let data = await editOrder(id, dataOrder);
             if (data && data.data && data.data.success === 1) {
-                dispatch(order_success());
+                dispatch(orderSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(order_faided());
+                dispatch(orderFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(order_faided());
+            dispatch(orderFaided());
             showNotification(error);
         }
     }
 }
-export const order_start = () => ({
+export const orderStart = () => ({
     type: action_types.ORDER_START,
 })
-export const order_success = () => ({
+export const orderSuccess = () => ({
     type: action_types.ORDER_SUCCESS,
 })
-export const order_faided = () => ({
+export const orderFaided = () => ({
     type: action_types.ORDER_FAIDED,
 })
 
-export const get_list_order_success = (data) => ({
+export const getListOrderSuccess = (data) => ({
     type: action_types.GET_LIST_ORDER_SUCCESS,
     data
 })
-export const get_order_success = (data) => ({
+export const getOrderSuccess = (data) => ({
     type: action_types.GET_ORDER_SUCCESS,
     data
 })
-export const on_change_order_redux = (value, id) => ({
+export const onChangeOrderRedux = (value, id) => ({
     type: action_types.ON_CHANGE_ORDER,
     value,
     id,

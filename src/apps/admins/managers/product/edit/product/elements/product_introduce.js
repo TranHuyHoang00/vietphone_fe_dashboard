@@ -224,7 +224,7 @@ const mapDispatchToProps = dispatch => {
         onChangeVariantAttributeGroup: (event, id,) => dispatch(actions.onChangeVariantAttributeGroupRedux(event, id,)),
         createVariantAttributeGroup: (data) => dispatch(actions.createVariantAttributeGroupRedux(data)),
 
-        on_change_product: (event, id,) => dispatch(actions.on_change_product_redux(event, id,)),
+        on_change_product: (event, id,) => dispatch(actions.onChangeProductRedux(event, id,)),
 
     };
 };

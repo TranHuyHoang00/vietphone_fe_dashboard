@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListCustomerRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(customer_start());
+            dispatch(customerStart());
             let data = await getListCustomer(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_customer_success(data.data.data));
+                dispatch(getListCustomerSuccess(data.data.data));
             } else {
-                dispatch(customer_faided());
+                dispatch(customerFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(customer_faided());
+            dispatch(customerFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListCustomerRedux = (dataFilter) => {
 export const getDataCustomerRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(customer_start());
+            dispatch(customerStart());
             let data = await getDataCustomer(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_customer_success(data.data.data));
+                dispatch(getCustomerSuccess(data.data.data));
             } else {
-                dispatch(customer_faided());
+                dispatch(customerFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(customer_faided());
+            dispatch(customerFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataCustomerRedux = (id) => {
 export const createCustomerRedux = (dataCustomer) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(customer_start());
+            dispatch(customerStart());
             let data = await createCustomer(dataCustomer);
             if (data && data.data && data.data.success === 1) {
-                dispatch(customer_success());
+                dispatch(customerSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(customer_faided());
+                dispatch(customerFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(customer_faided());
+            dispatch(customerFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListCustomerRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(customer_start());
+        dispatch(customerStart());
         for (const id of list_id) {
             try {
                 let data = await deleteCustomer(id);
@@ -65,17 +65,17 @@ export const deleteListCustomerRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(customer_faided());
+                dispatch(customerFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(customer_success());
+        dispatch(customerSuccess());
     }
 }
 export const editListCustomerRedux = (list_id, dataCustomer) => {
     return async (dispatch, getState) => {
-        dispatch(customer_start());
+        dispatch(customerStart());
         for (const id of list_id) {
             try {
                 let data = await editCustomer(id, dataCustomer);
@@ -83,47 +83,47 @@ export const editListCustomerRedux = (list_id, dataCustomer) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(customer_faided());
+                dispatch(customerFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(customer_success());
+        dispatch(customerSuccess());
     }
 }
 export const editCustomerRedux = (id, dataCustomer) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(customer_start());
+            dispatch(customerStart());
             let data = await editCustomer(id, dataCustomer);
             if (data && data.data && data.data.success === 1) {
-                dispatch(customer_success());
+                dispatch(customerSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(customer_faided());
+                dispatch(customerFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(customer_faided());
+            dispatch(customerFaided());
             showNotification(error);
         }
     }
 }
-export const customer_start = () => ({
+export const customerStart = () => ({
     type: action_types.CUSTOMER_START,
 })
-export const customer_success = () => ({
+export const customerSuccess = () => ({
     type: action_types.CUSTOMER_SUCCESS,
 })
-export const customer_faided = () => ({
+export const customerFaided = () => ({
     type: action_types.CUSTOMER_FAIDED,
 })
 
-export const get_list_customer_success = (data) => ({
+export const getListCustomerSuccess = (data) => ({
     type: action_types.GET_LIST_CUSTOMER_SUCCESS,
     data
 })
-export const get_customer_success = (data) => ({
+export const getCustomerSuccess = (data) => ({
     type: action_types.GET_CUSTOMER_SUCCESS,
     data
 })

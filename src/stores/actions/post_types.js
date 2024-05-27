@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListPostRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(post_start());
+            dispatch(postStart());
             let data = await getListPost(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_post_success(data.data.data));
+                dispatch(getListPostSuccess(data.data.data));
             } else {
-                dispatch(post_faided());
+                dispatch(postFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(post_faided());
+            dispatch(postFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListPostRedux = (dataFilter) => {
 export const getDataPostRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(post_start());
+            dispatch(postStart());
             let data = await getDataPost(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_post_success(data.data.data));
+                dispatch(getPostSuccess(data.data.data));
             } else {
-                dispatch(post_faided());
+                dispatch(postFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(post_faided());
+            dispatch(postFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataPostRedux = (id) => {
 export const createPostRedux = (dataPost) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(post_start());
+            dispatch(postStart());
             let data = await createPost(dataPost);
             if (data && data.data && data.data.success === 1) {
-                dispatch(post_success());
+                dispatch(postSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(post_faided());
+                dispatch(postFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(post_faided());
+            dispatch(postFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListPostRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(post_start());
+        dispatch(postStart());
         for (const id of list_id) {
             try {
                 let data = await deletePost(id);
@@ -65,17 +65,17 @@ export const deleteListPostRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(post_faided());
+                dispatch(postFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(post_success());
+        dispatch(postSuccess());
     }
 }
 export const editListPostRedux = (list_id, dataPost) => {
     return async (dispatch, getState) => {
-        dispatch(post_start());
+        dispatch(postStart());
         for (const id of list_id) {
             try {
                 let data = await editPost(id, dataPost);
@@ -83,47 +83,47 @@ export const editListPostRedux = (list_id, dataPost) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(post_faided());
+                dispatch(postFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(post_success());
+        dispatch(postSuccess());
     }
 }
 export const editPostRedux = (id, dataPost) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(post_start());
+            dispatch(postStart());
             let data = await editPost(id, dataPost);
             if (data && data.data && data.data.success === 1) {
-                dispatch(post_success());
+                dispatch(postSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(post_faided());
+                dispatch(postFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(post_faided());
+            dispatch(postFaided());
             showNotification(error);
         }
     }
 }
-export const post_start = () => ({
+export const postStart = () => ({
     type: action_types.POST_START,
 })
-export const post_success = () => ({
+export const postSuccess = () => ({
     type: action_types.POST_SUCCESS,
 })
-export const post_faided = () => ({
+export const postFaided = () => ({
     type: action_types.POST_FAIDED,
 })
 
-export const get_list_post_success = (data) => ({
+export const getListPostSuccess = (data) => ({
     type: action_types.GET_LIST_POST_SUCCESS,
     data
 })
-export const get_post_success = (data) => ({
+export const getPostSuccess = (data) => ({
     type: action_types.GET_POST_SUCCESS,
     data
 })

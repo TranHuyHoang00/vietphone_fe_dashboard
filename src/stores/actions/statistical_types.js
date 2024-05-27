@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getViewWebRedux = (value) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(statistical_start());
+            dispatch(statisticalStart());
             let data = await getViewWeb(value);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_view_web_success(data.data.data));
+                dispatch(getViewWebSuccess(data.data.data));
             } else {
-                dispatch(statistical_faided());
+                dispatch(statisticalFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(statistical_faided());
+            dispatch(statisticalFaided());
             showNotification(error);
         }
     }
@@ -23,39 +23,39 @@ export const getViewWebRedux = (value) => {
 export const getViewProductRedux = (value) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(statistical_start());
+            dispatch(statisticalStart());
             let data = await getViewProduct(value);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_view_product_success(data.data.data));
+                dispatch(getViewProductSuccess(data.data.data));
             } else {
-                dispatch(statistical_faided());
+                dispatch(statisticalFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(statistical_faided());
+            dispatch(statisticalFaided());
             showNotification(error);
         }
     }
 }
-export const statistical_start = () => ({
+export const statisticalStart = () => ({
     type: action_types.STATISTICAL_START,
 })
-export const statistical_success = () => ({
+export const statisticalSuccess = () => ({
     type: action_types.STATISTICAL_SUCCESS,
 })
-export const statistical_faided = () => ({
+export const statisticalFaided = () => ({
     type: action_types.STATISTICAL_FAIDED,
 })
 
-export const get_view_web_success = (data) => ({
+export const getViewWebSuccess = (data) => ({
     type: action_types.GET_VIEW_WEB_SUCCESS,
     data
 })
-export const get_view_product_success = (data) => ({
+export const getViewProductSuccess = (data) => ({
     type: action_types.GET_VIEW_PRODUCT_SUCCESS,
     data
 })
-export const on_change_statistical_redux = (value, id) => ({
+export const onChangeStatisticalRedux = (value, id) => ({
     type: action_types.ON_CHANGE_STATISTICAL,
     value,
     id,

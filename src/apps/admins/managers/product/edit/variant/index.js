@@ -195,9 +195,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getDataVariant: (id) => dispatch(actions.getDataVariantRedux(id)),
-        click_edit_variant: (value) => dispatch(actions.click_edit_variant_redux(value)),
+        click_edit_variant: (value) => dispatch(actions.clickEditVariantRedux(value)),
         editVariant: (id, data) => dispatch(actions.editVariantRedux(id, data)),
-        set_data_variant: (data) => dispatch(actions.set_data_variant_redux(data)),
+        set_data_variant: (data) => dispatch(actions.setDataVariantRedux(data)),
 
     };
 };

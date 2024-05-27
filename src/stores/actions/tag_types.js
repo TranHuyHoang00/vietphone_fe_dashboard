@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListTagRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(tag_start());
+            dispatch(tagStart());
             let data = await getListTag(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_tag_success(data.data.data));
+                dispatch(getListTagSuccess(data.data.data));
             } else {
-                dispatch(tag_faided());
+                dispatch(tagFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(tag_faided());
+            dispatch(tagFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListTagRedux = (dataFilter) => {
 export const getDataTagRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(tag_start());
+            dispatch(tagStart());
             let data = await getDataTag(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_tag_success(data.data.data));
+                dispatch(getTagSuccess(data.data.data));
             } else {
-                dispatch(tag_faided());
+                dispatch(tagFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(tag_faided());
+            dispatch(tagFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataTagRedux = (id) => {
 export const createTagRedux = (dataTag) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(tag_start());
+            dispatch(tagStart());
             let data = await createTag(dataTag);
             if (data && data.data && data.data.success === 1) {
-                dispatch(tag_success());
+                dispatch(tagSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(tag_faided());
+                dispatch(tagFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(tag_faided());
+            dispatch(tagFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListTagRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(tag_start());
+        dispatch(tagStart());
         for (const id of list_id) {
             try {
                 let data = await deleteTag(id);
@@ -65,17 +65,17 @@ export const deleteListTagRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(tag_faided());
+                dispatch(tagFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(tag_success());
+        dispatch(tagSuccess());
     }
 }
 export const editListTagRedux = (list_id, dataTag) => {
     return async (dispatch, getState) => {
-        dispatch(tag_start());
+        dispatch(tagStart());
         for (const id of list_id) {
             try {
                 let data = await editTag(id, dataTag);
@@ -83,47 +83,47 @@ export const editListTagRedux = (list_id, dataTag) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(tag_faided());
+                dispatch(tagFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(tag_success());
+        dispatch(tagSuccess());
     }
 }
 export const editTagRedux = (id, dataTag) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(tag_start());
+            dispatch(tagStart());
             let data = await editTag(id, dataTag);
             if (data && data.data && data.data.success === 1) {
-                dispatch(tag_success());
+                dispatch(tagSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(tag_faided());
+                dispatch(tagFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(tag_faided());
+            dispatch(tagFaided());
             showNotification(error);
         }
     }
 }
-export const tag_start = () => ({
+export const tagStart = () => ({
     type: action_types.TAG_START,
 })
-export const tag_success = () => ({
+export const tagSuccess = () => ({
     type: action_types.TAG_SUCCESS,
 })
-export const tag_faided = () => ({
+export const tagFaided = () => ({
     type: action_types.TAG_FAIDED,
 })
 
-export const get_list_tag_success = (data) => ({
+export const getListTagSuccess = (data) => ({
     type: action_types.GET_LIST_TAG_SUCCESS,
     data
 })
-export const get_tag_success = (data) => ({
+export const getTagSuccess = (data) => ({
     type: action_types.GET_TAG_SUCCESS,
     data
 })

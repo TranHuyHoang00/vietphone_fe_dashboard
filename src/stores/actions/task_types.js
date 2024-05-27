@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListTaskRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(task_start());
+            dispatch(taskStart());
             let data = await getListTask(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_task_success(data.data.data));
+                dispatch(getListTaskSuccess(data.data.data));
             } else {
-                dispatch(task_faided());
+                dispatch(taskFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(task_faided());
+            dispatch(taskFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListTaskRedux = (dataFilter) => {
 export const getDataTaskRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(task_start());
+            dispatch(taskStart());
             let data = await getDataTask(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_task_success(data.data.data));
+                dispatch(getTaskSuccess(data.data.data));
             } else {
-                dispatch(task_faided());
+                dispatch(taskFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(task_faided());
+            dispatch(taskFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataTaskRedux = (id) => {
 export const createTaskRedux = (dataTask) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(task_start());
+            dispatch(taskStart());
             let data = await createTask(dataTask);
             if (data && data.data && data.data.success === 1) {
-                dispatch(task_success());
+                dispatch(taskSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(task_faided());
+                dispatch(taskFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(task_faided());
+            dispatch(taskFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListTaskRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(task_start());
+        dispatch(taskStart());
         for (const id of list_id) {
             try {
                 let data = await deleteTask(id);
@@ -65,17 +65,17 @@ export const deleteListTaskRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(task_faided());
+                dispatch(taskFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(task_success());
+        dispatch(taskSuccess());
     }
 }
 export const editListRaskRedux = (list_id, dataTask) => {
     return async (dispatch, getState) => {
-        dispatch(task_start());
+        dispatch(taskStart());
         for (const id of list_id) {
             try {
                 let data = await editTask(id, dataTask);
@@ -83,47 +83,47 @@ export const editListRaskRedux = (list_id, dataTask) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(task_faided());
+                dispatch(taskFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(task_success());
+        dispatch(taskSuccess());
     }
 }
 export const editTaskRedux = (id, dataTask) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(task_start());
+            dispatch(taskStart());
             let data = await editTask(id, dataTask);
             if (data && data.data && data.data.success === 1) {
-                dispatch(task_success());
+                dispatch(taskSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(task_faided());
+                dispatch(taskFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(task_faided());
+            dispatch(taskFaided());
             showNotification(error);
         }
     }
 }
-export const task_start = () => ({
+export const taskStart = () => ({
     type: action_types.TASK_START,
 })
-export const task_success = () => ({
+export const taskSuccess = () => ({
     type: action_types.TASK_SUCCESS,
 })
-export const task_faided = () => ({
+export const taskFaided = () => ({
     type: action_types.TASK_FAIDED,
 })
 
-export const get_list_task_success = (data) => ({
+export const getListTaskSuccess = (data) => ({
     type: action_types.GET_LIST_TASK_SUCCESS,
     data
 })
-export const get_task_success = (data) => ({
+export const getTaskSuccess = (data) => ({
     type: action_types.GET_TASK_SUCCESS,
     data
 })

@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListGroupAttributeRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(group_attribute_start());
+            dispatch(groupAttributeStart());
             let data = await getListGroupAttribute(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_group_attribute_success(data.data.data));
+                dispatch(getListGroupAttributeSuccess(data.data.data));
             } else {
-                dispatch(group_attribute_faided());
+                dispatch(groupAttributeFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(group_attribute_faided());
+            dispatch(groupAttributeFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListGroupAttributeRedux = (dataFilter) => {
 export const getDataGroupAttributeRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(group_attribute_start());
+            dispatch(groupAttributeStart());
             let data = await getDataGroupAttribute(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_group_attribute_success(data.data.data));
+                dispatch(getGroupAttributeSuccess(data.data.data));
             } else {
-                dispatch(group_attribute_faided());
+                dispatch(groupAttributeFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(group_attribute_faided());
+            dispatch(groupAttributeFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataGroupAttributeRedux = (id) => {
 export const createGroupAttributeRedux = (dataGroupAttribute) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(group_attribute_start());
+            dispatch(groupAttributeStart());
             let data = await createGroupAttribute(dataGroupAttribute);
             if (data && data.data && data.data.success === 1) {
-                dispatch(group_attribute_success());
+                dispatch(groupAttributeSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(group_attribute_faided());
+                dispatch(groupAttributeFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(group_attribute_faided());
+            dispatch(groupAttributeFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListGroupAttributeRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(group_attribute_start());
+        dispatch(groupAttributeStart());
         for (const id of list_id) {
             try {
                 let data = await deleteGroupAttribute(id);
@@ -65,17 +65,17 @@ export const deleteListGroupAttributeRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(group_attribute_faided());
+                dispatch(groupAttributeFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(group_attribute_success());
+        dispatch(groupAttributeSuccess());
     }
 }
 export const editListGroupAttributeRedux = (list_id, dataGroupAttribute) => {
     return async (dispatch, getState) => {
-        dispatch(group_attribute_start());
+        dispatch(groupAttributeStart());
         for (const id of list_id) {
             try {
                 let data = await editGroupAttribute(id, dataGroupAttribute);
@@ -83,47 +83,47 @@ export const editListGroupAttributeRedux = (list_id, dataGroupAttribute) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(group_attribute_faided());
+                dispatch(groupAttributeFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(group_attribute_success());
+        dispatch(groupAttributeSuccess());
     }
 }
 export const editGroupAttributeRedux = (id, dataGroupAttribute) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(group_attribute_start());
+            dispatch(groupAttributeStart());
             let data = await editGroupAttribute(id, dataGroupAttribute);
             if (data && data.data && data.data.success === 1) {
-                dispatch(group_attribute_success());
+                dispatch(groupAttributeSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(group_attribute_faided());
+                dispatch(groupAttributeFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(group_attribute_faided());
+            dispatch(groupAttributeFaided());
             showNotification(error);
         }
     }
 }
-export const group_attribute_start = () => ({
+export const groupAttributeStart = () => ({
     type: action_types.GROUP_ATTRIBUTE_START,
 })
-export const group_attribute_success = () => ({
+export const groupAttributeSuccess = () => ({
     type: action_types.GROUP_ATTRIBUTE_SUCCESS,
 })
-export const group_attribute_faided = () => ({
+export const groupAttributeFaided = () => ({
     type: action_types.GROUP_ATTRIBUTE_FAIDED,
 })
 
-export const get_list_group_attribute_success = (data) => ({
+export const getListGroupAttributeSuccess = (data) => ({
     type: action_types.GET_LIST_GROUP_ATTRIBUTE_SUCCESS,
     data
 })
-export const get_group_attribute_success = (data) => ({
+export const getGroupAttributeSuccess = (data) => ({
     type: action_types.GET_GROUP_ATTRIBUTE_SUCCESS,
     data
 })

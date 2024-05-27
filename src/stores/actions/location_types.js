@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListLocationRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(location_start());
+            dispatch(locationStart());
             let data = await getListLocation(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_location_success(data.data.data));
+                dispatch(getListLocationSuccess(data.data.data));
             } else {
-                dispatch(location_faided());
+                dispatch(locationFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(location_faided());
+            dispatch(locationFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListLocationRedux = (dataFilter) => {
 export const getDataLocationRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(location_start());
+            dispatch(locationStart());
             let data = await getDataLocation(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_location_success(data.data.data));
+                dispatch(getLocationSuccess(data.data.data));
             } else {
-                dispatch(location_faided());
+                dispatch(locationFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(location_faided());
+            dispatch(locationFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataLocationRedux = (id) => {
 export const createLocationRedux = (dataLocation) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(location_start());
+            dispatch(locationStart());
             let data = await createLocation(dataLocation);
             if (data && data.data && data.data.success === 1) {
-                dispatch(location_success());
+                dispatch(locationSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(location_faided());
+                dispatch(locationFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(location_faided());
+            dispatch(locationFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListLocationRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(location_start());
+        dispatch(locationStart());
         for (const id of list_id) {
             try {
                 let data = await deleteLocation(id);
@@ -65,17 +65,17 @@ export const deleteListLocationRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(location_faided());
+                dispatch(locationFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(location_success());
+        dispatch(locationSuccess());
     }
 }
 export const editListLocationRedux = (list_id, dataLocation) => {
     return async (dispatch, getState) => {
-        dispatch(location_start());
+        dispatch(locationStart());
         for (const id of list_id) {
             try {
                 let data = await editLocation(id, dataLocation);
@@ -83,47 +83,47 @@ export const editListLocationRedux = (list_id, dataLocation) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(location_faided());
+                dispatch(locationFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(location_success());
+        dispatch(locationSuccess());
     }
 }
 export const editLocationRedux = (id, dataLocation) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(location_start());
+            dispatch(locationStart());
             let data = await editLocation(id, dataLocation);
             if (data && data.data && data.data.success === 1) {
-                dispatch(location_success());
+                dispatch(locationSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(location_faided());
+                dispatch(locationFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(location_faided());
+            dispatch(locationFaided());
             showNotification(error);
         }
     }
 }
-export const location_start = () => ({
+export const locationStart = () => ({
     type: action_types.LOCATION_START,
 })
-export const location_success = () => ({
+export const locationSuccess = () => ({
     type: action_types.LOCATION_SUCCESS,
 })
-export const location_faided = () => ({
+export const locationFaided = () => ({
     type: action_types.LOCATION_FAIDED,
 })
 
-export const get_list_location_success = (data) => ({
+export const getListLocationSuccess = (data) => ({
     type: action_types.GET_LIST_LOCATION_SUCCESS,
     data
 })
-export const get_location_success = (data) => ({
+export const getLocationSuccess = (data) => ({
     type: action_types.GET_LOCATION_SUCCESS,
     data
 })

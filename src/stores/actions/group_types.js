@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListGroupRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(group_start());
+            dispatch(groupStart());
             let data = await getListGroup(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_group_success(data.data.data));
+                dispatch(getListGroupSuccess(data.data.data));
             } else {
-                dispatch(group_faided());
+                dispatch(groupFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(group_faided());
+            dispatch(groupFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListGroupRedux = (dataFilter) => {
 export const getDataGroupRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(group_start());
+            dispatch(groupStart());
             let data = await getDataGroup(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_group_success(data.data.data));
+                dispatch(getGroupSuccess(data.data.data));
             } else {
-                dispatch(group_faided());
+                dispatch(groupFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(group_faided());
+            dispatch(groupFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataGroupRedux = (id) => {
 export const createGroupRedux = (dataGroup) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(group_start());
+            dispatch(groupStart());
             let data = await createGroup(dataGroup);
             if (data && data.data && data.data.success === 1) {
-                dispatch(group_success());
+                dispatch(groupSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(group_faided());
+                dispatch(groupFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(group_faided());
+            dispatch(groupFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListGroupRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(group_start());
+        dispatch(groupStart());
         for (const id of list_id) {
             try {
                 let data = await deleteGroup(id);
@@ -65,17 +65,17 @@ export const deleteListGroupRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(group_faided());
+                dispatch(groupFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(group_success());
+        dispatch(groupSuccess());
     }
 }
 export const editListGroupRedux = (list_id, dataGroup) => {
     return async (dispatch, getState) => {
-        dispatch(group_start());
+        dispatch(groupStart());
         for (const id of list_id) {
             try {
                 let data = await editGroup(id, dataGroup);
@@ -83,47 +83,47 @@ export const editListGroupRedux = (list_id, dataGroup) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(group_faided());
+                dispatch(groupFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(group_success());
+        dispatch(groupSuccess());
     }
 }
 export const editGroupRedux = (id, dataGroup) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(group_start());
+            dispatch(groupStart());
             let data = await editGroup(id, dataGroup);
             if (data && data.data && data.data.success === 1) {
-                dispatch(group_success());
+                dispatch(groupSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(group_faided());
+                dispatch(groupFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(group_faided());
+            dispatch(groupFaided());
             showNotification(error);
         }
     }
 }
-export const group_start = () => ({
+export const groupStart = () => ({
     type: action_types.GROUP_START,
 })
-export const group_success = () => ({
+export const groupSuccess = () => ({
     type: action_types.GROUP_SUCCESS,
 })
-export const group_faided = () => ({
+export const groupFaided = () => ({
     type: action_types.GROUP_FAIDED,
 })
 
-export const get_list_group_success = (data) => ({
+export const getListGroupSuccess = (data) => ({
     type: action_types.GET_LIST_GROUP_SUCCESS,
     data
 })
-export const get_group_success = (data) => ({
+export const getGroupSuccess = (data) => ({
     type: action_types.GET_GROUP_SUCCESS,
     data
 })

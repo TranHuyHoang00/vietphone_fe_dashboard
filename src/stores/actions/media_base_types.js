@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListMediaBaseRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(media_base_start());
+            dispatch(mediaBaseStart());
             let data = await getListMediaBase(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_media_base_success(data.data.data));
+                dispatch(getListMediaBaseSuccess(data.data.data));
             } else {
-                dispatch(media_base_faided());
+                dispatch(mediaBaseFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(media_base_faided());
+            dispatch(mediaBaseFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListMediaBaseRedux = (dataFilter) => {
 export const getDataMediaBaseRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(media_base_start());
+            dispatch(mediaBaseStart());
             let data = await getDataMediaBase(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_media_base_success(data.data.data));
+                dispatch(getMediaBaseSuccess(data.data.data));
             } else {
-                dispatch(media_base_faided());
+                dispatch(mediaBaseFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(media_base_faided());
+            dispatch(mediaBaseFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataMediaBaseRedux = (id) => {
 export const createMediaBaseRedux = (dataMediaBase) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(media_base_start());
+            dispatch(mediaBaseStart());
             let data = await createMediaBase(dataMediaBase);
             if (data && data.data && data.data.success === 1) {
-                dispatch(media_base_success());
+                dispatch(mediaBaseSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(media_base_faided());
+                dispatch(mediaBaseFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(media_base_faided());
+            dispatch(mediaBaseFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListMediaBaseRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(media_base_start());
+        dispatch(mediaBaseStart());
         for (const id of list_id) {
             try {
                 let data = await deleteMediaBase(id);
@@ -65,17 +65,17 @@ export const deleteListMediaBaseRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(media_base_faided());
+                dispatch(mediaBaseFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(media_base_success());
+        dispatch(mediaBaseSuccess());
     }
 }
 export const editListMediaBaseRedux = (list_id, dataMediaBase) => {
     return async (dispatch, getState) => {
-        dispatch(media_base_start());
+        dispatch(mediaBaseStart());
         for (const id of list_id) {
             try {
                 let data = await editMediaBase(id, dataMediaBase);
@@ -83,47 +83,47 @@ export const editListMediaBaseRedux = (list_id, dataMediaBase) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(media_base_faided());
+                dispatch(mediaBaseFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(media_base_success());
+        dispatch(mediaBaseSuccess());
     }
 }
 export const editMediaBaseRedux = (id, dataMediaBase) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(media_base_start());
+            dispatch(mediaBaseStart());
             let data = await editMediaBase(id, dataMediaBase);
             if (data && data.data && data.data.success === 1) {
-                dispatch(media_base_success());
+                dispatch(mediaBaseSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(media_base_faided());
+                dispatch(mediaBaseFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(media_base_faided());
+            dispatch(mediaBaseFaided());
             showNotification(error);
         }
     }
 }
-export const media_base_start = () => ({
+export const mediaBaseStart = () => ({
     type: action_types.MEIDA_BASE_START,
 })
-export const media_base_success = () => ({
+export const mediaBaseSuccess = () => ({
     type: action_types.MEIDA_BASE_SUCCESS,
 })
-export const media_base_faided = () => ({
+export const mediaBaseFaided = () => ({
     type: action_types.MEIDA_BASE_FAIDED,
 })
 
-export const get_list_media_base_success = (data) => ({
+export const getListMediaBaseSuccess = (data) => ({
     type: action_types.GET_LIST_MEIDA_BASE_SUCCESS,
     data
 })
-export const get_media_base_success = (data) => ({
+export const getMediaBaseSuccess = (data) => ({
     type: action_types.GET_MEIDA_BASE_SUCCESS,
     data
 })

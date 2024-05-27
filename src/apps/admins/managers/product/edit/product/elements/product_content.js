@@ -37,7 +37,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        on_change_product_description: (value) => dispatch(actions.on_change_product_description_redux(value)),
+        on_change_product_description: (value) => dispatch(actions.onChangeProductDescriptionRedux(value)),
 
     };
 };

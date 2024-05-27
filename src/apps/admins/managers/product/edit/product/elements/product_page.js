@@ -93,8 +93,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getDataProductPage: (id) => dispatch(actions.getDataProductPageRedux(id)),
-        on_change_product_page: (id, value) => dispatch(actions.on_change_product_page_redux(id, value)),
-        set_data_product_page: (id) => dispatch(actions.set_data_product_page_redux(id)),
+        on_change_product_page: (id, value) => dispatch(actions.onChangeProductPageRedux(id, value)),
+        set_data_product_page: (id) => dispatch(actions.setDataProductPageRedux(id)),
         delete_list_product_page: (id) => dispatch(actions.deleteListProductPageRedux(id)),
 
     };

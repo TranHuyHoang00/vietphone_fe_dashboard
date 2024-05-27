@@ -83,7 +83,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        on_change_variant: (event, id) => dispatch(actions.on_change_variant_redux(event, id)),
+        on_change_variant: (event, id) => dispatch(actions.onChangeVariantRedux(event, id)),
 
     };
 };

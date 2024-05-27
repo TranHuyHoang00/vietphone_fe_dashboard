@@ -6,16 +6,16 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListBrandRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(brand_start());
+            dispatch(brandStart());
             let data = await getListBrand(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_list_brand_success(data.data.data));
+                dispatch(getListBrandSuccess(data.data.data));
             } else {
-                dispatch(brand_faided());
+                dispatch(brandFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(brand_faided());
+            dispatch(brandFaided());
             showNotification(error);
         }
     }
@@ -23,16 +23,16 @@ export const getListBrandRedux = (dataFilter) => {
 export const getDataBrandRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(brand_start());
+            dispatch(brandStart());
             let data = await getDataBrand(id);
             if (data && data.data && data.data.success === 1) {
-                dispatch(get_brand_success(data.data.data));
+                dispatch(getBrandSuccess(data.data.data));
             } else {
-                dispatch(brand_faided());
+                dispatch(brandFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(brand_faided());
+            dispatch(brandFaided());
             showNotification(error);
         }
     }
@@ -40,24 +40,24 @@ export const getDataBrandRedux = (id) => {
 export const createBrandRedux = (dataBrand) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(brand_start());
+            dispatch(brandStart());
             let data = await createBrand(dataBrand);
             if (data && data.data && data.data.success === 1) {
-                dispatch(brand_success());
+                dispatch(brandSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(brand_faided());
+                dispatch(brandFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(brand_faided());
+            dispatch(brandFaided());
             showNotification(error);
         }
     }
 }
 export const deleteListBrandRedux = (list_id) => {
     return async (dispatch, getState) => {
-        dispatch(brand_start());
+        dispatch(brandStart());
         for (const id of list_id) {
             try {
                 let data = await deleteBrand(id);
@@ -65,17 +65,17 @@ export const deleteListBrandRedux = (list_id) => {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(brand_faided());
+                dispatch(brandFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(brand_success());
+        dispatch(brandSuccess());
     }
 }
 export const editListBrandRedux = (list_id, dataBrand) => {
     return async (dispatch, getState) => {
-        dispatch(brand_start());
+        dispatch(brandStart());
         for (const id of list_id) {
             try {
                 let data = await editBrand(id, dataBrand);
@@ -83,47 +83,47 @@ export const editListBrandRedux = (list_id, dataBrand) => {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
             } catch (error) {
-                dispatch(brand_faided());
+                dispatch(brandFaided());
                 showNotification(error);
             }
         }
         message.success('Thành công');
-        dispatch(brand_success());
+        dispatch(brandSuccess());
     }
 }
 export const editBrandRedux = (id, dataBrand) => {
     return async (dispatch, getState) => {
         try {
-            dispatch(brand_start());
+            dispatch(brandStart());
             let data = await editBrand(id, dataBrand);
             if (data && data.data && data.data.success === 1) {
-                dispatch(brand_success());
+                dispatch(brandSuccess());
                 message.success('Thành công');
             } else {
-                dispatch(brand_faided());
+                dispatch(brandFaided());
                 message.error('Lỗi');
             }
         } catch (error) {
-            dispatch(brand_faided());
+            dispatch(brandFaided());
             showNotification(error);
         }
     }
 }
-export const brand_start = () => ({
+export const brandStart = () => ({
     type: action_types.BRAND_START,
 })
-export const brand_success = () => ({
+export const brandSuccess = () => ({
     type: action_types.BRAND_SUCCESS,
 })
-export const brand_faided = () => ({
+export const brandFaided = () => ({
     type: action_types.BRAND_FAIDED,
 })
 
-export const get_list_brand_success = (data) => ({
+export const getListBrandSuccess = (data) => ({
     type: action_types.GET_LIST_BRAND_SUCCESS,
     data
 })
-export const get_brand_success = (data) => ({
+export const getBrandSuccess = (data) => ({
     type: action_types.GET_BRAND_SUCCESS,
     data
 })

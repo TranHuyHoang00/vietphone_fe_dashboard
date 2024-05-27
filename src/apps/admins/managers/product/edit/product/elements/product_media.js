@@ -145,7 +145,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        on_change_product: (event, id, type) => dispatch(actions.on_change_product_redux(event, id, type)),
+        on_change_product: (event, id, type) => dispatch(actions.onChangeProductRedux(event, id, type)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(product_media));
