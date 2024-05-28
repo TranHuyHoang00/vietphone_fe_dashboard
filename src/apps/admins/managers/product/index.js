@@ -11,6 +11,8 @@ import FormSelectPage from '@components/selects/formSelectPage';
 import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataProducts } from '@datas/dataPermissionsOrigin';
+import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -26,74 +28,48 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        this.props.getListProduct(this.props.dataFilter);
-        this.props.getListBrand({ page: 1, limit: 100, search: '' });
-        this.props.getListTag({ page: 1, limit: 100, search: '' });
-        this.props.getListCategory({ page: 1, limit: 100, search: '' });
-        this.setState({ dataFilter: this.props.dataFilter });
-
-        let dataCheckPermis = await handleCheckPermis(dataProducts, this.props.dataUserPermis, this.props.isSuperUser);
+        const { getListProduct, dataFilter, dataUserPermis, isSuperUser } = this.props;
+        getListProduct(dataFilter);
+        const dataCheckPermis = await handleCheckPermis(dataProducts, dataUserPermis, isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
+            dataFilter: dataFilter,
         });
     }
-    openModal = async (name, value, id) => {
-        if (name === 'create') {
-            this.setState({ modalCreate: value });
-            this.props.set_data_product({});
-        }
-        if (name === 'detail') {
-            if (id === undefined) {
-                this.setState({ modalDetail: value, dataProduct: {} });
-            } else {
-                this.setState({ modalDetail: value });
-                await this.props.getDataProduct(id);
-            }
-        }
-        if (name === 'edit') {
-            if (id === undefined) {
-                this.setState({ modalEdit: value, dataProduct: {} });
-            } else {
-                this.setState({ modalEdit: value });
-                await this.props.getDataProduct(id);
-            }
+    openModal = async (modalName, modalValue, itemId,) => {
+        const { setDataProduct, getDataProduct } = this.props;
+        const actions = {
+            setData: setDataProduct,
+            getData: getDataProduct,
+        };
+        const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
+        this.setState(newStateModal);
+    }
+    openDrawer = async (drawerName, drawerValue) => {
+        switch (drawerName) {
+            case 'filter':
+                this.setState({ drawerFilter: drawerValue });
+                break;
+            default:
+                return;
         }
     }
-    openDrawer = async (name, value) => {
-        if (name === 'filter') {
-            this.setState({ drawerFilter: value });
-        }
-    }
-    funcDropButtonHeaderOfTable = async () => {
-        let listItemSelected = this.state.listItemSelected;
-        if (this.state.dropButtonType === 1) { await this.props.delete_list_product(listItemSelected); }
-        if (this.state.dropButtonType === 2) { await this.props.edit_list_product(listItemSelected, { is_active: false }); }
-        if (this.state.dropButtonType === 3) { await this.props.edit_list_product(listItemSelected, { is_active: true }); }
-        await this.props.getListProduct(this.state.dataFilter);
-        if (this.state.dropButtonType === 1) { this.setState({ listItemSelected: [] }); }
-    }
-    onChangePage = async (value, type) => {
-        let dataFilter = this.state.dataFilter;
-        if (type === 'limit') { dataFilter.limit = value; }
-        if (type === 'page') { dataFilter.page = value; }
-        if (type === 'search') { dataFilter.search = value; dataFilter.page = 1; }
-        if (type === 'product_brand') { dataFilter.product_brand = value; dataFilter.page = 1; }
-        if (type === 'tag') { dataFilter.tag = value; dataFilter.page = 1; }
-        if (type === 'is_active') { dataFilter.is_active = value; dataFilter.page = 1; }
-        if (type === 'category') { dataFilter.category = value; dataFilter.page = 1; }
-        if (type === 'has_page') { dataFilter.has_page = value; dataFilter.page = 1; }
+    onChangePage = async (pageValue, pageType,) => {
+        const { dataFilter } = this.state;
+        const { getListProduct, setDataFilterProduct } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+        this.setState({ dataFilter: newDataFilter });
+        await getListProduct(newDataFilter);
+        setDataFilterProduct(newDataFilter);
 
-        this.setState({ dataFilter: dataFilter })
-        await this.props.getListProduct(dataFilter);
-        this.props.set_dataFilter_product(dataFilter);
     }
-    onchange_search = (value) => {
-        this.setState({
+    onChangeSearch = (value) => {
+        this.setState(prevState => ({
             dataFilter: {
-                ...this.state.dataFilter,
+                ...prevState.dataFilter,
                 search: value,
             }
-        })
+        }));
     }
     render() {
         const columns = [
@@ -126,7 +102,7 @@ class index extends Component {
                         {(product_brand && product_brand.name) ?
                             <Tag key={index} color='green'>{product_brand && product_brand.name}</Tag>
                             :
-                            <span   ></span>
+                            <span></span>
                         }
                     </>
             },
@@ -175,15 +151,16 @@ class index extends Component {
                     </div>
             },
         ];
-        let dataCheckPermis = this.state.dataCheckPermis;
-        const listItemSelected = this.state.listItemSelected;
+
+        const { dataCheckPermis, listItemSelected, drawerFilter } = this.state;
+        const { isLoading, dataProducts, dataMeta, dataFilter } = this.props;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Space>
@@ -195,32 +172,30 @@ class index extends Component {
                                     </Space>
                                 </Button>
                             </Space>
-                            <div><Input.Search value={this.state.dataFilter.search}
-                                onChange={(event) => this.onchange_search(event.target.value)}
+                            <div><Input.Search value={dataFilter.search}
+                                onChange={(event) => this.onChangeSearch(event.target.value)}
                                 onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên sản phẩm !" /></div>
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={this.props.dataFilter.limit} onChangePage={this.onChangePage} />
+                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
                             </div>
                             <Divider>SẢN PHẨM</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={this.props.dataProducts} pagination={false}
+                                    columns={columns} dataSource={dataProducts} pagination={false}
                                     size="middle" bordered scroll={{}} />
-                                <Pagination responsive current={this.props.dataFilter.page}
-                                    showQuickJumper total={this.props.dataMeta.total * this.props.dataMeta.limit} pageSize={this.props.dataFilter.limit}
+                                <Pagination responsive current={dataFilter.page}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
                     </div >
                 </Spin>
-                {this.state.drawerFilter && dataCheckPermis['product.view_product'] &&
-                    <DrawerFilter drawerFilter={this.state.drawerFilter}
-                        openDrawer={this.openDrawer} dataFilter={this.state.dataFilter}
-                        onChangePage={this.onChangePage}
-                        dataBrands={this.props.dataBrands} dataTags={this.props.dataTags}
-                        dataCategorys={this.props.dataCategorys} />
+                {drawerFilter && dataCheckPermis['product.view_product'] &&
+                    <DrawerFilter drawerFilter={drawerFilter}
+                        openDrawer={this.openDrawer} dataFilter={dataFilter}
+                        onChangePage={this.onChangePage} />
                 }
             </>
         );
@@ -235,10 +210,6 @@ const mapStateToProps = state => {
         isLoading: state.product.isLoading,
         isResult: state.product.isResult,
         dataFilter: state.product.dataFilter,
-        dataTags: state.tag.dataTags,
-        dataBrands: state.brand.dataBrands,
-        dataCategorys: state.category.dataCategorys,
-
         dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
@@ -247,14 +218,10 @@ const mapDispatchToProps = dispatch => {
     return {
         getListProduct: (dataFilter) => dispatch(actions.getListProductRedux(dataFilter)),
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
-        edit_list_product: (id, data) => dispatch(actions.editListProductRedux(id, data)),
-        delete_list_product: (id) => dispatch(actions.deleteListProductRedux(id)),
-        set_data_product: (id) => dispatch(actions.setDataProductRedux(id)),
-        set_dataFilter_product: (data) => dispatch(actions.setDataFilterProductRedux(data)),
-        getListBrand: (dataFilter) => dispatch(actions.getListBrandRedux(dataFilter)),
-        getListTag: (dataFilter) => dispatch(actions.getListTagRedux(dataFilter)),
-        getListCategory: (dataFilter) => dispatch(actions.getListCategoryRedux(dataFilter)),
-
+        editListProduct: (id, data) => dispatch(actions.editListProductRedux(id, data)),
+        deleteListProduct: (id) => dispatch(actions.deleteListProductRedux(id)),
+        setDataProduct: (id) => dispatch(actions.setDataProductRedux(id)),
+        setDataFilterProduct: (data) => dispatch(actions.setDataFilterProductRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

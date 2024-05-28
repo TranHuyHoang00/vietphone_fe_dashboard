@@ -97,7 +97,7 @@ class index extends Component {
                                                 return (
                                                     <div key={item?.product?.id} className='flex items-center space-x-[5px] border-b py-[10px] '>
                                                         <div>
-                                                            <Image src='https://cdn2.cellphones.com.vn/insecure/rs:fill:358:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/x/i/xiaomi-redmi-note-13-pro-4g_13__1.png'
+                                                            <Image src={`${process.env.REACT_APP_API}${item?.product?.media?.[0]?.image}`}
                                                                 className="object-cover" width={80} height={80} />
                                                         </div>
                                                         <div className='flex-1'>

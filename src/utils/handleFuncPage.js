@@ -31,6 +31,22 @@ const handleOnChangePage = async (pageValue, pageType, dataFilter) => {
             newDataFilter.source = pageValue;
             newDataFilter.page = 1;
             break;
+        case 'product_brand':
+            newDataFilter.product_brand = pageValue;
+            newDataFilter.page = 1;
+            break;
+        case 'tag':
+            newDataFilter.tag = pageValue;
+            newDataFilter.page = 1;
+            break;
+        case 'category':
+            newDataFilter.category = pageValue;
+            newDataFilter.page = 1;
+            break;
+        case 'has_page':
+            newDataFilter.has_page = pageValue;
+            newDataFilter.page = 1;
+            break;
         default:
             break;
     }
