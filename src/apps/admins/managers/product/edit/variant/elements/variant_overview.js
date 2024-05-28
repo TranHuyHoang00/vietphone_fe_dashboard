@@ -5,22 +5,21 @@ class variant_overview extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataVariant: {},
         }
     }
     async componentDidMount() {
     }
     render() {
-        let dataVariants = this.props.dataVariants;
+        const { dataVariants, activeVariant, selectVariant } = this.props;
         return (
             <Collapse defaultActiveKey={['1']}>
                 <Collapse.Panel header="Phiên bản" key="1">
-                    <Radio.Group className='w-full' value={this.props.active_variant}
-                        onChange={(value) => this.props.select_variant(value.target.value)}>
+                    <Radio.Group className='w-full' value={activeVariant}
+                        onChange={(value) => selectVariant(value.target.value)}>
                         <div className='space-y-[10px] '>
                             {dataVariants && dataVariants.map((item, index) => {
                                 return (
-                                    <div key={index} onClick={() => this.props.select_variant(index)}
+                                    <div key={index} onClick={() => selectVariant(index)}
                                         className='flex gap-[10px] cursor-pointer '>
                                         <Radio value={index}></Radio>
                                         <div>

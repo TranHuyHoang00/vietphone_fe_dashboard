@@ -16,101 +16,105 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data_atbvl_ids: [],
-            dataMediaIds: [],
-            data_media_raws: [],
             dataCheckPermis: {},
         }
     }
     async componentDidMount() {
-        let dataCheckPermis = await handleCheckPermis(dataProducts, this.props.dataUserPermis, this.props.isSuperUser);
+        const { dataUserPermis, isSuperUser } = this.props;
+        const dataCheckPermis = await handleCheckPermis(dataProducts, dataUserPermis, isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
         });
     }
-    handle_product_page = async () => {
-        let dataProduct = this.props.dataProduct;
-        let dataProductPage = this.props.dataProductPage;
-        dataProductPage.product = dataProduct.id;
-        if (!dataProductPage.id) {
-            await this.props.createProductPage(dataProductPage);
-            this.props.getDataProductPage(dataProduct.id);
+    handleProductPage = async () => {
+        const { dataProduct, dataProductPage, createProductPage, getDataProductPage, editProductPage } = this.props;
+        let newDataProductPage = {
+            ...dataProductPage,
+            product: dataProduct.id
+        };
+        if (!newDataProductPage.id) {
+            await createProductPage(newDataProductPage);
         } else {
-            await this.props.editProductPage(dataProductPage.id, dataProductPage);
-            this.props.getDataProductPage(dataProduct.id);
+            await editProductPage(newDataProductPage.id, newDataProductPage);
         }
+        await getDataProductPage(dataProduct.id);
+
     }
-    handle_create_media = async () => {
+    handleCreateMedia = async (media) => {
         try {
-            let data_media_ids_new = [];
-            let dataMediaIds = this.state.dataMediaIds;
-            let data_atbvl_raws = this.state.data_media_raws;
-            for (const item of data_atbvl_raws) {
-                if (!item.id) {
-                    let data = await createMedia(item);
-                    if (data && data.data && data.data.success === 1) {
-                        data_media_ids_new.push(data.data.data.id);
-                    }
-                }
+            const data = await createMedia(media);
+            if (data && data.data && data.data.success === 1) {
+                return data.data.data.id;
             }
-            return [...data_media_ids_new, ...dataMediaIds];
         } catch (error) {
             showNotification(error);
         }
     }
-    handle_edit_product = async () => {
-        let dataProduct = this.props.dataProduct;
+    handleDataMedias = async (dataMedias) => {
+        let newDataMediaIds = [];
+        for (const media of dataMedias) {
+            if (media.id) { newDataMediaIds.push(media.id) }
+            else {
+                const newMediaId = await this.handleCreateMedia(media);
+                if (newMediaId) { newDataMediaIds.push(newMediaId); }
+            }
+        }
+        return newDataMediaIds;
+    }
+    handleDataAtbvls = async (dataAtbvls) => {
+        let newDataAtbvlIds = [];
+        for (const Atbvl of dataAtbvls) {
+            if (Atbvl.id) {
+                newDataAtbvlIds.push(Atbvl.id);
+            }
+        }
+        return newDataAtbvlIds;
+    }
+    handleEditProduct = async () => {
+        const { dataProduct, isEdit, clickEditProduct, description, editProduct, getDataProduct } = this.props;
+        const dataMedias = dataProduct.media;
+        const dataAtbvls = dataProduct.attribute_values;
         if (dataProduct?.id) {
-            if (this.props.isEdit) {
-                dataProduct.description = this.props.description;
-                if (dataProduct?.variant_attribute_group?.name) { delete dataProduct.variant_attribute_group; }
-                if (dataProduct?.attribute_values?.[0]?.id) { delete dataProduct.attribute_values; }
-                let data_atbvl_ids = this.state.data_atbvl_ids;
-                if (data_atbvl_ids && data_atbvl_ids.length === 0) {
-                    delete dataProduct.attribute_values;
-                } else {
-                    dataProduct.attribute_values = data_atbvl_ids;
+            if (isEdit) {
+                let newDataProduct = {
+                    ...dataProduct,
+                    description: description,
                 }
-                let media = await this.handle_create_media();
-                if (media && media.length === 0) {
-                    if (dataProduct?.media?.[0]?.id) {
-                        delete dataProduct.media;
-                    }
-                } else {
-                    dataProduct.media = media;
+                if (newDataProduct?.variant_attribute_group?.id) { delete newDataProduct.variant_attribute_group; }
+                if (dataMedias.length !== 0) {
+                    const newDataMedias = await this.handleDataMedias(dataMedias);
+                    newDataProduct.media = newDataMedias;
                 }
-                await this.props.editProduct(dataProduct.id, dataProduct);
-                await this.handle_product_page();
-                await this.props.getDataProduct(dataProduct.id);
-                this.props.click_edit_product();
+                if (dataAtbvls.length !== 0) {
+                    const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
+                    newDataProduct.attribute_values = newDataAtbvls;
+                }
+                await editProduct(newDataProduct.id, newDataProduct);
+                await this.handleProductPage();
+                await getDataProduct(newDataProduct.id);
+                clickEditProduct();
             } else {
-                this.props.click_edit_product()
+                clickEditProduct()
             }
         }
     }
-    get_data_atbvl = (data_atbvl_ids) => {
-        this.setState({ data_atbvl_ids: data_atbvl_ids })
-    }
-    get_data_media = (dataMediaIds, data_media_raws) => {
-        this.setState({ dataMediaIds: dataMediaIds, data_media_raws: data_media_raws })
-    }
     render() {
-        let dataProduct = this.props.dataProduct;
-        let dataCheckPermis = this.state.dataCheckPermis;
+        const { dataProduct, isEdit, clickEditProduct } = this.props;
+        const { dataCheckPermis } = this.state;
         return (
             <div className='space-y-[10px]'>
                 <div className='flex items-center justify-between'>
-                    <Typography.Title level={4}>{this.props.dataProduct.name}</Typography.Title>
+                    <Typography.Title level={4}>{dataProduct.name}</Typography.Title>
                     <Space>
-                        {this.props.isEdit &&
-                            <Button onClick={() => this.props.click_edit_product()}
+                        {isEdit &&
+                            <Button onClick={() => clickEditProduct()}
                                 className='bg-[#e94138] text-white'>
                                 Hủy
                             </Button>
                         }
                         <Button disabled={!dataCheckPermis['product.change_product']}
-                            onClick={() => this.handle_edit_product()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
-                            {this.props.isEdit === false ? 'Chỉnh sửa' : 'Lưu'}
+                            onClick={() => this.handleEditProduct()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
+                            {isEdit ? 'Lưu' : 'Chỉnh sửa'}
                         </Button>
                     </Space>
                 </div>
@@ -119,12 +123,10 @@ class index extends Component {
                         <div className='space-y-[10px]'>
                             <ProductIntroduce />
                             <ProductPage />
-                            <ProductMedia data_media_raws={dataProduct.media}
-                                get_data_media={this.get_data_media} />
+                            <ProductMedia />
                         </div>
                         <div>
-                            <ProductAttributeValue get_data_atbvl={this.get_data_atbvl}
-                                data_atbvl_raws={dataProduct.attribute_values} />
+                            <ProductAttributeValue />
                         </div>
                     </div>
                     <ProductContent />
@@ -149,7 +151,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
-        click_edit_product: (value) => dispatch(actions.clickEditProductRedux(value)),
+        clickEditProduct: (value) => dispatch(actions.clickEditProductRedux(value)),
         editProduct: (id, data) => dispatch(actions.editProductRedux(id, data)),
 
         createProductPage: (data) => dispatch(actions.createProductPageRedux(data)),

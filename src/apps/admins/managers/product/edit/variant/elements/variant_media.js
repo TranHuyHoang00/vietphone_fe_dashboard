@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import * as actions from '@actions';
 import { Button, Carousel, Image, Collapse } from 'antd';
 import { convertImageToBase64 } from '@utils/handleFuncImage';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -9,69 +10,49 @@ class variant_media extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataMediaIds: [],
-            data_media_raws: [],
         }
     }
-    async componentDidUpdate(prevProps) {
-        if (prevProps.data_media_raws !== this.props.data_media_raws) {
-            this.setState({ data_media_raws: this.props.data_media_raws });
-            this.handle_data_id(this.props.data_media_raws);
+    onChangeImage = async (valueImage, nameFuntion, indexImage) => {
+        const { dataVariant, setDataVariant } = this.props;
+        let newDataVariant = { ...dataVariant };
+        switch (nameFuntion) {
+            case 'create':
+                const files = valueImage.target.files;
+                for (let i = 0; i < files.length; i++) {
+                    const newImage = await convertImageToBase64(valueImage, i);
+                    (newDataVariant.media).push({ image: newImage, media_type: 'image', name: dataVariant.name, alt: dataVariant.name });
+                }
+                break;
+            case 'delete':
+                (newDataVariant.media).splice(indexImage, 1);
+                break;
+            default:
+                break;
         }
-    }
-    handle_data_id = (data) => {
-        let dataMediaIds = [];
-        if (data && data.length !== 0) {
-            for (const item of data) {
-                dataMediaIds.push(item.id);
-            }
-        }
-        this.setState({
-            dataMediaIds: dataMediaIds,
-        })
-    }
-    onChangeImage = async (event, type, index, id) => {
-        let data_media_raws = this.state.data_media_raws;
-        let dataMediaIds = this.state.dataMediaIds;
-        if (type === 'create') {
-            const files = event.target.files;
-            for (let i = 0; i < files.length; i++) {
-                let image_new = await convertImageToBase64(event, i);
-                data_media_raws.push({ image: image_new, media_type: 'image', alt: this.props.dataVariant.name });
-            }
-        }
-        if (type === 'delete') {
-            if (id !== undefined) {
-                dataMediaIds = dataMediaIds.filter(item => item !== id);
-            }
-            data_media_raws.splice(index, 1);
-        }
-        this.setState({ data_media_raws: data_media_raws, dataMediaIds: dataMediaIds });
-        this.props.get_data_media(dataMediaIds, data_media_raws);
+        setDataVariant(newDataVariant);
     }
     render() {
-        let data_media_raws = this.state.data_media_raws;
+        const { dataVariant, isEdit } = this.props;
         return (
             <Collapse defaultActiveKey={['1']}>
                 <Collapse.Panel header="Hinh ảnh" key="1">
                     <div className='space-y-[10px] text-center'>
                         <Carousel>
-                            {data_media_raws && data_media_raws.map((item, index) => {
+                            {dataVariant && dataVariant.media && dataVariant.media.map((item, index) => {
                                 return (
                                     <div key={index}>
                                         <Image height={150} width={150} src={item.image} className='object-cover' />
                                         <div >
-                                            <Button disabled={!this.props.isEdit} onClick={() => this.onChangeImage(null, 'delete', index, item.id)}
+                                            <Button disabled={!isEdit} onClick={() => this.onChangeImage(null, 'delete', index)}
                                                 className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
                                         </div>
                                     </div>
-
                                 )
                             })}
                         </Carousel>
                         <input id="media_variant" type="file" accept="image/*" hidden
                             onChange={(event) => this.onChangeImage(event, 'create')} />
-                        <Button disabled={!this.props.isEdit}>
+                        <Button disabled={!isEdit}>
                             <label className='w-full h-full' htmlFor="media_variant">Thêm ảnh</label>
                         </Button>
                     </div>
@@ -89,6 +70,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
+        setDataVariant: (data) => dispatch(actions.setDataVariantRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(variant_media));

@@ -172,7 +172,8 @@ class index extends Component {
                                     </Space>
                                 </Button>
                             </Space>
-                            <div><Input.Search value={dataFilter.search}
+                            <div><Input.Search
+                                value={this.state.dataFilter.search}
                                 onChange={(event) => this.onChangeSearch(event.target.value)}
                                 onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên sản phẩm !" /></div>
                         </div>

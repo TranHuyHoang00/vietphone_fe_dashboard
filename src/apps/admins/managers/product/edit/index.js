@@ -12,25 +12,26 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        if (this.props.match && this.props.match.params) {
-            let product_id = this.props.match.params.id;
-            if (product_id) { this.props.getDataProduct(product_id); }
+        const { getDataProduct, match } = this.props;
+        if (match && match.params) {
+            const productId = match.params.id;
+            if (productId) { getDataProduct(productId); }
         }
     }
-    handle_go_back = () => {
+    goBackHome = () => {
         this.props.history.push(`/admin/manager/product`)
     }
     render() {
-        let dataProduct = this.props.dataProduct;
+        const { isLoading, dataProduct } = this.props;
         return (
-            <Spin size='large' spinning={this.props.isLoading}>
+            <Spin size='large' spinning={isLoading}>
                 <div className='p-[10px] space-y-[10px]'>
-                    <Button onClick={() => this.handle_go_back()}
+                    <Button onClick={() => this.goBackHome()}
                         className='bg-[#e94138] text-white'>
                         Quay lại
                     </Button>
                     <Product />
-                    <Variant data_variant_ids={dataProduct.variants} />
+                    <Variant dataVariantIds={dataProduct.variants} />
                 </div>
             </Spin>
         );

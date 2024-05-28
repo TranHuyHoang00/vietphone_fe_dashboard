@@ -9,136 +9,100 @@ class variant_attribute_value extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            disable_atbvl: true,
+            disableAtbvl: true,
             disabledButtonCreate: true,
-
             isEdit: '',
-            data_atbvl_raws: [],
-            data_atbvl_ids: [],
-            data_atbvl_uniques: [],
-
-            dataAttributes: [],
+            dataAtbvlUniques: [],
+            dataVariant: {},
         }
     }
     async componentDidMount() {
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.isEdit !== this.props.isEdit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws || prevProps.dataAttributes !== this.props.dataAttributes) {
-            this.props.setDataAttribute({});
-            this.props.setDataAttributeValue({});
-            let dataAttributes = this.props.dataAttributes;
-            let data_atbvl_raws = this.props.data_atbvl_raws;
-            if (data_atbvl_raws && data_atbvl_raws.length !== 0) {
-                this.handle_data_unique(this.props.data_atbvl_raws);
-                this.handle_data_id(this.props.data_atbvl_raws);
-                this.setState({
-                    data_atbvl_raws: this.props.data_atbvl_raws,
-                })
-            }
-            if (dataAttributes && dataAttributes.length !== 0) {
-                this.setState({
-                    dataAttributes: this.props.dataAttributes,
-                })
-            }
+        const { isEdit, dataAttributes, dataVariant, setDataAttribute, setDataAttributeValue } = this.props;
+        if (prevProps.isEdit !== isEdit || prevProps.dataAttributes !== dataAttributes || prevProps.dataVariant !== dataVariant) {
+            const dataAtbvl = dataVariant.attribute_values;
+            await this.handleDataAtbvlUnique(dataAtbvl);
+            setDataAttribute({});
+            setDataAttributeValue({});
             this.setState({
-                disable_atbvl: true,
+                disableAtbvl: true,
                 disabledButtonCreate: true,
             })
         }
     }
-    onSearch = (value, nameFormSelect) => {
-
+    onSearch = () => {
     }
     handleCreate = async (nameFormSelect) => {
-        if (nameFormSelect === 'attribute_value') {
-            if (!this.props.dataAttributeValue.value) { message.error('Thiếu giá trị'); return; }
-            await this.props.createAttributeValue(this.props.dataAttributeValue);
-            await this.props.getDataAttribute(this.props.dataAttributeValue.attribute);
+        const { dataAttributeValue, createAttributeValue, getDataAttribute } = this.props;
+        switch (nameFormSelect) {
+            case 'attribute_value':
+                if (!dataAttributeValue.value) { message.error('Thiếu giá trị'); return; }
+                await createAttributeValue(dataAttributeValue);
+                await getDataAttribute(dataAttributeValue.attribute);
+                break;
+            default:
+                break;
         }
     }
-
-    on_select = async (value, nameFormSelect) => {
-        if (nameFormSelect === 'attribute') {
-            await this.props.getDataAttribute(value);
-            this.props.setDataAttributeValue({ attribute: this.props.dataAttribute.id });
-            this.setState({
-                disable_atbvl: false,
-            })
-        }
-        if (nameFormSelect === 'attribute_value') {
-            await this.props.getDataAttributeValue(value);
-            this.setState({
-                disabledButtonCreate: false,
-            })
+    onSelect = async (value, nameFormSelect) => {
+        switch (nameFormSelect) {
+            case 'attribute':
+                await this.props.getDataAttribute(value);
+                this.props.setDataAttributeValue({ attribute: this.props.dataAttribute.id });
+                this.setState({
+                    disableAtbvl: false,
+                })
+                break;
+            case 'attribute_value':
+                await this.props.getDataAttributeValue(value);
+                this.setState({
+                    disabledButtonCreate: false,
+                })
+                break;
+            default:
+                break;
         }
     }
-    handle_data_unique = async (data) => {
+    handleDataAtbvlUnique = async (data) => {
         if (data && data.length !== 0) {
-            let unique_ids = new Set();
-            let unique_datas = [];
+            let uniqueId = new Set();
+            let uniqueDatas = [];
             for (const obj of data) {
                 if (obj && obj.attribute && obj.attribute.group_attribute && obj.attribute.group_attribute.id) {
-                    if (!unique_ids.has(obj.attribute.group_attribute.id)) {
-                        unique_ids.add(obj.attribute.group_attribute.id);
-                        unique_datas.push(obj.attribute.group_attribute);
+                    if (!uniqueId.has(obj.attribute.group_attribute.id)) {
+                        uniqueId.add(obj.attribute.group_attribute.id);
+                        uniqueDatas.push(obj.attribute.group_attribute);
                     }
                 }
             }
-            this.setState({ data_atbvl_uniques: unique_datas });
+            this.setState({ dataAtbvlUniques: uniqueDatas });
         }
     }
-    handle_data_id = (data) => {
-        let data_atbvl_ids = [];
-        if (data && data.length !== 0) {
-            for (const item of data) {
-                data_atbvl_ids.push(item.id);
-            }
-        }
-        this.setState({
-            data_atbvl_ids: data_atbvl_ids,
-        })
+    handleAddAtbvl = async () => {
+        const { dataAttributeValue, dataVariant, setDataVariant } = this.props;
+        let newDataAtbvls = dataVariant.attribute_values;
+        newDataAtbvls.push(dataAttributeValue);
+        let newDataVariant = {
+            ...dataVariant,
+            attribute_values: newDataAtbvls,
+        };
+        setDataVariant(newDataVariant);
+        await this.handleDataAtbvlUnique(newDataAtbvls);
     }
-    handle_add_atbvl = async () => {
-        let dataAttributeValue = this.props.dataAttributeValue;
-        let data_atbvl_ids = this.state.data_atbvl_ids;
-        let data_atbvl_raws = this.state.data_atbvl_raws;
-        if (data_atbvl_ids.includes(dataAttributeValue.id)) {
-            message.error('Đã tồn tại giá trị này');
-            return;
-        }
-        const index = data_atbvl_raws.findIndex(item => item.attribute.id === dataAttributeValue.attribute.id);
-        if (index !== -1) {
-            message.error('Đã tồn tại thông số này');
-            return;
-        }
-        data_atbvl_ids.push(dataAttributeValue.id);
-        data_atbvl_raws.push(dataAttributeValue);
-        await this.handle_data_unique(data_atbvl_raws);
-        this.props.get_data_atbvl(data_atbvl_ids);
-        this.setState({
-            data_atbvl_ids: data_atbvl_ids,
-            data_atbvl_raws: data_atbvl_raws,
-        })
-
-
-
-    }
-    handle_delete_atbvl = async (id) => {
-        let data_atbvl_raws = this.state.data_atbvl_raws.filter(item => item.id !== id);
-        let data_atbvl_ids = this.state.data_atbvl_ids.filter(item => item !== id);
-        await this.handle_data_unique(data_atbvl_raws);
-        this.props.get_data_atbvl(data_atbvl_ids);
-        this.setState({
-            data_atbvl_ids: data_atbvl_ids,
-            data_atbvl_raws: data_atbvl_raws,
-        });
+    handleDeleteAtbvl = async (id) => {
+        const { dataVariant, setDataVariant } = this.props;
+        let newDataAtbvls = (dataVariant.attribute_values).filter(item => item.id !== id);
+        let newDataVariant = {
+            ...dataVariant,
+            attribute_values: newDataAtbvls,
+        };
+        setDataVariant(newDataVariant);
+        await this.handleDataAtbvlUnique(newDataAtbvls);
     }
     render() {
-        let dataAttribute = this.props.dataAttribute;
-        let dataAttributeValue = this.props.dataAttributeValue;
-        let data_atbvl_uniques = this.state.data_atbvl_uniques;
-        let data_atbvl_raws = this.state.data_atbvl_raws;
-        let dataAttributes = this.state.dataAttributes;
+        const { isEdit, dataVariant, dataAttributes, onChangeAttribute, onChangeAttributeValue, dataAttribute, dataAttributeValue } = this.props;
+        const { dataAtbvlUniques, disabledButtonCreate, disableAtbvl } = this.state;
         return (
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Thông số kĩ thuật" key="1">
@@ -150,19 +114,19 @@ class variant_attribute_value extends Component {
                                     <FormSelectMultiple width={'100%'}
                                         placeholder={'Thông số'}
                                         nameFormSelect={'attribute'}
-                                        options={dataAttributes.map((item) => ({
+                                        options={dataAttributes && dataAttributes.map((item) => ({
                                             label: item.name,
                                             value: item.id,
                                         }))}
                                         value={dataAttribute.id}
-                                        disabledSelect={!this.props.isEdit}
+                                        disabledSelect={!isEdit}
                                         disabledButtonCreate={true}
                                         disabledSearch={true}
                                         onSearch={this.onSearch}
                                         variableSelect={'attribute'}
-                                        onChangeSelect={this.on_select}
+                                        onChangeSelect={this.onSelect}
                                         variableInputSearch={'name'}
-                                        onChangeInput={this.props.onChangeAttribute}
+                                        onChangeInput={onChangeAttribute}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -178,12 +142,12 @@ class variant_attribute_value extends Component {
                                             value: item.id,
                                         }))}
                                         value={dataAttributeValue.id}
-                                        disabledSelect={this.state.disable_atbvl}
+                                        disabledSelect={disableAtbvl}
                                         onSearch={this.onSearch}
                                         variableSelect={'attribute_value'}
-                                        onChangeSelect={this.on_select}
+                                        onChangeSelect={this.onSelect}
                                         variableInputSearch={'value'}
-                                        onChangeInput={this.props.onChangeAttributeValue}
+                                        onChangeInput={onChangeAttributeValue}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -192,17 +156,17 @@ class variant_attribute_value extends Component {
                         <div className='flex items-end gap-[5px]'>
                             <div className='w-1/4'>
                                 <Button className='w-full bg-[#0e97ff] text-white'
-                                    onClick={() => this.handle_add_atbvl()}
-                                    disabled={this.state.disabledButtonCreate}>Thêm </Button>
+                                    onClick={() => this.handleAddAtbvl()}
+                                    disabled={disabledButtonCreate}>Thêm </Button>
                             </div>
                         </div>
 
                         <div className='overflow-y-auto max-h-[500px]'>
-                            {data_atbvl_uniques && data_atbvl_uniques.map((item, index) => {
+                            {dataAtbvlUniques && dataAtbvlUniques.map((item, index) => {
                                 return (
                                     <Card key={item.id} title={`${item.name}`} size='small'>
                                         <div className='space-y-[5px]'>
-                                            {data_atbvl_raws && data_atbvl_raws.map((data, index) => {
+                                            {dataVariant && dataVariant.attribute_values && dataVariant.attribute_values.map((data, index) => {
                                                 return (
                                                     <div key={index}>
                                                         {(data && data.attribute && data.attribute.group_attribute && data.attribute.group_attribute.id === item.id) &&
@@ -216,8 +180,8 @@ class variant_attribute_value extends Component {
                                                                         <Typography.Text class="break-word">{data.value}</Typography.Text>
                                                                     </div>
                                                                     <div className='min-w-0 flex-shrink-0'>
-                                                                        <Button disabled={!this.props.isEdit}
-                                                                            onClick={() => this.handle_delete_atbvl(data.id)}
+                                                                        <Button disabled={!isEdit}
+                                                                            onClick={() => this.handleDeleteAtbvl(data.id)}
                                                                             className='bg-[#e94138] text-white' size='small'
                                                                             icon={<DeleteOutlined />}>
                                                                         </Button>
@@ -248,7 +212,7 @@ const mapStateToProps = state => {
         dataAttribute: state.attribute.dataAttribute,
 
         dataAttributeValue: state.attribute_value.dataAttributeValue,
-
+        dataVariant: state.variant.dataVariant,
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -261,6 +225,8 @@ const mapDispatchToProps = dispatch => {
         createAttributeValue: (data) => dispatch(actions.createAttributeValueRedux(data)),
         onChangeAttributeValue: (id, value) => dispatch(actions.onChangeAttributeValueRedux(id, value)),
         setDataAttributeValue: (data) => dispatch(actions.setDataAttributeValueRedux(data)),
+
+        setDataVariant: (data) => dispatch(actions.setDataVariantRedux(data)),
 
     };
 };

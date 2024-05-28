@@ -1,47 +1,50 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Modal, Button, Typography, Input, message } from 'antd';
-class modal_vide0 extends Component {
+class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            link_video: null,
-            is_hide_video: false,
+            linkVideo: null,
+            isShowVideo: false,
         }
     }
     async componentDidMount() {
     }
     onChangeInput = (event) => {
-        this.setState({ link_video: event.target.value })
+        this.setState({ linkVideo: event.target.value })
     }
-    handle_create_video = () => {
-        let link_video = this.state.link_video;
-        if (link_video === null) {
+    handleCreateVideo = () => {
+        const { linkVideo } = this.state;
+        const { onChangeVideo, openModal } = this.props;
+        if (linkVideo === null) {
             message.error("Không được bỏ trống 'Link video");
         } else {
-            this.props.onchange_video(link_video);
-            this.props.openModal("video", false);
+            onChangeVideo(linkVideo);
+            openModal("video", false);
         }
     }
-    onclick_show_video = () => {
-        let link_video = this.state.link_video;
-        if (link_video === null) {
+    onClickShowVideo = () => {
+        const { linkVideo } = this.state;
+        if (linkVideo === null) {
             message.error("Không được bỏ trống 'Link video");
         } else {
-            this.setState({ is_hide_video: true });
+            this.setState({ isShowVideo: true });
         }
     }
     render() {
+        const { modalVideo, openModal } = this.props;
+        const { isShowVideo, linkVideo } = this.state;
         return (
-            <Modal title="VIDEO" open={this.props.modal_video}
-                onCancel={() => this.props.openModal("video", false)} width={400}
+            <Modal title="VIDEO" open={modalVideo}
+                onCancel={() => openModal("video", false)} width={400}
                 footer={[
                     <>
-                        <Button onClick={() => this.props.openModal("video", false)}
+                        <Button onClick={() => openModal("video", false)}
                             className='bg-[#e94138] text-white'>
                             Hủy bỏ
                         </Button>
-                        <Button onClick={() => this.handle_create_video()}
+                        <Button onClick={() => this.handleCreateVideo()}
                             className='bg-[#0e97ff] dark:bg-white text-white'>
                             Xác nhận
                         </Button>
@@ -55,14 +58,14 @@ class modal_vide0 extends Component {
                         </Typography.Text>
                         <div className='flex items-center gap-[5px]'>
                             <Input onChange={(event) => this.onChangeInput(event)} />
-                            <Button onClick={() => this.onclick_show_video()}>Xem trước</Button>
+                            <Button onClick={() => this.onClickShowVideo()}>Xem trước</Button>
                         </div>
-                        {this.state.is_hide_video &&
+                        {isShowVideo &&
                             <div className='flex items-center justify-center'>
                                 <iframe title='video_product'
                                     width="100%"
                                     height="250"
-                                    src={this.state.link_video}
+                                    src={linkVideo}
                                     frameborder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowfullscreen
@@ -78,4 +81,4 @@ class modal_vide0 extends Component {
     }
 
 }
-export default withRouter(modal_vide0);
+export default withRouter(index);

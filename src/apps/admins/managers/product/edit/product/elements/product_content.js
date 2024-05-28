@@ -5,23 +5,23 @@ import { connect } from 'react-redux';
 import { Collapse } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-class product_content extends Component {
+class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
         }
     }
     render() {
+        const { isEdit, description, onChangeProductDescription } = this.props;
         return (
-
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Mô tả sản phẩm" key="1">
-                    <ReactQuill theme="snow" readOnly={!this.props.isEdit}
-                        modules={product_content.modules}
-                        formats={product_content.formats}
+                    <ReactQuill theme="snow" readOnly={!isEdit}
+                        modules={index.modules}
+                        formats={index.formats}
                         bounds={'.app'}
-                        value={this.props.description}
-                        onChange={(value) => this.props.on_change_product_description(value)}
+                        value={description}
+                        onChange={(value) => onChangeProductDescription(value)}
                     />
                 </Collapse.Panel>
             </Collapse>
@@ -37,13 +37,13 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        on_change_product_description: (value) => dispatch(actions.onChangeProductDescriptionRedux(value)),
+        onChangeProductDescription: (value) => dispatch(actions.onChangeProductDescriptionRedux(value)),
 
     };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(product_content));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));
 
-product_content.modules = {
+index.modules = {
     toolbar: [
         [{ 'font': [] }],
         [{ 'size': ['small', 'large', 'huge'] }],
@@ -69,7 +69,7 @@ product_content.modules = {
     }
 }
 
-product_content.formats = [
+index.formats = [
     'font', 'size',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'link', 'image', 'video',

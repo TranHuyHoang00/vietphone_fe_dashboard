@@ -12,45 +12,70 @@ class product_introduce extends Component {
         }
     }
     async componentDidMount() {
-        this.props.getListBrand(this.state.dataFilter);
-        this.props.getListTag(this.state.dataFilter);
-        this.props.getListCategory(this.state.dataFilter);
-        this.props.getListVariantAttributeGroup(this.state.dataFilter);
+        const { getListBrand, getListTag, getListCategory, getListVariantAttributeGroup } = this.props;
+        const { dataFilter } = this.state;
+        getListBrand(dataFilter);
+        getListTag(dataFilter);
+        getListCategory(dataFilter);
+        getListVariantAttributeGroup(dataFilter);
     }
-    onSearch = (value, nameFormSelect) => {
-        let dataFilter = this.state.dataFilter;
-        dataFilter.search = value;
-        if (nameFormSelect === 'brand') { this.props.getListBrand(dataFilter); }
-        if (nameFormSelect === 'tag') { this.props.getListTag(dataFilter); }
-        if (nameFormSelect === 'category') { this.props.getListCategory(dataFilter); }
-        if (nameFormSelect === 'variant_attribute_group') { this.props.getListVariantAttributeGroup(dataFilter); }
+    onSearch = (valueSearch, nameFormSelect) => {
+        const { getListBrand, getListTag, getListCategory, getListVariantAttributeGroup } = this.props;
+        const { dataFilter } = this.state;
+        let newDataFilter = {
+            ...dataFilter,
+            search: valueSearch,
+        }
+        switch (nameFormSelect) {
+            case 'brand':
+                getListBrand(newDataFilter)
+                break;
+            case 'tag':
+                getListTag(newDataFilter)
+                break;
+            case 'category':
+                getListCategory(newDataFilter)
+                break;
+            case 'variant_attribute_group':
+                getListTag(getListVariantAttributeGroup)
+                break;
+            default:
+                break;
+        }
     }
     handleCreate = async (nameFormSelect) => {
-        if (nameFormSelect === 'brand') {
-            if (!this.props.dataBrand.name) { message.error('Thiếu tên thương hiệu'); return; }
-            await this.props.createBrand(this.props.dataBrand);
-            await this.props.getListBrand(this.state.dataFilter);
-        }
-        if (nameFormSelect === 'tag') {
-            if (!this.props.dataTag.name) { message.error('Thiếu tên tag'); return; }
-            await this.props.createTag(this.props.dataTag);
-            await this.props.getListTag(this.state.dataFilter);
-        }
-        if (nameFormSelect === 'category') {
-            if (!this.props.dataCategory.name) { message.error('Thiếu tên danh mục'); return; }
-            await this.props.createCategory(this.props.dataCategory);
-            await this.props.getListCategory(this.state.dataFilter);
-        }
-        if (nameFormSelect === 'variant_attribute_group') {
-            await this.props.getListVariantAttributeGroup(this.state.dataFilter);
+        const { getListBrand, getListTag, getListCategory, getListVariantAttributeGroup,
+            createBrand, createTag, createCategory,
+            dataBrand, dataTag, dataCategory,
+        } = this.props;
+        const { dataFilter } = this.state;
+        switch (nameFormSelect) {
+            case 'brand':
+                if (!dataBrand.name) { message.error('Thiếu tên thương hiệu'); return; }
+                await createBrand(dataBrand);
+                await getListBrand(dataFilter);
+                break;
+            case 'tag':
+                if (!dataTag.name) { message.error('Thiếu tên tag'); return; }
+                await createTag(dataTag);
+                await getListTag(dataFilter);
+                break;
+            case 'category':
+                if (!dataCategory.name) { message.error('Thiếu tên danh mục'); return; }
+                await createCategory(dataCategory);
+                await getListCategory(dataFilter);
+                break;
+            case 'variant_attribute_group':
+                await getListVariantAttributeGroup(dataFilter);
+                break;
+            default:
+                break;
         }
     }
     render() {
-        let dataProduct = this.props.dataProduct;
-        let dataBrands = this.props.dataBrands;
-        let dataTags = this.props.dataTags;
-        let dataCategorys = this.props.dataCategorys;
-        let dataVariantAttributeGroups = this.props.dataVariantAttributeGroups;
+        const { dataProduct, dataBrands, dataTags, dataCategorys, dataVariantAttributeGroups,
+            isEdit, onChangeProduct, onChangeBrand, onChangeTag, onChangeCategory, onChangeVariantAttributeGroup
+        } = this.props;
         return (
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Thông tin sản phẩm" key="1">
@@ -61,8 +86,8 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Input disabled={!this.props.isEdit} value={dataProduct.name}
-                                    onChange={(event) => this.props.on_change_product(event.target.value, 'name')} />
+                                <Input disabled={!isEdit} value={dataProduct.name}
+                                    onChange={(event) => onChangeProduct(event.target.value, 'name')} />
                             </div>
                         </div>
                         <div className='flex items-center gap-[5px]'>
@@ -78,16 +103,16 @@ class product_introduce extends Component {
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabledSelect={!this.props.isEdit}
+                                    disabledSelect={!isEdit}
                                     disabledButtonCreate={false}
                                     disabledSearch={false}
 
                                     onSearch={this.onSearch}
                                     variableSelect={'product_brand'}
-                                    onChangeSelect={this.props.on_change_product}
+                                    onChangeSelect={onChangeProduct}
 
                                     variableInputSearch={'name'}
-                                    onChangeInput={this.props.onChangeBrand}
+                                    onChangeInput={onChangeBrand}
                                     handleCreate={this.handleCreate}
                                 />
 
@@ -106,14 +131,14 @@ class product_introduce extends Component {
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabledSelect={!this.props.isEdit}
+                                    disabledSelect={!isEdit}
                                     disabledButtonCreate={false}
                                     disabledSearch={false}
                                     onSearch={this.onSearch}
                                     variableSelect={'tags'}
-                                    onChangeSelect={this.props.on_change_product}
+                                    onChangeSelect={onChangeProduct}
                                     variableInputSearch={'name'}
-                                    onChangeInput={this.props.onChangeTag}
+                                    onChangeInput={onChangeTag}
                                     handleCreate={this.handleCreate}
                                 />
 
@@ -132,14 +157,14 @@ class product_introduce extends Component {
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabledSelect={!this.props.isEdit}
+                                    disabledSelect={!isEdit}
                                     disabledButtonCreate={false}
                                     disabledSearch={false}
                                     onSearch={this.onSearch}
                                     variableSelect={'categories'}
-                                    onChangeSelect={this.props.on_change_product}
+                                    onChangeSelect={onChangeProduct}
                                     variableInputSearch={'name'}
-                                    onChangeInput={this.props.onChangeCategory}
+                                    onChangeInput={onChangeCategory}
                                     handleCreate={this.handleCreate}
                                 />
 
@@ -158,14 +183,14 @@ class product_introduce extends Component {
                                         label: item.name,
                                         value: item.id,
                                     }))}
-                                    disabledSelect={!this.props.isEdit}
+                                    disabledSelect={!isEdit}
                                     disabledButtonCreate={true}
                                     disabledSearch={true}
                                     onSearch={this.onSearch}
                                     variableSelect={'variant_attribute_group'}
-                                    onChangeSelect={this.props.on_change_product}
+                                    onChangeSelect={onChangeProduct}
                                     variableInputSearch={'name'}
-                                    onChangeInput={this.props.onChangeVariantAttributeGroup}
+                                    onChangeInput={onChangeVariantAttributeGroup}
                                     handleCreate={this.handleCreate}
                                 />
 
@@ -177,8 +202,8 @@ class product_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Select disabled={!this.props.isEdit} style={{ width: '100%' }} value={this.props.dataProduct.is_active}
-                                    onChange={(event) => this.props.on_change_product(event, 'is_active')}
+                                <Select disabled={!isEdit} style={{ width: '100%' }} value={dataProduct.is_active}
+                                    onChange={(event) => onChangeProduct(event, 'is_active')}
                                     options={[
                                         { value: true, label: 'Mở' },
                                         { value: false, label: 'Khóa' },
@@ -224,7 +249,7 @@ const mapDispatchToProps = dispatch => {
         onChangeVariantAttributeGroup: (event, id,) => dispatch(actions.onChangeVariantAttributeGroupRedux(event, id,)),
         createVariantAttributeGroup: (data) => dispatch(actions.createVariantAttributeGroupRedux(data)),
 
-        on_change_product: (event, id,) => dispatch(actions.onChangeProductRedux(event, id,)),
+        onChangeProduct: (event, id,) => dispatch(actions.onChangeProductRedux(event, id,)),
 
     };
 };

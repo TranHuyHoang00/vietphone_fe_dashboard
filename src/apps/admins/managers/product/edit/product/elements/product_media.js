@@ -12,64 +12,45 @@ class product_media extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isEdit: false,
             dropButtonType: 1,
-            modal_video: false,
-
-            data_media_raws: [],
-            dataMediaIds: [],
+            modalVideo: false,
         }
     }
     async componentDidMount() {
     }
-    async componentDidUpdate(prevProps) {
-        if (prevProps.data_media_raws !== this.props.data_media_raws) {
-            this.handle_data_id(this.props.data_media_raws);
-            this.setState({
-                data_media_raws: this.props.data_media_raws,
-            })
+    onChangeImage = async (valueImage, nameFuntion, indexImage) => {
+        const { dataProduct, setDataProduct } = this.props;
+        let newDataProduct = { ...dataProduct };
+        switch (nameFuntion) {
+            case 'create':
+                const files = valueImage.target.files;
+                for (let i = 0; i < files.length; i++) {
+                    const newImage = await convertImageToBase64(valueImage, i);
+                    (newDataProduct.media).push({ image: newImage, media_type: 'image', name: dataProduct.name, alt: dataProduct.name });
+                }
+                break;
+            case 'delete':
+                (newDataProduct.media).splice(indexImage, 1);
+                break;
+            default:
+                break;
+        }
+        setDataProduct(newDataProduct);
+    }
+    openModal = (modalName, modalValue) => {
+        switch (modalName) {
+            case 'video':
+                this.setState({ modalVideo: modalValue });
+                break;
+            default:
+                break;
         }
     }
-    handle_data_id = (data) => {
-        let dataMediaIds = [];
-        if (data && data.length !== 0) {
-            for (const item of data) {
-                dataMediaIds.push(item.id);
-            }
-        }
-        this.setState({
-            dataMediaIds: dataMediaIds,
-        })
-    }
-    onChangeImage = async (event, type, index, id) => {
-        let data_media_raws = this.state.data_media_raws;
-        let dataMediaIds = this.state.dataMediaIds;
-
-        if (type === 'create') {
-            const files = event.target.files;
-            for (let i = 0; i < files.length; i++) {
-                let image_new = await convertImageToBase64(event, i);
-                data_media_raws.push({ image: image_new, media_type: 'image', alt: this.props.dataProduct.name });
-            }
-        }
-        if (type === 'delete') {
-            if (id !== undefined) {
-                dataMediaIds = dataMediaIds.filter(item => item !== id);
-            }
-            data_media_raws.splice(index, 1);
-        }
-        this.setState({ data_media_raws: data_media_raws, dataMediaIds: dataMediaIds });
-        this.props.get_data_media(dataMediaIds, data_media_raws);
-    }
-    openModal = async (name, value) => {
-        if (name === 'video') { this.setState({ modal_video: value }); }
-    }
-    onchange_video = (value) => {
-        let data_media_raws = this.state.data_media_raws;
-        let dataMediaIds = this.state.dataMediaIds;
-        data_media_raws.push({ external_url: value, media_type: 'video', alt: this.props.dataProduct.name });
-        this.setState({ data_media_raws: data_media_raws });
-        this.props.get_data_media(dataMediaIds, data_media_raws);
+    onChangeVideo = (valueVideo) => {
+        const { dataProduct, setDataProduct } = this.props;
+        let newDataProduct = { ...dataProduct };
+        (newDataProduct.media).push({ external_url: valueVideo, media_type: 'video', name: dataProduct.name, alt: dataProduct.name });
+        setDataProduct(newDataProduct);
     }
     render() {
         const responsive = {
@@ -80,26 +61,25 @@ class product_media extends Component {
             { key: 1, label: 'Thêm ảnh' },
             { key: 2, label: 'Thêm video' },
         ];
-        let isEdit = this.props.isEdit;
-        let dropButtonType = this.state.dropButtonType;
-        let data_media_raws = this.state.data_media_raws;
+        const { dropButtonType, modalVideo } = this.state;
+        const { dataProduct, isEdit } = this.props;
         return (
             <>
                 <Collapse defaultActiveKey={[1]}>
                     <Collapse.Panel header="Hình ảnh sản phẩm" key="1">
                         <div className='space-y-[10px]'>
-                            <input id="media_product" type="file" accept="image/*" hidden multiple
+                            <input id="mediaProduct" type="file" accept="image/*" hidden multiple
                                 onChange={(event) => this.onChangeImage(event, 'create')} />
                             <Dropdown.Button disabled={!isEdit} menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                 <div>
-                                    {dropButtonType === 1 && <label htmlFor="media_product">Thêm ảnh</label>}
-                                    {dropButtonType === 2 && <label onClick={() => this.setState({ modal_video: true })}>Thêm video</label>}
+                                    {dropButtonType === 1 && <label htmlFor="mediaProduct">Thêm ảnh</label>}
+                                    {dropButtonType === 2 && <label onClick={() => this.setState({ modalVideo: true })}>Thêm video</label>}
                                 </div>
                             </Dropdown.Button>
-                            {data_media_raws && data_media_raws.length !== 0 &&
+                            {dataProduct && dataProduct.media && dataProduct.media.length !== 0 &&
                                 <Carousel responsive={responsive} swipeable={true} draggable={true}
                                     infinite={true} partialVisible={false} dotListClass="custom-dot-list-style">
-                                    {data_media_raws && data_media_raws.map((item, index) => {
+                                    {dataProduct.media.map((item, index) => {
                                         return (
                                             <div key={index} className="slider" >
                                                 <div className='space-y-[5px]'>
@@ -118,7 +98,7 @@ class product_media extends Component {
                                                             </iframe>
                                                         }
                                                     </div>
-                                                    <Button disabled={!isEdit} onClick={() => this.onChangeImage(null, 'delete', index, item.id)}
+                                                    <Button disabled={!isEdit} onClick={() => this.onChangeImage(null, 'delete', index)}
                                                         className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
 
                                                 </div>
@@ -130,8 +110,9 @@ class product_media extends Component {
                         </div>
                     </Collapse.Panel>
                 </Collapse>
-                <ModalVideo modal_video={this.state.modal_video} openModal={this.openModal}
-                    onchange_video={this.onchange_video} />
+                {modalVideo &&
+                    <ModalVideo modalVideo={modalVideo} openModal={this.openModal}
+                        onChangeVideo={this.onChangeVideo} />}
             </>
         );
     }
@@ -145,7 +126,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        on_change_product: (event, id, type) => dispatch(actions.onChangeProductRedux(event, id, type)),
+        onChangeProduct: (event, id) => dispatch(actions.onChangeProductRedux(event, id)),
+        setDataProduct: (id) => dispatch(actions.setDataProductRedux(id)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(product_media));

@@ -10,142 +10,145 @@ class product_attribute_value extends Component {
         super(props);
         this.state = {
             dataFilter: { page: 1, limit: 100, search: '' },
-            disable_atb: true,
-            disable_atbvl: true,
+            disableAtb: true,
+            disableAtbvl: true,
             disabledButtonCreate: true,
             isEdit: '',
-            data_atbvl_raws: [],
-            data_atbvl_ids: [],
-            data_atbvl_uniques: [],
-
+            dataProduct: {},
+            dataAtbvlUniques: [],
         }
     }
     async componentDidMount() {
-        this.props.getListGroupAttribute(this.state.dataFilter);
+        const { getListGroupAttribute } = this.props;
+        const { dataFilter } = this.state;
+        getListGroupAttribute(dataFilter);
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.isEdit !== this.props.isEdit || prevProps.data_atbvl_raws !== this.props.data_atbvl_raws) {
-            let data_atbvl_raws = this.props.data_atbvl_raws;
-            if (data_atbvl_raws && data_atbvl_raws.length !== 0) {
-                this.handle_data_unique(this.props.data_atbvl_raws);
-                this.handle_data_id(this.props.data_atbvl_raws);
-                this.setState({
-                    data_atbvl_raws: this.props.data_atbvl_raws,
-                })
-            }
-            this.props.setDataGroupAttribute({});
-            this.props.setDataAttribute({});
-            this.props.setDataAttributeValue({});
+        const { isEdit, dataProduct, setDataGroupAttribute, setDataAttribute, setDataAttributeValue } = this.props;
+        if (prevProps.isEdit !== isEdit || prevProps.dataProduct !== dataProduct) {
+            const dataAtbvl = dataProduct.attribute_values;
+            await this.handleDataAtbvlUnique(dataAtbvl);
+            setDataGroupAttribute({});
+            setDataAttribute({});
+            setDataAttributeValue({});
             this.setState({
-                disable_atb: true,
-                disable_atbvl: true,
+                disableAtb: true,
+                disableAtbvl: true,
                 disabledButtonCreate: true,
             })
         }
     }
-    onSearch = (value, nameFormSelect) => {
-        let dataFilter = this.state.dataFilter;
-        dataFilter.search = value;
-        if (nameFormSelect === 'group_attribute') { this.props.getListGroupAttribute(dataFilter); }
-    }
-    handleCreate = async (nameFormSelect) => {
-        if (nameFormSelect === 'group_attribute') {
-            if (!this.props.dataGroupAttribute.name) { message.error('Thiếu tên loại thông số'); return; }
-            await this.props.createGroupAttribute(this.props.dataGroupAttribute);
-            await this.props.getListGroupAttribute(this.state.dataFilter);
-        }
-        if (nameFormSelect === 'attribute') {
-            if (!this.props.dataAttribute.name) { message.error('Thiếu tên thông số'); return; }
-            await this.props.createAttribute(this.props.dataAttribute);
-            await this.props.getDataGroupAttribute(this.props.dataAttribute.group_attribute);
-        }
-        if (nameFormSelect === 'attribute_value') {
-            if (!this.props.dataAttributeValue.value) { message.error('Thiếu giá trị'); return; }
-            await this.props.createAttributeValue(this.props.dataAttributeValue);
-            await this.props.getDataAttribute(this.props.dataAttributeValue.attribute);
-        }
-    }
-    on_select = async (value, nameFormSelect) => {
-        if (nameFormSelect === 'group_attribute') {
-            await this.props.getDataGroupAttribute(value);
-            this.props.setDataAttribute({ group_attribute: this.props.dataGroupAttribute.id });
-            this.props.setDataAttributeValue({});
-            this.setState({
-                disable_atb: false,
-                disable_atbvl: true,
-                disabledButtonCreate: true,
-            })
-        }
-        if (nameFormSelect === 'attribute') {
-            await this.props.getDataAttribute(value);
-            this.props.setDataAttributeValue({ attribute: this.props.dataAttribute.id });
-            this.setState({
-                disable_atbvl: false,
-            })
-        }
-        if (nameFormSelect === 'attribute_value') {
-            await this.props.getDataAttributeValue(value);
-            this.setState({
-                disabledButtonCreate: false,
-            })
-        }
-    }
-    handle_data_unique = async (data) => {
+    handleDataAtbvlUnique = async (data) => {
         if (data && data.length !== 0) {
-            let unique_ids = new Set();
-            let unique_datas = [];
+            let uniqueId = new Set();
+            let uniqueDatas = [];
             for (const obj of data) {
                 if (obj && obj.attribute && obj.attribute.group_attribute && obj.attribute.group_attribute.id) {
-                    if (!unique_ids.has(obj.attribute.group_attribute.id)) {
-                        unique_ids.add(obj.attribute.group_attribute.id);
-                        unique_datas.push(obj.attribute.group_attribute);
+                    if (!uniqueId.has(obj.attribute.group_attribute.id)) {
+                        uniqueId.add(obj.attribute.group_attribute.id);
+                        uniqueDatas.push(obj.attribute.group_attribute);
                     }
                 }
             }
-            this.setState({ data_atbvl_uniques: unique_datas });
+            this.setState({ dataAtbvlUniques: uniqueDatas });
         }
     }
-    handle_data_id = (data) => {
-        let data_atbvl_ids = [];
-        if (data && data.length !== 0) {
-            for (const item of data) {
-                data_atbvl_ids.push(item.id);
-            }
+    onSearch = (valueSearch, nameFormSelect) => {
+        const { dataFilter } = this.state;
+        const { getListGroupAttribute } = this.props;
+        let newDataFilter = {
+            ...dataFilter,
+            search: valueSearch,
         }
-        this.setState({
-            data_atbvl_ids: data_atbvl_ids,
-        })
+        switch (nameFormSelect) {
+            case 'group_attribute':
+                getListGroupAttribute(newDataFilter)
+                break;
+            default:
+                break;
+        }
     }
-    handle_add_atbvl = async () => {
-        let dataAttributeValue = this.props.dataAttributeValue;
-        let data_atbvl_ids = this.state.data_atbvl_ids;
-        let data_atbvl_raws = this.state.data_atbvl_raws;
-        data_atbvl_ids.push(dataAttributeValue.id);
-        data_atbvl_raws.push(dataAttributeValue);
-        await this.handle_data_unique(data_atbvl_raws);
-        this.props.get_data_atbvl(data_atbvl_ids);
-        this.setState({
-            data_atbvl_ids: data_atbvl_ids,
-            data_atbvl_raws: data_atbvl_raws,
-        })
+    handleCreate = async (nameFormSelect) => {
+        const { dataGroupAttribute, dataAttribute, dataAttributeValue,
+            createGroupAttribute, getListGroupAttribute, createAttribute, getDataGroupAttribute,
+            createAttributeValue, getDataAttribute,
+        } = this.props;
+        const { dataFilter } = this.state;
+        switch (nameFormSelect) {
+            case 'group_attribute':
+                if (!dataGroupAttribute.name) { message.error('Thiếu tên loại thông số'); return; }
+                await createGroupAttribute(dataGroupAttribute);
+                await getListGroupAttribute(dataFilter);
+                break;
+            case 'attribute':
+                if (!dataAttribute.name) { message.error('Thiếu tên thông số'); return; }
+                await createAttribute(dataAttribute);
+                await getDataGroupAttribute(dataAttribute.group_attribute);
+                break;
+            case 'attribute_value':
+                if (!dataAttributeValue.value) { message.error('Thiếu giá trị'); return; }
+                await createAttributeValue(dataAttributeValue);
+                await getDataAttribute(dataAttributeValue.attribute);
+                break;
+            default:
+                break;
+        }
     }
-    handle_delete_atbvl = async (id) => {
-        let data_atbvl_raws = this.state.data_atbvl_raws.filter(item => item.id !== id);
-        let data_atbvl_ids = this.state.data_atbvl_ids.filter(item => item !== id);
-        await this.handle_data_unique(data_atbvl_raws);
-        this.props.get_data_atbvl(data_atbvl_ids);
-        this.setState({
-            data_atbvl_ids: data_atbvl_ids,
-            data_atbvl_raws: data_atbvl_raws,
-        });
+    onSelect = async (value, nameFormSelect) => {
+        switch (nameFormSelect) {
+            case 'group_attribute':
+                await this.props.getDataGroupAttribute(value);
+                this.props.setDataAttribute({ group_attribute: this.props.dataGroupAttribute.id });
+                this.props.setDataAttributeValue({});
+                this.setState({
+                    disableAtb: false,
+                    disableAtbvl: true,
+                    disabledButtonCreate: true,
+                })
+                break;
+            case 'attribute':
+                await this.props.getDataAttribute(value);
+                this.props.setDataAttributeValue({ attribute: this.props.dataAttribute.id });
+                this.setState({
+                    disableAtbvl: false,
+                })
+                break
+            case 'attribute_value':
+                await this.props.getDataAttributeValue(value);
+                this.setState({
+                    disabledButtonCreate: false,
+                })
+                break
+            default:
+                break;
+        }
+    }
+    handleAddAtbvl = async () => {
+        const { dataAttributeValue, dataProduct, setDataProduct } = this.props;
+        let newDataAtbvls = dataProduct.attribute_values;
+        newDataAtbvls.push(dataAttributeValue);
+        let newDataProduct = {
+            ...dataProduct,
+            attribute_values: newDataAtbvls,
+        };
+        setDataProduct(newDataProduct);
+        await this.handleDataAtbvlUnique(newDataAtbvls);
+    }
+    handleDeleteAtbvl = async (id) => {
+        const { dataProduct, setDataProduct } = this.props;
+        let newDataAtbvls = (dataProduct.attribute_values).filter(item => item.id !== id);
+        let newDataProduct = {
+            ...dataProduct,
+            attribute_values: newDataAtbvls,
+        };
+        setDataProduct(newDataProduct);
+        await this.handleDataAtbvlUnique(newDataAtbvls);
     }
     render() {
-        let dataGroupAttributes = this.props.dataGroupAttributes;
-        let dataGroupAttribute = this.props.dataGroupAttribute;
-        let dataAttribute = this.props.dataAttribute;
-        let dataAttributeValue = this.props.dataAttributeValue;
-        let data_atbvl_uniques = this.state.data_atbvl_uniques;
-        let data_atbvl_raws = this.state.data_atbvl_raws;
+        const { dataAtbvlUniques, disableAtb, disableAtbvl } = this.state;
+        const { dataProduct, isEdit, dataGroupAttributes, dataGroupAttribute, dataAttribute, dataAttributeValue,
+            onChangeGroupAttribute, onChangeAttribute, onChangeAttributeValue
+        } = this.props;
         return (
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Thông số kĩ thuật" key="1">
@@ -162,12 +165,12 @@ class product_attribute_value extends Component {
                                             value: item.id,
                                         }))}
                                         value={dataGroupAttribute.id}
-                                        disabledSelect={!this.props.isEdit}
+                                        disabledSelect={!isEdit}
                                         onSearch={this.onSearch}
                                         variableSelect={'group_attribute'}
-                                        onChangeSelect={this.on_select}
+                                        onChangeSelect={this.onSelect}
                                         variableInputSearch={'name'}
-                                        onChangeInput={this.props.onChangeGroupAttribute}
+                                        onChangeInput={onChangeGroupAttribute}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -183,12 +186,12 @@ class product_attribute_value extends Component {
                                             value: item.id,
                                         }))}
                                         value={dataAttribute.id}
-                                        disabledSelect={this.state.disable_atb}
+                                        disabledSelect={disableAtb}
                                         onSearch={this.onSearch}
                                         variableSelect={'attribute'}
-                                        onChangeSelect={this.on_select}
+                                        onChangeSelect={this.onSelect}
                                         variableInputSearch={'name'}
-                                        onChangeInput={this.props.onChangeAttribute}
+                                        onChangeInput={onChangeAttribute}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
@@ -206,29 +209,28 @@ class product_attribute_value extends Component {
                                             value: item.id,
                                         }))}
                                         value={dataAttributeValue.id}
-                                        disabledSelect={this.state.disable_atbvl}
+                                        disabledSelect={disableAtbvl}
                                         onSearch={this.onSearch}
                                         variableSelect={'attribute_value'}
-                                        onChangeSelect={this.on_select}
+                                        onChangeSelect={this.onSelect}
                                         variableInputSearch={'value'}
-                                        onChangeInput={this.props.onChangeAttributeValue}
+                                        onChangeInput={onChangeAttributeValue}
                                         handleCreate={this.handleCreate}
                                     />
                                 </div>
                             </div>
                             <div className='w-1/4'>
                                 <Button className='w-full bg-[#0e97ff] text-white'
-                                    onClick={() => this.handle_add_atbvl()}
+                                    onClick={() => this.handleAddAtbvl()}
                                     disabled={this.state.disabledButtonCreate}>Thêm </Button>
                             </div>
                         </div>
-
                         <div className='overflow-y-auto max-h-[500px]'>
-                            {data_atbvl_uniques && data_atbvl_uniques.map((item, index) => {
+                            {dataAtbvlUniques && dataAtbvlUniques.map((item) => {
                                 return (
                                     <Card key={item.id} title={`${item.name}`} size='small'>
                                         <div className='space-y-[5px]'>
-                                            {data_atbvl_raws && data_atbvl_raws.map((data, index) => {
+                                            {dataProduct && dataProduct.attribute_values && dataProduct.attribute_values.map((data, index) => {
                                                 return (
                                                     <div key={index}>
                                                         {(data && data.attribute && data.attribute.group_attribute && data.attribute.group_attribute.id === item.id) &&
@@ -242,8 +244,8 @@ class product_attribute_value extends Component {
                                                                         <Typography.Text class="break-word">{data.value}</Typography.Text>
                                                                     </div>
                                                                     <div className='min-w-0 flex-shrink-0'>
-                                                                        <Button disabled={!this.props.isEdit}
-                                                                            onClick={() => this.handle_delete_atbvl(data.id)}
+                                                                        <Button disabled={!isEdit}
+                                                                            onClick={() => this.handleDeleteAtbvl(data.id)}
                                                                             className='bg-[#e94138] text-white' size='small'
                                                                             icon={<DeleteOutlined />}>
                                                                         </Button>
@@ -273,6 +275,7 @@ const mapStateToProps = state => {
 
         dataGroupAttributes: state.group_attribute.dataGroupAttributes,
         dataGroupAttribute: state.group_attribute.dataGroupAttribute,
+        isResultGroupAtb: state.group_attribute.isResult,
 
         dataAttribute: state.attribute.dataAttribute,
 
@@ -282,6 +285,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
+        setDataProduct: (id) => dispatch(actions.setDataProductRedux(id)),
+
         getListGroupAttribute: (dataFilter) => dispatch(actions.getListGroupAttributeRedux(dataFilter)),
         createGroupAttribute: (data) => dispatch(actions.createGroupAttributeRedux(data)),
         onChangeGroupAttribute: (id, value) => dispatch(actions.onChangeGroupAttributeRedux(id, value)),

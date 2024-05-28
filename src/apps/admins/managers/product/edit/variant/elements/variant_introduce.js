@@ -16,7 +16,7 @@ class variant_introduce extends Component {
     async componentDidUpdate() {
     }
     render() {
-        let dataVariant = this.props.dataVariant;
+        const { dataVariant, onChangeVariant, isEdit } = this.props;
         return (
             <Collapse defaultActiveKey={['1']}>
                 <Collapse.Panel header="Phiên bản" key="1">
@@ -29,8 +29,8 @@ class variant_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Input disabled={!this.props.isEdit} value={dataVariant.name}
-                                    onChange={(event) => this.props.on_change_variant(event.target.value, 'name')} />
+                                <Input disabled={!isEdit} value={dataVariant.name}
+                                    onChange={(event) => onChangeVariant(event.target.value, 'name')} />
                             </div>
                         </div>
                         <div className='flex gap-[5px]'>
@@ -39,8 +39,8 @@ class variant_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Input disabled={!this.props.isEdit} value={this.props.isEdit ? (dataVariant.regular_price) : formatMoney(dataVariant.regular_price)}
-                                    onChange={(event) => this.props.on_change_variant(event.target.value, 'regular_price')} />
+                                <Input disabled={!isEdit} value={isEdit ? (dataVariant.regular_price) : formatMoney(dataVariant.regular_price)}
+                                    onChange={(event) => onChangeVariant(event.target.value, 'regular_price')} />
                             </div>
                         </div>
                         <div className='flex gap-[5px]'>
@@ -49,8 +49,8 @@ class variant_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Input disabled={!this.props.isEdit} value={this.props.isEdit ? (dataVariant.discount_price) : formatMoney(dataVariant.discount_price)}
-                                    onChange={(event) => this.props.on_change_variant(event.target.value, 'discount_price')} />
+                                <Input disabled={!isEdit} value={isEdit ? (dataVariant.discount_price) : formatMoney(dataVariant.discount_price)}
+                                    onChange={(event) => onChangeVariant(event.target.value, 'discount_price')} />
                             </div>
                         </div>
                         {textLine13('Số lượng', `${dataVariant.quantity} cái`)}
@@ -60,8 +60,8 @@ class variant_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <Select disabled={!this.props.isEdit} style={{ width: '100%' }} value={dataVariant.is_active}
-                                    onChange={(event) => this.props.on_change_variant(event, 'is_active')}
+                                <Select disabled={!isEdit} style={{ width: '100%' }} value={dataVariant.is_active}
+                                    onChange={(event) => onChangeVariant(event, 'is_active')}
                                     options={[
                                         { value: true, label: 'Mở' },
                                         { value: false, label: 'Khóa' },
@@ -83,7 +83,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        on_change_variant: (event, id) => dispatch(actions.onChangeVariantRedux(event, id)),
+        onChangeVariant: (event, id) => dispatch(actions.onChangeVariantRedux(event, id)),
 
     };
 };

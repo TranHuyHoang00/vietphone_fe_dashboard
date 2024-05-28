@@ -11,28 +11,29 @@ class product_page extends Component {
         }
     }
     async componentDidMount() {
-        this.props.set_data_product_page({});
-        if (this.props.match && this.props.match.params) {
-            let product_id = this.props.match.params.id;
-            if (product_id) { this.props.getDataProductPage(product_id); }
+        const { setDataProductPage, match, getDataProductPage } = this.props;
+        setDataProductPage({});
+        if (match && match.params) {
+            const productId = match.params.id;
+            if (productId) { getDataProductPage(productId); }
         }
     }
-    handle_delete = () => {
-        let dataProductPage = this.props.dataProductPage;
+    handleDelete = () => {
+        const { dataProductPage, deleteListProductPage, isResult, setDataProductPage } = this.props;
         if (dataProductPage && dataProductPage.id) {
-            this.props.delete_list_product_page([dataProductPage.id]);
-            if (this.props.isResult) {
-                this.props.set_data_product_page({});
+            deleteListProductPage([dataProductPage.id]);
+            if (isResult) {
+                setDataProductPage({});
             }
         }
     }
     render() {
-        let dataProductPage = this.props.dataProductPage;
+        const { dataProductPage, isLoading, onChangeProductPage, isEdit } = this.props;
         return (
             <Collapse defaultActiveKey={[1]}>
                 <Collapse.Panel header="Sản phẩm trên Website" key="1"
-                    extra={<Button onClick={() => this.handle_delete()} className='bg-[#e94138] text-white' disabled={(this.props.isEdit === true && dataProductPage?.id) ? false : true}>Xóa bài</Button>}>
-                    <Spin spinning={this.props.isLoading}>
+                    extra={<Button onClick={() => this.handleDelete()} className='bg-[#e94138] text-white' disabled={(isEdit && dataProductPage?.id) ? false : true}>Xóa bài</Button>}>
+                    <Spin spinning={isLoading}>
                         <div className='space-y-[5px]'>
                             <div className='flex items-center gap-[5px]'>
                                 <div className='w-1/3 flex items-center justify-between'>
@@ -40,8 +41,8 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={dataProductPage.title} width={'100%'} disabled={!this.props.isEdit}
-                                        onChange={(event) => this.props.on_change_product_page(event.target.value, 'title')} />
+                                    <Input value={dataProductPage.title} width={'100%'} disabled={!isEdit}
+                                        onChange={(event) => onChangeProductPage(event.target.value, 'title')} />
                                 </div>
                             </div>
                             <div className='flex items-center gap-[5px]'>
@@ -50,8 +51,8 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={dataProductPage.slug} width={'100%'} disabled={!this.props.isEdit}
-                                        onChange={(event) => this.props.on_change_product_page(event.target.value, 'slug')} />
+                                    <Input value={dataProductPage.slug} width={'100%'} disabled={!isEdit}
+                                        onChange={(event) => onChangeProductPage(event.target.value, 'slug')} />
                                 </div>
                             </div>
                             <div className='flex items-center gap-[5px]'>
@@ -60,8 +61,8 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <textarea className='w-full border p-[5px]' rows={4} value={dataProductPage.search_description} width={'100%'} disabled={!this.props.isEdit}
-                                        onChange={(event) => this.props.on_change_product_page(event.target.value, 'search_description')} />
+                                    <textarea className='w-full border p-[5px]' rows={4} value={dataProductPage.search_description} width={'100%'} disabled={!isEdit}
+                                        onChange={(event) => onChangeProductPage(event.target.value, 'search_description')} />
                                 </div>
                             </div>
                             <div className='flex items-center gap-[5px]'>
@@ -70,8 +71,8 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={dataProductPage.keywords} width={'100%'} disabled={!this.props.isEdit}
-                                        onChange={(event) => this.props.on_change_product_page(event.target.value, 'keywords')} />
+                                    <Input value={dataProductPage.keywords} width={'100%'} disabled={!isEdit}
+                                        onChange={(event) => onChangeProductPage(event.target.value, 'keywords')} />
                                 </div>
                             </div>
                         </div>
@@ -93,9 +94,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getDataProductPage: (id) => dispatch(actions.getDataProductPageRedux(id)),
-        on_change_product_page: (id, value) => dispatch(actions.onChangeProductPageRedux(id, value)),
-        set_data_product_page: (id) => dispatch(actions.setDataProductPageRedux(id)),
-        delete_list_product_page: (id) => dispatch(actions.deleteListProductPageRedux(id)),
+        onChangeProductPage: (id, value) => dispatch(actions.onChangeProductPageRedux(id, value)),
+        setDataProductPage: (id) => dispatch(actions.setDataProductPageRedux(id)),
+        deleteListProductPage: (id) => dispatch(actions.deleteListProductPageRedux(id)),
 
     };
 };

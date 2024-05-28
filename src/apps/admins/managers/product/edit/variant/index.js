@@ -16,146 +16,143 @@ class index extends Component {
         super(props);
         this.state = {
             dataVariants: [],
-            data_variant_ids: [],
 
             dataVariant: {},
-            active_variant: '',
-
-            dataMediaIds: [],
-            data_media_raws: [],
-            data_atbvl_ids: [],
+            activeVariant: '',
 
             dataAttributes: [],
+
             dataCheckPermis: {},
+            dataVariantIds: [],
+
         }
     }
     async componentDidMount() {
-        let dataCheckPermis = await handleCheckPermis(dataProducts, this.props.dataUserPermis, this.props.isSuperUser);
+        const { dataUserPermis, isSuperUser } = this.props;
+        const dataCheckPermis = await handleCheckPermis(dataProducts, dataUserPermis, isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
         });
     }
     async componentDidUpdate(prevProps) {
-        if (prevProps.data_variant_ids !== this.props.data_variant_ids) {
-            let data_variant_ids = this.props.data_variant_ids;
-            let dataProduct = this.props.dataProduct;
+        const { dataVariantIds, dataProduct } = this.props;
+        if (prevProps.dataVariantIds !== dataVariantIds) {
             let dataAttributes;
             if (dataProduct?.variant_attribute_group?.attribute) {
                 dataAttributes = dataProduct.variant_attribute_group.attribute;
             }
-            if (data_variant_ids && data_variant_ids.length !== 0) {
-                this.setState({ data_variant_ids: data_variant_ids, dataAttributes: dataAttributes });
-                await this.getListVariant(data_variant_ids);
+            if (dataVariantIds && dataVariantIds.length !== 0) {
+                this.setState({ dataVariantIds: dataVariantIds, dataAttributes: dataAttributes });
+                await this.getListVariant(dataVariantIds);
             }
         }
     }
-    getListVariant = async (data_variant_ids) => {
+    getListVariant = async (dataVariantIds) => {
+        const { getDataVariant } = this.props;
         let dataVariants = [];
-        for (const id of data_variant_ids) {
-            await this.props.getDataVariant(id);
-            let dataVariant = this.props.dataVariant;
-            dataVariants.push(dataVariant);
+        for (const id of dataVariantIds) {
+            await getDataVariant(id);
+            dataVariants.push(this.props.dataVariant);
         }
-        this.setState({ dataVariants: dataVariants, active_variant: (dataVariants.length) - 1 });
+        this.setState({ dataVariants: dataVariants, activeVariant: (dataVariants.length) - 1 });
     }
-    select_variant = async (index) => {
-        let isEdit = this.props.isEdit;
+    selectVariant = async (index) => {
+        const { isEdit, getDataVariant } = this.props;
+        const { dataVariants } = this.state;
         if (isEdit) {
-            message.error('Bạn vui lòng lưu lại thay đôi');
+            message.error('Bạn vui lòng lưu lại thay đổi');
             return;
         } else {
-            let dataVariants = this.state.dataVariants;
-            this.setState({ active_variant: index })
-            await this.props.getDataVariant(dataVariants[index].id);
-        }
-
-    }
-    get_data_media = (dataMediaIds, data_media_raws) => {
-        this.setState({ dataMediaIds: dataMediaIds, data_media_raws: data_media_raws })
-    }
-    handle_create_media = async () => {
-        try {
-            let data_media_ids_new = [];
-            let dataMediaIds = this.state.dataMediaIds;
-            let data_atbvl_raws = this.state.data_media_raws;
-            for (const item of data_atbvl_raws) {
-                if (!item.id) {
-                    let data = await createMedia(item);
-                    if (data && data.data && data.data.success === 1) {
-                        data_media_ids_new.push(data.data.data.id);
-                    }
-                }
-            }
-            return [...data_media_ids_new, ...dataMediaIds];
-        } catch (error) {
-            showNotification(error);
-            return [];
-
+            this.setState({ activeVariant: index })
+            await getDataVariant(dataVariants[index].id);
         }
     }
-    get_data_atbvl = (data_atbvl_ids) => {
-        this.setState({ data_atbvl_ids: data_atbvl_ids })
-    }
-    handle_edit_variant = async () => {
-        let dataVariant = this.props.dataVariant;
+    handleEditVariant = async () => {
+        const { dataVariant, isEdit, clicEditVariant, editVariant, getDataVariant, isResultVariant } = this.props;
+        const dataMedias = dataVariant.media;
+        const dataAtbvls = dataVariant.attribute_values;
+        const { dataAttributes } = this.state;
         if (dataVariant?.id) {
-            let data_atbvl_ids = this.state.data_atbvl_ids;
-            let dataAttributes = this.state.dataAttributes;
-            if (this.props.isEdit) {
-                if (dataVariant.attribute_values?.[0]?.id) { delete dataVariant.attribute_values; }
-                if (data_atbvl_ids.length === 0) { delete dataVariant.attribute_values; }
-                else {
-                    if (data_atbvl_ids.length !== dataAttributes.length) {
-                        message.error('Thông số chưa đủ, vui chọn đầy đủ');
-                        return;
-                    } else {
-                        dataVariant.attribute_values = this.state.data_atbvl_ids;
+            if (isEdit) {
+                let newDataVariant = { ...dataVariant };
+                if (dataMedias.length !== 0) {
+                    const newDataMedias = await this.handleDataMedias(dataMedias);
+                    newDataVariant.media = newDataMedias;
+                }
+                if (dataAtbvls.length === dataAttributes.length) {
+                    if (dataAtbvls.length !== 0) {
+                        const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
+                        newDataVariant.attribute_values = newDataAtbvls;
                     }
+                } else {
+                    message.error('Thông số chưa đủ, vui chọn đầy đủ');
+                    return;
                 }
-                let media = await this.handle_create_media();
-                if (media && media.length === 0) {
-                    if (dataVariant?.media?.[0]?.id) { delete dataVariant.media; }
-                }
-                else { dataVariant.media = media; }
-
-                await this.props.editVariant(dataVariant.id, dataVariant);
-
-                if (this.props.is_result_variant) {
-                    await this.props.getDataVariant(dataVariant.id);
-                    this.props.click_edit_variant();
+                await editVariant(newDataVariant.id, newDataVariant);
+                if (isResultVariant) {
+                    await getDataVariant(newDataVariant.id);
+                    clicEditVariant();
                 }
             } else {
-                this.props.click_edit_variant();
+                clicEditVariant();
             }
         }
-
+    }
+    handleDataAtbvls = async (dataAtbvls) => {
+        let newDataAtbvlIds = [];
+        for (const Atbvl of dataAtbvls) {
+            if (Atbvl.id) {
+                newDataAtbvlIds.push(Atbvl.id);
+            }
+        }
+        return newDataAtbvlIds;
+    }
+    handleCreateMedia = async (media) => {
+        try {
+            const data = await createMedia(media);
+            if (data && data.data && data.data.success === 1) {
+                return data.data.data.id;
+            }
+        } catch (error) {
+            showNotification(error);
+        }
+    }
+    handleDataMedias = async (dataMedias) => {
+        let newDataMediaIds = [];
+        for (const media of dataMedias) {
+            if (media.id) { newDataMediaIds.push(media.id) }
+            else {
+                const newMediaId = await this.handleCreateMedia(media);
+                if (newMediaId) { newDataMediaIds.push(newMediaId); }
+            }
+        }
+        return newDataMediaIds;
     }
     render() {
-        let dataProduct = this.props.dataProduct;
-        let dataVariant = this.props.dataVariant;
-        let dataCheckPermis = this.state.dataCheckPermis;
+        const { dataProduct, isEdit, clicEditVariant } = this.props;
+        const { dataCheckPermis, dataVariants, activeVariant } = this.state;
         return (
             <Spin size='large' spinning={this.props.isLoading}>
                 <div className=" space-y-[10px]">
                     <div className='flex items-center justify-end'>
                         <Space>
-                            {this.props.isEdit &&
-                                <Button onClick={() => this.props.click_edit_variant()}
+                            {isEdit &&
+                                <Button onClick={() => clicEditVariant()}
                                     className='bg-[#e94138] text-white'>
                                     Hủy
                                 </Button>
                             }
                             <Button disabled={!dataCheckPermis['product.change_product']}
-                                onClick={() => this.handle_edit_variant()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
-                                {this.props.isEdit === false ? 'Chỉnh sửa' : 'Lưu'}
+                                onClick={() => this.handleEditVariant()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
+                                {isEdit ? 'Lưu' : 'Chỉnh sửa'}
                             </Button>
                         </Space>
                     </div>
                     <div className='lg:grid grid-cols-3 gap-[10px] space-y-[10px] lg:space-y-0 '>
                         <div>
-                            <VariantOverview dataVariants={this.state.dataVariants}
-                                select_variant={this.select_variant}
-                                active_variant={this.state.active_variant} />
+                            <VariantOverview dataVariants={dataVariants}
+                                selectVariant={this.selectVariant}
+                                activeVariant={activeVariant} />
                         </div>
                         <div className='col-span-2 space-y-[10px]'>
                             <div className='md:grid grid-cols-3 gap-[10px] space-y-[10px] md:space-y-0'>
@@ -163,14 +160,11 @@ class index extends Component {
                                     <VariantIntroduce />
                                 </div>
                                 <div>
-                                    <VariantMedia data_media_raws={this.props.dataVariant.media}
-                                        get_data_media={this.get_data_media} />
+                                    <VariantMedia />
                                 </div>
                             </div>
                             <VariantAttributeValue
-                                dataAttributes={dataProduct?.variant_attribute_group?.attribute}
-                                data_atbvl_raws={dataVariant?.attribute_values}
-                                get_data_atbvl={this.get_data_atbvl} />
+                                dataAttributes={dataProduct?.variant_attribute_group?.attribute} />
                         </div>
                     </div>
                 </div>
@@ -183,7 +177,7 @@ const mapStateToProps = state => {
         isLoading: state.variant.isLoading,
         dataProduct: state.product.dataProduct,
         dataVariant: state.variant.dataVariant,
-        is_result_variant: state.variant.isResult,
+        isResultVariant: state.variant.isResult,
 
         isEdit: state.variant.isEdit,
 
@@ -195,10 +189,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getDataVariant: (id) => dispatch(actions.getDataVariantRedux(id)),
-        click_edit_variant: (value) => dispatch(actions.clickEditVariantRedux(value)),
+        clicEditVariant: (value) => dispatch(actions.clickEditVariantRedux(value)),
         editVariant: (id, data) => dispatch(actions.editVariantRedux(id, data)),
-        set_data_variant: (data) => dispatch(actions.setDataVariantRedux(data)),
-
+        setDataVariant: (data) => dispatch(actions.setDataVariantRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));
