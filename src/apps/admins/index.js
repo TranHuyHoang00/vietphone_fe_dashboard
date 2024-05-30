@@ -56,16 +56,15 @@ class index extends Component {
             collapsed: false,
             url: '/admin/',
             value: {},
-            loggedIn: false,
             drawerMenu: false,
             dataCheckPermis: {},
         }
     }
     async componentDidMount() {
         const dataAccount = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
-        const { getListUserPermission } = this.props;
+        const { setLogin, getListUserPermission } = this.props;
         if (dataAccount) {
-            this.setState({ loggedIn: true });
+            setLogin(true);
             await getListUserPermission();
             await this.checkPermis();
         }
@@ -82,12 +81,7 @@ class index extends Component {
     onClickPage = (value) => {
         this.props.history.push(`/admin/${value.key}`);
     }
-    handleLoginAdmin = () => {
-        this.setState({ loggedIn: true });
-    }
-    handleLogoutAdmin = () => {
-        this.setState({ loggedIn: false });
-    }
+
     openDrawerMenu = () => {
         this.setState({ drawerMenu: true })
     }
@@ -95,8 +89,9 @@ class index extends Component {
         this.setState({ drawerMenu: false })
     }
     render() {
-        const { dataCheckPermis, loggedIn, url, collapsed, drawerMenu } = this.state;
-
+        const { dataCheckPermis, url, collapsed, drawerMenu } = this.state;
+        const { loggedIn } = this.props;
+        console.log();
         const items = [
             {
                 key: 'menu_dashboard', icon: <AiFillDashboard />, label: 'Dashboard', children: [
@@ -255,7 +250,7 @@ class index extends Component {
                                 onClick={(value) => this.onClickPage(value)} />
                         </Drawer>
                         <Layout className='overflow-auto h-screen'>
-                            <HeaderDB openDrawerMenu={this.openDrawerMenu} handleLogoutAdmin={this.handleLogoutAdmin} />
+                            <HeaderDB openDrawerMenu={this.openDrawerMenu} />
                             <Layout.Content className='py-[10px]'>
                                 <Switch>
                                     <Route exact path={`${url}statistical/view_web`}><StatisticalViewWeb /></Route>
@@ -327,7 +322,7 @@ class index extends Component {
                         <Switch>
                             <Route exact path={`${url}`}><NotLogged /></Route>
                             <Route exact path={`${url}login`}>
-                                <LoginDB handleLoginAdmin={this.handleLoginAdmin} />
+                                <LoginDB />
                             </Route>
                             <Route ><NotFound /></Route>
                         </Switch>
@@ -342,11 +337,14 @@ const mapStateToProps = state => {
     return {
         dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
+        loggedIn: state.login.loggedIn,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         getListUserPermission: (dataFilter) => dispatch(actions.getListUserPermissionRedux(dataFilter)),
+        setLogin: (data) => dispatch(actions.setLoginRedux(data)),
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

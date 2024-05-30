@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { getDataLocal, setDataLocal } from './localStorage';
-
+import { getDataLocal, setDataLocal, deleteDataLocal } from './localStorage';
 const apiAdmin = axios.create({
     baseURL: `${process.env.REACT_APP_API}`,
 });
@@ -15,7 +14,6 @@ apiAdmin.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-
 apiAdmin.interceptors.response.use(
     (response) => { return response; },
     async (error) => {
@@ -28,7 +26,7 @@ apiAdmin.interceptors.response.use(
                 return Promise.reject(error);
             }
             try {
-                let data = await axios.post(`${process.env.REACT_APP_API}/auth/api/v1/token/refresh`, { refresh: refresh });
+                const data = await axios.post(`${process.env.REACT_APP_API}/auth/api/v1/token/refresh`, { refresh: refresh });
                 if (data && data.data && data.data.success === 1) {
                     token = data.data.data.access;
                     originalConfig.headers.Authorization = `Bearer ${token}`;
@@ -36,12 +34,20 @@ apiAdmin.interceptors.response.use(
                     setDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, dataAccount.data);
                     return apiAdmin(originalConfig);
                 } else {
+                    const isResult = deleteDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+                    if (isResult) {
+                        this.props.history.push('/admin/login');
+                        window.location.href = '/';
+                    }
                     return Promise.reject(error);
                 }
             } catch (error) {
+                const isResult = deleteDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+                if (isResult) {
+                    window.location.href = '/';
+                }
                 return Promise.reject(error);
             }
-
         }
         return Promise.reject(error);
     }

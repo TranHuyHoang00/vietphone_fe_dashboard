@@ -29,10 +29,10 @@ class header extends Component {
             this.setState({ dataUser: dataUser.data.user, darkMode: darkMode.data });
         }
     }
-    handleLogout = () => {
-        const { handleLogoutAdmin } = this.props;
-        handleLogoutAdmin();
-        deleteDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+    handleLogout = async () => {
+        const { setLogin } = this.props;
+        setLogin(false);
+        await deleteDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
         this.props.history.push(`/admin/login`);
     }
     handleSetDarkMode = (value) => {
@@ -102,6 +102,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         setDarkMode: (value) => dispatch(actions.setDarkModeRedux(value)),
+        setLogin: (data) => dispatch(actions.setLoginRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(header));

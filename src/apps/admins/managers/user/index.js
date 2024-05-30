@@ -42,8 +42,6 @@ class index extends Component {
         const { getListUser, dataUserPermis, isSuperUser } = this.props;
         await getListUser(dataFilter);
         const dataCheckPermis = await handleCheckPermis(dataUsers, dataUserPermis, isSuperUser);
-        console.log(dataCheckPermis);
-
         this.setState({
             dataCheckPermis: dataCheckPermis,
         });

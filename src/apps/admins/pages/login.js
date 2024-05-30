@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '@actions';
 import { setDataLocal } from '@auths/localStorage';
 import { Login } from '@services/login_services';
 import { message, Spin } from 'antd';
@@ -49,14 +51,15 @@ class login extends Component {
     handleLogin = async () => {
         const { phone, password } = this.state;
         const result = this.validationData(phone, password);
-        const { handleLoginAdmin } = this.props;
+        const { setLogin } = this.props;
         if (result.check) {
             try {
                 let data = await Login(phone, password);
                 if (data && data.data && data.data.success === 1) {
-                    setDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
+                    await setDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
+                    setLogin(true);
                     this.props.history.push(`/admin`);
-                    handleLoginAdmin();
+                    window.location.href = '/admin';
                 }
                 else {
                     message.error("Tài khoản hoặc mật khẩu không chính xác!")
@@ -119,4 +122,15 @@ class login extends Component {
     }
 
 }
-export default withRouter(login);
+
+const mapStateToProps = state => {
+    return {
+        loggedIn: state.login.loggedIn,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        setLogin: (data) => dispatch(actions.setLoginRedux(data)),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(login));

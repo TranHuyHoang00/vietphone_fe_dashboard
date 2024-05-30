@@ -82,13 +82,20 @@ class variant_attribute_value extends Component {
     handleAddAtbvl = async () => {
         const { dataAttributeValue, dataVariant, setDataVariant } = this.props;
         let newDataAtbvls = dataVariant.attribute_values;
-        newDataAtbvls.push(dataAttributeValue);
-        let newDataVariant = {
-            ...dataVariant,
-            attribute_values: newDataAtbvls,
-        };
-        setDataVariant(newDataVariant);
-        await this.handleDataAtbvlUnique(newDataAtbvls);
+        const foundObject = newDataAtbvls.find(obj => obj?.attribute?.id === dataAttributeValue?.attribute?.id);
+        if (foundObject) {
+            message.error('Đã tồn tại thông số này');
+            return;
+        } else {
+            newDataAtbvls.push(dataAttributeValue);
+            let newDataVariant = {
+                ...dataVariant,
+                attribute_values: newDataAtbvls,
+            };
+            setDataVariant(newDataVariant);
+            await this.handleDataAtbvlUnique(newDataAtbvls);
+        }
+
     }
     handleDeleteAtbvl = async (id) => {
         const { dataVariant, setDataVariant } = this.props;

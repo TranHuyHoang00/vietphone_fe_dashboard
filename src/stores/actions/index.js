@@ -23,6 +23,7 @@ export * from '@actions/permission_types';
 export * from '@actions/dark_mode_types';
 export * from '@actions/user_types';
 export * from '@actions/statistical_types';
+export * from '@actions/login_types';
 
 
 

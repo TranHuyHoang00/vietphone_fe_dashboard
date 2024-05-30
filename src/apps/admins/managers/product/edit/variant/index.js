@@ -37,10 +37,7 @@ class index extends Component {
     async componentDidUpdate(prevProps) {
         const { dataVariantIds, dataProduct } = this.props;
         if (prevProps.dataVariantIds !== dataVariantIds) {
-            let dataAttributes;
-            if (dataProduct?.variant_attribute_group?.attribute) {
-                dataAttributes = dataProduct.variant_attribute_group.attribute;
-            }
+            const dataAttributes = dataProduct?.variant_attribute_group?.attribute ? dataProduct?.variant_attribute_group?.attribute : []
             if (dataVariantIds && dataVariantIds.length !== 0) {
                 this.setState({ dataVariantIds: dataVariantIds, dataAttributes: dataAttributes });
                 await this.getListVariant(dataVariantIds);
@@ -75,18 +72,22 @@ class index extends Component {
         if (dataVariant?.id) {
             if (isEdit) {
                 let newDataVariant = { ...dataVariant };
-                if (dataMedias.length !== 0) {
+                if (dataMedias && dataMedias.length !== 0) {
                     const newDataMedias = await this.handleDataMedias(dataMedias);
                     newDataVariant.media = newDataMedias;
                 }
-                if (dataAtbvls.length === dataAttributes.length) {
-                    if (dataAtbvls.length !== 0) {
-                        const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
-                        newDataVariant.attribute_values = newDataAtbvls;
+                if (dataAtbvls && dataAttributes) {
+                    if (dataAtbvls.length === dataAttributes.length) {
+                        if (dataAtbvls.length !== 0) {
+                            const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
+                            newDataVariant.attribute_values = newDataAtbvls;
+                        } else {
+                            delete newDataVariant.attribute_values;
+                        }
+                    } else {
+                        message.error('Thiếu hoặc chưa đủ thông số, vui sửa lại');
+                        return;
                     }
-                } else {
-                    message.error('Thông số chưa đủ, vui chọn đầy đủ');
-                    return;
                 }
                 await editVariant(newDataVariant.id, newDataVariant);
                 if (isResultVariant) {
@@ -163,8 +164,7 @@ class index extends Component {
                                     <VariantMedia />
                                 </div>
                             </div>
-                            <VariantAttributeValue
-                                dataAttributes={dataProduct?.variant_attribute_group?.attribute} />
+                            <VariantAttributeValue dataAttributes={dataProduct?.variant_attribute_group?.attribute} />
                         </div>
                     </div>
                 </div>
