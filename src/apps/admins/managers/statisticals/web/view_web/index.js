@@ -31,7 +31,12 @@ class index extends Component {
                 start = dayjs(day).subtract(displayNumber, 'day').format('YYYY-MM-DD');
                 break;
             case 'month':
-                start = dayjs(day).subtract(displayNumber, 'month').format('YYYY-MM-DD');
+                const startOfMonth = dayjs(day).subtract(displayNumber, 'month').format('YYYY-MM-DD');
+                const firstDayOfStart = dayjs(startOfMonth).startOf('month').format('YYYY-MM-DD');
+                const endtOfMonth = dayjs(day).format('YYYY-MM-DD');
+                const firstDayOfEnd = dayjs(endtOfMonth).startOf('month').format('YYYY-MM-DD');
+                start = firstDayOfStart;
+                end = firstDayOfEnd;
                 break;
             case 'year':
                 start = dayjs(day).subtract(displayNumber, 'year').format('YYYY-MM-DD');
@@ -39,7 +44,6 @@ class index extends Component {
             default:
                 break;
         }
-
         for (let i = 0; i <= displayNumber; i++) {
             let previousDay;
             switch (itemGroupButtonType) {

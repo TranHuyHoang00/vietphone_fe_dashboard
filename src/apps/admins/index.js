@@ -3,19 +3,11 @@ import { Switch, Route } from "react-router-dom";
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Layout, Menu, Drawer } from 'antd';
-import {
-    AiOutlineUser, AiFillHdd, AiFillAndroid, AiFillShop, AiFillSwitcher, AiFillBehanceSquare
-    , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillBook, AiFillBuild,
-    AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook, AiOutlineUserSwitch,
-    AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard
-} from "react-icons/ai";
-import { IoStatsChart, IoLogoChrome, IoBarChartSharp, IoBookSharp } from "react-icons/io5";
-import { FaUserNurse, FaAndroid, FaUserShield } from "react-icons/fa6";
-
 import { withRouter } from 'react-router-dom';
 import { getDataLocal } from '@auths/localStorage';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataPermiViews } from '@datas/dataPermissionsOrigin';
+import { itemMenuLeftLayoutSider } from '@datas/dataMenu';
 import HeaderDB from './layouts/header';
 import LoginDB from './pages/login';
 import NotLogged from './pages_error/not_logged';
@@ -81,172 +73,37 @@ class index extends Component {
     onClickPage = (value) => {
         this.props.history.push(`/admin/${value.key}`);
     }
-
     openDrawerMenu = () => {
         this.setState({ drawerMenu: true })
     }
     closeDrawerMenu = () => {
         this.setState({ drawerMenu: false })
     }
+    handleMenuWithPermis = (menuItems) => {
+        const { dataCheckPermis } = this.state;
+        return menuItems.map(item => {
+            const filteredChildren = item.children.filter(child => dataCheckPermis[child.title]);
+            return { ...item, children: filteredChildren };
+        }).filter(item => item.children.length > 0);
+    }
     render() {
         const { dataCheckPermis, url, collapsed, drawerMenu } = this.state;
         const { loggedIn } = this.props;
-        console.log();
-        const items = [
-            {
-                key: 'menu_dashboard', icon: <AiFillDashboard />, label: 'Dashboard', children: [
-                    {
-                        key: 'website', icon: <IoLogoChrome />, label: 'Website', type: 'group', children: [
-                            {
-                                key: 'statistical/view_web', icon: <IoStatsChart />, label: 'Lượt truy cập',
-                            },
-                            {
-                                key: 'statistical/view_product', icon: <IoBarChartSharp />, label: 'Lượt xem sản phẩm',
-                            },
-                        ]
-                    },
-                ],
-            },
-            {
-                key: 'menu_system_staff', icon: <FaUserNurse />, label: 'Nhân viên', children: [
-                    {
-                        key: 'system_staff/roll_call', icon: <FaAndroid />, label: 'Chấm công',
-                    },
-                    {
-                        key: 'system_staff/history', icon: <IoBookSharp />, label: 'Lịch sử',
-                    },
-                ],
-            },
-            {
-                key: 'menu_user', icon: <FaUserShield />, label: 'Người dùng', children: [
-                    {
-                        key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng',
-                        disabled: !dataCheckPermis['account.view_customer']
-                    },
-                    {
-                        key: 'manager/user', icon: <AiOutlineUserSwitch />, label: 'Tài khoản',
-                        disabled: !dataCheckPermis['account.view_user']
-                    },
-                    {
-                        key: 'manager/group', icon: <AiFillRobot />, label: 'Phân quyền',
-                        disabled: !dataCheckPermis['group.view_group']
-                    },
-                ],
-            },
-            {
-                key: 'menu_order', icon: <AiFillContainer />, label: 'Đơn đặt', children: [
-                    {
-                        key: '', icon: <AiFillFileMarkdown />, label: 'Đơn hàng',
-                        disabled: !dataCheckPermis['order.view_order']
-                    },
-                ],
-            },
-            {
-                key: 'menu_product', icon: <AiFillShop />, label: 'Cửa hàng', children: [
-                    {
-                        key: 'manager/product', icon: <AiFillMobile />, label: 'Sản phẩm',
-                        disabled: !dataCheckPermis['product.view_product']
-                    },
-                    {
-                        key: 'manager/flash_sale_item', icon: <AiFillPayCircle />, label: 'Flash sale',
-                        disabled: !dataCheckPermis['promotion.view_flashsaleitem']
-                    },
-                ],
-            },
-            {
-                key: 'advertisement', icon: <AiFillProject />, label: 'Quảng cáo', children: [
-                    {
-                        key: 'manager/banner', icon: <AiFillBehanceSquare />, label: 'Băng rôn',
-                        disabled: !dataCheckPermis['settings.view_banner']
-                    },
-                    {
-                        key: 'manager/location', icon: <AiFillEnvironment />, label: 'Vị trí',
-                        disabled: !dataCheckPermis['settings.view_location']
-                    },
-                ],
-            },
-            {
-                key: 'menu_specification', icon: <AiFillSetting />, label: 'Thông số', children: [
-                    {
-                        key: 'manager/attribute_value', icon: <AiFillRocket />, label: 'Giá trị',
-                        disabled: !dataCheckPermis['product.view_attributevalue']
-                    },
-                    {
-                        key: 'manager/attribute', icon: <AiFillUsb />, label: 'Thông số',
-                        disabled: !dataCheckPermis['product.view_attribute']
-                    },
-                    {
-                        key: 'manager/group_attribute', icon: <AiFillFire />, label: 'Loại thông số',
-                        disabled: !dataCheckPermis['product.view_groupattribute']
-                    },
-                    {
-                        key: 'manager/variant_attribute_group', icon: <AiFillCrown />, label: 'Loại TS-SP',
-                        disabled: !dataCheckPermis['product.view_variantattributegroup']
-                    },
-                ],
-            },
-            {
-                key: 'menu_category', icon: <AiFillHdd />, label: 'Danh mục', children: [
-                    {
-                        key: 'manager/tag', icon: <AiFillTag />, label: 'Tag',
-                        disabled: !dataCheckPermis['product.view_tag']
-                    },
-                    {
-                        key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu',
-                        disabled: !dataCheckPermis['product.view_brand']
-                    },
-                    {
-                        key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục',
-                        disabled: !dataCheckPermis['product.view_category']
-                    },
-                    {
-                        key: 'manager/flash_sale', icon: <AiFillMoneyCollect />, label: 'Flash_sale',
-                        disabled: !dataCheckPermis['promotion.view_flashsale']
-                    },
-
-                ],
-            },
-            {
-                key: 'menu_post', icon: <AiFillBook />, label: 'Bài đăng', children: [
-                    {
-                        key: 'manager/post', icon: <AiOutlineBook />, label: 'Bài viết',
-                        disabled: !dataCheckPermis['post.view_post']
-                    },
-                    {
-                        key: 'manager/category_post', icon: <AiFillBuild />, label: 'Loại bài viết',
-                        disabled: !dataCheckPermis['post.view_category']
-                    },
-                ],
-            },
-            {
-                key: 'menu_system', icon: <AiFillAndroid />, label: 'Hệ thống', children: [
-                    {
-                        key: 'manager/sync_data', icon: <AiFillControl />, label: 'Đồng bộ',
-                        disabled: !dataCheckPermis['sync.view_sync']
-                    },
-                    {
-                        key: 'manager/task', icon: <AiFillSwitcher />, label: 'Lịch sử',
-                        disabled: !dataCheckPermis['task.view_task']
-                    },
-                ],
-            },
-        ];
         return (
-
             <>
                 {loggedIn ?
                     <Layout hasSider style={{ minHeight: '100vh', }} >
                         <Layout.Sider theme='dark' className='overflow-y-auto h-screen md:block hidden'
                             collapsible collapsed={collapsed} breakpoint="lg"
                             onCollapse={() => this.setCollapsed()}>
-                            <Menu theme='dark' mode="inline" items={items} defaultSelectedKeys={['manager']}
+                            <Menu theme='dark' mode="inline" items={this.handleMenuWithPermis(itemMenuLeftLayoutSider)} defaultSelectedKeys={['manager']}
                                 onClick={(value) => this.onClickPage(value)} />
                         </Layout.Sider>
                         <Drawer title="Menu" placement={'left'} width={250} className='md:hidden block'
                             onClose={() => this.closeDrawerMenu()}
                             open={drawerMenu}>
                             <Menu className='border p-[5px] shadow-sm rounded-[5px]'
-                                theme="light" mode="inline" items={items} defaultSelectedKeys={['manager']}
+                                theme="light" mode="inline" items={this.handleMenuWithPermis(itemMenuLeftLayoutSider)} defaultSelectedKeys={['manager']}
                                 onClick={(value) => this.onClickPage(value)} />
                         </Drawer>
                         <Layout className='overflow-auto h-screen'>
@@ -308,8 +165,6 @@ class index extends Component {
                                         <Route exact path={`${url}manager/sync_data`}><ManagerSyncData /></Route>}
                                     {dataCheckPermis['task.view_task'] &&
                                         <Route exact path={`${url}manager/task`}><ManagerTask /></Route>}
-
-
 
                                     <Route exact path={`${url}login`}><Empty /></Route>
                                     <Route ><NotFound /></Route>

@@ -1,4 +1,5 @@
 const dataPermiViews = [
+    "statistical.view_web", "statistical.view_product",
     "account.view_customer", "account.view_user", "group.view_group",
     "order.view_order",
     "product.view_product", "promotion.view_flashsaleitem",
