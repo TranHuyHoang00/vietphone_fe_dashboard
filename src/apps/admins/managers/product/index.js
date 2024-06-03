@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
-    Table, Space, Divider, Button, Input,
+    Table, Space, Divider, Button, Input, Popconfirm, Dropdown,
     Spin, Pagination, Typography, Tag, Image
 } from 'antd';
 import { AiOutlineMenu } from "react-icons/ai";
@@ -12,11 +12,13 @@ import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataProducts } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            dropButtonType: 1,
             listItemSelected: [],
             modalDetail: false,
             modalCreate: false,
@@ -53,6 +55,17 @@ class index extends Component {
             default:
                 return;
         }
+    }
+    funcDropButtonHeaderOfTable = async () => {
+        const { listItemSelected, dropButtonType, dataFilter } = this.state;
+        const { deleteListProduct, editListProduct, getListProduct } = this.props;
+        const actions = {
+            deleteList: deleteListProduct,
+            editList: editListProduct,
+            getList: getListProduct
+        };
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
+        this.setState({ listItemSelected: newListItemSelected });
     }
     onChangePage = async (pageValue, pageType,) => {
         const { dataFilter } = this.state;
@@ -151,8 +164,10 @@ class index extends Component {
                     </div>
             },
         ];
-
-        const { dataCheckPermis, listItemSelected, drawerFilter } = this.state;
+        const { dataCheckPermis, listItemSelected, drawerFilter, dropButtonType } = this.state;
+        const items = [
+            { key: 1, label: 'Xóa', disabled: !dataCheckPermis['product.delete_product'] },
+        ];
         const { isLoading, dataProducts, dataMeta, dataFilter } = this.props;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -180,6 +195,20 @@ class index extends Component {
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
+                                <div>
+                                    <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
+                                        title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
+                                        placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
+                                        <Dropdown.Button
+                                            disabled={!dataCheckPermis['product.delete_product']}
+                                            menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
+                                            <div>
+                                                {dropButtonType === 1 && <span>Xóa</span>}
+                                                <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
+                                            </div>
+                                        </Dropdown.Button>
+                                    </Popconfirm>
+                                </div>
                             </div>
                             <Divider>SẢN PHẨM</Divider>
                             <div className='space-y-[20px]'>

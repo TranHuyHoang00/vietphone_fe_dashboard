@@ -9,8 +9,8 @@ import { FaUserNurse, FaAndroid, FaUserShield } from "react-icons/fa6";
 
 const itemMenuLeftLayoutSider = [
     {
-        key: 1, icon: <AiFillDashboard />, label: 'Dashboard', children: [
-            { key: 'statistical/view_web', icon: <IoStatsChart />, label: 'Lượt truy cập', title: 'statistical.view_web' },
+        key: 1, icon: <AiFillDashboard />, label: 'Thống kê', children: [
+            { key: 'statistical/view_web', icon: <IoStatsChart />, label: 'Lượt truy cập web', title: 'statistical.view_web' },
             { key: 'statistical/view_product', icon: <IoBarChartSharp />, label: 'Lượt xem sản phẩm', title: 'statistical.view_product' },
         ],
     },

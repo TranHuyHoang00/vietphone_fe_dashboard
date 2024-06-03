@@ -23,7 +23,7 @@ const dataOrders = [
     "order.view_order", "order.change_order", "order.delete_order", "order.add_order",
 ];
 const dataProducts = [
-    "product.view_product", "product.change_product", "product.deleteProduct", "product.add_product",
+    "product.view_product", "product.change_product", "product.delete_product", "product.add_product",
 ];
 const dataFlashSaleItems = [
     "promotion.view_flashsaleitem", "promotion.change_flashsaleitem", "promotion.delete_flashsaleitem", "promotion.add_flashsaleitem",
