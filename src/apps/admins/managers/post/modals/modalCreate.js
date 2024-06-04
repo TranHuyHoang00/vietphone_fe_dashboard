@@ -8,6 +8,7 @@ import ModalFooter from '@components/modals/modalFooter';
 import FormSelectSingle from '@components/selects/formSelectSingle';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { moduleQuills, formatQuills } from '@datas/dataModuleReactQuill';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -76,8 +77,8 @@ class index extends Component {
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
                             <ReactQuill theme="snow"
-                                modules={index.modules}
-                                formats={index.formats}
+                                modules={moduleQuills}
+                                formats={formatQuills}
                                 bounds={'.app'}
                                 value={dataPost.body}
                                 onChange={(value) => onChangePost(value, 'body')}
@@ -108,38 +109,3 @@ const mapDispatchToProps = dispatch => {
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));
-
-index.modules = {
-    toolbar: [
-        [{ 'font': [] }],
-        [{ 'size': ['small', 'large', 'huge'] }],
-
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-
-        ['link', 'image', 'video'],
-
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-
-        [{ 'script': 'sub' }, { 'script': 'super' }],
-        [{ 'indent': '-1' }, { 'indent': '+1' }],
-
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'align': [] }],
-
-        ['clean']
-    ],
-    clipboard: {
-        matchVisual: false,
-    }
-}
-
-index.formats = [
-    'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'link', 'image', 'video',
-
-    'header', 'indent', 'script',
-    'color', 'background', 'align', 'clean'
-]

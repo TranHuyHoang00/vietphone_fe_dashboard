@@ -25,6 +25,10 @@ import darkModeReducers from '@reducers/dark_mode_reducers';
 import userReducers from '@reducers/user_reducers';
 import statisticalReducers from '@reducers/statistical_reducers';
 import loginReducers from '@reducers/login_reducers';
+import promotionReducers from '@reducers/promotion_reducers';
+import warrantyReducers from '@reducers/warranty_reducers';
+import repairReducers from '@reducers/repair_reducers';
+
 export default combineReducers({
     product: productReducers,
     customer: customerReducers,
@@ -52,4 +56,7 @@ export default combineReducers({
     user: userReducers,
     statistical: statisticalReducers,
     login: loginReducers,
+    promotion: promotionReducers,
+    warranty: warrantyReducers,
+    repair: repairReducers,
 })

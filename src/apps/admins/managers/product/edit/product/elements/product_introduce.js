@@ -12,15 +12,19 @@ class product_introduce extends Component {
         }
     }
     async componentDidMount() {
-        const { getListBrand, getListTag, getListCategory, getListVariantAttributeGroup } = this.props;
+        const { getListBrand, getListTag, getListCategory, getListVariantAttributeGroup, getListPromotion, getListRepair } = this.props;
         const { dataFilter } = this.state;
-        getListBrand(dataFilter);
-        getListTag(dataFilter);
-        getListCategory(dataFilter);
-        getListVariantAttributeGroup(dataFilter);
+        await getListBrand(dataFilter);
+        await getListTag(dataFilter);
+        await getListCategory(dataFilter);
+        await getListVariantAttributeGroup(dataFilter);
+        await getListPromotion(dataFilter);
+        await getListRepair(dataFilter);
     }
     onSearch = (valueSearch, nameFormSelect) => {
-        const { getListBrand, getListTag, getListCategory, getListVariantAttributeGroup } = this.props;
+        const { getListBrand, getListTag, getListCategory, getListVariantAttributeGroup, getListPromotion,
+            getListRepair,
+        } = this.props;
         const { dataFilter } = this.state;
         let newDataFilter = {
             ...dataFilter,
@@ -37,16 +41,22 @@ class product_introduce extends Component {
                 getListCategory(newDataFilter)
                 break;
             case 'variant_attribute_group':
-                getListTag(getListVariantAttributeGroup)
+                getListVariantAttributeGroup(newDataFilter)
+                break;
+            case 'promotion':
+                getListPromotion(newDataFilter)
+                break;
+            case 'repair':
+                getListRepair(newDataFilter)
                 break;
             default:
                 break;
         }
     }
     handleCreate = async (nameFormSelect) => {
-        const { getListBrand, getListTag, getListCategory, getListVariantAttributeGroup,
-            createBrand, createTag, createCategory,
-            dataBrand, dataTag, dataCategory,
+        const { getListBrand, getListTag, getListCategory, getListVariantAttributeGroup, getListRepair,
+            createBrand, createTag, createCategory, createRepair,
+            dataBrand, dataTag, dataCategory, dataRepair
         } = this.props;
         const { dataFilter } = this.state;
         switch (nameFormSelect) {
@@ -68,13 +78,19 @@ class product_introduce extends Component {
             case 'variant_attribute_group':
                 await getListVariantAttributeGroup(dataFilter);
                 break;
+            case 'repair':
+                if (!dataRepair.value) { message.error('Thiếu giá trị'); return; }
+                await createRepair(dataRepair);
+                await getListRepair(dataFilter);
+                break;
             default:
                 break;
         }
     }
     render() {
         const { dataProduct, dataBrands, dataTags, dataCategorys, dataVariantAttributeGroups,
-            isEdit, onChangeProduct, onChangeBrand, onChangeTag, onChangeCategory, onChangeVariantAttributeGroup
+            isEdit, onChangeProduct, onChangeBrand, onChangeTag, onChangeCategory, onChangeVariantAttributeGroup,
+            dataPromotions, onChangePromotion, dataRepairs, onChangeRepair,
         } = this.props;
         return (
             <Collapse defaultActiveKey={[1]}>
@@ -82,12 +98,68 @@ class product_introduce extends Component {
                     <div className='space-y-[5px]'>
                         <div className='flex gap-[5px]'>
                             <div className='w-1/3 flex items-center justify-between'>
-                                <span>Trạng thái</span>
+                                <span>Tên sản phẩm</span>
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
                                 <Input disabled={!isEdit} value={dataProduct.name}
                                     onChange={(event) => onChangeProduct(event.target.value, 'name')} />
+                            </div>
+                        </div>
+                        <div className='flex items-center gap-[5px]'>
+                            <div className='w-1/3 flex items-center justify-between'>
+                                <span>Khuyến mãi</span>
+                                <span>:</span>
+                            </div>
+                            <div className='w-2/3'>
+                                <FormSelectMultiple width={'100%'} placeholder={'Tên khuyến mãi'}
+                                    nameFormSelect={'promotion'}
+                                    value={dataProduct?.promotion_info?.id ? dataProduct?.promotion_info?.id : dataProduct?.promotion_info}
+                                    options={dataPromotions && dataPromotions.map((item) => ({
+                                        label: item.name,
+                                        value: item.id,
+                                    }))}
+                                    disabledSelect={!isEdit}
+                                    disabledButtonCreate={true}
+                                    disabledSearch={false}
+
+                                    onSearch={this.onSearch}
+                                    variableSelect={'promotion_info'}
+                                    onChangeSelect={onChangeProduct}
+
+                                    variableInputSearch={'name'}
+                                    onChangeInput={onChangePromotion}
+                                    handleCreate={this.handleCreate}
+                                />
+
+                            </div>
+                        </div>
+                        <div className='flex items-center gap-[5px]'>
+                            <div className='w-1/3 flex items-center justify-between'>
+                                <span>Sửa chữa</span>
+                                <span>:</span>
+                            </div>
+                            <div className='w-2/3'>
+                                <FormSelectMultiple width={'100%'} placeholder={'Giá trị'}
+                                    nameFormSelect={'repair'}
+                                    value={dataProduct?.repair_time?.id ? dataProduct?.repair_time?.id : dataProduct?.repair_time}
+                                    options={dataRepairs && dataRepairs.map((item) => ({
+                                        label: item.value,
+                                        value: item.id,
+                                    }))}
+                                    disabledSelect={!isEdit}
+                                    disabledButtonCreate={false}
+                                    disabledSearch={false}
+
+                                    onSearch={this.onSearch}
+                                    variableSelect={'repair_time'}
+                                    onChangeSelect={onChangeProduct}
+
+                                    variableInputSearch={'value'}
+                                    onChangeInput={onChangeRepair}
+                                    handleCreate={this.handleCreate}
+                                />
+
                             </div>
                         </div>
                         <div className='flex items-center gap-[5px]'>
@@ -99,7 +171,7 @@ class product_introduce extends Component {
                                 <FormSelectMultiple width={'100%'} placeholder={'Tên thương hiệu'}
                                     nameFormSelect={'brand'}
                                     value={dataProduct.product_brand}
-                                    options={dataBrands.map((item) => ({
+                                    options={dataBrands && dataBrands.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
@@ -127,7 +199,7 @@ class product_introduce extends Component {
                                 <FormSelectMultiple width={'100%'} placeholder={'Tên tag'}
                                     nameFormSelect={'tag'} mode={'multiple'}
                                     value={dataProduct.tags}
-                                    options={dataTags.map((item) => ({
+                                    options={dataTags && dataTags.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
@@ -153,7 +225,7 @@ class product_introduce extends Component {
                                 <FormSelectMultiple width={'100%'} placeholder={'Tên danh mục'}
                                     nameFormSelect={'category'} mode={'multiple'}
                                     value={dataProduct.categories}
-                                    options={dataCategorys.map((item) => ({
+                                    options={dataCategorys && dataCategorys.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
@@ -179,7 +251,7 @@ class product_introduce extends Component {
                                 <FormSelectMultiple width={'100%'} placeholder={'Tên SP-TS'}
                                     nameFormSelect={'variant_attribute_group'}
                                     value={(dataProduct?.variant_attribute_group?.id) ? (dataProduct.variant_attribute_group.id) : dataProduct.variant_attribute_group}
-                                    options={dataVariantAttributeGroups.map((item) => ({
+                                    options={dataVariantAttributeGroups && dataVariantAttributeGroups.map((item) => ({
                                         label: item.name,
                                         value: item.id,
                                     }))}
@@ -229,6 +301,10 @@ const mapStateToProps = state => {
         dataVariantAttributeGroups: state.variant_attribute_group.dataVariantAttributeGroups,
         dataVariantAttributeGroup: state.variant_attribute_group.dataVariantAttributeGroup,
         isEdit: state.product.isEdit,
+        dataPromotions: state.promotion.dataPromotions,
+        dataRepairs: state.repair.dataRepairs,
+        dataRepair: state.repair.dataRepair,
+
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -250,6 +326,13 @@ const mapDispatchToProps = dispatch => {
         createVariantAttributeGroup: (data) => dispatch(actions.createVariantAttributeGroupRedux(data)),
 
         onChangeProduct: (event, id,) => dispatch(actions.onChangeProductRedux(event, id,)),
+
+        getListPromotion: (dataFilter) => dispatch(actions.getListPromotionRedux(dataFilter)),
+        onChangePromotion: (id, value) => dispatch(actions.onChangePromotionRedux(id, value)),
+
+        getListRepair: (dataFilter) => dispatch(actions.getListRepairRedux(dataFilter)),
+        onChangeRepair: (id, value) => dispatch(actions.onChangeRepairRedux(id, value)),
+        createRepair: (data) => dispatch(actions.createRepairRedux(data)),
 
     };
 };

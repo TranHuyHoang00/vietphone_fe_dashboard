@@ -24,6 +24,6 @@ export * from '@actions/dark_mode_types';
 export * from '@actions/user_types';
 export * from '@actions/statistical_types';
 export * from '@actions/login_types';
-
-
-
+export * from '@actions/promotion_types';
+export * from '@actions/warranty_types';
+export * from '@actions/repair_types';

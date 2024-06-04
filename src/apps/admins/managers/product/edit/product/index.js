@@ -81,6 +81,9 @@ class index extends Component {
                     description: description,
                 }
                 if (newDataProduct?.variant_attribute_group?.id) { delete newDataProduct.variant_attribute_group; }
+                if (newDataProduct?.promotion_info?.id) { delete newDataProduct.promotion_info; }
+                if (newDataProduct?.repair_time?.id) { delete newDataProduct.repair_time; }
+
                 if (dataMedias.length !== 0) {
                     const newDataMedias = await this.handleDataMedias(dataMedias);
                     newDataProduct.media = newDataMedias;

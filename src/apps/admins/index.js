@@ -35,6 +35,9 @@ import ManagerCategoryPost from './managers/category_post/index';
 import ManagerPost from './managers/post/index';
 import ManagerGroup from './managers/group/index';
 import ManagerUser from './managers/user/index';
+import ManagerPromotion from './managers/promotion/index';
+import ManagerWarranty from './managers/warranty/index';
+import ManagerRepair from './managers/repair/index';
 
 import StatisticalViewWeb from './managers/statisticals/web/view_web/index';
 import StatisticalViewProduct from './managers/statisticals/web/view_product/index';
@@ -81,11 +84,18 @@ class index extends Component {
     }
     handleMenuWithPermis = (menuItems) => {
         const { dataCheckPermis } = this.state;
-        return menuItems.map(item => {
-            const filteredChildren = item.children.filter(child => dataCheckPermis[child.title]);
-            return { ...item, children: filteredChildren };
-        }).filter(item => item.children.length > 0);
-    }
+        const filterItems = (items) => {
+            return items.map(item => {
+                const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+                const filteredChildren = hasChildren ? filterItems(item.children) : false;
+                if (filteredChildren.length > 0 || dataCheckPermis[item.title]) {
+                    return { ...item, children: filteredChildren };
+                }
+                return null;
+            }).filter(item => item !== null);
+        };
+        return filterItems(menuItems);
+    };
     render() {
         const { dataCheckPermis, url, collapsed, drawerMenu } = this.state;
         const { loggedIn } = this.props;
@@ -132,7 +142,13 @@ class index extends Component {
                                         <Route exact path={`${url}manager/product/edit/:id`}><EditProduct /></Route>}
                                     {dataCheckPermis['promotion.view_flashsaleitem'] &&
                                         <Route exact path={`${url}manager/flash_sale_item`}><ManagerFlashSaleItem /></Route>}
+                                    {dataCheckPermis['product.view_promotioninfo'] &&
+                                        <Route exact path={`${url}manager/promotion`}><ManagerPromotion /></Route>}
 
+                                    {dataCheckPermis['product.view_warranty'] &&
+                                        <Route exact path={`${url}manager/warranty`}><ManagerWarranty /></Route>}
+                                    {dataCheckPermis['product.view_repair'] &&
+                                        <Route exact path={`${url}manager/repair`}><ManagerRepair /></Route>}
 
                                     {dataCheckPermis['settings.view_banner'] &&
                                         <Route exact path={`${url}manager/banner`}><ManagerBanner /></Route>}
@@ -165,6 +181,7 @@ class index extends Component {
                                         <Route exact path={`${url}manager/sync_data`}><ManagerSyncData /></Route>}
                                     {dataCheckPermis['task.view_task'] &&
                                         <Route exact path={`${url}manager/task`}><ManagerTask /></Route>}
+
 
                                     <Route exact path={`${url}login`}><Empty /></Route>
                                     <Route ><NotFound /></Route>
