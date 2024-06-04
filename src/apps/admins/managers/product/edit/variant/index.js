@@ -72,6 +72,7 @@ class index extends Component {
         if (dataVariant?.id) {
             if (isEdit) {
                 let newDataVariant = { ...dataVariant };
+                if (newDataVariant?.warranty?.id) { delete newDataVariant.warranty; }
                 if (dataMedias && dataMedias.length !== 0) {
                     const newDataMedias = await this.handleDataMedias(dataMedias);
                     newDataVariant.media = newDataMedias;

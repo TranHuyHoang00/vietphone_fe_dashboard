@@ -38,6 +38,14 @@ class index extends Component {
                             <Radio.Button value={false}>Chưa đăng</Radio.Button>
                         </Radio.Group>
                     </div>
+                    <div className='space-y-[2px]'>
+                        <Typography.Text strong>Nguồn</Typography.Text>
+                        <Radio.Group value={dataFilter.source} onChange={(event) => onChangePage(event.target.value, 'source')} className='flex'>
+                            <Radio.Button value="">Tất cả</Radio.Button>
+                            <Radio.Button value="sapo">Sapo</Radio.Button>
+                            <Radio.Button value="web">Web</Radio.Button>
+                        </Radio.Group>
+                    </div>
                     <FormSelectSingle name={'Loại sản phẩm'} variable={'category'} value={dataFilter.category}
                         important={false} width={'100%'}
                         options={[

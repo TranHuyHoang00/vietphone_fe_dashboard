@@ -16,6 +16,7 @@ const initialState = {
         is_active: '',
         category: '',
         has_page: '',
+        source: '',
     },
     description: '',
 }
