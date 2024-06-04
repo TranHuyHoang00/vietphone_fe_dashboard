@@ -36,7 +36,7 @@ class index extends Component {
         const { dataRepair, isLoading, onChangeRepair, modalEdit, openModal } = this.props;
         return (
             <Modal title="CHỈNH SỬA" open={modalEdit}
-                onCancel={() => openModal("edit", false)} width={800}
+                onCancel={() => openModal("edit", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
                     <ModalFooter openModal={openModal} type={'edit'}

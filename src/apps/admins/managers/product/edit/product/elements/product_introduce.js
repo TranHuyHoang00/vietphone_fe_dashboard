@@ -115,10 +115,14 @@ class product_introduce extends Component {
                                 <FormSelectMultiple width={'100%'} placeholder={'Tên khuyến mãi'}
                                     nameFormSelect={'promotion'}
                                     value={dataProduct?.promotion_info?.id ? dataProduct?.promotion_info?.id : dataProduct?.promotion_info}
-                                    options={dataPromotions && dataPromotions.map((item) => ({
-                                        label: item.name,
-                                        value: item.id,
-                                    }))}
+                                    options={[
+                                        { label: 'Bỏ trống', value: '' },
+                                        ...dataPromotions && dataPromotions
+                                            .map((item) => ({
+                                                label: item.name,
+                                                value: item.id,
+                                            })),
+                                    ]}
                                     disabledSelect={!isEdit}
                                     disabledButtonCreate={true}
                                     disabledSearch={false}
@@ -143,10 +147,14 @@ class product_introduce extends Component {
                                 <FormSelectMultiple width={'100%'} placeholder={'Giá trị'}
                                     nameFormSelect={'repair'}
                                     value={dataProduct?.repair_time?.id ? dataProduct?.repair_time?.id : dataProduct?.repair_time}
-                                    options={dataRepairs && dataRepairs.map((item) => ({
-                                        label: item.value,
-                                        value: item.id,
-                                    }))}
+                                    options={[
+                                        { label: 'Bỏ trống', value: '' },
+                                        ...dataRepairs && dataRepairs
+                                            .map((item) => ({
+                                                label: item.value,
+                                                value: item.id,
+                                            })),
+                                    ]}
                                     disabledSelect={!isEdit}
                                     disabledButtonCreate={false}
                                     disabledSearch={false}

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Collapse, Typography, Radio } from 'antd';
+import { connect } from 'react-redux';
+import * as actions from '@actions';
+import { Collapse, Typography, Radio, Button, Popconfirm } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 class variant_overview extends Component {
     constructor(props) {
         super(props);
@@ -8,6 +11,11 @@ class variant_overview extends Component {
         }
     }
     async componentDidMount() {
+    }
+    handleDelete = async (id) => {
+        const { deleteListVariant, getDataProduct, dataProduct } = this.props;
+        await deleteListVariant([id]);
+        await getDataProduct(dataProduct.id);
     }
     render() {
         const { dataVariants, activeVariant, selectVariant } = this.props;
@@ -19,13 +27,21 @@ class variant_overview extends Component {
                         <div className='space-y-[10px] '>
                             {dataVariants && dataVariants.map((item, index) => {
                                 return (
-                                    <div key={index} onClick={() => selectVariant(index)}
-                                        className='flex gap-[10px] cursor-pointer '>
-                                        <Radio value={index}></Radio>
+                                    <div className='flex items-center justify-between'>
+                                        <div key={index} onClick={() => selectVariant(index)}
+                                            className='flex gap-[10px] cursor-pointer'>
+                                            <Radio value={index}></Radio>
+                                            <div>
+                                                <Typography.Text strong>{item.name}</Typography.Text><br />
+                                                <Typography.Text type='secondary'>Số lượng: {item.quantity} cái</Typography.Text>
+                                            </div>
+                                        </div>
                                         <div>
-                                            <Typography.Text strong>{item.sku}</Typography.Text><br />
-                                            <Typography.Text strong>{item.name}</Typography.Text><br />
-                                            <Typography.Text type='secondary'>Số lượng: {item.quantity} cái</Typography.Text>
+                                            <Popconfirm
+                                                title={`Bạn có chắc chắn muốn xóa?`}
+                                                placement="bottomLeft" okType='default' onConfirm={() => this.handleDelete(item.id)}>
+                                                <Button className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
+                                            </Popconfirm>
                                         </div>
                                     </div>
                                 )
@@ -38,4 +54,17 @@ class variant_overview extends Component {
     }
 
 }
-export default withRouter(variant_overview);
+const mapStateToProps = state => {
+    return {
+        dataProduct: state.product.dataProduct,
+        isResult: state.variant.isResult,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        deleteListVariant: (id) => dispatch(actions.deleteListVariantRedux(id)),
+        getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
+
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(variant_overview));

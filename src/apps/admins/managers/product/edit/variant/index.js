@@ -11,10 +11,12 @@ import { createMedia } from '@services/media_service';
 import { showNotification } from '@utils/handleFuncNotification';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataProducts } from '@datas/dataPermissionsOrigin';
+import ModalCreate from './modals/modalCreate';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            modalCreate: false,
             dataVariants: [],
 
             dataVariant: {},
@@ -65,7 +67,9 @@ class index extends Component {
         }
     }
     handleEditVariant = async () => {
-        const { dataVariant, isEdit, clicEditVariant, editVariant, getDataVariant, isResultVariant } = this.props;
+        const { dataVariant, isEdit, clicEditVariant, editVariant, getDataVariant, isResultVariant, getDataProduct,
+            dataProduct
+        } = this.props;
         const dataMedias = dataVariant.media;
         const dataAtbvls = dataVariant.attribute_values;
         const { dataAttributes } = this.state;
@@ -94,6 +98,7 @@ class index extends Component {
                 if (isResultVariant) {
                     await getDataVariant(newDataVariant.id);
                     clicEditVariant();
+                    await getDataProduct(dataProduct.id);
                 }
             } else {
                 clicEditVariant();
@@ -130,46 +135,60 @@ class index extends Component {
         }
         return newDataMediaIds;
     }
+    openModal = () => {
+        this.setState({ modalCreate: !this.state.modalCreate });
+    }
     render() {
         const { dataProduct, isEdit, clicEditVariant } = this.props;
-        const { dataCheckPermis, dataVariants, activeVariant } = this.state;
+        const { dataCheckPermis, dataVariants, activeVariant, modalCreate } = this.state;
         return (
-            <Spin size='large' spinning={this.props.isLoading}>
-                <div className=" space-y-[10px]">
-                    <div className='flex items-center justify-end'>
-                        <Space>
-                            {isEdit &&
-                                <Button onClick={() => clicEditVariant()}
-                                    className='bg-[#e94138] text-white'>
-                                    Hủy
-                                </Button>
-                            }
+            <>
+                <Spin size='large' spinning={this.props.isLoading}>
+                    <div className=" space-y-[10px]">
+                        <div className='flex items-center justify-between'>
                             <Button disabled={!dataCheckPermis['product.change_product']}
-                                onClick={() => this.handleEditVariant()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
-                                {isEdit ? 'Lưu' : 'Chỉnh sửa'}
+                                onClick={() => this.openModal()} className='bg-[#0e97ff] dark:bg-white'>
+                                <Space className='text-white dark:text-black'>
+                                    Tạo mới
+                                </Space>
                             </Button>
-                        </Space>
-                    </div>
-                    <div className='lg:grid grid-cols-3 gap-[10px] space-y-[10px] lg:space-y-0 '>
-                        <div>
-                            <VariantOverview dataVariants={dataVariants}
-                                selectVariant={this.selectVariant}
-                                activeVariant={activeVariant} />
+                            <Space>
+                                {isEdit &&
+                                    <Button onClick={() => clicEditVariant()}
+                                        className='bg-[#e94138] text-white'>
+                                        Hủy
+                                    </Button>
+                                }
+                                <Button disabled={!dataCheckPermis['product.change_product']}
+                                    onClick={() => this.handleEditVariant()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
+                                    {isEdit ? 'Lưu' : 'Chỉnh sửa'}
+                                </Button>
+                            </Space>
                         </div>
-                        <div className='col-span-2 space-y-[10px]'>
-                            <div className='md:grid grid-cols-3 gap-[10px] space-y-[10px] md:space-y-0'>
-                                <div className='col-span-2 '>
-                                    <VariantIntroduce />
-                                </div>
-                                <div>
-                                    <VariantMedia />
-                                </div>
+                        <div className='lg:grid grid-cols-3 gap-[10px] space-y-[10px] lg:space-y-0 '>
+                            <div>
+                                <VariantOverview dataVariants={dataVariants}
+                                    selectVariant={this.selectVariant}
+                                    activeVariant={activeVariant} />
                             </div>
-                            <VariantAttributeValue dataAttributes={dataProduct?.variant_attribute_group?.attribute} />
+                            <div className='col-span-2 space-y-[10px]'>
+                                <div className='md:grid grid-cols-3 gap-[10px] space-y-[10px] md:space-y-0'>
+                                    <div className='col-span-2 '>
+                                        <VariantIntroduce />
+                                    </div>
+                                    <div>
+                                        <VariantMedia />
+                                    </div>
+                                </div>
+                                <VariantAttributeValue dataAttributes={dataProduct?.variant_attribute_group?.attribute} />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Spin>
+                </Spin>
+                {modalCreate && dataCheckPermis['product.change_product'] &&
+                    <ModalCreate modalCreate={modalCreate}
+                        openModal={this.openModal} />}
+            </>
         );
     }
 }
@@ -193,6 +212,8 @@ const mapDispatchToProps = dispatch => {
         clicEditVariant: (value) => dispatch(actions.clickEditVariantRedux(value)),
         editVariant: (id, data) => dispatch(actions.editVariantRedux(id, data)),
         setDataVariant: (data) => dispatch(actions.setDataVariantRedux(data)),
+        getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

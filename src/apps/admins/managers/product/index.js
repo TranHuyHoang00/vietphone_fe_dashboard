@@ -6,7 +6,7 @@ import {
     Table, Space, Divider, Button, Input, Popconfirm, Dropdown,
     Spin, Pagination, Typography, Tag, Image
 } from 'antd';
-import { AiOutlineMenu } from "react-icons/ai";
+import { AiOutlineMenu, AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
@@ -14,6 +14,7 @@ import { dataProducts } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
+import ModalCreate from './modals/modalCreate';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -57,8 +58,8 @@ class index extends Component {
         }
     }
     funcDropButtonHeaderOfTable = async () => {
-        const { listItemSelected, dropButtonType, dataFilter } = this.state;
-        const { deleteListProduct, editListProduct, getListProduct } = this.props;
+        const { listItemSelected, dropButtonType } = this.state;
+        const { deleteListProduct, editListProduct, getListProduct, dataFilter } = this.props;
         const actions = {
             deleteList: deleteListProduct,
             editList: editListProduct,
@@ -74,7 +75,6 @@ class index extends Component {
         this.setState({ dataFilter: newDataFilter });
         await getListProduct(newDataFilter);
         setDataFilterProduct(newDataFilter);
-
     }
     onChangeSearch = (value) => {
         this.setState(prevState => ({
@@ -83,6 +83,9 @@ class index extends Component {
                 search: value,
             }
         }));
+    }
+    setDataFilterState = (dataFilter) => {
+        this.setState({ dataFilter: dataFilter });
     }
     render() {
         const columns = [
@@ -163,8 +166,15 @@ class index extends Component {
                         }
                     </div>
             },
+            {
+                title: 'Nguồn', dataIndex: 'source', width: 50, responsive: ['lg'],
+                render: (source) =>
+                    <div className='flex items-center justify-start'>
+                        <Tag color='green'>{source}</Tag>
+                    </div>
+            },
         ];
-        const { dataCheckPermis, listItemSelected, drawerFilter, dropButtonType } = this.state;
+        const { dataCheckPermis, listItemSelected, drawerFilter, dropButtonType, modalCreate } = this.state;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataCheckPermis['product.delete_product'] },
         ];
@@ -179,6 +189,13 @@ class index extends Component {
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
                             <Space>
+                                <Button disabled={!dataCheckPermis['product.add_product']}
+                                    onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                    <Space className='text-white dark:text-black'>
+                                        <AiOutlinePlus />
+                                        Tạo mới
+                                    </Space>
+                                </Button>
                                 <Button disabled={!dataCheckPermis['product.view_product']}
                                     onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
@@ -227,6 +244,9 @@ class index extends Component {
                         openDrawer={this.openDrawer} dataFilter={dataFilter}
                         onChangePage={this.onChangePage} />
                 }
+                {modalCreate && dataCheckPermis['product.add_product'] &&
+                    <ModalCreate modalCreate={modalCreate}
+                        openModal={this.openModal} setDataFilterState={this.setDataFilterState} />}
             </>
         );
     }

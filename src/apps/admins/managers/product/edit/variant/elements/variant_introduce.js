@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Collapse, Input, Typography, Select } from 'antd';
-import { textLine13 } from '@components/displays/line13';
 import { formatMoney } from '@utils/handleFuncFormat';
 import FormSelectMultiple from '@components/selects/formSelectMultiple';
 class variant_introduce extends Component {
@@ -38,9 +37,27 @@ class variant_introduce extends Component {
         return (
             <Collapse defaultActiveKey={['1']}>
                 <Collapse.Panel header="Phiên bản" key="1">
-                    {textLine13('Mã SKU', dataVariant.sku)}
-                    {textLine13('Mã Barcode', dataVariant.barcode)}
                     <div className='space-y-[5px]'>
+                        <div className='flex gap-[5px]'>
+                            <div className='w-1/3 flex justify-between space-x-[5px]'>
+                                <Typography.Text type="secondary">Mã SKU</Typography.Text>
+                                <span>:</span>
+                            </div>
+                            <div className='w-2/3'>
+                                <Input disabled={!isEdit} value={dataVariant.sku}
+                                    onChange={(event) => onChangeVariant(event.target.value, 'sku')} />
+                            </div>
+                        </div>
+                        <div className='flex gap-[5px]'>
+                            <div className='w-1/3 flex justify-between space-x-[5px]'>
+                                <Typography.Text type="secondary">Mã Barcode</Typography.Text>
+                                <span>:</span>
+                            </div>
+                            <div className='w-2/3'>
+                                <Input disabled={!isEdit} value={dataVariant.barcode}
+                                    onChange={(event) => onChangeVariant(event.target.value, 'barcode')} />
+                            </div>
+                        </div>
                         <div className='flex gap-[5px]'>
                             <div className='w-1/3 flex justify-between space-x-[5px]'>
                                 <Typography.Text type="secondary">Tên phiên bản</Typography.Text>
@@ -80,10 +97,14 @@ class variant_introduce extends Component {
                                 <FormSelectMultiple width={'100%'} placeholder={'Tên bảo hành'}
                                     nameFormSelect={'warranty'}
                                     value={dataVariant?.warranty?.id ? dataVariant?.warranty?.id : dataVariant?.warranty}
-                                    options={dataWarrantys.map((item) => ({
-                                        label: item.name,
-                                        value: item.id,
-                                    }))}
+                                    options={[
+                                        { label: 'Bỏ trống', value: '' },
+                                        ...dataWarrantys && dataWarrantys
+                                            .map((item) => ({
+                                                label: item.name,
+                                                value: item.id,
+                                            })),
+                                    ]}
                                     disabledSelect={!isEdit}
                                     disabledButtonCreate={true}
                                     disabledSearch={false}
@@ -98,7 +119,16 @@ class variant_introduce extends Component {
 
                             </div>
                         </div>
-                        {textLine13('Số lượng', `${dataVariant.quantity} cái`)}
+                        <div className='flex gap-[5px]'>
+                            <div className='w-1/3 flex justify-between space-x-[5px]'>
+                                <Typography.Text type="secondary">Số lượng</Typography.Text>
+                                <span>:</span>
+                            </div>
+                            <div className='w-2/3'>
+                                <Input disabled={!isEdit} value={dataVariant.quantity}
+                                    onChange={(event) => onChangeVariant(event.target.value, 'quantity')} />
+                            </div>
+                        </div>
                         <div className='flex items-center gap-[5px]'>
                             <div className='w-1/3 flex items-center justify-between'>
                                 <Typography.Text type="secondary">Trạng thái</Typography.Text>
