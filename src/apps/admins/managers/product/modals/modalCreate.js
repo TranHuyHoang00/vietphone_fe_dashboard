@@ -69,7 +69,6 @@ class index extends Component {
                             important={false} width={'100%'}
                             options={[
                                 { value: 'web', label: 'WEB' },
-                                { value: 'sapo', label: 'SAPO' },
                             ]}
                             onChangeInput={onChangeProduct} />
                     </div>

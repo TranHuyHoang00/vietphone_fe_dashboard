@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Modal, message, Spin, Typography } from 'antd';
+import { Modal, message, Spin } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import ModalFooter from '@components/modals/modalFooter';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { moduleQuills, formatQuills } from '@datas/dataModuleReactQuill';
+import FormTextare from '@components/inputs/formTextare';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +40,7 @@ class index extends Component {
         const { dataWarranty, isLoading, onChangeWarranty, modalEdit, openModal } = this.props;
         return (
             <Modal title="CHỈNH SỬA" open={modalEdit}
-                onCancel={() => openModal("edit", false)} width={800}
+                onCancel={() => openModal("edit", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
                     <ModalFooter openModal={openModal} type={'edit'}
@@ -54,19 +52,9 @@ class index extends Component {
                             important={true}
                             onChangeInput={onChangeWarranty} />
 
-                        <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>
-                                Nội dung
-                                <Typography.Text type="danger" strong> *</Typography.Text>
-                            </Typography.Text>
-                            <ReactQuill theme="snow"
-                                modules={moduleQuills}
-                                formats={formatQuills}
-                                bounds={'.app'}
-                                value={dataWarranty.content}
-                                onChange={(value) => onChangeWarranty(value, 'content')}
-                            />
-                        </div>
+                        <FormTextare name={'Nội dung'} variable={'content'} value={dataWarranty.content}
+                            important={true}
+                            onChangeInput={onChangeWarranty} />
                     </div>
                 </Spin>
             </Modal>
