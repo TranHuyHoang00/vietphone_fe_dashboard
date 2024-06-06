@@ -104,7 +104,7 @@ class index extends Component {
                 {loggedIn ?
                     <Layout hasSider style={{ minHeight: '100vh', }} >
                         <Layout.Sider theme='dark' className='overflow-y-auto h-screen md:block hidden'
-                            collapsible collapsed={collapsed} breakpoint="lg"
+                            collapsible collapsed={collapsed} breakpoint="lg" width={250}
                             onCollapse={() => this.setCollapsed()}>
                             <Menu theme='dark' mode="inline" items={this.handleMenuWithPermis(itemMenuLeftLayoutSider)} defaultSelectedKeys={['manager']}
                                 onClick={(value) => this.onClickPage(value)} />

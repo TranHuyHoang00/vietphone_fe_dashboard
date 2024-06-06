@@ -1,6 +1,6 @@
 export const themeLight = Object.freeze({
     token: {
-        borderRadius: 0,
+        borderRadius: 2,
         colorBgContainerDisabled: '#f4f4f4',
     },
     components: {

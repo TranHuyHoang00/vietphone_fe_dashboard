@@ -6,6 +6,7 @@ export const themeDark = Object.freeze({
         colorBgContainerDisabled: '#000000',
     },
     algorithm: theme.darkAlgorithm,
+
     components: {
         Select: {
             colorBorder: '#757575',
