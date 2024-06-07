@@ -27,6 +27,7 @@ const itemMenuLeftLayoutSider = [
             {
                 key: 'store_website', icon: <AiFillShop />, label: 'Gian hàng', children: [
                     { key: 'manager/product', icon: <AiFillMobile />, label: 'Sản phẩm', title: 'product.view_product' },
+                    { key: 'manager/product_repair', icon: <AiFillTool />, label: 'Sửa chữa', title: 'product.view_product' },
                     { key: 'manager/flash_sale_item', icon: <AiFillPayCircle />, label: 'Giảm giá', title: 'promotion.view_flashsaleitem' },
                 ],
             },

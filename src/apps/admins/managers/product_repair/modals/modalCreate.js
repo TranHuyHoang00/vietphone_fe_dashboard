@@ -19,20 +19,20 @@ class index extends Component {
                 is_active: '',
                 category: '',
                 has_page: '',
-                source: '',
+                source: 'repair',
             },
         }
     }
     async componentDidMount() {
         const { setDataProduct } = this.props;
-        setDataProduct({ source: "web" });
+        setDataProduct({ source: "repair" });
     }
     validationData = (data) => {
-        if (!data.name) {
-            return { mess: "Không được bỏ trống 'Tên sản phẩm' ", check: false };
-        }
         if (!data.source) {
             return { mess: "Không được bỏ trống 'Nguồn' ", check: false };
+        }
+        if (!data.name) {
+            return { mess: "Không được bỏ trống 'Tên sản phẩm' ", check: false };
         }
         return { check: true };
     }
@@ -71,7 +71,6 @@ class index extends Component {
                         <FormSelectSingle name={'Nguồn'} variable={'source'} value={dataProduct.source}
                             important={false} width={'100%'}
                             options={[
-                                { value: 'web', label: 'Web' },
                                 { value: 'repair', label: 'Sửa chữa' },
                             ]}
                             onChangeInput={onChangeProduct} />

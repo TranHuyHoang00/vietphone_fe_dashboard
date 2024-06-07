@@ -31,10 +31,17 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { getListProduct, dataFilter, dataUserPermis, isSuperUser, setDataFilterProduct } = this.props;
+        const { getListProduct, dataUserPermis, isSuperUser, setDataFilterProduct } = this.props;
         let newDataFilter = {
-            ...dataFilter,
-            source: '',
+            page: 1,
+            limit: 5,
+            search: '',
+            product_brand: '',
+            tag: '',
+            is_active: '',
+            category: '',
+            has_page: '',
+            source: 'repair',
         }
         setDataFilterProduct(newDataFilter);
         getListProduct(newDataFilter);
@@ -111,7 +118,7 @@ class index extends Component {
             {
                 title: 'Tên sản phẩm', dataIndex: 'name',
                 render: (name, item) =>
-                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product/edit/${item.id}`)}>
+                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product_repair/edit/${item.id}`)}>
                         <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{name}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
