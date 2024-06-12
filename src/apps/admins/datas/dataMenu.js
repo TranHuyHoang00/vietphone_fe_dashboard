@@ -5,7 +5,7 @@ import {
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard,
     AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool
 } from "react-icons/ai";
-import { IoStatsChart, IoBarChartSharp, IoBookSharp } from "react-icons/io5";
+import { IoStatsChart, IoBarChartSharp, IoBookSharp ,IoLocation } from "react-icons/io5";
 import { FaUserNurse, FaAndroid, FaUserShield, FaDatabase, FaCat } from "react-icons/fa6";
 import { FaCcDiscover } from "react-icons/fa";
 import { BsFillBox2HeartFill } from "react-icons/bs";
@@ -67,6 +67,7 @@ const itemMenuLeftLayoutSider = [
                     { key: 'manager/tag', icon: <AiFillTag />, label: 'Thẻ tag', title: 'product.view_tag' },
                     { key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu', title: 'product.view_brand' },
                     { key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục', title: 'product.view_category' },
+                    { key: 'manager/shop', icon: <IoLocation  />, label: 'Cửa hàng', title: 'shop.view_shop' },
                 ],
             },
             {

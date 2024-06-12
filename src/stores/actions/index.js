@@ -27,3 +27,5 @@ export * from '@actions/login_types';
 export * from '@actions/promotion_types';
 export * from '@actions/warranty_types';
 export * from '@actions/repair_types';
+export * from '@actions/address_types';
+export * from '@actions/shop_types';

@@ -40,6 +40,7 @@ import ManagerUser from './managers/user/index';
 import ManagerPromotion from './managers/promotion/index';
 import ManagerWarranty from './managers/warranty/index';
 import ManagerRepair from './managers/repair/index';
+import ManagerShop from './managers/shop/index';
 
 import StatisticalViewWeb from './managers/statisticals/web/view_web/index';
 import StatisticalViewProduct from './managers/statisticals/web/view_product/index';
@@ -181,6 +182,9 @@ class index extends Component {
                                         <Route exact path={`${url}manager/category`}><ManagerCategory /></Route>}
                                     {dataCheckPermis['promotion.view_flashsale'] &&
                                         <Route exact path={`${url}manager/flash_sale`}><ManagerFlashSale /></Route>}
+
+                                    {dataCheckPermis['shop.view_shop'] &&
+                                        <Route exact path={`${url}manager/shop`}><ManagerShop /></Route>}
 
                                     {dataCheckPermis['post.view_post'] &&
                                         <Route exact path={`${url}manager/post`}><ManagerPost /></Route>}

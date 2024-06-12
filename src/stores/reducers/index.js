@@ -28,7 +28,8 @@ import loginReducers from '@reducers/login_reducers';
 import promotionReducers from '@reducers/promotion_reducers';
 import warrantyReducers from '@reducers/warranty_reducers';
 import repairReducers from '@reducers/repair_reducers';
-
+import addressReducers from '@reducers/address_reducers';
+import shopReducers from '@reducers/shop_reducers';
 export default combineReducers({
     product: productReducers,
     customer: customerReducers,
@@ -59,4 +60,6 @@ export default combineReducers({
     promotion: promotionReducers,
     warranty: warrantyReducers,
     repair: repairReducers,
+    address:addressReducers,
+    shop:shopReducers,
 })

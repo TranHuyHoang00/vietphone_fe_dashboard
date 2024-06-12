@@ -7,7 +7,7 @@ const dataPermiViews = [
     "product.view_warranty", "product.view_repair",
     "settings.view_banner", "settings.view_location",
     "product.view_attributevalue", "product.view_attribute", "product.view_groupattribute", "product.view_variantattributegroup",
-    "product.view_tag", "product.view_brand", "product.view_category",
+    "product.view_tag", "product.view_brand", "product.view_category","shop.view_shop",
     "post.view_post", "post.view_category",
     "sync.view_sync", "task.view_task",
 ];
@@ -69,6 +69,9 @@ const dataBrands = [
 const dataCategorys = [
     "product.view_category", "product.change_category", "product.delete_category", "product.add_category",
 ];
+const dataShops = [
+    "shop.view_shop", "shop.change_shop", "shop.delete_shop", "shop.add_shop",
+];
 const dataPosts = [
     "post.view_post", "post.change_post", "post.delete_post", "post.add_post",
 ];
@@ -91,7 +94,7 @@ export {
     dataWarrantys, dataRepairs,
     dataBanners, dataLocations,
     dataAttributeValues, dataAttributes, dataGroupAttributes, dataVariantAttributeGroups,
-    dataTags, dataBrands, dataCategorys,
+    dataTags, dataBrands, dataCategorys,dataShops,
     dataPosts, dataCategoryPosts,
     dataSyncs, dataTasks,
 }
