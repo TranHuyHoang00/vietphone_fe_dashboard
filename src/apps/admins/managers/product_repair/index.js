@@ -25,30 +25,18 @@ class index extends Component {
             modalCreate: false,
             modalEdit: false,
             drawerFilter: false,
-            dataFilter: {},
+            dataFilterProductRepair: {},
 
             dataCheckPermis: {},
         }
     }
     async componentDidMount() {
-        const { getListProduct, dataUserPermis, isSuperUser, setDataFilterProduct } = this.props;
-        let newDataFilter = {
-            page: 1,
-            limit: 5,
-            search: '',
-            product_brand: '',
-            tag: '',
-            is_active: '',
-            category: '',
-            has_page: '',
-            source: 'repair',
-        }
-        setDataFilterProduct(newDataFilter);
-        getListProduct(newDataFilter);
+        const { getListProduct, dataUserPermis, isSuperUser, dataFilterProductRepair } = this.props;
+        getListProduct(dataFilterProductRepair);
         const dataCheckPermis = await handleCheckPermis(dataProducts, dataUserPermis, isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
-            dataFilter: newDataFilter,
+            dataFilterProductRepair: dataFilterProductRepair,
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {
@@ -71,33 +59,33 @@ class index extends Component {
     }
     funcDropButtonHeaderOfTable = async () => {
         const { listItemSelected, dropButtonType } = this.state;
-        const { deleteListProduct, editListProduct, getListProduct, dataFilter } = this.props;
+        const { deleteListProduct, editListProduct, getListProduct, dataFilterProductRepair } = this.props;
         const actions = {
             deleteList: deleteListProduct,
             editList: editListProduct,
             getList: getListProduct
         };
-        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
+        const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilterProductRepair, actions);
         this.setState({ listItemSelected: newListItemSelected });
     }
     onChangePage = async (pageValue, pageType,) => {
-        const { dataFilter } = this.state;
-        const { getListProduct, setDataFilterProduct } = this.props;
-        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
+        const { dataFilterProductRepair } = this.state;
+        const { getListProduct, setDataFilterProductRepair } = this.props;
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilterProductRepair);
+        this.setState({ dataFilterProductRepair: newDataFilter });
         await getListProduct(newDataFilter);
-        setDataFilterProduct(newDataFilter);
+        setDataFilterProductRepair(newDataFilter);
     }
     onChangeSearch = (value) => {
         this.setState(prevState => ({
-            dataFilter: {
-                ...prevState.dataFilter,
+            dataFilterProductRepair: {
+                ...prevState.dataFilterProductRepair,
                 search: value,
             }
         }));
     }
-    setDataFilterState = (dataFilter) => {
-        this.setState({ dataFilter: dataFilter });
+    setDataFilterState = (dataFilterProductRepair) => {
+        this.setState({ dataFilterProductRepair: dataFilterProductRepair });
     }
     render() {
         const columns = [
@@ -118,7 +106,7 @@ class index extends Component {
             {
                 title: 'Tên sản phẩm', dataIndex: 'name',
                 render: (name, item) =>
-                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product_repair/edit/${item.id}`)}>
+                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product/edit/${item.id}`, { address: 'product_repair' })}>
                         <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{name}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
@@ -190,7 +178,7 @@ class index extends Component {
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataCheckPermis['product.delete_product'] },
         ];
-        const { isLoading, dataProducts, dataMeta, dataFilter } = this.props;
+        const { isLoading, dataProducts, dataMeta, dataFilterProductRepair } = this.props;
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
         };
@@ -217,13 +205,13 @@ class index extends Component {
                                 </Button>
                             </Space>
                             <div><Input.Search
-                                value={this.state.dataFilter.search}
+                                value={this.state.dataFilterProductRepair.search}
                                 onChange={(event) => this.onChangeSearch(event.target.value)}
                                 onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên sản phẩm !" /></div>
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
+                                <FormSelectPage limit={dataFilterProductRepair.limit} onChangePage={this.onChangePage} />
                                 <div>
                                     <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
@@ -239,13 +227,13 @@ class index extends Component {
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider>SẢN PHẨM</Divider>
+                            <Divider>SỬA CHỮA</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={dataProducts} pagination={false}
                                     size="middle" bordered scroll={{}} />
-                                <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
+                                <Pagination responsive current={dataFilterProductRepair.page}
+                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilterProductRepair.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
@@ -253,7 +241,7 @@ class index extends Component {
                 </Spin>
                 {drawerFilter && dataCheckPermis['product.view_product'] &&
                     <DrawerFilter drawerFilter={drawerFilter}
-                        openDrawer={this.openDrawer} dataFilter={dataFilter}
+                        openDrawer={this.openDrawer} dataFilterProductRepair={dataFilterProductRepair}
                         onChangePage={this.onChangePage} />
                 }
                 {modalCreate && dataCheckPermis['product.add_product'] &&
@@ -271,19 +259,19 @@ const mapStateToProps = state => {
         dataMeta: state.product.dataMeta,
         isLoading: state.product.isLoading,
         isResult: state.product.isResult,
-        dataFilter: state.product.dataFilter,
+        dataFilterProductRepair: state.product.dataFilterProductRepair,
         dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        getListProduct: (dataFilter) => dispatch(actions.getListProductRedux(dataFilter)),
+        getListProduct: (dataFilterProductRepair) => dispatch(actions.getListProductRedux(dataFilterProductRepair)),
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
         editListProduct: (id, data) => dispatch(actions.editListProductRedux(id, data)),
         deleteListProduct: (id) => dispatch(actions.deleteListProductRedux(id)),
         setDataProduct: (id) => dispatch(actions.setDataProductRedux(id)),
-        setDataFilterProduct: (data) => dispatch(actions.setDataFilterProductRedux(data)),
+        setDataFilterProductRepair: (data) => dispatch(actions.setDataFilterProductRepairRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

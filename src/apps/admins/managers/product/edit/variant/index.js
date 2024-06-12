@@ -20,7 +20,7 @@ class index extends Component {
             dataVariants: [],
 
             dataVariant: {},
-            activeVariant: '',
+            indexActiveVariant: '',
 
             dataAttributes: [],
 
@@ -66,53 +66,65 @@ class index extends Component {
             await getDataVariant(id);
             dataVariants.push(this.props.dataVariant);
         }
-        this.setState({ dataVariants: dataVariants, activeVariant: (dataVariants.length) - 1 });
+        this.setState({ dataVariants: dataVariants, indexActiveVariant: (dataVariants.length) - 1 });
     }
     selectVariant = async (index) => {
-        const { isEdit, getDataVariant } = this.props;
+        const { isEdit } = this.props;
         const { dataVariants } = this.state;
         if (isEdit) {
             message.error('Bạn vui lòng lưu lại thay đổi');
             return;
         } else {
-            this.setState({ activeVariant: index })
-            await getDataVariant(dataVariants[index].id);
+            this.setState({ indexActiveVariant: index })
+            this.handleGetDataVariant(dataVariants[index].id);
         }
     }
+    handleGetDataVariant = async (variantId) => {
+        const { getDataVariant } = this.props;
+        await getDataVariant(variantId);
+        const { dataVariants } = this.state;
+        const dataVariant = this.props.dataVariant;
+        const newDataVariants = dataVariants.map(item =>
+            item.id === dataVariant.id ? dataVariant : item
+        );
+        this.setState({ dataVariants: newDataVariants });
+    }
+
+
     handleEditVariant = async () => {
-        const { dataVariant, isEdit, clicEditVariant, editVariant, getDataVariant, isResultVariant, getDataProduct,
-            dataProduct
-        } = this.props;
-        const dataMedias = dataVariant.media;
-        const dataAtbvls = dataVariant.attribute_values;
+        const { dataVariant, isEdit, clicEditVariant, editVariant, isResultVariant, isEditVariant } = this.props;
         const { dataAttributes } = this.state;
         if (dataVariant?.id) {
             if (isEdit) {
-                let newDataVariant = { ...dataVariant };
-                if (newDataVariant?.warranty?.id) { delete newDataVariant.warranty; }
-                if (dataMedias && dataMedias.length !== 0) {
-                    const newDataMedias = await this.handleDataMedias(dataMedias);
-                    newDataVariant.media = newDataMedias;
-                }
-                if (dataAtbvls && dataAttributes) {
-                    if (dataAtbvls.length === dataAttributes.length) {
-                        if (dataAtbvls.length !== 0) {
-                            const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
-                            newDataVariant.attribute_values = newDataAtbvls;
-                        } else {
-                            delete newDataVariant.attribute_values;
-                        }
-                    } else {
-                        message.error('Thiếu hoặc chưa đủ thông số, vui sửa lại');
-                        return;
+                if (isEditVariant) {
+                    const dataMedias = dataVariant.media;
+                    const dataAtbvls = dataVariant.attribute_values;
+                    let newDataVariant = { ...dataVariant };
+
+                    if (newDataVariant?.warranty?.id) { delete newDataVariant.warranty; }
+                    if (dataMedias && dataMedias.length !== 0) {
+                        const newDataMedias = await this.handleDataMedias(dataMedias);
+                        newDataVariant.media = newDataMedias;
                     }
+                    if (dataAtbvls && dataAttributes) {
+                        if (dataAtbvls.length === dataAttributes.length) {
+                            if (dataAtbvls.length !== 0) {
+                                const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
+                                newDataVariant.attribute_values = newDataAtbvls;
+                            } else {
+                                delete newDataVariant.attribute_values;
+                            }
+                        } else {
+                            message.error('Thiếu hoặc chưa đủ thông số, vui sửa lại');
+                            return;
+                        }
+                    }
+                    await editVariant(newDataVariant.id, newDataVariant);
+                    if (isResultVariant) { await this.handleGetDataVariant(newDataVariant.id) }
+                } else {
+                    message.success('Success');
                 }
-                await editVariant(newDataVariant.id, newDataVariant);
-                if (isResultVariant) {
-                    await getDataVariant(newDataVariant.id);
-                    clicEditVariant();
-                    await getDataProduct(dataProduct.id);
-                }
+                clicEditVariant();
             } else {
                 clicEditVariant();
             }
@@ -153,7 +165,7 @@ class index extends Component {
     }
     render() {
         const { dataProduct, isEdit, clicEditVariant } = this.props;
-        const { dataCheckPermis, dataVariants, activeVariant, modalCreate } = this.state;
+        const { dataCheckPermis, dataVariants, indexActiveVariant, modalCreate } = this.state;
         return (
             <>
                 <Spin size='large' spinning={this.props.isLoading}>
@@ -182,7 +194,7 @@ class index extends Component {
                             <div>
                                 <VariantOverview dataVariants={dataVariants}
                                     selectVariant={this.selectVariant}
-                                    activeVariant={activeVariant} />
+                                    indexActiveVariant={indexActiveVariant} />
                             </div>
                             <div className='col-span-2 space-y-[10px]'>
                                 <div className='md:grid grid-cols-3 gap-[10px] space-y-[10px] md:space-y-0'>
@@ -213,6 +225,7 @@ const mapStateToProps = state => {
         isResultVariant: state.variant.isResult,
 
         isEdit: state.variant.isEdit,
+        isEditVariant: state.variant.isEditVariant,
 
         dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,

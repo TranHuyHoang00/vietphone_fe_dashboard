@@ -19,7 +19,17 @@ class index extends Component {
         }
     }
     goBackHome = () => {
-        this.props.history.push(`/admin/manager/product`)
+        const { address } = this.props.location.state;
+        switch (address) {
+            case 'product_repair':
+                this.props.history.push(`/admin/manager/product_repair`);
+                break;
+            case 'product':
+                this.props.history.push(`/admin/manager/product`);
+                break;
+            default:
+                break;
+        }
     }
     render() {
         const { isLoading, dataProduct } = this.props;

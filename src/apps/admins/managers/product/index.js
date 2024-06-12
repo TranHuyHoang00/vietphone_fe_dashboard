@@ -31,17 +31,12 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { getListProduct, dataFilter, dataUserPermis, isSuperUser, setDataFilterProduct } = this.props;
-        let newDataFilter = {
-            ...dataFilter,
-            source: '',
-        }
-        setDataFilterProduct(newDataFilter);
-        getListProduct(newDataFilter);
+        const { getListProduct, dataFilter, dataUserPermis, isSuperUser } = this.props;
+        getListProduct(dataFilter);
         const dataCheckPermis = await handleCheckPermis(dataProducts, dataUserPermis, isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
-            dataFilter: newDataFilter,
+            dataFilter: dataFilter,
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {
@@ -111,7 +106,7 @@ class index extends Component {
             {
                 title: 'Tên sản phẩm', dataIndex: 'name',
                 render: (name, item) =>
-                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product/edit/${item.id}`)}>
+                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product/edit/${item.id}`, { address: 'product' })}>
                         <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{name}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),

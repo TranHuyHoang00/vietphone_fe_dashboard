@@ -142,6 +142,6 @@ export const clickEditVariantRedux = (data) => ({
     data: data
 })
 export const setDataFilterVariantRedux = (data) => ({
-    type: action_types.SET_dataFilter_VARIANT,
+    type: action_types.SET_DATA_FILTER_VARIANT,
     data,
 })

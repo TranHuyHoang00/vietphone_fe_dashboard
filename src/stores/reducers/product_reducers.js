@@ -18,6 +18,17 @@ const initialState = {
         has_page: '',
         source: '',
     },
+    dataFilterProductRepair: {
+        page: 1,
+        limit: 5,
+        search: '',
+        product_brand: '',
+        tag: '',
+        is_active: '',
+        category: '',
+        has_page: '',
+        source: 'repair',
+    },
     description: '',
     isEditProduct: false,
 
@@ -115,6 +126,11 @@ const productReducers = (state = initialState, action) => {
             return {
                 ...state,
                 dataFilter: action.data,
+            }
+        case action_types.SET_DATA_FILTER_PRODUCT_REPAIR:
+            return {
+                ...state,
+                dataFilterProductRepair: action.data,
             }
         default:
             return state;

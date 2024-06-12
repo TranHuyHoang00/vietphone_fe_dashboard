@@ -25,7 +25,6 @@ import ManagerAttributeValue from './managers/attribute_value/index';
 import ManagerProduct from './managers/product/index';
 import ManagerProductRepair from './managers/product_repair/index';
 import EditProduct from './managers/product/edit/index';
-import EditProductRepair from './managers/product_repair/edit/index';
 import ManagerVariantAttributeGroup from './managers/variant_attribute_group/index';
 import ManagerSyncData from './managers/sync_data/index';
 import ManagerFlashSale from './managers/flash_sale/index';
@@ -147,8 +146,6 @@ class index extends Component {
 
                                     {dataCheckPermis['product.view_product'] &&
                                         <Route exact path={`${url}manager/product/edit/:id`}><EditProduct /></Route>}
-                                    {dataCheckPermis['product.view_product'] &&
-                                        <Route exact path={`${url}manager/product_repair/edit/:id`}><EditProductRepair /></Route>}
 
                                     {dataCheckPermis['promotion.view_flashsaleitem'] &&
                                         <Route exact path={`${url}manager/flash_sale_item`}><ManagerFlashSaleItem /></Route>}

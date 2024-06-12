@@ -12,6 +12,7 @@ const initialState = {
         limit: 5,
         search: ''
     },
+    isEditVariant: false,
 }
 
 const variantReducers = (state = initialState, action) => {
@@ -21,6 +22,7 @@ const variantReducers = (state = initialState, action) => {
                 ...state,
                 isLoading: true,
                 isResult: false,
+                isEditVariant: false,
             }
         case action_types.VARIANT_SUCCESS:
             return {
@@ -77,6 +79,7 @@ const variantReducers = (state = initialState, action) => {
             return {
                 ...state,
                 dataVariant: action.data,
+                isEditVariant: true,
             }
         case action_types.ON_CHANGE_VARIANT:
             let copyState = { ...state.dataVariant };
@@ -85,14 +88,15 @@ const variantReducers = (state = initialState, action) => {
                 ...state,
                 dataVariant: {
                     ...copyState,
-                }
+                },
+                isEditVariant: true,
             }
         case action_types.CLICK_EDIT_VARIANT:
             return {
                 ...state,
                 isEdit: !state.isEdit
             }
-        case action_types.SET_dataFilter_VARIANT:
+        case action_types.SET_DATA_FILTER_VARIANT:
             return {
                 ...state,
                 dataFilter: action.data,

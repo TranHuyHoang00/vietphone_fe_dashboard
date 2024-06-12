@@ -145,3 +145,7 @@ export const setDataFilterProductRedux = (data) => ({
     type: action_types.SET_DATA_FILTER_PRODUCT,
     data,
 })
+export const setDataFilterProductRepairRedux = (data) => ({
+    type: action_types.SET_DATA_FILTER_PRODUCT_REPAIR,
+    data,
+})
