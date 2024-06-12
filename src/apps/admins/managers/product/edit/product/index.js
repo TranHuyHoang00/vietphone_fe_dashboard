@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Button, Typography, Space } from 'antd';
+import { Button, Typography, Space, message } from 'antd';
 import ProductIntroduce from './elements/product_introduce';
 import ProductAttributeValue from './elements/product_attribute_value';
 import ProductPage from './elements/product_page';
@@ -71,30 +71,34 @@ class index extends Component {
         return newDataAtbvlIds;
     }
     handleEditProduct = async () => {
-        const { dataProduct, isEdit, clickEditProduct, description, editProduct, getDataProduct } = this.props;
-        const dataMedias = dataProduct.media;
-        const dataAtbvls = dataProduct.attribute_values;
+        const { dataProduct, isEdit, clickEditProduct, description, editProduct, getDataProduct, isEditProductPage, isEditProduct } = this.props;
         if (dataProduct?.id) {
             if (isEdit) {
-                let newDataProduct = {
-                    ...dataProduct,
-                    description: description,
-                }
-                if (newDataProduct?.variant_attribute_group?.id) { delete newDataProduct.variant_attribute_group; }
-                if (newDataProduct?.promotion_info?.id) { delete newDataProduct.promotion_info; }
-                if (newDataProduct?.repair_time?.id) { delete newDataProduct.repair_time; }
+                if (isEditProduct) {
+                    const dataMedias = dataProduct.media;
+                    const dataAtbvls = dataProduct.attribute_values;
+                    let newDataProduct = {
+                        ...dataProduct,
+                        description: description,
+                    }
+                    if (newDataProduct?.variant_attribute_group?.id) { delete newDataProduct.variant_attribute_group; }
+                    if (newDataProduct?.promotion_info?.id) { delete newDataProduct.promotion_info; }
+                    if (newDataProduct?.repair_time?.id) { delete newDataProduct.repair_time; }
 
-                if (dataMedias.length !== 0) {
-                    const newDataMedias = await this.handleDataMedias(dataMedias);
-                    newDataProduct.media = newDataMedias;
+                    if (dataMedias.length !== 0) {
+                        const newDataMedias = await this.handleDataMedias(dataMedias);
+                        newDataProduct.media = newDataMedias;
+                    }
+                    if (dataAtbvls.length !== 0) {
+                        const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
+                        newDataProduct.attribute_values = newDataAtbvls;
+                    }
+                    await editProduct(newDataProduct.id, newDataProduct);
+                    await getDataProduct(newDataProduct.id);
+                } else {
+                    message.success('Success');
                 }
-                if (dataAtbvls.length !== 0) {
-                    const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
-                    newDataProduct.attribute_values = newDataAtbvls;
-                }
-                await editProduct(newDataProduct.id, newDataProduct);
-                await this.handleProductPage();
-                await getDataProduct(newDataProduct.id);
+                if (isEditProductPage) { await this.handleProductPage(); }
                 clickEditProduct();
             } else {
                 clickEditProduct()
@@ -149,6 +153,9 @@ const mapStateToProps = state => {
 
         dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
+
+        isEditProductPage: state.product_page.isEditProductPage,
+        isEditProduct: state.product.isEditProduct,
     };
 };
 const mapDispatchToProps = dispatch => {

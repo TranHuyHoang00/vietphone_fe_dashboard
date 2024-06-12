@@ -29,7 +29,7 @@ class index extends Component {
                         {textLine13('Địa chỉ', `${dataShop?.address},${dataShop?.ward?.name},${dataShop?.ward?.district_code?.name},${dataShop?.ward?.district_code?.province_code?.name}`)}
                         {textLine13('Mô tả', dataShop.description)}
                         {textLine13('Google Map', ``)}
-                        <iframe
+                        <iframe title='map'
                             class="w-full h-full"
                             src={`${dataShop?.google_map_url}`}
                             allowfullscreen=""

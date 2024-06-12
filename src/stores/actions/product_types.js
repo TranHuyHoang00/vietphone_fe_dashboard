@@ -142,6 +142,6 @@ export const clickEditProductRedux = (data) => ({
     data: data
 })
 export const setDataFilterProductRedux = (data) => ({
-    type: action_types.SET_dataFilter_PRODUCT,
+    type: action_types.SET_DATA_FILTER_PRODUCT,
     data,
 })

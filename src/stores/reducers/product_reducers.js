@@ -19,6 +19,8 @@ const initialState = {
         source: '',
     },
     description: '',
+    isEditProduct: false,
+
 }
 
 const productReducers = (state = initialState, action) => {
@@ -28,6 +30,7 @@ const productReducers = (state = initialState, action) => {
                 ...state,
                 isLoading: true,
                 isResult: false,
+                isEditProduct: false,
             }
         case action_types.PRODUCT_SUCCESS:
             return {
@@ -85,6 +88,7 @@ const productReducers = (state = initialState, action) => {
             return {
                 ...state,
                 dataProduct: action.data,
+                isEditProduct: true,
             }
         case action_types.ON_CHANGE_PRODUCT:
             let copyState = { ...state.dataProduct };
@@ -93,19 +97,21 @@ const productReducers = (state = initialState, action) => {
                 ...state,
                 dataProduct: {
                     ...copyState,
-                }
+                },
+                isEditProduct: true,
             }
         case action_types.ON_CHANGE_PRODUCT_DESCRIPTION:
             return {
                 ...state,
-                description: action.value
+                description: action.value,
+                isEditProduct: true,
             }
         case action_types.CLICK_EDIT_PRODUCT:
             return {
                 ...state,
-                isEdit: !state.isEdit
+                isEdit: !state.isEdit,
             }
-        case action_types.SET_dataFilter_PRODUCT:
+        case action_types.SET_DATA_FILTER_PRODUCT:
             return {
                 ...state,
                 dataFilter: action.data,

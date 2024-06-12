@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isEditProductPage: false,
 }
 
 const productPageReducers = (state = initialState, action) => {
@@ -15,6 +16,7 @@ const productPageReducers = (state = initialState, action) => {
                 ...state,
                 isLoading: true,
                 isResult: false,
+                isEditProductPage: false,
             }
         case action_types.PRODUCT_PAGE_SUCCESS:
             return {
@@ -71,12 +73,14 @@ const productPageReducers = (state = initialState, action) => {
             return {
                 ...state,
                 dataProductPage: action.data,
+                isEditProductPage: true,
             }
         case action_types.ON_CHANGE_PRODUCT_PAGE:
             let copyState = { ...state.dataProductPage };
             copyState[action.id] = action.value;
             return {
                 ...state,
+                isEditProductPage: true,
                 dataProductPage: {
                     ...copyState,
                 }

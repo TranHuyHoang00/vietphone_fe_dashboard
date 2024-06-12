@@ -38,12 +38,25 @@ class index extends Component {
     }
     async componentDidUpdate(prevProps) {
         const { dataVariantIds, dataProduct } = this.props;
-        if (prevProps.dataVariantIds !== dataVariantIds) {
+        if (!this.arraysEqual(prevProps.dataVariantIds, dataVariantIds)) {
             const dataAttributes = dataProduct?.variant_attribute_group?.attribute ? dataProduct?.variant_attribute_group?.attribute : []
             if (dataVariantIds && dataVariantIds.length !== 0) {
                 this.setState({ dataVariantIds: dataVariantIds, dataAttributes: dataAttributes });
                 await this.getListVariant(dataVariantIds);
             }
+        }
+    }
+    arraysEqual = (arr1, arr2) => {
+        if (arr1 && arr1) {
+            if (arr1.length !== arr2.length) return false;
+            const sortedArr1 = [...arr1].sort();
+            const sortedArr2 = [...arr2].sort();
+            for (let i = 0; i < sortedArr1.length; i++) {
+                if (sortedArr1[i] !== sortedArr2[i]) return false;
+            }
+            return true;
+        } else {
+            return;
         }
     }
     getListVariant = async (dataVariantIds) => {

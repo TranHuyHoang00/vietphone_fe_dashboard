@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Image, Dropdown, Tag
+    Spin, Pagination, Typography, Image, Dropdown
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';

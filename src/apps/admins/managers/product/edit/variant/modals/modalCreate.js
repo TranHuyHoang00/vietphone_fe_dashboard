@@ -9,12 +9,28 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            dataVariant: {},
         }
     }
     async componentDidMount() {
-        const { setDataVariant, dataProduct } = this.props;
-        setDataVariant({ product: dataProduct.id });
+        const { dataProduct } = this.props;
+        this.setState({
+            dataVariant: {
+                ...this.state.dataVariant,
+                product: dataProduct.id
+            }
+        })
     }
+    handleOnchangeInput = (event, id) => {
+        let copyState = { ...this.state.dataVariant };
+        copyState[id] = event;
+        this.setState({
+            dataVariant: {
+                ...copyState
+            }
+        });
+    }
+
     validationData = (data) => {
         if (!data.sku) {
             return { mess: "Không được bỏ trống 'Mã SKU' ", check: false };
@@ -25,7 +41,8 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        const { createVariant, dataVariant, getDataProduct, dataProduct, openModal } = this.props;
+        const { createVariant, getDataProduct, dataProduct, openModal } = this.props;
+        const { dataVariant } = this.state;
         const result = this.validationData(dataVariant);
         if (result.check) {
             await createVariant(dataVariant);
@@ -36,7 +53,8 @@ class index extends Component {
         }
     }
     render() {
-        const { dataVariant, isLoading, onChangeVariant, modalCreate, openModal } = this.props;
+        const { isLoading, modalCreate, openModal } = this.props;
+        const { dataVariant } = this.state;
         return (
 
             <Modal title="TẠO MỚI" open={modalCreate}
@@ -50,11 +68,11 @@ class index extends Component {
                     <div className="space-y-[10px]">
                         <FormInput name={'Mã SKU'} variable={'sku'} value={dataVariant.sku}
                             important={true}
-                            onChangeInput={onChangeVariant} />
+                            onChangeInput={this.handleOnchangeInput} />
 
                         <FormInput name={'Tên phiên bản'} variable={'name'} value={dataVariant.name}
                             important={true}
-                            onChangeInput={onChangeVariant} />
+                            onChangeInput={this.handleOnchangeInput} />
                     </div>
                 </Spin>
             </Modal>
@@ -65,18 +83,13 @@ class index extends Component {
 const mapStateToProps = state => {
     return {
         dataProduct: state.product.dataProduct,
-
         isLoading: state.variant.isLoading,
         isResult: state.variant.isResult,
-
-        dataVariant: state.variant.dataVariant,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        setDataVariant: (id) => dispatch(actions.setDataVariantRedux(id)),
         createVariant: (data) => dispatch(actions.createVariantRedux(data)),
-        onChangeVariant: (id, value) => dispatch(actions.onChangeVariantRedux(id, value)),
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
 
     };

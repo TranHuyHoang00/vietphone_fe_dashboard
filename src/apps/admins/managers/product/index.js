@@ -182,6 +182,8 @@ class index extends Component {
         const { dataCheckPermis, listItemSelected, drawerFilter, dropButtonType, modalCreate } = this.state;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataCheckPermis['product.delete_product'] },
+            { key: 2, label: 'Khóa', disabled: !dataCheckPermis['product.change_product'] },
+            { key: 3, label: 'Mở', disabled: !dataCheckPermis['product.change_product'] },
         ];
         const { isLoading, dataProducts, dataMeta, dataFilter } = this.props;
         const onChangeSelectedRow = (dataNew) => {
@@ -226,6 +228,8 @@ class index extends Component {
                                             menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
                                                 {dropButtonType === 1 && <span>Xóa</span>}
+                                                {dropButtonType === 2 && <span>Khóa</span>}
+                                                {dropButtonType === 3 && <span>Mở</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

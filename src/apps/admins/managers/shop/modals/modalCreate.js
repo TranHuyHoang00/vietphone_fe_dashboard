@@ -44,7 +44,7 @@ class index extends Component {
         }
     }
     render() {
-        const { dataShop, isLoading, onChangeShop, modalCreate, openModal, dataDistricts, } = this.props;
+        const { dataShop, isLoading, onChangeShop, modalCreate, openModal, } = this.props;
         return (
 
             <Modal title="TẠO MỚI" open={modalCreate}
