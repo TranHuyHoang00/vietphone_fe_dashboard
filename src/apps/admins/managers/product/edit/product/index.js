@@ -93,12 +93,13 @@ class index extends Component {
                         const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
                         newDataProduct.attribute_values = newDataAtbvls;
                     }
-                    await editProduct(newDataProduct.id, newDataProduct);
+                    if (isEditProductPage) { await this.handleProductPage(); }
+                    await editProduct(newDataProduct.id, newDataProduct);  
                     await getDataProduct(newDataProduct.id);
                 } else {
+                    if (isEditProductPage) { await this.handleProductPage(); }
                     message.success('Success');
                 }
-                if (isEditProductPage) { await this.handleProductPage(); }
                 clickEditProduct();
             } else {
                 clickEditProduct()
