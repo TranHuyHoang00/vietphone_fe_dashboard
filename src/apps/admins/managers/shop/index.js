@@ -115,7 +115,6 @@ class index extends Component {
             this.setState({ listItemSelected: dataNew })
         };
         const rowSelection = { listItemSelected, onChange: onChangeSelectedRow };
-        console.log('dataShops', dataShops);
         return (
             <>
                 <Spin size='large' spinning={isLoading}>

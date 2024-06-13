@@ -6,7 +6,7 @@ import {
     Table, Space, Divider, Button, Input, Popconfirm, Dropdown,
     Spin, Pagination, Typography, Tag, Image
 } from 'antd';
-import { AiOutlineMenu, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineMenu, AiOutlinePlus, AiFillTool } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
@@ -15,6 +15,7 @@ import { handleOnChangePage } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 import ModalCreate from './modals/modalCreate';
+import DrawerEditBatch from '../product/drawers/drawerEditBatch';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -25,6 +26,7 @@ class index extends Component {
             modalCreate: false,
             modalEdit: false,
             drawerFilter: false,
+            drawerEditBatch: false,
             dataFilterProductRepair: {},
 
             dataCheckPermis: {},
@@ -52,6 +54,9 @@ class index extends Component {
         switch (drawerName) {
             case 'filter':
                 this.setState({ drawerFilter: drawerValue });
+                break;
+            case 'edit':
+                this.setState({ drawerEditBatch: drawerValue });
                 break;
             default:
                 return;
@@ -97,84 +102,83 @@ class index extends Component {
                 title: 'Ảnh', dataIndex: 'media', width: 90, responsive: ['sm'],
                 render: (media) =>
                     <>
-                        {(media && media.length !== 0) &&
-                            <Image width={80} height={80} src={media[0].image} className='object-cover' />
-                        }
-
+                        {(media && media.length !== 0) && <Image width={80} height={80} src={media[0].image} className='object-cover' />}
                     </>
             },
             {
                 title: 'Tên sản phẩm', dataIndex: 'name',
                 render: (name, item) =>
-                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product/edit/${item.id}`, { address: 'product_repair' })}>
+                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/product/edit/${item.id}`, { address: 'product' })}>
                         <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{name}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
             {
-                title: 'Thương hiệu', dataIndex: 'product_brand', responsive: ['lg'],
-                render: (product_brand) =>
-                    <>
-                        {(product_brand && product_brand.name) ?
-                            <Tag key={index} color='green'>{product_brand && product_brand.name}</Tag>
-                            :
-                            <span></span>
-                        }
-                    </>
-            },
-            {
-                title: 'Tag', dataIndex: 'tags', responsive: ['lg'],
-                render: (tags) =>
+                title: 'Thông tin', dataIndex: 'product_brand', responsive: ['lg'],
+                render: (product_brand, item) =>
                     <div className='space-y-[5px]'>
-                        {tags && tags.map((item, index) => {
-                            return (
-                                <Tag key={index} color='orange'>{item.name}</Tag>
-                            )
-                        })}
+                        {(product_brand && product_brand.name) &&
+                            <div className='flex items-center flex-wrap gap-[5px]'>
+                                <span>Hãng :</span>
+                                <Tag key={index} color='green'>{product_brand && product_brand.name}</Tag>
+                            </div>
+                        }
+                        {item && item.tags && item.tags.length !== 0 &&
+                            <div className='flex items-center flex-wrap  gap-[5px]'>
+                                <span>Tag :</span>
+                                {item.tags && item.tags.map((tag, index) => {
+                                    return (<Tag key={index} color='orange'>{tag.name}</Tag>)
+                                })}
+                            </div>
+                        }
+                        {item && item.categories && item.categories.length !== 0 &&
+                            <div className='flex items-center flex-wrap  gap-[5px]'>
+                                <span>Danh mục :</span>
+                                {item.categories && item.categories.map((category, index) => {
+                                    return (<Tag key={index} color='blue'>{category.name}</Tag>)
+                                })}
+                            </div>
+                        }
                     </div>,
             },
             {
-                title: 'Danh mục', dataIndex: 'categories', responsive: ['lg'],
-                render: (categories) =>
+                title: 'Dịch vụ', dataIndex: 'repair_time', responsive: ['lg'],
+                render: (repair_time, item) =>
                     <div className='space-y-[5px]'>
-                        {categories && categories.map((item, index) => {
-                            return (
-                                <Tag key={index} color='blue'>{item.name}</Tag>
-                            )
-                        })}
+                        {(repair_time && repair_time.value) &&
+                            <div>
+                                <p>Sửa chữa :</p>
+                                <Tag key={index} color='green'>{repair_time && repair_time.value}</Tag>
+                            </div>
+                        }
+                        {(item.promotion_info && item.promotion_info.name) &&
+                            <div>
+                                <p>Khuyến mãi :</p>
+                                <Tag key={index} color='green'>{item.promotion_info && item.promotion_info.name}</Tag>
+                            </div>
+                        }
                     </div>,
             },
             {
-                title: 'Website', dataIndex: 'has_page', width: 70,
-                render: (has_page) =>
-                    <div className='flex items-center justify-start'>
-                        {has_page ?
-                            <Tag color='green'>Đã đăng</Tag>
-                            :
-                            <Tag color='red'>Chưa đăng</Tag>
-                        }
-                    </div>
-            },
-            {
-                title: 'Status', dataIndex: 'is_active', width: 70, responsive: ['lg'],
-                render: (is_active) =>
-                    <div className='flex items-center justify-start'>
-                        {is_active ?
-                            <Tag color='green'>Mở</Tag>
-                            :
-                            <Tag color='red'>Khóa</Tag>
-                        }
-                    </div>
-            },
-            {
-                title: 'Nguồn', dataIndex: 'source', width: 50, responsive: ['lg'],
-                render: (source) =>
-                    <div className='flex items-center justify-start'>
-                        <Tag color='green'>{source}</Tag>
-                    </div>
+                title: 'Status', dataIndex: 'is_active', responsive: ['lg'], width: 140,
+                render: (is_active, item) =>
+                    <div className='space-y-[5px]'>
+                        <div className='flex items-center justify-between'>
+                            <span>Trạng thái :</span>
+                            {is_active ? <Tag color='green'>Mở</Tag> : <Tag color='red'>Khóa</Tag>}
+                        </div>
+                        <div className='flex items-center justify-between'>
+                            <span>Website : </span>
+                            {item.has_page ? <Tag color='green'>Yes</Tag> : <Tag color='red'>No</Tag>}
+                        </div>
+                        <div className='flex items-center justify-between'>
+                            <span>Nguồn :</span>
+                            <Tag color='blue'>{item.source}</Tag>
+                        </div>
+                    </div>,
             },
         ];
-        const { dataCheckPermis, listItemSelected, drawerFilter, dropButtonType, modalCreate } = this.state;
+        const { dataCheckPermis, listItemSelected, drawerFilter, dropButtonType, modalCreate, drawerEditBatch } = this.state;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataCheckPermis['product.delete_product'] },
         ];
@@ -188,7 +192,7 @@ class index extends Component {
                 <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Space>
+                            <div className='flex flex-wrap items-center gap-[10px]'>
                                 <Button disabled={!dataCheckPermis['product.add_product']}
                                     onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
@@ -203,7 +207,15 @@ class index extends Component {
                                         Bộ lọc
                                     </Space>
                                 </Button>
-                            </Space>
+                                <Button disabled={(!dataCheckPermis['product.view_product'] === false && (listItemSelected && listItemSelected.length > 0)) ? false : true}
+                                    onClick={() => this.openDrawer("edit", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                    <Space className='text-white dark:text-black'>
+                                        <AiFillTool />
+                                        Sửa hàng loạt
+                                        <span>{listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
+                                    </Space>
+                                </Button>
+                            </div>
                             <div><Input.Search
                                 value={this.state.dataFilterProductRepair.search}
                                 onChange={(event) => this.onChangeSearch(event.target.value)}
@@ -242,6 +254,12 @@ class index extends Component {
                 {drawerFilter && dataCheckPermis['product.view_product'] &&
                     <DrawerFilter drawerFilter={drawerFilter}
                         openDrawer={this.openDrawer} dataFilterProductRepair={dataFilterProductRepair}
+                        onChangePage={this.onChangePage} />
+                }
+                {drawerEditBatch && dataCheckPermis['product.view_product'] &&
+                    <DrawerEditBatch drawerEditBatch={drawerEditBatch}
+                        openDrawer={this.openDrawer} dataFilter={dataFilterProductRepair}
+                        listItemSelected={listItemSelected}
                         onChangePage={this.onChangePage} />
                 }
                 {modalCreate && dataCheckPermis['product.add_product'] &&
