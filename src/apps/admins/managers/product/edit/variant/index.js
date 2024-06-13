@@ -89,8 +89,6 @@ class index extends Component {
         );
         this.setState({ dataVariants: newDataVariants });
     }
-
-
     handleEditVariant = async () => {
         const { dataVariant, isEdit, clicEditVariant, editVariant, isResultVariant, isEditVariant } = this.props;
         const { dataAttributes } = this.state;
@@ -163,6 +161,10 @@ class index extends Component {
     openModal = () => {
         this.setState({ modalCreate: !this.state.modalCreate });
     }
+
+    // hanleOpen=async()=>{
+    //    await this.props.editListVariant(this.state.dataVariantIds,{is_active:true});
+    // }
     render() {
         const { dataProduct, isEdit, clicEditVariant } = this.props;
         const { dataCheckPermis, dataVariants, indexActiveVariant, modalCreate } = this.state;
@@ -177,6 +179,12 @@ class index extends Component {
                                     Tạo mới
                                 </Space>
                             </Button>
+                            {/* <Button disabled={!dataCheckPermis['product.change_product']}
+                                onClick={() => this.hanleOpen()} className='bg-[#0e97ff] dark:bg-white'>
+                                <Space className='text-white dark:text-black'>
+                                    Mở
+                                </Space>
+                            </Button> */}
                             <Space>
                                 {isEdit &&
                                     <Button onClick={() => clicEditVariant()}
@@ -239,7 +247,7 @@ const mapDispatchToProps = dispatch => {
         editVariant: (id, data) => dispatch(actions.editVariantRedux(id, data)),
         setDataVariant: (data) => dispatch(actions.setDataVariantRedux(data)),
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
-
+        editListVariant: (id, data) => dispatch(actions.editListVariantRedux(id, data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

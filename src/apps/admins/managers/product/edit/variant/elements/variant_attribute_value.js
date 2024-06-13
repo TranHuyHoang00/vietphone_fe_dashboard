@@ -65,9 +65,9 @@ class variant_attribute_value extends Component {
         }
     }
     handleDataAtbvlUnique = async (data) => {
+        let uniqueDatas = [];
         if (data && data.length !== 0) {
             let uniqueId = new Set();
-            let uniqueDatas = [];
             for (const obj of data) {
                 if (obj && obj.attribute && obj.attribute.group_attribute && obj.attribute.group_attribute.id) {
                     if (!uniqueId.has(obj.attribute.group_attribute.id)) {
@@ -76,8 +76,9 @@ class variant_attribute_value extends Component {
                     }
                 }
             }
-            this.setState({ dataAtbvlUniques: uniqueDatas });
         }
+        this.setState({ dataAtbvlUniques: uniqueDatas });
+
     }
     handleAddAtbvl = async () => {
         const { dataAttributeValue, dataVariant, setDataVariant } = this.props;
