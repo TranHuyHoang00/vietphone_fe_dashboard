@@ -83,10 +83,7 @@ class index extends Component {
             {
                 title: 'Địa chỉ', dataIndex: 'address', responsive: ['lg'],
                 render: (address, item) =>
-                    <>
-                        <span>{address},</span>
-                        <span>{item?.ward?.name},{item?.ward?.district_code?.name},{item?.ward?.district_code?.province_code?.name}</span>
-                    </>
+                    <><span>{address}</span></>
             },
             {
                 title: 'Ảnh', dataIndex: 'image', responsive: ['md'], width: 100,
