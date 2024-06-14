@@ -34,6 +34,7 @@ import ManagerLocation from './managers/location/index';
 import ManagerBanner from './managers/banner/index';
 import ManagerCategoryPost from './managers/category_post/index';
 import ManagerPost from './managers/post/index';
+import EditPost from './managers/post/edit/index';
 import ManagerGroup from './managers/group/index';
 import ManagerUser from './managers/user/index';
 import ManagerPromotion from './managers/promotion/index';
@@ -185,6 +186,9 @@ class index extends Component {
 
                                     {dataCheckPermis['post.view_post'] &&
                                         <Route exact path={`${url}manager/post`}><ManagerPost /></Route>}
+                                    {dataCheckPermis['post.view_post'] &&
+                                        <Route exact path={`${url}manager/post/edit/:id`}><EditPost /></Route>}
+
                                     {dataCheckPermis['post.view_category'] &&
                                         <Route exact path={`${url}manager/category_post`}><ManagerCategoryPost /></Route>}
                                     {dataCheckPermis['sync.view_sync'] &&

@@ -6,7 +6,7 @@ import {
     Table, Space, Divider, Button, Popconfirm, Input,
     Spin, Pagination, Typography, Dropdown
 } from 'antd';
-import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
@@ -76,8 +76,11 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'Tiêu đề', dataIndex: 'title',
-                render: (title) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{title}</Typography.Text>,
+            title: 'Tiêu đề', dataIndex: 'title',
+                render: (title,item) =>
+                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/post/edit/${item.id}`)}>
+                        <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{title}</Typography.Text>
+                    </span>,
                 sorter: (a, b) => a.title.localeCompare(b.title),
             },
             {
@@ -87,16 +90,6 @@ class index extends Component {
             {
                 title: 'Loại bài viết', dataIndex: 'category', responsive: ['sm'],
                 render: (category) => <Typography.Text >{category.title}</Typography.Text>,
-            },
-            {
-                title: 'HĐ', width: 80,
-                render: (_, item) => (
-                    <Space size="middle" >
-                        <button disabled={!dataCheckPermis['post.change_post']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
-                            <AiFillEdit />
-                        </button>
-                    </Space >
-                ),
             },
 
         ];
