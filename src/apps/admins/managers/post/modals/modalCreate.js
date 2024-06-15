@@ -6,6 +6,7 @@ import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import ModalFooter from '@components/modals/modalFooter';
 import FormSelectSingle from '@components/selects/formSelectSingle';
+import FormImage from '@components/inputs/formImage';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { moduleQuills, formatQuills } from '@datas/dataModuleReactQuill';
@@ -48,7 +49,7 @@ class index extends Component {
         const { dataPost, isLoading, onChangePost, modalCreate, openModal, dataCategoryPosts } = this.props;
         return (
             <Modal title="TẠO MỚI" open={modalCreate}
-                onCancel={() => openModal("create", false)} width={800}
+                onCancel={() => openModal("create", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
                     <ModalFooter openModal={openModal} type={'create'}
@@ -56,21 +57,30 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
-                        <div className='flex flex-col flex-wrap sm:flex-row gap-[10px]'>
-                            <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost.title}
-                                important={true}
-                                onChangeInput={onChangePost} />
-                            <FormInput name={'Slug'} variable={'slug'} value={dataPost.slug}
-                                important={true}
-                                onChangeInput={onChangePost} />
-                            <FormSelectSingle name={'Loại bài viết'} variable={'category'} value={dataPost.category}
-                                important={true} width={200}
-                                options={dataCategoryPosts.map((item) => ({
-                                    label: item.title,
-                                    value: item.id,
-                                }))}
-                                onChangeInput={onChangePost} />
-                        </div>
+                        <FormImage name={'Ảnh'} variable={'image'} value={dataPost.image}
+                            important={true}
+                            htmlFor={'loadImageCreate'} width={100} height={100}
+                            onChangeInput={onChangePost} />
+                        <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost.title}
+                            important={true}
+                            onChangeInput={onChangePost} />
+                        <FormInput name={'Slug'} variable={'slug'} value={dataPost.slug}
+                            important={true}
+                            onChangeInput={onChangePost} />
+                        <FormSelectSingle name={'Loại bài viết'} variable={'category'} value={dataPost.category}
+                            important={true} width={'100%'}
+                            options={dataCategoryPosts.map((item) => ({
+                                label: item.title,
+                                value: item.id,
+                            }))}
+                            onChangeInput={onChangePost} />
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataPost.is_active}
+                            important={false} width={'100%'}
+                            options={[
+                                { value: true, label: 'Mở' },
+                                { value: false, label: 'Khóa' },
+                            ]}
+                            onChangeInput={onChangePost} />
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>
                                 Nội dung

@@ -5,6 +5,7 @@ import * as actions from '@actions';
 import { Button, Spin, Typography, message } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormSelectSingle from '@components/selects/formSelectSingle';
+import FormImage from '@components/inputs/formImage';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { moduleQuills, formatQuills } from '@datas/dataModuleReactQuill';
@@ -47,6 +48,11 @@ class index extends Component {
             message.error(result.mess);
         }
     }
+    onChangeImage = (image) => {
+        const { onChangePost } = this.props;
+        this.setState({ isEditImage: true, })
+        onChangePost(image, 'image');
+    }
     render() {
         const { dataPost, isLoading, onChangePost, dataCategoryPosts } = this.props;
         return (
@@ -64,6 +70,10 @@ class index extends Component {
                             </Button>
                         </div>
                         <div className="space-y-[10px]">
+                            <FormImage name={'Ảnh'} variable={'image'} value={dataPost.image}
+                                important={true}
+                                htmlFor={'loadImageEdit'} width={100} height={100}
+                                onChangeImage={this.onChangeImage} />
                             <div className='flex flex-wrap gap-[10px]'>
                                 <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost.title}
                                     important={true}
@@ -80,6 +90,7 @@ class index extends Component {
                                         value: item.id,
                                     }))}
                                     onChangeInput={onChangePost} />
+
                             </div>
                             <div className='space-y-[3px]'>
                                 <Typography.Text italic strong>

@@ -59,8 +59,8 @@ class index extends Component {
 
                         <FormImage name={'Ảnh'} variable={'image'} value={dataShop.image}
                             important={true}
-                            htmlFor={'loadImageCreate'} width={200} height={200}
-                            onChangeImage={this.onChangeImage} />
+                            htmlFor={'loadImageCreate'} width={100} height={100}
+                            onChangeInput={onChangeShop} />
 
                         <FormInput name={'Tên cửa hàng'} variable={'name'} value={dataShop.name}
                             important={true}

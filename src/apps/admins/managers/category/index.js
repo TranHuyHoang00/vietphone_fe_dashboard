@@ -85,7 +85,7 @@ class index extends Component {
             },
             {
                 title: 'Ảnh', dataIndex: 'image', responsive: ['xl'], width: 60,
-                render: (image) => <Image src={image} height={50} width={50} className='object-cover' />
+                render: (image) => <>{image && <Image src={image} height={50} width={50} className='object-cover' />}</>
             },
             {
                 title: 'Status', dataIndex: 'is_active', width: 70, responsive: ['md'],

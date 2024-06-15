@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown
+    Spin, Pagination, Typography, Dropdown, Tag, Image
 } from 'antd';
 import { AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
-import ModalEdit from './modals/modalEdit';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataPosts } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
@@ -23,7 +22,6 @@ class index extends Component {
             listItemSelected: [],
             modalDetail: false,
             modalCreate: false,
-            modalEdit: false,
             dataFilter: {
                 page: 1,
                 limit: 5,
@@ -76,8 +74,8 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-            title: 'Tiêu đề', dataIndex: 'title',
-                render: (title,item) =>
+                title: 'Tiêu đề', dataIndex: 'title',
+                render: (title, item) =>
                     <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/post/edit/${item.id}`)}>
                         <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{title}</Typography.Text>
                     </span>,
@@ -91,13 +89,30 @@ class index extends Component {
                 title: 'Loại bài viết', dataIndex: 'category', responsive: ['sm'],
                 render: (category) => <Typography.Text >{category.title}</Typography.Text>,
             },
+            {
+                title: 'Ảnh', dataIndex: 'image', responsive: ['md'], width: 100,
+                render: (image) => <>{image && <Image src={image} height={50} width={100} className='object-cover' />}</>
+            },
+            {
+                title: 'Status', dataIndex: 'is_active', width: 70, responsive: ['md'],
+                render: (is_active) =>
+                    <div className='flex items-center justify-start'>
+                        {is_active ?
+                            <Tag color='green'>Mở</Tag>
+                            :
+                            <Tag color='red'>Khóa</Tag>
+                        }
+                    </div>
+            },
 
         ];
         const { dataCheckPermis, listItemSelected, dataFilter, dropButtonType,
-            modalCreate, modalEdit } = this.state;
+            modalCreate } = this.state;
         const { isLoading, dataPosts, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataCheckPermis['post.delete_post'] },
+            { key: 2, label: 'Khóa', disabled: !dataCheckPermis['post.change_post'] },
+            { key: 3, label: 'Mở', disabled: !dataCheckPermis['post.change_post'] },
         ];
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -129,6 +144,8 @@ class index extends Component {
                                             menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
                                                 {dropButtonType === 1 && <span>Xóa</span>}
+                                                {dropButtonType === 2 && <span>Khóa</span>}
+                                                {dropButtonType === 3 && <span>Mở</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
@@ -149,10 +166,6 @@ class index extends Component {
                 </Spin>
                 {modalCreate && dataCheckPermis['post.add_post'] &&
                     <ModalCreate modalCreate={modalCreate}
-                        openModal={this.openModal}
-                        dataFilter={dataFilter} />}
-                {modalEdit && dataCheckPermis['post.change_post'] &&
-                    <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
             </>

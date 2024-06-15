@@ -51,7 +51,7 @@ class index extends Component {
     onChangeImage = (image) => {
         const { onChangeShop } = this.props;
         this.setState({ isEditImage: true, })
-        onChangeShop([image], 'image');
+        onChangeShop(image, 'image');
     }
     render() {
         const { dataShop, isLoading, onChangeShop, modalEdit, openModal } = this.props;
@@ -68,7 +68,7 @@ class index extends Component {
 
                         <FormImage name={'Ảnh'} variable={'image'} value={dataShop.image}
                             important={true}
-                            htmlFor={'loadImageEdit'} width={200} height={200}
+                            htmlFor={'loadImageEdit'} width={100} height={100}
                             onChangeImage={this.onChangeImage} />
 
                         <FormInput name={'Tên cửa hàng'} variable={'name'} value={dataShop.name}

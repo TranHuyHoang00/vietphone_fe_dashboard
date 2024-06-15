@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Image, Dropdown
+    Spin, Pagination, Typography, Image, Dropdown, Tag
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
@@ -86,8 +86,19 @@ class index extends Component {
                     <><span>{address}</span></>
             },
             {
-                title: 'Ảnh', dataIndex: 'image', responsive: ['md'], width: 100,
-                render: (image) => <Image src={image} height={100} width={100} className='object-cover' />
+                title: 'Ảnh', dataIndex: 'image', responsive: ['md'], width: 60,
+                render: (image) => <>{image && <Image src={image} height={50} width={50} className='object-cover' />}</>
+            },
+            {
+                title: 'Status', dataIndex: 'is_active', width: 70, responsive: ['md'],
+                render: (is_active) =>
+                    <div className='flex items-center justify-start'>
+                        {is_active ?
+                            <Tag color='green'>Mở</Tag>
+                            :
+                            <Tag color='red'>Khóa</Tag>
+                        }
+                    </div>
             },
             {
                 title: 'HĐ', width: 80,
@@ -107,6 +118,8 @@ class index extends Component {
         const { isLoading, dataShops, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataCheckPermis['shop.delete_shop'] },
+            { key: 2, label: 'Khóa', disabled: !dataCheckPermis['shop.change_shop'] },
+            { key: 3, label: 'Mở', disabled: !dataCheckPermis['shop.change_shop'] },
         ];
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -138,6 +151,8 @@ class index extends Component {
                                             menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
                                                 {dropButtonType === 1 && <span>Xóa</span>}
+                                                {dropButtonType === 2 && <span>Khóa</span>}
+                                                {dropButtonType === 3 && <span>Mở</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>
