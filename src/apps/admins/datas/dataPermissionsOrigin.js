@@ -1,8 +1,9 @@
 const dataPermiViews = [
     "statistical.view_web", "statistical.view_product",
-    "account.view_customer", "account.view_user", "group.view_group",
     "order.view_order",
     "product.view_product", "promotion.view_flashsaleitem",
+    "account.view_customer", "account.view_user", "group.view_group",
+    "product.view_comment",
     "product.view_promotioninfo", "promotion.view_flashsale",
     "product.view_warranty", "product.view_repair",
     "settings.view_banner", "settings.view_location",
@@ -26,6 +27,9 @@ const dataOrders = [
 ];
 const dataProducts = [
     "product.view_product", "product.change_product", "product.delete_product", "product.add_product",
+];
+const dataComments = [
+    "product.view_comment", "product.change_comment", "product.delete_comment", "product.add_comment",
 ];
 const dataFlashSaleItems = [
     "promotion.view_flashsaleitem", "promotion.change_flashsaleitem", "promotion.delete_flashsaleitem", "promotion.add_flashsaleitem",
@@ -90,6 +94,7 @@ export {
     dataCustomers, dataUsers, dataGroups,
     dataOrders,
     dataProducts, dataFlashSaleItems,
+    dataComments,
     dataPromotions, dataFlashSales,
     dataWarrantys, dataRepairs,
     dataBanners, dataLocations,

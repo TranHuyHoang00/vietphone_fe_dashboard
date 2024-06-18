@@ -1,0 +1,19 @@
+/* src/App.css */
+.ql-toolbar {
+  transition: all 0.3s;
+}
+
+.toolbar-fixed .ql-toolbar {
+  position: fixed;
+  top: 52px;
+  z-index: 100;
+  background: white;
+}
+
+.editor-container {
+  margin-top: 0;
+}
+
+.toolbar-fixed .editor-container {
+  margin-top: 70px; /* Adjust this value based on the height of your toolbar */
+}

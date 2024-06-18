@@ -3,7 +3,7 @@ import {
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillBook, AiFillBuild,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook, AiOutlineUserSwitch,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard,
-    AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool
+    AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool,AiOutlineComment 
 } from "react-icons/ai";
 import { IoStatsChart, IoBarChartSharp, IoBookSharp ,IoLocation } from "react-icons/io5";
 import { FaUserNurse, FaAndroid, FaUserShield, FaDatabase, FaCat } from "react-icons/fa6";
@@ -34,6 +34,11 @@ const itemMenuLeftLayoutSider = [
             {
                 key: 'user_webiste', icon: <FaUserShield />, label: 'Người dùng', children: [
                     { key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng', title: 'account.view_customer' },
+                ],
+            },
+            {
+                key: 'comment_webiste', icon: <AiOutlineComment  />, label: 'Phản hồi', children: [
+                    { key: 'manager/comment', icon: <AiOutlineComment  />, label: 'Bình luận', title: 'product.view_comment' },
                 ],
             },
             {
