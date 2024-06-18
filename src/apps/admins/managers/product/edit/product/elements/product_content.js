@@ -14,10 +14,26 @@ class index extends Component {
             isToolbarFixed: false,
         }
     }
-    handlePinHeader = (event) => {
+    componentDidMount() {
+        document.querySelectorAll(".ql-picker").forEach(tool => {
+            tool.addEventListener("mousedown", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            });
+        });
+    }
+    componentDidUpdate() {
+        document.querySelectorAll(".ql-picker").forEach(tool => {
+            tool.addEventListener("mousedown", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            });
+        });
+    }
+    toggleToolbarFixed = (event) => {
         event.stopPropagation();
         this.setState({ isToolbarFixed: !this.state.isToolbarFixed });
-    }
+    };
     render() {
         const { isEdit, description, onChangeProductDescription } = this.props;
         const { isToolbarFixed } = this.state;
@@ -26,7 +42,7 @@ class index extends Component {
                 <Collapse.Panel header="Mô tả sản phẩm" key="1" extra={
                     <>
                         <Button className='bg-[#0e97ff] dark:bg-white'
-                            onClick={(event) => this.handlePinHeader(event)}>
+                            onClick={(event) => this.toggleToolbarFixed(event)}>
                             <span className=' text-white dark:text-black'>{isToolbarFixed ? 'Bỏ Gim' : 'Gim'}</span>
                         </Button>
                     </>
@@ -36,7 +52,7 @@ class index extends Component {
                         <ReactQuill theme="snow" readOnly={!isEdit}
                             modules={moduleQuills}
                             formats={formatQuills}
-                            bounds={'.app'}
+                            bounds={'.editor-container'}
                             value={description}
                             onChange={(value) => onChangeProductDescription(value)}
                         />

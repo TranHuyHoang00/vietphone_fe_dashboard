@@ -771,10 +771,6 @@ video {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.flex-col {
-  flex-direction: column;
-}
-
 .flex-wrap {
   flex-wrap: wrap;
 }
@@ -1327,10 +1323,6 @@ video {
 
   .sm\:w-\[400px\] {
     width: 400px;
-  }
-
-  .sm\:flex-row {
-    flex-direction: row;
   }
 }
 
