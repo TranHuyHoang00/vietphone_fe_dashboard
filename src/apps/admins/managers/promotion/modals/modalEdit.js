@@ -8,10 +8,12 @@ import ModalFooter from '@components/modals/modalFooter';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { moduleQuills, formatQuills } from '@datas/dataModuleReactQuill';
+import FormImage from '@components/inputs/formImage';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isEditImage: false,
         }
     }
     async componentDidMount() {
@@ -28,8 +30,11 @@ class index extends Component {
     handleEdit = async () => {
         const { dataPromotion, isResult, openModal, getListPromotion, editPromotion, dataFilter } = this.props;
         const result = this.validationData(dataPromotion);
+        const { isEditImage } = this.state;
+        let newDataPromotion = { ...dataPromotion };
         if (result.check) {
-            await editPromotion(dataPromotion.id, dataPromotion);
+            if (isEditImage === false) { delete newDataPromotion.image; }
+            await editPromotion(newDataPromotion.id, newDataPromotion);
             if (isResult) {
                 openModal("edit", false);
                 await getListPromotion(dataFilter);
@@ -37,6 +42,11 @@ class index extends Component {
         } else {
             message.error(result.mess);
         }
+    }
+    onChangeImage = (image) => {
+        const { onChangePromotion } = this.props;
+        this.setState({ isEditImage: true, })
+        onChangePromotion(image, 'image');
     }
     render() {
         const { dataPromotion, isLoading, onChangePromotion, modalEdit, openModal } = this.props;
@@ -50,6 +60,16 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
+                        <FormImage name={'Ảnh'} variable={'image'} value={dataPromotion.image}
+                            important={true}
+                            htmlFor={'loadImageEdit'} width={200} height={100}
+                            onChangeImage={this.onChangeImage} />
+
+                        <FormInput name={'Trả góp'} variable={'instalment'} value={dataPromotion.instalment}
+                            important={true}
+                            onChangeInput={onChangePromotion} />
+
+
                         <FormInput name={'Tên'} variable={'name'} value={dataPromotion.name}
                             important={true}
                             onChangeInput={onChangePromotion} />

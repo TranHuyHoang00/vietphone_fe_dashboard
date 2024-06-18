@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown
+    Spin, Pagination, Typography, Dropdown, Image
 } from 'antd';
 import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
@@ -79,6 +79,15 @@ class index extends Component {
                 title: 'Tên', dataIndex: 'name',
                 render: (name) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{name}</Typography.Text>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
+            },
+            {
+                title: 'Trả góp', dataIndex: 'instalment',
+                render: (instalment) => <Typography.Text className='text-[#0574b8] dark:text-white'>{instalment}</Typography.Text>,
+                sorter: (a, b) => a.instalment.localeCompare(b.instalment),
+            },
+            {
+                title: 'Ảnh', dataIndex: 'image', responsive: ['md'], width: 100,
+                render: (image) => <>{image && <Image src={image} height={40} width={80} className='object-cover' />}</>
             },
             {
                 title: 'HĐ', width: 80,

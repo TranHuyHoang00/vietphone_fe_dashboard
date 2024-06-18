@@ -8,6 +8,8 @@ import ModalFooter from '@components/modals/modalFooter';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { moduleQuills, formatQuills } from '@datas/dataModuleReactQuill';
+import FormImage from '@components/inputs/formImage';
+
 class index extends Component {
     constructor(props) {
         super(props);
@@ -50,7 +52,16 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
+                        <FormImage name={'Ảnh'} variable={'image'} value={dataPromotion.image}
+                            important={true}
+                            htmlFor={'loadImageCreate'} width={200} height={100}
+                            onChangeInput={onChangePromotion} />
+
                         <FormInput name={'Tên'} variable={'name'} value={dataPromotion.name}
+                            important={true}
+                            onChangeInput={onChangePromotion} />
+
+                        <FormInput name={'Trả góp'} variable={'instalment'} value={dataPromotion.instalment}
                             important={true}
                             onChangeInput={onChangePromotion} />
 
