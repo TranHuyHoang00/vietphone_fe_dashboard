@@ -17,7 +17,13 @@ class index extends Component {
             case 'loadImageCreate':
                 onChangeInput(imageNew, variable);
                 break;
+            case 'loadImageCreateBg':
+                onChangeInput(imageNew, variable);
+                break;
             case 'loadImageEdit':
+                onChangeImage(imageNew);
+                break;
+            case 'loadImageEditBg':
                 onChangeImage(imageNew);
                 break;
             default:

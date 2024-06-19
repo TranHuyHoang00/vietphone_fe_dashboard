@@ -26,7 +26,9 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
                         {imageLine13('Ảnh', dataCategory.image, 50, 50)}
+                        {imageLine13('Ảnh nền', dataCategory.background, 210, 70)}
                         {textLine13('Tên danh mục', dataCategory.name)}
+                        {textLine13('Màu nền', dataCategory.color)}
                         {textLine13('Icon', dataCategory.icon)}
                         {textLine13('Mô tả', dataCategory.description)}
                         {textLine13('Trạng thái', (dataCategory && dataCategory.is_active ? 'Mở' : 'Khóa'))}

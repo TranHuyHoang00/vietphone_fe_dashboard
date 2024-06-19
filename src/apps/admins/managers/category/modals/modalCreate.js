@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Modal, message, Spin } from 'antd';
+import { Modal, message, Spin,Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormTextare from '@components/inputs/formTextare';
 import FormImage from '@components/inputs/formImage';
@@ -50,13 +50,26 @@ class index extends Component {
                     <div className="space-y-[10px]">
 
                         <FormImage name={'Ảnh'} variable={'image'} value={dataCategory.image}
-                            important={true}
+                            important={false}
                             htmlFor={'loadImageCreate'} width={100} height={100}
+                            onChangeInput={onChangeCategory} />
+
+                        <FormImage name={'Ảnh nền'} variable={'background'} value={dataCategory.background}
+                            important={false}
+                            htmlFor={'loadImageCreateBg'} width={300} height={100}
                             onChangeInput={onChangeCategory} />
 
                         <FormInput name={'Tên danh mục'} variable={'name'} value={dataCategory.name}
                             important={true}
                             onChangeInput={onChangeCategory} />
+
+                        <div className='space-y-[3px]'>
+                            <Typography.Text italic strong>Màu nền</Typography.Text>
+                            <div>
+                                <input onChange={(event) => { onChangeCategory(event.target.value, 'color'); }}
+                                    value={dataCategory.color} type='color' className='w-full' />
+                            </div>
+                        </div>
 
                         <FormInput name={'Icon'} variable={'icon'} value={dataCategory.icon}
                             important={false}

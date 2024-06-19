@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown, Tag
+    Spin, Pagination, Typography, Dropdown, Tag,Image
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
@@ -88,6 +88,14 @@ class index extends Component {
             {
                 title: 'Ngày KT', dataIndex: 'end_time', responsive: ['md'],
                 render: (end_time) => <Typography.Text>{moment(end_time).format('HH:mm DD/MM/YYYY ')}</Typography.Text>,
+            },
+            {
+                title: 'Màu nền', dataIndex: 'color', responsive: ['lg'],
+                render: (color) => <Typography.Text>{color}</Typography.Text>,
+            },
+            {
+                title: 'Ảnh nền', dataIndex: 'background', responsive: ['lg'], width: 100,
+                render: (background) => <>{background && <Image src={background} height={30} width={90} className='object-cover' />}</>
             },
             {
                 title: 'Status', dataIndex: 'is_active', width: 70, responsive: ['md'],

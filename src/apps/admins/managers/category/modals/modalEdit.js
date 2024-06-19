@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Modal, message, Spin } from 'antd';
+import { Modal, message, Spin,Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormTextare from '@components/inputs/formTextare';
 import FormImage from '@components/inputs/formImage';
@@ -13,6 +13,7 @@ class index extends Component {
         super(props);
         this.state = {
             isEditImage: false,
+            isEditImageBg: false,
         }
     }
     async componentDidMount() {
@@ -25,11 +26,12 @@ class index extends Component {
     }
     handleEdit = async () => {
         const { dataCategory, isResult, openModal, getListCategory, editCategory, dataFilter } = this.props;
-        const { isEditImage } = this.state;
+        const { isEditImage, isEditImageBg } = this.state;
         const result = this.validationData(dataCategory);
         let newDataCategory = { ...dataCategory };
         if (result.check) {
             if (isEditImage === false) { delete newDataCategory.image; }
+            if (isEditImageBg === false) { delete newDataCategory.background; }
             await editCategory(newDataCategory.id, newDataCategory);
             if (isResult) {
                 await getListCategory(dataFilter);
@@ -43,6 +45,11 @@ class index extends Component {
         const { onChangeCategory } = this.props;
         this.setState({ isEditImage: true, })
         onChangeCategory(image, 'image');
+    }
+    onChangeImageBg = (background) => {
+        const { onChangeCategory } = this.props;
+        this.setState({ isEditImageBg: true, })
+        onChangeCategory(background, 'background');
     }
     render() {
         const { dataCategory, isLoading, onChangeCategory, modalEdit, openModal } = this.props;
@@ -62,9 +69,22 @@ class index extends Component {
                             htmlFor={'loadImageEdit'} width={100} height={100}
                             onChangeImage={this.onChangeImage} />
 
+                        <FormImage name={'Ảnh nền'} variable={'background'} value={dataCategory.background}
+                            important={true}
+                            htmlFor={'loadImageEditBg'} width={300} height={100}
+                            onChangeImage={this.onChangeImageBg} />
+
                         <FormInput name={'Tên danh mục'} variable={'name'} value={dataCategory.name}
                             important={true}
                             onChangeInput={onChangeCategory} />
+
+                        <div className='space-y-[3px]'>
+                            <Typography.Text italic strong>Màu nền</Typography.Text>
+                            <div>
+                                <input onChange={(event) => { onChangeCategory(event.target.value, 'color'); }}
+                                    value={dataCategory.color} type='color' className='w-full' />
+                            </div>
+                        </div>
 
                         <FormInput name={'Icon'} variable={'icon'} value={dataCategory.icon}
                             important={false}
