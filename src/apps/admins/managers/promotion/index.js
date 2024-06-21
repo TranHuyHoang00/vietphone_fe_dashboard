@@ -6,10 +6,9 @@ import {
     Table, Space, Divider, Button, Popconfirm, Input,
     Spin, Pagination, Typography, Dropdown, Image
 } from 'antd';
-import { AiFillEdit, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
-import ModalEdit from './modals/modalEdit';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataPromotions } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
@@ -23,7 +22,6 @@ class index extends Component {
             listItemSelected: [],
             modalDetail: false,
             modalCreate: false,
-            modalEdit: false,
             dataFilter: {
                 page: 1,
                 limit: 5,
@@ -77,32 +75,26 @@ class index extends Component {
             },
             {
                 title: 'Tên', dataIndex: 'name',
-                render: (name) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{name}</Typography.Text>,
+                render: (name, item) =>
+                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/promotion/edit/${item.id}`)}>
+                        <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{name}</Typography.Text>
+                    </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
+                
             },
+            
             {
                 title: 'Trả góp', dataIndex: 'instalment',
                 render: (instalment) => <Typography.Text className='text-[#0574b8] dark:text-white'>{instalment}</Typography.Text>,
                 sorter: (a, b) => a.instalment.localeCompare(b.instalment),
             },
             {
-                title: 'Ảnh', dataIndex: 'image', responsive: ['md'], width: 100,
-                render: (image) => <>{image && <Image src={image} height={40} width={80} className='object-cover' />}</>
+                title: 'Ảnh', dataIndex: 'image', responsive: ['lg'], width: 210,
+                render: (image) => <>{image && <Image src={image} height={40} width={200} className='object-cover' />}</>
             },
-            {
-                title: 'HĐ', width: 80,
-                render: (_, item) => (
-                    <Space size="middle" >
-                        <button disabled={!dataCheckPermis['product.change_promotioninfo']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
-                            <AiFillEdit />
-                        </button>
-                    </Space >
-                ),
-            },
-
         ];
         const { dataCheckPermis, listItemSelected, dataFilter, dropButtonType,
-            modalCreate, modalEdit } = this.state;
+            modalCreate } = this.state;
         const { isLoading, dataPromotions, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataCheckPermis['product.delete_promotioninfo'] },
@@ -157,10 +149,6 @@ class index extends Component {
                 </Spin>
                 {modalCreate && dataCheckPermis['product.add_promotioninfo'] &&
                     <ModalCreate modalCreate={modalCreate}
-                        openModal={this.openModal}
-                        dataFilter={dataFilter} />}
-                {modalEdit && dataCheckPermis['product.change_promotioninfo'] &&
-                    <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
             </>

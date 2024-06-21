@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Button, Spin, Typography, message } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import FormSelectSingle from '@components/selects/formSelectSingle';
 import FormImage from '@components/inputs/formImage';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -17,45 +16,41 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { getListCategoryPost, getDataPost, match } = this.props;
+        const { getDataPromotion, match } = this.props;
         if (match && match.params) {
-            const postId = match.params.id;
-            if (postId) { await getDataPost(postId); }
+            const promotionId = match.params.id;
+            if (promotionId) { await getDataPromotion(promotionId); }
         }
-        await getListCategoryPost({ page: 1, limit: 100, search: '' });
     }
-    goBackHome = () => { this.props.history.push(`/admin/manager/post`) };
+    goBackHome = () => { this.props.history.push(`/admin/manager/promotion`) };
     validationData = (data) => {
-        if (!data.title) {
-            return { mess: "Không được bỏ trống 'Tiêu đề' ", check: false };
+        if (!data.name) {
+            return { mess: "Không được bỏ trống 'Tên' ", check: false };
         }
-        if (!data.slug) {
-            return { mess: "Không được bỏ trống 'Slug' ", check: false };
-        }
-        if (!data.body) {
+        if (!data.content) {
             return { mess: "Không được bỏ trống 'Nội dung' ", check: false };
         }
         return { check: true };
     }
     handleEdit = async () => {
-        const { dataPost, isResult, getListPost, editPost, dataFilter } = this.props;
-        const result = this.validationData(dataPost);
+        const { dataPromotion,editPromotion } = this.props;
+        const result = this.validationData(dataPromotion);
+        const { isEditImage } = this.state;
+        let newDataPromotion = { ...dataPromotion };
         if (result.check) {
-            await editPost(dataPost.id, dataPost);
-            if (isResult) {
-                await getListPost(dataFilter);
-            }
+            if (isEditImage === false) { delete newDataPromotion.image; }
+            await editPromotion(newDataPromotion.id, newDataPromotion);
         } else {
             message.error(result.mess);
         }
     }
     onChangeImage = (image) => {
-        const { onChangePost } = this.props;
+        const { onChangePromotion } = this.props;
         this.setState({ isEditImage: true, })
-        onChangePost(image, 'image');
+        onChangePromotion(image, 'image');
     }
     render() {
-        const { dataPost, isLoading, onChangePost, dataCategoryPosts } = this.props;
+        const { dataPromotion, isLoading, onChangePromotion } = this.props;
         return (
             <Spin size='large' spinning={isLoading}>
                 <div className="mx-[10px] space-y-[10px]">
@@ -71,39 +66,31 @@ class index extends Component {
                             </Button>
                         </div>
                         <div className="space-y-[10px]">
-                            <FormImage name={'Ảnh'} variable={'image'} value={dataPost.image}
+                            <FormImage name={'Ảnh'} variable={'image'} value={dataPromotion.image}
                                 important={true}
-                                htmlFor={'loadImageEdit'} width={100} height={100}
+                                htmlFor={'loadImageEdit'} width={250} height={50}
                                 onChangeImage={this.onChangeImage} />
+
                             <div className='flex flex-wrap gap-[10px]'>
-                                <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost.title}
+                                <FormInput name={'Trả góp'} variable={'instalment'} value={dataPromotion.instalment}
                                     important={true}
-                                    onChangeInput={onChangePost} />
+                                    onChangeInput={onChangePromotion} />
 
-                                <FormInput name={'Slug'} variable={'slug'} value={dataPost.slug}
+                                <FormInput name={'Tên'} variable={'name'} value={dataPromotion.name}
                                     important={true}
-                                    onChangeInput={onChangePost} />
-
-                                <FormSelectSingle name={'Loại bài viết'} variable={'category'} value={dataPost.category}
-                                    important={true} width={200}
-                                    options={dataCategoryPosts.map((item) => ({
-                                        label: item.title,
-                                        value: item.id,
-                                    }))}
-                                    onChangeInput={onChangePost} />
-
+                                    onChangeInput={onChangePromotion} />
                             </div>
                             <div className='space-y-[3px]'>
                                 <Typography.Text italic strong>
                                     Nội dung
                                     <Typography.Text type="danger" strong> *</Typography.Text>
                                 </Typography.Text>
-                                <ReactQuill theme="snow" className='text-black dark:text-white'
+                                <ReactQuill theme="snow"
                                     modules={moduleQuills}
                                     formats={formatQuills}
                                     bounds={'.app'}
-                                    value={dataPost.body}
-                                    onChange={(value) => onChangePost(value, 'body')}
+                                    value={dataPromotion.content}
+                                    onChange={(value) => onChangePromotion(value, 'content')}
                                 />
                             </div>
                         </div>
@@ -117,19 +104,17 @@ class index extends Component {
 
 const mapStateToProps = state => {
     return {
-        dataCategoryPosts: state.category_post.dataCategoryPosts,
-        dataPost: state.post.dataPost,
-        isLoading: state.post.isLoading,
-        isResult: state.post.isResult,
+        dataPromotion: state.promotion.dataPromotion,
+        isLoading: state.promotion.isLoading,
+        isResult: state.promotion.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        getListPost: (dataFilter) => dispatch(actions.getListPostRedux(dataFilter)),
-        editPost: (id, data) => dispatch(actions.editPostRedux(id, data)),
-        onChangePost: (id, value) => dispatch(actions.onChangePostRedux(id, value)),
-        getListCategoryPost: (dataFilter) => dispatch(actions.getListCategoryPostRedux(dataFilter)),
-        getDataPost: (id) => dispatch(actions.getDataPostRedux(id)),
+        editPromotion: (id, data) => dispatch(actions.editPromotionRedux(id, data)),
+        onChangePromotion: (id, value) => dispatch(actions.onChangePromotionRedux(id, value)),
+        getDataPromotion: (id) => dispatch(actions.getDataPromotionRedux(id)),
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

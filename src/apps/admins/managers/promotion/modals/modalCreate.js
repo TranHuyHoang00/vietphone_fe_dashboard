@@ -54,7 +54,7 @@ class index extends Component {
                     <div className="space-y-[10px]">
                         <FormImage name={'Ảnh'} variable={'image'} value={dataPromotion.image}
                             important={true}
-                            htmlFor={'loadImageCreate'} width={200} height={100}
+                            htmlFor={'loadImageCreate'} width={250} height={50}
                             onChangeInput={onChangePromotion} />
 
                         <FormInput name={'Tên'} variable={'name'} value={dataPromotion.name}

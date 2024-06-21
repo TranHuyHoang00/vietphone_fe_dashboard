@@ -38,6 +38,7 @@ import EditPost from './managers/post/edit/index';
 import ManagerGroup from './managers/group/index';
 import ManagerUser from './managers/user/index';
 import ManagerPromotion from './managers/promotion/index';
+import EditPromotion from './managers/promotion/edit/index';
 import ManagerWarranty from './managers/warranty/index';
 import ManagerRepair from './managers/repair/index';
 import ManagerShop from './managers/shop/index';
@@ -154,8 +155,11 @@ class index extends Component {
 
                                     {dataCheckPermis['promotion.view_flashsaleitem'] &&
                                         <Route exact path={`${url}manager/flash_sale_item`}><ManagerFlashSaleItem /></Route>}
+
                                     {dataCheckPermis['product.view_promotioninfo'] &&
                                         <Route exact path={`${url}manager/promotion`}><ManagerPromotion /></Route>}
+                                    {dataCheckPermis['product.view_promotioninfo'] &&
+                                        <Route exact path={`${url}manager/promotion/edit/:id`}><EditPromotion/></Route>}
 
                                     {dataCheckPermis['product.view_warranty'] &&
                                         <Route exact path={`${url}manager/warranty`}><ManagerWarranty /></Route>}

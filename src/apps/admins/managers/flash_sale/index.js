@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown, Tag,Image
+    Spin, Pagination, Typography, Dropdown, Tag, Image
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
@@ -82,12 +82,17 @@ class index extends Component {
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
             {
-                title: 'Ngày BĐ', dataIndex: 'start_time', responsive: ['md'],
-                render: (start_time) => <Typography.Text>{moment(start_time).format('HH:mm DD/MM/YYYY ')}</Typography.Text>,
-            },
-            {
-                title: 'Ngày KT', dataIndex: 'end_time', responsive: ['md'],
-                render: (end_time) => <Typography.Text>{moment(end_time).format('HH:mm DD/MM/YYYY ')}</Typography.Text>,
+                title: 'Thời gian', dataIndex: 'start_time', responsive: ['md'],
+                render: (start_time, item) => <>
+                    <div>
+                        <span>Ngày BĐ : </span>
+                        <Typography.Text>{moment(start_time).format('HH:mm DD/MM/YYYY ')}</Typography.Text>
+                    </div>
+                    <div>
+                        <span>Ngày KT : </span>
+                        <Typography.Text>{moment(item.end_time).format('HH:mm DD/MM/YYYY ')}</Typography.Text>
+                    </div>
+                </>
             },
             {
                 title: 'Màu nền', dataIndex: 'color', responsive: ['lg'],
