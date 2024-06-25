@@ -84,11 +84,8 @@ class index extends Component {
                 title: 'Icon', dataIndex: 'icon', responsive: ['lg'],
             },
             {
-                title: 'Mô tả', dataIndex: 'description', responsive: ['xl'],
-            },
-            {
-                title: 'Ảnh', dataIndex: 'image', responsive: ['md'], width: 100,
-                render: (image) => <>{image && <Image src={image} height={50} width={80} className='object-cover' />}</>
+                title: 'Ảnh', dataIndex: 'image', responsive: ['md'], width: 160,
+                render: (image) => <>{image && <Image src={image} height={50} width={150} className='object-cover' />}</>
             },
             {
                 title: 'Status', dataIndex: 'is_active', width: 70, responsive: ['md'],

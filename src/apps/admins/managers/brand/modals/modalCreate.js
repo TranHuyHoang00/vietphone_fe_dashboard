@@ -51,7 +51,7 @@ class index extends Component {
 
                         <FormImage name={'Ảnh'} variable={'image'} value={dataBrand.image}
                             important={true}
-                            htmlFor={'loadImageCreate'} width={200} height={100}
+                            htmlFor={'loadImageCreate'} width={240} height={80}
                             onChangeInput={onChangeBrand} />
 
                         <FormInput name={'Tên thương hiệu'} variable={'name'} value={dataBrand.name}

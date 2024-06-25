@@ -24,7 +24,7 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {imageLine13('Ảnh', dataBrand.image, 100, 50)}
+                        {imageLine13('Ảnh', dataBrand.image, 150, 50)}
                         {textLine13('Tên danh mục', dataBrand.name)}
                         {textLine13('Icon', dataBrand.icon)}
                         {textLine13('Mô tả', dataBrand.description)}

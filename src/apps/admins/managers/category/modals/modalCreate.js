@@ -51,12 +51,12 @@ class index extends Component {
 
                         <FormImage name={'Ảnh'} variable={'image'} value={dataCategory.image}
                             important={false}
-                            htmlFor={'loadImageCreate'} width={100} height={100}
+                            htmlFor={'loadImageCreate'} width={240} height={80}
                             onChangeInput={onChangeCategory} />
 
                         <FormImage name={'Ảnh nền'} variable={'background'} value={dataCategory.background}
                             important={false}
-                            htmlFor={'loadImageCreateBg'} width={300} height={100}
+                            htmlFor={'loadImageCreateBg'} width={240} height={80}
                             onChangeInput={onChangeCategory} />
 
                         <FormInput name={'Tên danh mục'} variable={'name'} value={dataCategory.name}

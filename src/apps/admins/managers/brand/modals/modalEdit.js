@@ -59,7 +59,7 @@ class index extends Component {
 
                         <FormImage name={'Ảnh'} variable={'image'} value={dataBrand.image}
                             important={true}
-                            htmlFor={'loadImageEdit'} width={200} height={100}
+                            htmlFor={'loadImageEdit'} width={240} height={80}
                             onChangeImage={this.onChangeImage} />
 
                         <FormInput name={'Tên thương hiệu'} variable={'name'} value={dataBrand.name}

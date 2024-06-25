@@ -88,12 +88,12 @@ class index extends Component {
                 render: (color) => <Typography.Text>{color}</Typography.Text>,
             },
             {
-                title: 'Ảnh', dataIndex: 'image', responsive: ['xl'], width: 60,
-                render: (image) => <>{image && <Image src={image} height={50} width={50} className='object-cover' />}</>
+                title: 'Ảnh', dataIndex: 'image', responsive: ['xl'], width: 160,
+                render: (image) => <>{image && <Image src={image} height={50} width={150} className='object-cover' />}</>
             },
             {
-                title: 'Ảnh nền', dataIndex: 'background', responsive: ['xl'], width: 100,
-                render: (background) => <>{background && <Image src={background} height={30} width={90} className='object-cover' />}</>
+                title: 'Ảnh nền', dataIndex: 'background', responsive: ['xl'], width: 160,
+                render: (background) => <>{background && <Image src={background} height={50} width={150} className='object-cover' />}</>
             },
             {
                 title: 'Status', dataIndex: 'is_active', width: 70, responsive: ['md'],
