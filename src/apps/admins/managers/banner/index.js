@@ -140,7 +140,7 @@ class index extends Component {
                             </Button>
                             <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên băng rôn !" /></div>
                         </div>
-                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
                                 <div>

@@ -7,7 +7,7 @@ const formatMoney = (number) => {
         minimumFractionDigits: 0,
         maximumFractionDigits: 3
     });
-    return `${newNumber} vnđ`;
+    return `${newNumber} đ`;
 };
 const formatNumber = (number) => {
     var newNumber = parseFloat(number).toLocaleString('en-US', {

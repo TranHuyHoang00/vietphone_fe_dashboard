@@ -30,3 +30,4 @@ export * from '@actions/repair_types';
 export * from '@actions/address_types';
 export * from '@actions/shop_types';
 export * from '@actions/comment_types';
+export * from '@actions/target_types';

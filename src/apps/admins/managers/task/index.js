@@ -109,7 +109,7 @@ class index extends Component {
             <>
                 <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
-                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
                                 <div>

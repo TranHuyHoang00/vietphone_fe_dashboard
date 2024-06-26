@@ -31,6 +31,7 @@ import repairReducers from '@reducers/repair_reducers';
 import addressReducers from '@reducers/address_reducers';
 import shopReducers from '@reducers/shop_reducers';
 import commentReducers from '@reducers/comment_reducers';
+import targetReducers from '@reducers/target_reducers';
 export default combineReducers({
     product: productReducers,
     customer: customerReducers,
@@ -61,7 +62,8 @@ export default combineReducers({
     promotion: promotionReducers,
     warranty: warrantyReducers,
     repair: repairReducers,
-    address:addressReducers,
-    shop:shopReducers,
-    comment:commentReducers,
+    address: addressReducers,
+    shop: shopReducers,
+    comment: commentReducers,
+    target: targetReducers,
 })

@@ -111,7 +111,7 @@ class index extends Component {
         const { isLoadingSyncProduct, isResultSyncProduct, dataSyncProduct } = this.state;
         return (
             <div className="mx-[10px] space-y-[10px]">
-                <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
+                <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                     <Divider>ĐỒNG BỘ</Divider>
                     <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-[10px]'>
                         <div>

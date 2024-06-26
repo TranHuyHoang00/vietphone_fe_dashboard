@@ -120,7 +120,7 @@ class index extends Component {
                                 </Space>
                             </Button>
                         </div>
-                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                             <div className='flex items-end justify-between gap-[10px]'>
                                 <div className='w-[200px] sm:w-[300px] md:w-[400px]'>
                                     <FormSelectSingle name={'Flash sale'}

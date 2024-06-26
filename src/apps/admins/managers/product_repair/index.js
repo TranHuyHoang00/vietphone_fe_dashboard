@@ -223,7 +223,7 @@ class index extends Component {
                                 onChange={(event) => this.onChangeSearch(event.target.value)}
                                 onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên sản phẩm !" /></div>
                         </div>
-                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={dataFilterProductRepair.limit} onChangePage={this.onChangePage} />
                                 <div>

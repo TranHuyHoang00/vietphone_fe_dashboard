@@ -3,12 +3,12 @@ import {
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillBook, AiFillBuild,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook, AiOutlineUserSwitch,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard,
-    AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool,AiOutlineComment 
+    AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool, AiOutlineComment
 } from "react-icons/ai";
-import { IoStatsChart, IoBarChartSharp, IoBookSharp ,IoLocation } from "react-icons/io5";
+import { IoStatsChart, IoBarChartSharp, IoBookSharp, IoLocation } from "react-icons/io5";
 import { FaUserNurse, FaAndroid, FaUserShield, FaDatabase, FaCat } from "react-icons/fa6";
 import { FaCcDiscover } from "react-icons/fa";
-import { BsFillBox2HeartFill } from "react-icons/bs";
+import { BsFillBox2HeartFill, BsCalendarFill, BsCurrencyExchange } from "react-icons/bs";
 
 const itemMenuLeftLayoutSider = [
     {
@@ -37,8 +37,8 @@ const itemMenuLeftLayoutSider = [
                 ],
             },
             {
-                key: 'comment_webiste', icon: <AiOutlineComment  />, label: 'Phản hồi', children: [
-                    { key: 'manager/comment', icon: <AiOutlineComment  />, label: 'Bình luận', title: 'product.view_comment' },
+                key: 'comment_webiste', icon: <AiOutlineComment />, label: 'Phản hồi', children: [
+                    { key: 'manager/comment', icon: <AiOutlineComment />, label: 'Bình luận', title: 'product.view_comment' },
                 ],
             },
             {
@@ -72,7 +72,7 @@ const itemMenuLeftLayoutSider = [
                     { key: 'manager/tag', icon: <AiFillTag />, label: 'Thẻ tag', title: 'product.view_tag' },
                     { key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu', title: 'product.view_brand' },
                     { key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục', title: 'product.view_category' },
-                    { key: 'manager/shop', icon: <IoLocation  />, label: 'Cửa hàng', title: 'shop.view_shop' },
+                    { key: 'manager/shop', icon: <IoLocation />, label: 'Cửa hàng', title: 'shop.view_shop' },
                 ],
             },
             {
@@ -85,6 +85,11 @@ const itemMenuLeftLayoutSider = [
     },
     {
         key: 'manager', icon: <FaCat />, label: 'Quản lý', children: [
+            {
+                key: 'target_manager', icon: <BsCalendarFill />, label: 'Doanh số', children: [
+                    { key: 'manager/target', icon: <BsCurrencyExchange />, label: 'Target - Kpi', title: 'account.view_user' },
+                ],
+            },
             {
                 key: 'user_manager', icon: <FaUserShield />, label: 'Người dùng', children: [
                     { key: 'manager/user', icon: <AiOutlineUserSwitch />, label: 'Tài khoản', title: 'account.view_user' },

@@ -43,6 +43,7 @@ import ManagerWarranty from './managers/warranty/index';
 import ManagerRepair from './managers/repair/index';
 import ManagerShop from './managers/shop/index';
 import ManagerComment from './managers/comment/index';
+import ManagerTarget from './managers/target/index';
 
 import StatisticalViewWeb from './managers/statisticals/web/view_web/index';
 import StatisticalViewProduct from './managers/statisticals/web/view_product/index';
@@ -145,7 +146,7 @@ class index extends Component {
                                         <Route exact path={`${url}manager/product`}><ManagerProduct /></Route>}
 
                                     {dataCheckPermis['product.view_comment'] &&
-                                        <Route exact path={`${url}manager/comment`}><ManagerComment/></Route>}
+                                        <Route exact path={`${url}manager/comment`}><ManagerComment /></Route>}
 
                                     {dataCheckPermis['product.view_product'] &&
                                         <Route exact path={`${url}manager/product_repair`}><ManagerProductRepair /></Route>}
@@ -159,7 +160,7 @@ class index extends Component {
                                     {dataCheckPermis['product.view_promotioninfo'] &&
                                         <Route exact path={`${url}manager/promotion`}><ManagerPromotion /></Route>}
                                     {dataCheckPermis['product.view_promotioninfo'] &&
-                                        <Route exact path={`${url}manager/promotion/edit/:id`}><EditPromotion/></Route>}
+                                        <Route exact path={`${url}manager/promotion/edit/:id`}><EditPromotion /></Route>}
 
                                     {dataCheckPermis['product.view_warranty'] &&
                                         <Route exact path={`${url}manager/warranty`}><ManagerWarranty /></Route>}
@@ -199,6 +200,10 @@ class index extends Component {
 
                                     {dataCheckPermis['post.view_category'] &&
                                         <Route exact path={`${url}manager/category_post`}><ManagerCategoryPost /></Route>}
+
+
+                                    <Route exact path={`${url}manager/target`}><ManagerTarget /></Route>
+
                                     {dataCheckPermis['sync.view_sync'] &&
                                         <Route exact path={`${url}manager/sync_data`}><ManagerSyncData /></Route>}
                                     {dataCheckPermis['task.view_task'] &&

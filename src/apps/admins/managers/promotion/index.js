@@ -80,9 +80,9 @@ class index extends Component {
                         <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{name}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
-                
+
             },
-            
+
             {
                 title: 'Trả góp', dataIndex: 'instalment',
                 render: (instalment) => <Typography.Text className='text-[#0574b8] dark:text-white'>{instalment}</Typography.Text>,
@@ -117,7 +117,7 @@ class index extends Component {
                             </Button>
                             <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên !" /></div>
                         </div>
-                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-md'>
+                        <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
                                 <div>
