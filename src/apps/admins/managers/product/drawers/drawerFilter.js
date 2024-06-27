@@ -20,7 +20,7 @@ class index extends Component {
 
         const { dataFilter, dataBrands, dataTags, dataCategorys, onChangePage, openDrawer, drawerFilter } = this.props;
         return (
-            <Drawer title="Bộ lọc nâng cao" onClose={() => openDrawer('filter', false)} open={drawerFilter}>
+            <Drawer title="Bộ lọc" onClose={() => openDrawer('filter', false)} open={drawerFilter}>
                 <div className='space-y-[10px]'>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Trạng thái</Typography.Text>

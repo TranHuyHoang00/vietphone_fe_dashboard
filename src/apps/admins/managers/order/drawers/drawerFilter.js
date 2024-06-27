@@ -12,7 +12,7 @@ class index extends Component {
     render() {
         const { dataFilter, openDrawer, drawerFilter, onChangePage } = this.props;
         return (
-            <Drawer title="Bộ lọc nâng cao" onClose={() => openDrawer('filter', false)} open={drawerFilter}>
+            <Drawer title="Bộ lọc" onClose={() => openDrawer('filter', false)} open={drawerFilter}>
                 <Space direction='vertical'>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Trạng thái</Typography.Text>

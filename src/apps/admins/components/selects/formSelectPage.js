@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Select, Space } from 'antd';
+import { Select } from 'antd';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -17,20 +17,15 @@ class index extends Component {
             { value: 30, label: '30 dòng' },
             { value: 40, label: '40 dòng' },
             { value: 50, label: '50 dòng' },
-            { value: 100, label: '100 dòng' },
+            { value: 80, label: '80 dòng' },
         ];
         return (
-            <Space>
-                <span className='text-black dark:text-white'>Hiển thị</span>
-                <Select
-                    onChange={(value) => this.props.onChangePage(value, 'limit')}
-                    defaultValue="5 dòng"
-                    style={{ width: 100 }}
-                    options={dataLineNumber}
-                    value={this.props.limit}
-                />
-            </Space>
-
+            <Select
+                onChange={(value) => this.props.onChangePage(value, 'limit')}
+                defaultValue="5 dòng"
+                style={{ width: 100 }}
+                options={dataLineNumber}
+                value={this.props.limit} />
         );
     }
 

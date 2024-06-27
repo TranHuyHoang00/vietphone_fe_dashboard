@@ -6,7 +6,7 @@ import {
     Table, Space, Divider, Button, Input, Popconfirm, Dropdown,
     Spin, Pagination, Typography, Tag, Image
 } from 'antd';
-import { AiOutlineMenu, AiOutlinePlus, AiFillTool } from "react-icons/ai";
+import { AiFillFilter, AiOutlinePlus, AiFillTool } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import DrawerFilter from './drawers/drawerFilter';
 import DrawerEditBatch from './drawers/drawerEditBatch';
@@ -206,7 +206,7 @@ class index extends Component {
                                 <Button disabled={!dataCheckPermis['product.view_product']}
                                     onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
-                                        <AiOutlineMenu />
+                                        <AiFillFilter />
                                         Bộ lọc
                                     </Space>
                                 </Button>

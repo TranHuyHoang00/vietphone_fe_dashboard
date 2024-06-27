@@ -6,7 +6,7 @@ import {
     Table, Space, Divider, Input, Tag, Button, Popconfirm, Dropdown,
     Spin, Pagination, Typography, Avatar
 } from 'antd';
-import { AiOutlinePlus, AiFillEdit, AiOutlineMenu } from "react-icons/ai";
+import { AiOutlinePlus, AiFillEdit, AiFillFilter } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
@@ -185,7 +185,7 @@ class index extends Component {
                                 </Button>
                                 <Button onClick={() => this.openDrawer('filter', true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
-                                        <AiOutlineMenu />
+                                        <AiFillFilter />
                                         Bộ lọc
                                     </Space>
                                 </Button>

@@ -12,7 +12,7 @@ const formatMoney = (number) => {
 const formatNumber = (number) => {
     var newNumber = parseFloat(number).toLocaleString('en-US', {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 3
+        maximumFractionDigits: 0,
     });
     return `${newNumber}`;
 };

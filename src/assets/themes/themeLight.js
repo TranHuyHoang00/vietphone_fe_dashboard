@@ -11,7 +11,8 @@ export const themeLight = Object.freeze({
             colorBorder: '#ced4da'
         },
         Input: {
-            colorBorder: '#ced4da'
+            colorBorder: '#ced4da',
+            addonBg: '#f4f4f4',
         },
         Result: {
             extraMargin: '14px 0 0 0',

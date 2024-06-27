@@ -43,7 +43,10 @@ import ManagerWarranty from './managers/warranty/index';
 import ManagerRepair from './managers/repair/index';
 import ManagerShop from './managers/shop/index';
 import ManagerComment from './managers/comment/index';
-import ManagerTarget from './managers/target/index';
+// import SetTableTarget from './managers/target/set/table/index';
+// import SetOverviewTarget from './managers/target/set/overview/index';
+// import AchieveIndividualTarget from './managers/target/achieve/individual/index';
+import AchieveOverviewTarget from './managers/target/achieve/overview/index';
 
 import StatisticalViewWeb from './managers/statisticals/web/view_web/index';
 import StatisticalViewProduct from './managers/statisticals/web/view_product/index';
@@ -202,7 +205,11 @@ class index extends Component {
                                         <Route exact path={`${url}manager/category_post`}><ManagerCategoryPost /></Route>}
 
 
-                                    <Route exact path={`${url}manager/target`}><ManagerTarget /></Route>
+                                    {/* <Route exact path={`${url}set/target/table`}><SetTableTarget /></Route>
+                                    <Route exact path={`${url}set/target/overview`}><SetOverviewTarget /></Route>
+                                    <Route exact path={`${url}achieve/target/individual`}><AchieveIndividualTarget /></Route> */}
+                                    <Route exact path={`${url}achieve/target/overview`}><AchieveOverviewTarget /></Route>
+
 
                                     {dataCheckPermis['sync.view_sync'] &&
                                         <Route exact path={`${url}manager/sync_data`}><ManagerSyncData /></Route>}

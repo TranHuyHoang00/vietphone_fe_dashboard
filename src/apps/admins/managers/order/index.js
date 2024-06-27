@@ -6,7 +6,7 @@ import {
     Table, Space, Divider, Button, Input,
     Spin, Pagination, Typography, Avatar,
 } from 'antd';
-import { AiFillEye, AiOutlineMenu } from "react-icons/ai";
+import { AiFillEye, AiFillFilter } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import { formatMoney, formatDay } from '@utils/handleFuncFormat';
 import { textLine13 } from '@components/displays/line13';
@@ -141,7 +141,7 @@ class index extends Component {
                                 <Button disabled={!dataCheckPermis['order.view_order']}
                                     onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
-                                        <AiOutlineMenu />
+                                        <AiFillFilter />
                                         Bộ lọc
                                     </Space>
                                 </Button>

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
@@ -6,18 +6,18 @@ import {
     Table, Space, Divider, Button, Popconfirm, Input,
     Spin, Pagination, Typography, Dropdown
 } from 'antd';
-import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
+import { AiFillEdit, AiFillEye, AiOutlinePlus, AiFillFilter } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
+import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataTargets } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 import { formatMoney } from '@utils/handleFuncFormat';
-
-class index extends PureComponent {
+class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,6 +25,7 @@ class index extends PureComponent {
             listItemSelected: [],
             modalCreate: false,
             modalEdit: false,
+            drawerFilter: false,
             dataFilter: {
                 page: 1,
                 limit: 5,
@@ -51,6 +52,15 @@ class index extends PureComponent {
         };
         const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
         this.setState(newStateModal);
+    }
+    openDrawer = async (drawerName, drawerValue) => {
+        switch (drawerName) {
+            case 'filter':
+                this.setState({ drawerFilter: drawerValue });
+                break;
+            default:
+                return;
+        }
     }
     funcDropButtonHeaderOfTable = async () => {
         const { listItemSelected, dropButtonType, dataFilter } = this.state;
@@ -101,7 +111,7 @@ class index extends PureComponent {
 
         ];
         const { dataCheckPermis, listItemSelected, dataFilter, dropButtonType,
-            modalCreate, modalEdit } = this.state;
+            modalCreate, modalEdit, drawerFilter } = this.state;
         const { isLoading, dataTargets, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataCheckPermis['target.delete_target'] },
@@ -119,14 +129,26 @@ class index extends PureComponent {
                                 onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
-                                    Tạo mới
+                                    Tạo
                                 </Space>
                             </Button>
-                            <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên thông số !" /></div>
+                            <div>
+                                <Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tìm theo tên !"
+                                    enterButton="Tìm" className='bg-[#0e97ff]' />
+                            </div>
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
+                                <Space>
+                                    <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
+                                    <Button disabled={!dataCheckPermis['target.view_target']}
+                                        onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                        <Space className='text-white dark:text-black'>
+                                            <AiFillFilter />
+                                            Lọc
+                                        </Space>
+                                    </Button>
+                                </Space>
                                 <div>
                                     <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
@@ -142,7 +164,7 @@ class index extends PureComponent {
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider orientationMargin={50}>TARGET</Divider>
+                            <Divider>TARGET</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={dataTargets} pagination={false}
@@ -152,7 +174,7 @@ class index extends PureComponent {
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
-                    </div >
+                    </div>
                 </Spin>
                 {modalCreate && dataCheckPermis['target.add_target'] &&
                     <ModalCreate modalCreate={modalCreate}
@@ -162,6 +184,10 @@ class index extends PureComponent {
                     <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
+                {drawerFilter && dataCheckPermis['target.view_target'] &&
+                    <DrawerFilter drawerFilter={drawerFilter}
+                        openDrawer={this.openDrawer} dataFilter={dataFilter}
+                        onChangePage={this.onChangePage} />}
             </>
         );
     }

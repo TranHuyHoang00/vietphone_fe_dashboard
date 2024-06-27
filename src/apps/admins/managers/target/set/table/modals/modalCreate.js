@@ -34,7 +34,6 @@ class index extends Component {
         }
     }
     formatNumber = (number) => {
-        console.log('number', number);
         if (number) { return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
     };
     render() {

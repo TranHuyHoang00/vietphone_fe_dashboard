@@ -3,12 +3,12 @@ import {
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillBook, AiFillBuild,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook, AiOutlineUserSwitch,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard,
-    AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool, AiOutlineComment
+    AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool, AiOutlineComment,
 } from "react-icons/ai";
 import { IoStatsChart, IoBarChartSharp, IoBookSharp, IoLocation } from "react-icons/io5";
 import { FaUserNurse, FaAndroid, FaUserShield, FaDatabase, FaCat } from "react-icons/fa6";
 import { FaCcDiscover } from "react-icons/fa";
-import { BsFillBox2HeartFill, BsCalendarFill, BsCurrencyExchange } from "react-icons/bs";
+import { BsFillBox2HeartFill, BsCalendar2PlusFill, BsClipboardDataFill, BsAward, BsTable, BsAndroid2, BsBox2HeartFill } from "react-icons/bs";
 
 const itemMenuLeftLayoutSider = [
     {
@@ -86,16 +86,28 @@ const itemMenuLeftLayoutSider = [
     {
         key: 'manager', icon: <FaCat />, label: 'Quản lý', children: [
             {
-                key: 'target_manager', icon: <BsCalendarFill />, label: 'Doanh số', children: [
-                    { key: 'manager/target', icon: <BsCurrencyExchange />, label: 'Target - Kpi', title: 'account.view_user' },
-                ],
-            },
-            {
                 key: 'user_manager', icon: <FaUserShield />, label: 'Người dùng', children: [
                     { key: 'manager/user', icon: <AiOutlineUserSwitch />, label: 'Tài khoản', title: 'account.view_user' },
                     { key: 'manager/group', icon: <AiFillRobot />, label: 'Phân quyền', title: 'group.view_group' },
                 ],
             }
+        ]
+
+    },
+    {
+        key: 'target', icon: <BsAward />, label: 'Target', children: [
+            {
+                key: 'set', icon: <BsCalendar2PlusFill />, label: 'Đặt ra', children: [
+                    { key: 'set/target/overview', icon: <BsClipboardDataFill />, label: 'Tổng quan', title: 'account.view_user' },
+                    { key: 'set/target/table', icon: <BsTable />, label: 'Bảng', title: 'account.view_user' },
+                ],
+            },
+            {
+                key: 'achieve', icon: <BsBox2HeartFill />, label: 'Đạt được', children: [
+                    { key: 'achieve/target/overview', icon: <BsClipboardDataFill />, label: 'Tổng quan', title: 'account.view_user' },
+                    { key: 'achieve/target/individual', icon: <BsAndroid2 />, label: 'Cá nhân', title: 'account.view_user' },
+                ],
+            },
         ]
 
     },
