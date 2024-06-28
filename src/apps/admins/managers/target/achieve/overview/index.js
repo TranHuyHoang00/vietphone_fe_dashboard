@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Spin, Table, Typography, Button, Space, message } from 'antd';
 import { AiFillFilter } from "react-icons/ai";
-import { formatNumber } from '@utils/handleFuncFormat';
 import dayjs from 'dayjs';
 import BarGroup from '../../component/bar/group';
 import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataTargets } from '@datas/dataPermissionsOrigin';
+import { formatNumber } from '@utils/handleFuncFormat';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -19,12 +19,15 @@ class index extends Component {
                 start_time: dayjs().startOf('month').format("YYYY-MM-DD"),
                 end_time: dayjs().format("YYYY-MM-DD"),
                 type_object: 'shop',
-                type_time: 'month',
+                type_view: 'all',
+                list_id: [],
             },
             dataTargets: [],
-
-            dataChartTargetShop: {},
             dataCheckPermis: {},
+
+            dataChartTargetMonthShop: {},
+            dataChartTargetDateShop: {},
+            dataChartDailyIncomeDateShop: {},
 
         }
     }
@@ -38,6 +41,15 @@ class index extends Component {
         this.loadData();
     }
     validationData = (data) => {
+        if (data?.type_object === "shop" && data?.type_view === "individual") {
+            return { mess: "Vui lòng chọn danh sách cửa hàng ", check: false };
+        }
+        if (data?.type_object === "staff" && data?.type_view === "together") {
+            return { mess: "Vui lòng chọn danh sách cửa hàng ", check: false };
+        }
+        if (data?.type_object === "staff" && data?.type_view === "individual") {
+            return { mess: "Vui lòng chọn danh sách nhân viên ", check: false };
+        }
         if (!data.start_time) {
             return { mess: "Không được bỏ trống 'Ngày bắt đầu' ", check: false };
         }
@@ -75,16 +87,16 @@ class index extends Component {
     }
     loadData = () => {
         const dataTargetShops = [
-            { id: 1, shop: { id: 1, name: 'vietphone 16' }, targetMonth: 650000000, targetAchieved: 478000000, dailyIncome: 87100000 },
-            { id: 2, shop: { id: 2, name: 'vietphone 21' }, targetMonth: 850000000, targetAchieved: 577010000, dailyIncome: 90000 },
-            { id: 3, shop: { id: 3, name: 'vietphone 22' }, targetMonth: 450000000, targetAchieved: 454060000, dailyIncome: 1700000 },
+            { id: 1, shop: { id: 1, name: 'vietphone 16' }, targetMonth: 650000000, targetAchieved: 478100000, dailyIncome: 8700000 },
+            { id: 2, shop: { id: 2, name: 'vietphone 21' }, targetMonth: 850000000, targetAchieved: 577110000, dailyIncome: 90000 },
+            { id: 3, shop: { id: 3, name: 'vietphone 22' }, targetMonth: 450000000, targetAchieved: 454060000, dailyIncome: 170000 },
             { id: 4, shop: { id: 4, name: 'vietphone 25' }, targetMonth: 850000000, targetAchieved: 954070000, dailyIncome: 17000 },
             { id: 5, shop: { id: 10, name: 'vietphone 26' }, targetMonth: 550000000, targetAchieved: 234000400, dailyIncome: 70000 },
             { id: 6, shop: { id: 9, name: 'vietphone 27' }, targetMonth: 450000000, targetAchieved: 462090000, dailyIncome: 580000 },
             { id: 7, shop: { id: 5, name: 'vietphone 28' }, targetMonth: 650000000, targetAchieved: 104060000, dailyIncome: 6700000 },
-            { id: 8, shop: { id: 6, name: 'vietphone 29' }, targetMonth: 750000000, targetAchieved: 154040000, dailyIncome: 2700000 },
-            { id: 9, shop: { id: 7, name: 'vietphone 30' }, targetMonth: 650000000, targetAchieved: 354030000, dailyIncome: 1700000 },
-            { id: 10, shop: { id: 8, name: 'vietphone 31' }, targetMonth: 550000000, targetAchieved: 234005000, dailyIncome: 117000000 },
+            { id: 8, shop: { id: 6, name: 'vietphone 29' }, targetMonth: 750000000, targetAchieved: 456000000, dailyIncome: 2700000 },
+            { id: 9, shop: { id: 7, name: 'vietphone 30' }, targetMonth: 650000000, targetAchieved: 354030000, dailyIncome: 17500 },
+            { id: 10, shop: { id: 8, name: 'vietphone 31' }, targetMonth: 550000000, targetAchieved: 234005000, dailyIncome: 11705000 },
         ]
         this.setState({ dataTargets: dataTargetShops });
         this.handleDataForChart(dataTargetShops);
@@ -99,22 +111,51 @@ class index extends Component {
         }
     }
     handleDataForChart = (dataInput) => {
-        const dataTargetMonths = dataInput.map(item => (item?.targetMonth / 1000000));
-        const dataTargetAchieveds = dataInput.map(item => (item?.targetAchieved / 1000000));
+        const { dataFilter } = this.state;
+        const dataTargetMonths = dataInput.map(item => item?.targetMonth / 1000000);
+        const dataTargetAchievedMonths = dataInput.map(item => item?.targetAchieved / 1000000);
         const dataNameShops = dataInput.map(item => (item?.shop?.name));
-        const dataOutput = {
+        const dataChartTargetMonthShop = {
             datas: [
-                { name: 'Thực đạt', data: dataTargetAchieveds },
-                { name: 'Target', data: dataTargetMonths },
+                { name: 'Thực đạt', data: dataTargetAchievedMonths },
+                { name: 'Target tháng', data: dataTargetMonths },
             ],
             labels: dataNameShops,
             height: 80 * (dataTargetMonths && dataTargetMonths.length),
         }
-        this.setState({ dataChartTargetShop: dataOutput })
+
+        const dataTargetDates = dataInput.map(item => {
+            const targetDate = this.getTargetDate(dataFilter?.end_time, item?.targetMonth, item?.targetAchieved) / 1000000;
+            if (targetDate <= 0) {
+                return 0;
+            } else {
+                return targetDate;
+            }
+        });
+        const dataChartTargetDateShop = {
+            datas: [{ name: 'Target ngày', data: dataTargetDates },],
+            labels: dataNameShops,
+            height: 40 * (dataTargetDates && dataTargetDates.length),
+        }
+
+        const dataDailyIncomes = dataInput.map(item => (item?.dailyIncome / 1000000));
+        const dataChartDailyIncomeDateShop = {
+            datas: [{ name: 'Doanh thu ngày', data: dataDailyIncomes },],
+            labels: dataNameShops,
+            height: 40 * (dataDailyIncomes && dataDailyIncomes.length),
+        }
+
+        this.setState({
+            dataChartTargetMonthShop: dataChartTargetMonthShop,
+            dataChartTargetDateShop: dataChartTargetDateShop,
+            dataChartDailyIncomeDateShop: dataChartDailyIncomeDateShop,
+        })
     }
     render() {
         const { isLoading } = this.props;
-        const { dataTargets, dataFilter, dataChartTargetShop, drawerFilter, dataCheckPermis } = this.state;
+        const { dataTargets, dataFilter, dataChartTargetMonthShop, drawerFilter, dataCheckPermis, dataChartTargetDateShop
+            , dataChartDailyIncomeDateShop
+        } = this.state;
         const totalRevenueColumns = [
             {
                 title: `${dataFilter?.type_time === 'month' ? `TỔNG DOANH THU CỬA HÀNG THÁNG ${dayjs(dataFilter?.start_time).format('MM-YYYY')}` : `TỔNG DOANH THU CỬA HÀNG TỪ ${dayjs(dataFilter?.start_time).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end_time).format('DD-MM-YYYY')}`}`,
@@ -259,10 +300,23 @@ class index extends Component {
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md '>
                             <div className='md:grid grid-cols-2 gap-[20px]'>
-                                {dataChartTargetShop && dataChartTargetShop.datas &&
-                                    <BarGroup dataSeries={dataChartTargetShop?.datas} dataCategories={dataChartTargetShop?.labels}
-                                        height={dataChartTargetShop?.height} title={"Biểu đồ cột doanh thu theo cửa hàng (triệu vnđ)"} />
+                                {dataChartTargetMonthShop && dataChartTargetMonthShop.datas &&
+                                    <BarGroup dataSeries={dataChartTargetMonthShop?.datas} dataCategories={dataChartTargetMonthShop?.labels}
+                                        height={dataChartTargetMonthShop?.height} unit={'money'}
+                                        title={"Target tháng (triệu vnđ)"} colors={['#0e92f7', '#f60000']} />
                                 }
+                                <div>
+                                    {dataChartTargetDateShop && dataChartTargetDateShop.datas &&
+                                        <BarGroup dataSeries={dataChartTargetDateShop?.datas} dataCategories={dataChartTargetDateShop?.labels}
+                                            height={dataChartTargetDateShop?.height} unit={'money'}
+                                            title={"Target ngày (triệu vnđ)"} colors={['#f60000']} />
+                                    }
+                                    {dataChartDailyIncomeDateShop && dataChartDailyIncomeDateShop.datas &&
+                                        <BarGroup dataSeries={dataChartDailyIncomeDateShop?.datas} dataCategories={dataChartDailyIncomeDateShop?.labels}
+                                            height={dataChartDailyIncomeDateShop?.height} unit={'money'}
+                                            title={"Danh thu ngày (triệu vnđ)"} colors={['#0e92f7']} />
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>

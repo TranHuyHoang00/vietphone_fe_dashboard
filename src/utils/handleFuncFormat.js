@@ -9,10 +9,10 @@ const formatMoney = (number) => {
     });
     return `${newNumber} đ`;
 };
-const formatNumber = (number) => {
+const formatNumber = (number, min, max) => {
     var newNumber = parseFloat(number).toLocaleString('en-US', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        minimumFractionDigits: min ? min : 0,
+        maximumFractionDigits: max ? max : 0,
     });
     return `${newNumber}`;
 };

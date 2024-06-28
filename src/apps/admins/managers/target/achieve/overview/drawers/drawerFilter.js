@@ -1,48 +1,43 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Drawer, Space, Typography, Radio, Button } from 'antd';
+import { Drawer, Space, Typography, Radio, Button, Select } from 'antd';
 import dayjs from 'dayjs';
 import { AiOutlineCheck } from "react-icons/ai";
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataFilter: {},
+            dataFilter: {
+                type_time: 'month',
+            },
         }
     }
     async componentDidMount() {
-        const { dataFilter } = this.props;
-        this.setState({ dataFilter: dataFilter });
-    }
-    onChangePage = async (pageValue, pageType) => {
-        const { dataFilter } = this.state;
-        let newDataFilter = { ...dataFilter };
-        switch (pageType) {
-            case 'type_time':
-                newDataFilter.type_time = pageValue;
-                break;
-            case 'type_object':
-                newDataFilter.type_object = pageValue;
-                break;
-            case 'start_time':
-                newDataFilter.start_time = pageValue;
-                break;
-            case 'end_time':
-                newDataFilter.end_time = pageValue;
-                break;
-            default:
-                break;
+        const newDataFilter = {
+            ...this.props.dataFilter,
+            ...this.state.dataFilter,
         }
-        this.setState({ dataFilter: newDataFilter })
-
+        this.setState({
+            dataFilter: newDataFilter
+        });
+    }
+    handleOnchangeInput = (value, id) => {
+        const { dataFilter } = this.state;
+        let copyState = { ...dataFilter };
+        copyState[id] = value;
+        this.setState({
+            dataFilter: {
+                ...copyState
+            }
+        });
     }
     onChangeInputMonth = async (date) => {
         if (dayjs(date).isSame(dayjs(), 'month')) {
-            await this.onChangePage(dayjs(date).startOf('month').format('YYYY-MM-DD'), 'start_time');
-            await this.onChangePage(dayjs().format('YYYY-MM-DD'), 'end_time');
+            await this.handleOnchangeInput(dayjs(date).startOf('month').format('YYYY-MM-DD'), 'start_time');
+            await this.handleOnchangeInput(dayjs().format('YYYY-MM-DD'), 'end_time');
         } else {
-            await this.onChangePage(dayjs(date).startOf('month').format('YYYY-MM-DD'), 'start_time');
-            await this.onChangePage(dayjs(date).endOf('month').format('YYYY-MM-DD'), 'end_time');
+            await this.handleOnchangeInput(dayjs(date).startOf('month').format('YYYY-MM-DD'), 'start_time');
+            await this.handleOnchangeInput(dayjs(date).endOf('month').format('YYYY-MM-DD'), 'end_time');
         }
     }
     render() {
@@ -57,63 +52,116 @@ class index extends Component {
                             <Typography.Text type="danger" strong> *</Typography.Text>
                         </Typography.Text>
                         <Radio.Group buttonStyle="solid"
-                            value={dataFilter?.type_object} onChange={(event) => this.onChangePage(event.target.value, 'type_object')} className='flex'>
+                            value={dataFilter?.type_object} onChange={(event) => this.handleOnchangeInput(event.target.value, 'type_object')} className='flex'>
                             <Radio.Button value="shop">Cửa hàng</Radio.Button>
                             <Radio.Button value="staff">Nhân viên</Radio.Button>
                         </Radio.Group>
                     </div>
-                    <div className='space-y-[2px]'>
-                        <Typography.Text strong>
-                            Kiểu thời gian
-                            <Typography.Text type="danger" strong> *</Typography.Text>
-                        </Typography.Text>
-                        <Radio.Group buttonStyle="solid"
-                            value={dataFilter?.type_time} onChange={(event) => this.onChangePage(event.target.value, 'type_time')} className='flex'>
-                            <Radio.Button value="month">Tháng</Radio.Button>
-                            <Radio.Button value="date">Ngày</Radio.Button>
-                        </Radio.Group>
-                    </div>
-                    {dataFilter?.type_time === 'month' &&
+                    {dataFilter?.type_object && <>
                         <div className='space-y-[2px]'>
                             <Typography.Text strong>
-                                Thời gian (tháng)
+                                Loại xem
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
-                            <input className='border w-full h-[35px] px-[5px]'
-                                type="month" value={dayjs(dataFilter?.end_time).format('YYYY-MM')}
-                                onChange={(event) => this.onChangeInputMonth(event.target.value)}
-                                max={dayjs().format('YYYY-MM')} />
+                            <Radio.Group buttonStyle="solid"
+                                value={dataFilter?.type_view} onChange={(event) => this.handleOnchangeInput(event.target.value, 'type_view')} className='flex'>
+                                <Radio.Button value="all">Tất cả</Radio.Button>
+                                <Radio.Button value="individual">Riêng</Radio.Button>
+                                {dataFilter?.type_object === "staff" &&
+                                    <Radio.Button value="together">Chung</Radio.Button>
+                                }
+                            </Radio.Group>
                         </div>
-                    }
-                    {dataFilter?.type_time === 'date' &&
-                        <>
+                        {((dataFilter?.type_view === "individual" && dataFilter?.type_object === "shop") ||
+                            (dataFilter?.type_view === "together" && dataFilter?.type_object === "staff")) &&
                             <div className='space-y-[2px]'>
                                 <Typography.Text strong>
-                                    Ngày bắt đầu
-                                    <Typography.Text type="danger" strong> * <small>(cùng tháng - năm)</small></Typography.Text>
+                                    Danh sách cửa hàng
+                                    <Typography.Text type="danger" strong> *</Typography.Text>
                                 </Typography.Text>
-                                <input type='date' className='border w-full h-[35px] px-[5px]' required
-                                    value={dayjs(dataFilter?.start_time).format('YYYY-MM-DD')}
-                                    onChange={(event) => this.onChangePage(dayjs(event.target.value).format('YYYY-MM-DD'), 'start_time')} />
+                                <Select style={{ width: '100%' }} placement='bottomRight' mode='multiple'
+                                    value={dataFilter?.list_id}
+                                    onChange={(value) => this.handleOnchangeInput(value, 'list_id')}
+                                    options={[
+                                        { label: 'VIETPHONE 16', value: 1 },
+                                        { label: 'VIETPHONE 21', value: 2 },
+                                        { label: 'VIETPHONE 22', value: 3 },
+                                        { label: 'VIETPHONE 29', value: 4 }
+                                    ]} />
                             </div>
+                        }
+                        {dataFilter?.type_view === "individual" && dataFilter?.type_object === "staff" &&
                             <div className='space-y-[2px]'>
                                 <Typography.Text strong>
-                                    Ngày kết thúc
-                                    <Typography.Text type="danger" strong> * <small>(cùng tháng - năm)</small></Typography.Text>
+                                    Danh sách nhân viên
+                                    <Typography.Text type="danger" strong> *</Typography.Text>
                                 </Typography.Text>
-                                <input type='date' className='border w-full h-[35px] px-[5px]' required
-                                    value={dayjs(dataFilter?.end_time).format('YYYY-MM-DD')}
-                                    onChange={(event) => this.onChangePage(dayjs(event.target.value).format('YYYY-MM-DD'), 'end_time')} />
+                                <Select style={{ width: '100%' }} placement='bottomRight' mode='multiple'
+                                    options={[
+                                        { label: 'Huy Hoàng', value: 1 },
+                                        { label: 'Phúc Đại', value: 2 },
+                                        { label: 'Trung An', value: 3 },
+                                        { label: 'Đức Hải', value: 4 }
+                                    ]} />
                             </div>
-                        </>
-                    }
-                    <Button onClick={() => handleFilter(dataFilter)}
-                        className='bg-[#0e97ff] dark:bg-white'>
-                        <Space className='text-white dark:text-black'>
-                            <AiOutlineCheck />
-                            Xác nhận
-                        </Space>
-                    </Button>
+                        }
+                        {dataFilter?.type_view && <>
+                            <div className='space-y-[2px]'>
+                                <Typography.Text strong>
+                                    Kiểu thời gian
+                                    <Typography.Text type="danger" strong> *</Typography.Text>
+                                </Typography.Text>
+                                <Radio.Group buttonStyle="solid"
+                                    value={dataFilter?.type_time} onChange={(event) => this.handleOnchangeInput(event.target.value, 'type_time')} className='flex'>
+                                    <Radio.Button value="month">Tháng</Radio.Button>
+                                    <Radio.Button value="date">Ngày</Radio.Button>
+                                </Radio.Group>
+                            </div>
+                            {dataFilter?.type_time && <>
+                                {dataFilter?.type_time === 'month' &&
+                                    <div className='space-y-[2px]'>
+                                        <Typography.Text strong>
+                                            Thời gian (tháng)
+                                            <Typography.Text type="danger" strong> *</Typography.Text>
+                                        </Typography.Text>
+                                        <input className='border w-full h-[35px] px-[5px]'
+                                            type="month" value={dayjs(dataFilter?.end_time).format('YYYY-MM')}
+                                            onChange={(event) => this.onChangeInputMonth(event.target.value)}
+                                            max={dayjs().format('YYYY-MM')} />
+                                    </div>
+                                }
+                                {dataFilter?.type_time === 'date' && <>
+                                    <div className='space-y-[2px]'>
+                                        <Typography.Text strong>
+                                            Ngày bắt đầu
+                                            <Typography.Text type="danger" strong> * <small>(cùng tháng - năm)</small></Typography.Text>
+                                        </Typography.Text>
+                                        <input type='date' className='border w-full h-[35px] px-[5px]' required
+                                            value={dayjs(dataFilter?.start_time).format('YYYY-MM-DD')}
+                                            onChange={(event) => this.handleOnchangeInput(dayjs(event.target.value).format('YYYY-MM-DD'), 'start_time')} />
+                                    </div>
+                                    <div className='space-y-[2px]'>
+                                        <Typography.Text strong>
+                                            Ngày kết thúc
+                                            <Typography.Text type="danger" strong> * <small>(cùng tháng - năm)</small></Typography.Text>
+                                        </Typography.Text>
+                                        <input type='date' className='border w-full h-[35px] px-[5px]' required
+                                            value={dayjs(dataFilter?.end_time).format('YYYY-MM-DD')}
+                                            onChange={(event) => this.handleOnchangeInput(dayjs(event.target.value).format('YYYY-MM-DD'), 'end_time')} />
+                                    </div>
+                                </>}
+                                <Button onClick={() => handleFilter(dataFilter)}
+                                    className='bg-[#0e97ff] dark:bg-white'>
+                                    <Space className='text-white dark:text-black'>
+                                        <AiOutlineCheck />
+                                        Xác nhận
+                                    </Space>
+                                </Button>
+                            </>}
+
+                        </>}
+                    </>}
+
                 </Space>
             </Drawer>
         );
