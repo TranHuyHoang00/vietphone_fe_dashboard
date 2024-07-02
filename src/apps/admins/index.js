@@ -42,8 +42,8 @@ import EditPromotion from './managers/promotion/edit/index';
 import ManagerWarranty from './managers/warranty/index';
 import ManagerRepair from './managers/repair/index';
 import ManagerShop from './managers/shop/index';
-import ManagerComment from './managers/comment/index';
-// import SetTableTarget from './managers/target/set/table/index';
+// import ManagerComment from './managers/comment/index';
+import SetTableTarget from './managers/target/set/table/index';
 // import SetOverviewTarget from './managers/target/set/overview/index';
 // import AchieveIndividualTarget from './managers/target/achieve/individual/index';
 import AchieveOverviewTarget from './managers/target/achieve/overview/index';
@@ -148,8 +148,8 @@ class index extends Component {
                                     {dataCheckPermis['product.view_product'] &&
                                         <Route exact path={`${url}manager/product`}><ManagerProduct /></Route>}
 
-                                    {dataCheckPermis['product.view_comment'] &&
-                                        <Route exact path={`${url}manager/comment`}><ManagerComment /></Route>}
+                                    {/* {dataCheckPermis['product.view_comment'] &&
+                                        <Route exact path={`${url}manager/comment`}><ManagerComment /></Route>} */}
 
                                     {dataCheckPermis['product.view_product'] &&
                                         <Route exact path={`${url}manager/product_repair`}><ManagerProductRepair /></Route>}
@@ -205,8 +205,8 @@ class index extends Component {
                                         <Route exact path={`${url}manager/category_post`}><ManagerCategoryPost /></Route>}
 
 
-                                    {/* <Route exact path={`${url}set/target/table`}><SetTableTarget /></Route>
-                                    <Route exact path={`${url}set/target/overview`}><SetOverviewTarget /></Route>
+                                    <Route exact path={`${url}set/target/table`}><SetTableTarget /></Route>
+                                    {/* <Route exact path={`${url}set/target/overview`}><SetOverviewTarget /></Route>
                                     <Route exact path={`${url}achieve/target/individual`}><AchieveIndividualTarget /></Route> */}
                                     <Route exact path={`${url}achieve/target/overview`}><AchieveOverviewTarget /></Route>
 

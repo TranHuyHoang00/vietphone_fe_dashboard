@@ -8,7 +8,6 @@ class index extends Component {
         super(props);
         this.state = {
             dataFilter: {
-                type_time: 'month',
             },
         }
     }
@@ -67,13 +66,9 @@ class index extends Component {
                                 value={dataFilter?.type_view} onChange={(event) => this.handleOnchangeInput(event.target.value, 'type_view')} className='flex'>
                                 <Radio.Button value="all">Tất cả</Radio.Button>
                                 <Radio.Button value="individual">Riêng</Radio.Button>
-                                {dataFilter?.type_object === "staff" &&
-                                    <Radio.Button value="together">Chung</Radio.Button>
-                                }
                             </Radio.Group>
                         </div>
-                        {((dataFilter?.type_view === "individual" && dataFilter?.type_object === "shop") ||
-                            (dataFilter?.type_view === "together" && dataFilter?.type_object === "staff")) &&
+                        {(dataFilter?.type_view === "individual" && dataFilter?.type_object === "shop") &&
                             <div className='space-y-[2px]'>
                                 <Typography.Text strong>
                                     Danh sách cửa hàng
