@@ -19,22 +19,20 @@ import ManagerCustomer from './managers/customer/index';
 
 
 import ManagerOrder from './managers/sapo/order/index';
-import ManagerGroupAttribute from './managers/group_attribute/index';
-import ManagerAttribute from './managers/attribute/index';
-import ManagerAttributeValue from './managers/attribute_value/index';
+
+
 import ManagerProduct from './managers/product/index';
 import ManagerProductRepair from './managers/product_repair/index';
 import EditProduct from './managers/product/edit/index';
-import ManagerVariantAttributeGroup from './managers/variant_attribute_group/index';
+
 import ManagerSyncData from './managers/sync_data/index';
 import ManagerFlashSale from './managers/flash_sale/index';
 import ManagerFlashSaleItem from './managers/flash_sale_item/index';
 import ManagerTask from './managers/task/index';
 import ManagerLocation from './managers/location/index';
 import ManagerBanner from './managers/banner/index';
-import ManagerCategoryPost from './managers/category_post/index';
-import ManagerPost from './managers/post/index';
-import EditPost from './managers/post/edit/index';
+
+
 import ManagerGroup from './managers/group/index';
 import ManagerUser from './managers/user/index';
 import ManagerPromotion from './managers/promotion/index';
@@ -46,6 +44,13 @@ import ManagerRepair from './managers/repair/index';
 import ManagerBrand from './managers/website/brand/index';
 import ManagerTag from './managers/website/tag/index';
 import ManagerCategory from './managers/website/category/index';
+import ManagerCategoryPost from './managers/website/categoryPost/index';
+import ManagerPost from './managers/website/post/index';
+import EditPost from './managers/website/post/edit/index';
+import ManagerVariantAttributeGroup from './managers/website/variantAttributeGroup/index';
+import ManagerGroupAttribute from './managers/website/groupAttribute/index';
+import ManagerAttribute from './managers/website/attribute/index';
+import ManagerAttributeValue from './managers/website/attributeValue/index';
 // SAPO
 import ManagerShop from './managers/sapo/shop/index';
 import ManagerStaff from './managers/sapo/staff/index';
@@ -185,13 +190,13 @@ class index extends Component {
                                         <Route exact path={`${url}manager/location`}><ManagerLocation /></Route>}
 
                                     {dataCheckPermis['product.view_attributevalue'] &&
-                                        <Route exact path={`${url}manager/attribute_value`}><ManagerAttributeValue /></Route>}
+                                        <Route exact path={`${url}manager/website/attribute_value`}><ManagerAttributeValue /></Route>}
                                     {dataCheckPermis['product.view_attribute'] &&
-                                        <Route exact path={`${url}manager/attribute`}><ManagerAttribute /></Route>}
+                                        <Route exact path={`${url}manager/website/attribute`}><ManagerAttribute /></Route>}
                                     {dataCheckPermis['product.view_groupattribute'] &&
-                                        <Route exact path={`${url}manager/group_attribute`}><ManagerGroupAttribute /></Route>}
+                                        <Route exact path={`${url}manager/website/group_attribute`}><ManagerGroupAttribute /></Route>}
                                     {dataCheckPermis['product.view_variantattributegroup'] &&
-                                        <Route exact path={`${url}manager/variant_attribute_group`}><ManagerVariantAttributeGroup /></Route>}
+                                        <Route exact path={`${url}manager/website/variant_attribute_group`}><ManagerVariantAttributeGroup /></Route>}
 
                                     {dataCheckPermis['product.view_tag'] &&
                                         <Route exact path={`${url}manager/website/tag`}><ManagerTag /></Route>}
@@ -205,12 +210,12 @@ class index extends Component {
 
 
                                     {dataCheckPermis['post.view_post'] &&
-                                        <Route exact path={`${url}manager/post`}><ManagerPost /></Route>}
+                                        <Route exact path={`${url}manager/website/post`}><ManagerPost /></Route>}
                                     {dataCheckPermis['post.view_post'] &&
-                                        <Route exact path={`${url}manager/post/edit/:id`}><EditPost /></Route>}
+                                        <Route exact path={`${url}manager/website/post/edit/:id`}><EditPost /></Route>}
 
                                     {dataCheckPermis['post.view_category'] &&
-                                        <Route exact path={`${url}manager/category_post`}><ManagerCategoryPost /></Route>}
+                                        <Route exact path={`${url}manager/website/category_post`}><ManagerCategoryPost /></Route>}
 
                                     {dataCheckPermis['analytic.view_shopmonthlytarget'] &&
                                         <Route exact path={`${url}set/target/shop`}><SetTargetShop /></Route>}

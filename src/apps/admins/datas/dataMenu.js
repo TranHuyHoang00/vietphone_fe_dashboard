@@ -64,10 +64,10 @@ const itemMenuLeftLayoutSider = [
             },
             {
                 key: 'specification_product_website', icon: <AiFillSetting />, label: 'Thông số kỹ thuật', children: [
-                    { key: 'manager/attribute_value', icon: <AiFillRocket />, label: 'Giá trị', title: 'product.view_attributevalue' },
-                    { key: 'manager/attribute', icon: <AiFillUsb />, label: 'Thông số', title: 'product.view_attribute' },
-                    { key: 'manager/group_attribute', icon: <AiFillFire />, label: 'Loại thông số', title: 'product.view_groupattribute' },
-                    { key: 'manager/variant_attribute_group', icon: <AiFillCrown />, label: 'Loại TS-SP', title: 'product.view_variantattributegroup' },
+                    { key: 'manager/website/attribute_value', icon: <AiFillRocket />, label: 'Giá trị', title: 'product.view_attributevalue' },
+                    { key: 'manager/website/attribute', icon: <AiFillUsb />, label: 'Thông số', title: 'product.view_attribute' },
+                    { key: 'manager/website/group_attribute', icon: <AiFillFire />, label: 'Loại thông số', title: 'product.view_groupattribute' },
+                    { key: 'manager/website/variant_attribute_group', icon: <AiFillCrown />, label: 'Loại TS-SP', title: 'product.view_variantattributegroup' },
                 ],
             },
             {
@@ -79,8 +79,8 @@ const itemMenuLeftLayoutSider = [
             },
             {
                 key: 'post_website', icon: <AiFillBook />, label: 'Bài đăng', children: [
-                    { key: 'manager/post', icon: <AiOutlineBook />, label: 'Bài viết', title: 'post.view_post' },
-                    { key: 'manager/category_post', icon: <AiFillBuild />, label: 'Loại bài viết', title: 'post.view_category' },
+                    { key: 'manager/website/post', icon: <AiOutlineBook />, label: 'Bài viết', title: 'post.view_post' },
+                    { key: 'manager/website/category_post', icon: <AiFillBuild />, label: 'Loại bài viết', title: 'post.view_category' },
                 ],
             },
         ],

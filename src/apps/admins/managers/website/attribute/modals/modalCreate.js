@@ -23,28 +23,29 @@ class index extends Component {
         }
         return { check: true };
     }
-    handleEdit = async () => {
-        const { dataAttribute, isResult, openModal, getListAttribute, editAttribute, dataFilter } = this.props;
+    handleCreate = async () => {
+        const { dataAttribute, isResult, openModal, getListAttribute, createAttribute, dataFilter } = this.props;
         const result = this.validationData(dataAttribute);
         if (result.check) {
-            await editAttribute(dataAttribute.id, dataAttribute);
+            await createAttribute(dataAttribute);
             if (isResult) {
-                openModal("edit", false);
                 await getListAttribute(dataFilter);
+                openModal("create", false);
             }
         } else {
             message.error(result.mess);
         }
     }
     render() {
-        const { dataAttribute, isLoading, onChangeAttribute, modalEdit, openModal, dataGroupAttributes } = this.props;
+        const { dataAttribute, isLoading, onChangeAttribute, modalCreate, openModal, dataGroupAttributes } = this.props;
         return (
-            <Modal title="CHỈNH SỬA" open={modalEdit}
-                onCancel={() => openModal("edit", false)} width={400}
+
+            <Modal title="TẠO MỚI" open={modalCreate}
+                onCancel={() => openModal("create", false)} width={400}
                 maskClosable={!isLoading}
                 footer={[
-                    <ModalFooter openModal={openModal} type={'edit'}
-                        isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
+                    <ModalFooter openModal={openModal} type={'create'}
+                        isLoading={isLoading} selectFuncFooterModal={this.handleCreate} />
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
@@ -77,13 +78,12 @@ const mapStateToProps = state => {
         isLoading: state.attribute.isLoading,
         isResult: state.attribute.isResult,
         dataGroupAttributes: state.groupAttribute.dataGroupAttributes,
-
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         getListAttribute: (dataFilter) => dispatch(actions.getListAttributeRedux(dataFilter)),
-        editAttribute: (id, data) => dispatch(actions.editAttributeRedux(id, data)),
+        createAttribute: (data) => dispatch(actions.createAttributeRedux(data)),
         onChangeAttribute: (id, value) => dispatch(actions.onChangeAttributeRedux(id, value)),
         getListGroupAttribute: (dataFilter) => dispatch(actions.getListGroupAttributeRedux(dataFilter)),
 

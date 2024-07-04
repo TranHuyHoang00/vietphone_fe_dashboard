@@ -273,13 +273,13 @@ const mapStateToProps = state => {
         dataProduct: state.product.dataProduct,
         isEdit: state.product.isEdit,
 
-        dataGroupAttributes: state.group_attribute.dataGroupAttributes,
-        dataGroupAttribute: state.group_attribute.dataGroupAttribute,
-        isResultGroupAtb: state.group_attribute.isResult,
+        dataGroupAttributes: state.groupAttribute.dataGroupAttributes,
+        dataGroupAttribute: state.groupAttribute.dataGroupAttribute,
+        isResultGroupAtb: state.groupAttribute.isResult,
 
         dataAttribute: state.attribute.dataAttribute,
 
-        dataAttributeValue: state.attribute_value.dataAttributeValue,
+        dataAttributeValue: state.attributeValue.dataAttributeValue,
 
     };
 };

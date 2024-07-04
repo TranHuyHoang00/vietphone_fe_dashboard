@@ -219,7 +219,7 @@ const mapStateToProps = state => {
 
         dataAttribute: state.attribute.dataAttribute,
 
-        dataAttributeValue: state.attribute_value.dataAttributeValue,
+        dataAttributeValue: state.attributeValue.dataAttributeValue,
         dataVariant: state.variant.dataVariant,
     };
 };
