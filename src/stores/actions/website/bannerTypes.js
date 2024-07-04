@@ -1,5 +1,5 @@
-import action_types from '@actions/action_types';
-import { getListBanner, getDataBanner, createBanner, deleteBanner, editBanner } from '@services/banner_service';
+import actionTypes from './actionTypes';
+import { getListBanner, getDataBanner, createBanner, deleteBanner, editBanner } from '@services/website/bannerServices';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -110,29 +110,29 @@ export const editBannerRedux = (id, dataBanner) => {
     }
 }
 export const bannerStart = () => ({
-    type: action_types.BANNER_START,
+    type: actionTypes.BANNER_START,
 })
 export const bannerSuccess = () => ({
-    type: action_types.BANNER_SUCCESS,
+    type: actionTypes.BANNER_SUCCESS,
 })
 export const bannerFaided = () => ({
-    type: action_types.BANNER_FAIDED,
+    type: actionTypes.BANNER_FAIDED,
 })
 
 export const getListBannerSuccess = (data) => ({
-    type: action_types.GET_LIST_BANNER_SUCCESS,
+    type: actionTypes.GET_LIST_BANNER_SUCCESS,
     data
 })
 export const getBannerSuccess = (data) => ({
-    type: action_types.GET_BANNER_SUCCESS,
+    type: actionTypes.GET_BANNER_SUCCESS,
     data
 })
 export const onChangeBannerRedux = (value, id) => ({
-    type: action_types.ON_CHANGE_BANNER,
+    type: actionTypes.ON_CHANGE_BANNER,
     value,
     id,
 })
 export const setDataBannerRedux = (data) => ({
-    type: action_types.SET_DATA_BANNER,
+    type: actionTypes.SET_DATA_BANNER,
     data,
 })

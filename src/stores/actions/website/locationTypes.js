@@ -1,5 +1,5 @@
-import action_types from '@actions/action_types';
-import { getListLocation, getDataLocation, createLocation, deleteLocation, editLocation } from '@services/location_service';
+import actionTypes from './actionTypes';
+import { getListLocation, getDataLocation, createLocation, deleteLocation, editLocation } from '@services/website/locationServices';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -110,29 +110,29 @@ export const editLocationRedux = (id, dataLocation) => {
     }
 }
 export const locationStart = () => ({
-    type: action_types.LOCATION_START,
+    type: actionTypes.LOCATION_START,
 })
 export const locationSuccess = () => ({
-    type: action_types.LOCATION_SUCCESS,
+    type: actionTypes.LOCATION_SUCCESS,
 })
 export const locationFaided = () => ({
-    type: action_types.LOCATION_FAIDED,
+    type: actionTypes.LOCATION_FAIDED,
 })
 
 export const getListLocationSuccess = (data) => ({
-    type: action_types.GET_LIST_LOCATION_SUCCESS,
+    type: actionTypes.GET_LIST_LOCATION_SUCCESS,
     data
 })
 export const getLocationSuccess = (data) => ({
-    type: action_types.GET_LOCATION_SUCCESS,
+    type: actionTypes.GET_LOCATION_SUCCESS,
     data
 })
 export const onChangeLocationRedux = (value, id) => ({
-    type: action_types.ON_CHANGE_LOCATION,
+    type: actionTypes.ON_CHANGE_LOCATION,
     value,
     id,
 })
 export const setDataLocationRedux = (data) => ({
-    type: action_types.SET_DATA_LOCATION,
+    type: actionTypes.SET_DATA_LOCATION,
     data,
 })

@@ -1,83 +1,83 @@
-import action_types from '@actions/action_types';
+import actionTypes from '@actions/website/actionTypes';
 
 const initialState = {
-    dataLocations: [],
-    dataLocation: {},
+    dataBanners: [],
+    dataBanner: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
 }
 
-const locationReducers = (state = initialState, action) => {
+const bannerReducers = (state = initialState, action) => {
     switch (action.type) {
-        case action_types.LOCATION_START:
+        case actionTypes.BANNER_START:
             return {
                 ...state,
                 isLoading: true,
                 isResult: false,
             }
-        case action_types.LOCATION_SUCCESS:
+        case actionTypes.BANNER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.LOCATION_FAIDED:
+        case actionTypes.BANNER_FAIDED:
             return {
                 ...state,
                 isLoading: false,
                 isResult: false,
             }
-        case action_types.GET_LIST_LOCATION_SUCCESS:
+        case actionTypes.GET_LIST_BANNER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                dataLocations: action.data.locations,
+                dataBanners: action.data.banners,
                 dataMeta: action.data.metadata
             }
-        case action_types.GET_LOCATION_SUCCESS:
+        case actionTypes.GET_BANNER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                dataLocation: action.data
+                dataBanner: action.data
             }
-        case action_types.CREATE_LOCATION_SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                isResult: true,
-            }
-        case action_types.EDIT_LOCATION_SUCCESS:
+        case actionTypes.CREATE_BANNER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.EDIT_LIST_LOCATION_SUCCESS:
+        case actionTypes.EDIT_BANNER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.DELETE_LIST_LOCATION_SUCCESS:
+        case actionTypes.EDIT_LIST_BANNER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.SET_DATA_LOCATION:
+        case actionTypes.DELETE_LIST_BANNER_SUCCESS:
             return {
                 ...state,
-                dataLocation: action.data,
+                isLoading: false,
+                isResult: true,
             }
-        case action_types.ON_CHANGE_LOCATION:
-            let copyState = { ...state.dataLocation };
+        case actionTypes.SET_DATA_BANNER:
+            return {
+                ...state,
+                dataBanner: action.data,
+            }
+        case actionTypes.ON_CHANGE_BANNER:
+            let copyState = { ...state.dataBanner };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                dataLocation: {
+                dataBanner: {
                     ...copyState,
                 }
             }
@@ -86,4 +86,4 @@ const locationReducers = (state = initialState, action) => {
     }
 }
 
-export default locationReducers;
+export default bannerReducers;

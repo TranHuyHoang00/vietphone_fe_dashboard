@@ -29,8 +29,7 @@ import ManagerSyncData from './managers/sync_data/index';
 import ManagerFlashSale from './managers/flash_sale/index';
 import ManagerFlashSaleItem from './managers/flash_sale_item/index';
 import ManagerTask from './managers/task/index';
-import ManagerLocation from './managers/location/index';
-import ManagerBanner from './managers/banner/index';
+
 
 
 import ManagerGroup from './managers/group/index';
@@ -51,6 +50,8 @@ import ManagerVariantAttributeGroup from './managers/website/variantAttributeGro
 import ManagerGroupAttribute from './managers/website/groupAttribute/index';
 import ManagerAttribute from './managers/website/attribute/index';
 import ManagerAttributeValue from './managers/website/attributeValue/index';
+import ManagerLocation from './managers/website/location/index';
+import ManagerBanner from './managers/website/banner/index';
 // SAPO
 import ManagerShop from './managers/sapo/shop/index';
 import ManagerStaff from './managers/sapo/staff/index';
@@ -185,9 +186,9 @@ class index extends Component {
                                         <Route exact path={`${url}manager/repair`}><ManagerRepair /></Route>}
 
                                     {dataCheckPermis['settings.view_banner'] &&
-                                        <Route exact path={`${url}manager/banner`}><ManagerBanner /></Route>}
+                                        <Route exact path={`${url}manager/website/banner`}><ManagerBanner /></Route>}
                                     {dataCheckPermis['settings.view_location'] &&
-                                        <Route exact path={`${url}manager/location`}><ManagerLocation /></Route>}
+                                        <Route exact path={`${url}manager/website/location`}><ManagerLocation /></Route>}
 
                                     {dataCheckPermis['product.view_attributevalue'] &&
                                         <Route exact path={`${url}manager/website/attribute_value`}><ManagerAttributeValue /></Route>}

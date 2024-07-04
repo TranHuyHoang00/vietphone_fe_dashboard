@@ -76,16 +76,16 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'Tên', dataIndex: 'name',
+                title: 'TÊN', dataIndex: 'name',
                 render: (name) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{name}</Typography.Text>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
             {
-                title: 'Vị trí', dataIndex: 'location', responsive: ['sm'],
+                title: 'VỊ TRÍ', dataIndex: 'location', responsive: ['sm'],
                 render: (location) => <Typography.Text >{location.name}</Typography.Text>,
             },
             {
-                title: 'Ảnh', dataIndex: 'media', responsive: ['md'], width: 200,
+                title: 'ẢNH', dataIndex: 'media', responsive: ['md'], width: 200,
                 render: (media) => (
                     <>
                         {media.length !== 0 ?

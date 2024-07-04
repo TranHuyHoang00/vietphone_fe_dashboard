@@ -12,8 +12,8 @@ export * from '@actions/variant_types';
 export * from '@actions/flash_sale_types';
 export * from '@actions/flash_sale_item_types';
 export * from '@actions/task_types';
-export * from '@actions/location_types';
-export * from '@actions/banner_types';
+
+
 export * from '@actions/product_page';
 export * from '@actions/media_base_types';
 
@@ -41,6 +41,8 @@ export * from '@actions/website/groupAttributeTypes';
 export * from '@actions/website/variantAttributeGroupTypes';
 export * from '@actions/website/attributeTypes';
 export * from '@actions/website/attributeValueTypes';
+export * from '@actions/website/locationTypes';
+export * from '@actions/website/bannerTypes';
 // SAPO
 export * from '@actions/sapo/productCategoryTypes';
 export * from '@actions/sapo/shopTypes';

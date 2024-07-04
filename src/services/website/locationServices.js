@@ -1,6 +1,8 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListLocation = (date_filter) => {
-    return apiAdmin.get(`/settings/api/v1/list-location?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
+const getListLocation = ({ page, limit, search }) => {
+    const searchQuery = search ? `&search=${search}` : '';
+    const url = `/settings/api/v1/list-location?page=${page}&limit=${limit}${searchQuery}`;
+    return apiAdmin.get(url);
 }
 const createLocation = (data) => {
     return apiAdmin.post(`/settings/api/v1/create-location`, data);

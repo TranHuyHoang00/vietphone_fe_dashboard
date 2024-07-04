@@ -9,8 +9,6 @@ import customerReducers from '@reducers/customer_reducers';
 import flashSaleReducers from '@reducers/flash_sale_reducers';
 import flashSaleItemReducers from '@reducers/flash_sale_item_reducers';
 import taskReducers from '@reducers/task_reducers';
-import locationReducers from '@reducers/location_reducers';
-import bannerReducers from '@reducers/banner_reducers';
 import productPageReducers from '@reducers/product_page_reducers';
 import mediaBaseReducers from '@reducers/media_base_reducers';
 
@@ -39,6 +37,9 @@ import groupAttributeReducers from '@reducers/website/groupAttributeReducers';
 import variantAttributeGroupReducers from '@reducers/website/variantAttributeGroupReducers';
 import attributeReducers from '@reducers/website/attributeReducers';
 import attributeValueReducers from '@reducers/website/attributeValueReducers';
+import locationReducers from '@reducers/website/locationReducers';
+import bannerReducers from '@reducers/website/bannerReducers';
+
 
 // SAPO
 import productCategoryReducers from '@reducers/sapo/productCategoryReducers';
@@ -57,8 +58,6 @@ export default combineReducers({
     flash_sale: flashSaleReducers,
     flash_sale_item: flashSaleItemReducers,
     task: taskReducers,
-    location: locationReducers,
-    banner: bannerReducers,
     product_page: productPageReducers,
     media_base: mediaBaseReducers,
     group: groupReducers,
@@ -84,6 +83,8 @@ export default combineReducers({
     variantAttributeGroup: variantAttributeGroupReducers,
     attribute: attributeReducers,
     attributeValue: attributeValueReducers,
+    location: locationReducers,
+    banner: bannerReducers,
     // SAPO
     shop: shopReducers,
     productCategory: productCategoryReducers,

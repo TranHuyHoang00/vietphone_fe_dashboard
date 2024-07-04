@@ -58,8 +58,8 @@ const itemMenuLeftLayoutSider = [
             },
             {
                 key: 'advertisement_website', icon: <AiFillProject />, label: 'Quảng cáo', children: [
-                    { key: 'manager/banner', icon: <AiFillBehanceSquare />, label: 'Băng rôn', title: 'settings.view_banner' },
-                    { key: 'manager/location', icon: <AiFillEnvironment />, label: 'Vị trí', title: 'settings.view_location' },
+                    { key: 'manager/website/banner', icon: <AiFillBehanceSquare />, label: 'Băng rôn', title: 'settings.view_banner' },
+                    { key: 'manager/website/location', icon: <AiFillEnvironment />, label: 'Vị trí', title: 'settings.view_location' },
                 ],
             },
             {
