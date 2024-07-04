@@ -20,8 +20,7 @@ import userReducers from '@reducers/user_reducers';
 import statisticalReducers from '@reducers/statistical_reducers';
 import loginReducers from '@reducers/login_reducers';
 import promotionReducers from '@reducers/promotion_reducers';
-import warrantyReducers from '@reducers/warranty_reducers';
-import repairReducers from '@reducers/repair_reducers';
+
 import addressReducers from '@reducers/address_reducers';
 
 import commentReducers from '@reducers/comment_reducers';
@@ -39,7 +38,8 @@ import attributeReducers from '@reducers/website/attributeReducers';
 import attributeValueReducers from '@reducers/website/attributeValueReducers';
 import locationReducers from '@reducers/website/locationReducers';
 import bannerReducers from '@reducers/website/bannerReducers';
-
+import repairReducers from '@reducers/website/repairReducers';
+import warrantyReducers from '@reducers/website/warrantyReducers';
 
 // SAPO
 import productCategoryReducers from '@reducers/sapo/productCategoryReducers';
@@ -67,8 +67,6 @@ export default combineReducers({
     statistical: statisticalReducers,
     login: loginReducers,
     promotion: promotionReducers,
-    warranty: warrantyReducers,
-    repair: repairReducers,
     address: addressReducers,
     comment: commentReducers,
     target: targetReducers,
@@ -85,6 +83,9 @@ export default combineReducers({
     attributeValue: attributeValueReducers,
     location: locationReducers,
     banner: bannerReducers,
+    repair: repairReducers,
+    warranty: warrantyReducers,
+
     // SAPO
     shop: shopReducers,
     productCategory: productCategoryReducers,

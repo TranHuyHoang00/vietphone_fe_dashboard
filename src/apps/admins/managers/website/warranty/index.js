@@ -76,7 +76,7 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'Tên', dataIndex: 'name',
+                title: 'TÊN', dataIndex: 'name',
                 render: (name) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{name}</Typography.Text>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
@@ -111,7 +111,7 @@ class index extends Component {
                                 onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
-                                    Tạo mới
+                                    Tạo
                                 </Space>
                             </Button>
                             <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên !" /></div>

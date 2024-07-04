@@ -36,8 +36,7 @@ import ManagerGroup from './managers/group/index';
 import ManagerUser from './managers/user/index';
 import ManagerPromotion from './managers/promotion/index';
 import EditPromotion from './managers/promotion/edit/index';
-import ManagerWarranty from './managers/warranty/index';
-import ManagerRepair from './managers/repair/index';
+
 
 // WEBSITE
 import ManagerBrand from './managers/website/brand/index';
@@ -52,6 +51,8 @@ import ManagerAttribute from './managers/website/attribute/index';
 import ManagerAttributeValue from './managers/website/attributeValue/index';
 import ManagerLocation from './managers/website/location/index';
 import ManagerBanner from './managers/website/banner/index';
+import ManagerWarranty from './managers/website/warranty/index';
+import ManagerRepair from './managers/website/repair/index';
 // SAPO
 import ManagerShop from './managers/sapo/shop/index';
 import ManagerStaff from './managers/sapo/staff/index';
@@ -181,9 +182,9 @@ class index extends Component {
                                         <Route exact path={`${url}manager/promotion/edit/:id`}><EditPromotion /></Route>}
 
                                     {dataCheckPermis['product.view_warranty'] &&
-                                        <Route exact path={`${url}manager/warranty`}><ManagerWarranty /></Route>}
+                                        <Route exact path={`${url}manager/website/warranty`}><ManagerWarranty /></Route>}
                                     {dataCheckPermis['product.view_repair'] &&
-                                        <Route exact path={`${url}manager/repair`}><ManagerRepair /></Route>}
+                                        <Route exact path={`${url}manager/website/repair`}><ManagerRepair /></Route>}
 
                                     {dataCheckPermis['settings.view_banner'] &&
                                         <Route exact path={`${url}manager/website/banner`}><ManagerBanner /></Route>}

@@ -1,83 +1,83 @@
-import action_types from '@actions/action_types';
+import actionTypes from '@actions/website/actionTypes';
 
 const initialState = {
-    dataRepairs: [],
-    dataRepair: {},
+    dataWarrantys: [],
+    dataWarranty: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
 }
 
-const repairReducers = (state = initialState, action) => {
+const warrantyReducers = (state = initialState, action) => {
     switch (action.type) {
-        case action_types.REPAIR_START:
+        case actionTypes.WARRANTY_START:
             return {
                 ...state,
                 isLoading: true,
                 isResult: false,
             }
-        case action_types.REPAIR_SUCCESS:
+        case actionTypes.WARRANTY_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.REPAIR_FAIDED:
+        case actionTypes.WARRANTY_FAIDED:
             return {
                 ...state,
                 isLoading: false,
                 isResult: false,
             }
-        case action_types.GET_LIST_REPAIR_SUCCESS:
+        case actionTypes.GET_LIST_WARRANTY_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                dataRepairs: action.data.repairtimes,
+                dataWarrantys: action.data.warranties,
                 dataMeta: action.data.metadata
             }
-        case action_types.GET_REPAIR_SUCCESS:
+        case actionTypes.GET_WARRANTY_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                dataRepair: action.data
+                dataWarranty: action.data
             }
-        case action_types.CREATE_REPAIR_SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                isResult: true,
-            }
-        case action_types.EDIT_REPAIR_SUCCESS:
+        case actionTypes.CREATE_WARRANTY_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.EDIT_LIST_REPAIR_SUCCESS:
+        case actionTypes.EDIT_WARRANTY_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.DELETE_LIST_REPAIR_SUCCESS:
+        case actionTypes.EDIT_LIST_WARRANTY_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.SET_DATA_REPAIR:
+        case actionTypes.DELETE_LIST_WARRANTY_SUCCESS:
             return {
                 ...state,
-                dataRepair: action.data,
+                isLoading: false,
+                isResult: true,
             }
-        case action_types.ON_CHANGE_REPAIR:
-            let copyState = { ...state.dataRepair };
+        case actionTypes.SET_DATA_WARRANTY:
+            return {
+                ...state,
+                dataWarranty: action.data,
+            }
+        case actionTypes.ON_CHANGE_WARRANTY:
+            let copyState = { ...state.dataWarranty };
             copyState[action.id] = action.value;
             return {
                 ...state,
-                dataRepair: {
+                dataWarranty: {
                     ...copyState,
                 }
             }
@@ -86,4 +86,4 @@ const repairReducers = (state = initialState, action) => {
     }
 }
 
-export default repairReducers;
+export default warrantyReducers;

@@ -1,6 +1,8 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListRepair = (date_filter) => {
-    return apiAdmin.get(`/product/api/v1/list-repair-time?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
+const getListRepair = ({ page, limit, search }) => {
+    const searchQuery = search ? `&search=${search}` : '';
+    const url = `/product/api/v1/list-repair-time?page=${page}&limit=${limit}${searchQuery}`;
+    return apiAdmin.get(url);
 }
 const createRepair = (data) => {
     return apiAdmin.post(`/product/api/v1/create-repair-time`, data);

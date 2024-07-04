@@ -25,8 +25,8 @@ export * from '@actions/user_types';
 export * from '@actions/statistical_types';
 export * from '@actions/login_types';
 export * from '@actions/promotion_types';
-export * from '@actions/warranty_types';
-export * from '@actions/repair_types';
+
+
 export * from '@actions/address_types';
 export * from '@actions/comment_types';
 export * from '@actions/target_types';
@@ -43,6 +43,8 @@ export * from '@actions/website/attributeTypes';
 export * from '@actions/website/attributeValueTypes';
 export * from '@actions/website/locationTypes';
 export * from '@actions/website/bannerTypes';
+export * from '@actions/website/repairTypes';
+export * from '@actions/website/warrantyTypes';
 // SAPO
 export * from '@actions/sapo/productCategoryTypes';
 export * from '@actions/sapo/shopTypes';

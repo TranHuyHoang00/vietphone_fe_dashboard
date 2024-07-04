@@ -1,5 +1,5 @@
-import action_types from '@actions/action_types';
-import { getListRepair, getDataRepair, createRepair, deleteRepair, editRepair } from '@services/repair_service';
+import actionTypes from './actionTypes';
+import { getListRepair, getDataRepair, createRepair, deleteRepair, editRepair } from '@services/website/repairServices';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -110,29 +110,29 @@ export const editRepairRedux = (id, dataRepair) => {
     }
 }
 export const repairStart = () => ({
-    type: action_types.REPAIR_START,
+    type: actionTypes.REPAIR_START,
 })
 export const repairSuccess = () => ({
-    type: action_types.REPAIR_SUCCESS,
+    type: actionTypes.REPAIR_SUCCESS,
 })
 export const repairFaided = () => ({
-    type: action_types.REPAIR_FAIDED,
+    type: actionTypes.REPAIR_FAIDED,
 })
 
 export const getListRepairSuccess = (data) => ({
-    type: action_types.GET_LIST_REPAIR_SUCCESS,
+    type: actionTypes.GET_LIST_REPAIR_SUCCESS,
     data
 })
 export const getRepairSuccess = (data) => ({
-    type: action_types.GET_REPAIR_SUCCESS,
+    type: actionTypes.GET_REPAIR_SUCCESS,
     data
 })
 export const onChangeRepairRedux = (value, id) => ({
-    type: action_types.ON_CHANGE_REPAIR,
+    type: actionTypes.ON_CHANGE_REPAIR,
     value,
     id,
 })
 export const setDataRepairRedux = (data) => ({
-    type: action_types.SET_DATA_REPAIR,
+    type: actionTypes.SET_DATA_REPAIR,
     data,
 })

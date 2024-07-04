@@ -52,8 +52,8 @@ const itemMenuLeftLayoutSider = [
             },
             {
                 key: 'service_product_webiste', icon: <AiFillSnippets />, label: 'Dịch vụ', children: [
-                    { key: 'manager/warranty', icon: <AiOutlineAudit />, label: 'Bảo hành', title: 'product.view_warranty' },
-                    { key: 'manager/repair', icon: <AiFillTool />, label: 'Sửa chữa', title: 'product.view_repair' },
+                    { key: 'manager/website/warranty', icon: <AiOutlineAudit />, label: 'Bảo hành', title: 'product.view_warranty' },
+                    { key: 'manager/website/repair', icon: <AiFillTool />, label: 'Sửa chữa', title: 'product.view_repair' },
                 ],
             },
             {

@@ -1,5 +1,5 @@
-import action_types from '@actions/action_types';
-import { getListWarranty, getDataWarranty, createWarranty, deleteWarranty, editWarranty } from '@services/warranty_service';
+import actionTypes from './actionTypes';
+import { getListWarranty, getDataWarranty, createWarranty, deleteWarranty, editWarranty } from '@services/website/warrantyServices';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -110,29 +110,29 @@ export const editWarrantyRedux = (id, dataWarranty) => {
     }
 }
 export const warrantyStart = () => ({
-    type: action_types.WARRANTY_START,
+    type: actionTypes.WARRANTY_START,
 })
 export const warrantySuccess = () => ({
-    type: action_types.WARRANTY_SUCCESS,
+    type: actionTypes.WARRANTY_SUCCESS,
 })
 export const warrantyFaided = () => ({
-    type: action_types.WARRANTY_FAIDED,
+    type: actionTypes.WARRANTY_FAIDED,
 })
 
 export const getListWarrantySuccess = (data) => ({
-    type: action_types.GET_LIST_WARRANTY_SUCCESS,
+    type: actionTypes.GET_LIST_WARRANTY_SUCCESS,
     data
 })
 export const getWarrantySuccess = (data) => ({
-    type: action_types.GET_WARRANTY_SUCCESS,
+    type: actionTypes.GET_WARRANTY_SUCCESS,
     data
 })
 export const onChangeWarrantyRedux = (value, id) => ({
-    type: action_types.ON_CHANGE_WARRANTY,
+    type: actionTypes.ON_CHANGE_WARRANTY,
     value,
     id,
 })
 export const setDataWarrantyRedux = (data) => ({
-    type: action_types.SET_DATA_WARRANTY,
+    type: actionTypes.SET_DATA_WARRANTY,
     data,
 })
