@@ -13,7 +13,7 @@ class chartTargetMoney extends Component {
 
     }
     render() {
-        const { dataTargets } = this.props;
+        const { dataTargetShops } = this.props;
         const options = {
             chart: {
                 type: 'bar',
@@ -41,7 +41,7 @@ class chartTargetMoney extends Component {
                 offsetX: 0,
             },
             xaxis: {
-                categories: dataTargets.map(item => (item?.store?.name)),
+                categories: dataTargetShops.map(item => (item?.store?.name)),
             },
             yaxis: { labels: { show: false } },
         }
@@ -50,7 +50,7 @@ class chartTargetMoney extends Component {
             <div>
                 <strong>Tổng quan Target ( triệu vnd )</strong>
                 <ReactApexChart options={options}
-                    series={[{ name: 'Target', data: dataTargets.map(item => (item?.target / 1000000)) }]}
+                    series={[{ name: 'Target', data: dataTargetShops.map(item => (item?.target / 1000000)) }]}
                     type="bar" height={380} />
             </div>
 
@@ -60,7 +60,7 @@ class chartTargetMoney extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataTargets: state.target.dataTargets,
+        dataTargetShops: state.target.dataTargetShops,
     };
 };
 const mapDispatchToProps = dispatch => {

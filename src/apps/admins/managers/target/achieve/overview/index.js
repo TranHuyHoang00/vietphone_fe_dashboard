@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import BarGroup from '../../component/bar/group';
 import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
-import { dataTargets } from '@datas/dataPermissionsOrigin';
+import { dataTargetShops } from '@datas/dataPermissionsOrigin';
 import { formatNumber } from '@utils/handleFuncFormat';
 import { exportTableAntdToExcel, exportTableAntdToImage } from '@utils/handleFuncExport'
 class index extends Component {
@@ -25,7 +25,7 @@ class index extends Component {
         list_id: [],
         type_time: 'month',
       },
-      dataTargets: [],
+      dataTargetShops: [],
       dataCheckPermis: {},
 
       dataChartTargetMonthShop: {},
@@ -36,7 +36,7 @@ class index extends Component {
   }
   async componentDidMount() {
     const { dataUserPermis, isSuperUser } = this.props;
-    const dataCheckPermis = await handleCheckPermis(dataTargets, dataUserPermis, isSuperUser);
+    const dataCheckPermis = await handleCheckPermis(dataTargetShops, dataUserPermis, isSuperUser);
     this.setState({
       dataCheckPermis: dataCheckPermis,
     });
@@ -143,7 +143,7 @@ class index extends Component {
         daily: { revenue: 2320000, phone: 2, speaker: 5, accessory: 2 }
       },
     ]
-    this.setState({ dataTargets: dataTargetShops });
+    this.setState({ dataTargetShops: dataTargetShops });
     this.handleDataForChart(dataTargetShops);
   }
   getTargetDate = (end_time, targetMonth, targetAchieved) => {
@@ -199,7 +199,7 @@ class index extends Component {
   render() {
     const { Text } = Typography;
     const { isLoading } = this.props;
-    const { dataTargets, dataFilter, dataChartTargetMonthShop, drawerFilter, dataCheckPermis, dataChartTargetDateShop
+    const { dataTargetShops, dataFilter, dataChartTargetMonthShop, drawerFilter, dataCheckPermis, dataChartTargetDateShop
       , dataChartDailyIncomeDateShop
     } = this.state;
     const overviewColumns = [
@@ -349,7 +349,7 @@ class index extends Component {
         key: '1',
         label: (
           // eslint-disable-next-line
-          <a onClick={() => exportTableAntdToExcel(overviewColumns, dataTargets, dayjs().format("HH-mm/DD-MM-YYYY"))}>
+          <a onClick={() => exportTableAntdToExcel(overviewColumns, dataTargetShops, dayjs().format("HH-mm/DD-MM-YYYY"))}>
             Excel
           </a>
         ),
@@ -428,7 +428,7 @@ class index extends Component {
         <Spin size='large' spinning={isLoading}>
           <div className="mx-[10px] space-y-[10px]">
             <div className='flex items-center justify-between space-x-[5px]'>
-              <Button disabled={!dataCheckPermis['target.view_target']}
+              <Button disabled={!dataCheckPermis['analytic.view_shopmonthlytarget']}
                 onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                 <Space className='text-white dark:text-black'>
                   <AiFillFilter />
@@ -446,7 +446,7 @@ class index extends Component {
             </div>
             <div id='tableTargetOverView' className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md '>
               <Table rowKey="id"
-                columns={overviewColumns} dataSource={dataTargets} pagination={false}
+                columns={overviewColumns} dataSource={dataTargetShops} pagination={false}
                 size="small" bordered scroll={{ x: 1000 }}
                 summary={calculateSummary}
               />
@@ -474,7 +474,7 @@ class index extends Component {
             </div>
           </div>
         </Spin>
-        {drawerFilter && dataCheckPermis['target.view_target'] &&
+        {drawerFilter && dataCheckPermis['analytic.view_shopmonthlytarget'] &&
           <DrawerFilter drawerFilter={drawerFilter}
             openDrawer={this.openDrawer} dataFilter={dataFilter}
             handleFilter={this.handleFilter} />}
@@ -485,7 +485,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
   return {
-    dataTargets: state.target.dataTargets,
+    dataTargetShops: state.target.dataTargetShops,
     dataTarget: state.target.dataTarget,
     dataMeta: state.target.dataMeta,
     isLoading: state.target.isLoading,

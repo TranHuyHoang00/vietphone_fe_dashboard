@@ -1,14 +1,13 @@
 import { combineReducers } from 'redux';
 import productReducers from '@reducers/product_reducers';
 import variantReducers from '@reducers/variant_reducers';
-import brandReducers from '@reducers/brand_reducers';
-import tagReducers from '@reducers/tag_reducers';
-import categoryReducers from '@reducers/category_reducers';
+
+
 import variantAttributeGroupReducers from '@reducers/variant_attribute_group_reducers';
 import groupAttributeReducers from '@reducers/group_attribute_reducers';
 import attributeReducers from '@reducers/attribute_reducers';
 import attributeValueReducers from '@reducers/attribute_value_reducers';
-import orderReducers from '@reducers/order_reducers';
+
 import customerReducers from '@reducers/customer_reducers';
 import flashSaleReducers from '@reducers/flash_sale_reducers';
 import flashSaleItemReducers from '@reducers/flash_sale_item_reducers';
@@ -29,17 +28,28 @@ import promotionReducers from '@reducers/promotion_reducers';
 import warrantyReducers from '@reducers/warranty_reducers';
 import repairReducers from '@reducers/repair_reducers';
 import addressReducers from '@reducers/address_reducers';
-import shopReducers from '@reducers/shop_reducers';
+
 import commentReducers from '@reducers/comment_reducers';
 import targetReducers from '@reducers/target_reducers';
+
+// WEBSITE
+import brandReducers from '@reducers/website/brandReducers';
+import tagReducers from '@reducers/website/tagReducers';
+import categoryReducers from '@reducers/website/categoryReducers';
+// SAPO
+import productCategoryReducers from '@reducers/sapo/productCategoryReducers';
+import shopReducers from '@reducers/sapo/shopReducers';
+import staffReducers from '@reducers/sapo/staffReducers';
+import orderReducers from '@reducers/sapo/orderReducers';
+
+// TARGET
+import targetProductCategoryReducers from '@reducers/targets/targetProductCategoryReducers';
+import targetShopReducers from '@reducers/targets/targetShopReducers';
+
 export default combineReducers({
     product: productReducers,
     customer: customerReducers,
     variant: variantReducers,
-    brand: brandReducers,
-    tag: tagReducers,
-    order: orderReducers,
-    category: categoryReducers,
     group_attribute: groupAttributeReducers,
     attribute: attributeReducers,
     attribute_value: attributeValueReducers,
@@ -63,7 +73,20 @@ export default combineReducers({
     warranty: warrantyReducers,
     repair: repairReducers,
     address: addressReducers,
-    shop: shopReducers,
     comment: commentReducers,
     target: targetReducers,
+
+    // WEBSITE
+    brand: brandReducers,
+    tag: tagReducers,
+    category: categoryReducers,
+
+    // SAPO
+    shop: shopReducers,
+    productCategory: productCategoryReducers,
+    staff: staffReducers,
+    order: orderReducers,
+    // TARGET
+    targetProductCategory: targetProductCategoryReducers,
+    targetShop: targetShopReducers,
 })

@@ -7,7 +7,7 @@ import ChartTargetMoney from './apexCharts/chartTargetMoney';
 import DonutTargetPercent from './apexCharts/donutTargetPercent';
 import ChartTargetProduct from './apexCharts/chartTargetProduct';
 import { AiFillFilter } from "react-icons/ai";
-import { dataTargets } from '@datas/dataPermissionsOrigin';
+import { dataTargetShops } from '@datas/dataPermissionsOrigin';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 import DrawerFilter from '../table/drawers/drawerFilter';
@@ -25,7 +25,7 @@ class index extends Component {
     }
     async componentDidMount() {
         const { dataUserPermis, isSuperUser } = this.props;
-        const dataCheckPermis = await handleCheckPermis(dataTargets, dataUserPermis, isSuperUser);
+        const dataCheckPermis = await handleCheckPermis(dataTargetShops, dataUserPermis, isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
         });
@@ -41,10 +41,10 @@ class index extends Component {
     }
     onChangePage = async (pageValue, pageType,) => {
         const { dataFilter } = this.state;
-        // const { getListTarget } = this.props;
+        // const { getListTargetShop } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
         this.setState({ dataFilter: newDataFilter });
-        // await getListTarget(newDataFilter);
+        // await getListTargetShop(newDataFilter);
     }
     render() {
         const { isLoading } = this.props;
@@ -62,7 +62,7 @@ class index extends Component {
                             </div>
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md space-y-[10px]'>
-                            <Button disabled={!dataCheckPermis['target.view_target']}
+                            <Button disabled={!dataCheckPermis['analytic.view_shopmonthlytarget']}
                                 onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiFillFilter />
@@ -80,7 +80,7 @@ class index extends Component {
                         </div>
                     </div>
                 </Spin>
-                {drawerFilter && dataCheckPermis['target.view_target'] &&
+                {drawerFilter && dataCheckPermis['analytic.view_shopmonthlytarget'] &&
                     <DrawerFilter drawerFilter={drawerFilter}
                         openDrawer={this.openDrawer} dataFilter={dataFilter}
                         onChangePage={this.onChangePage} />}
@@ -91,7 +91,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataTargets: state.target.dataTargets,
+        dataTargetShops: state.target.dataTargetShops,
         isLoading: state.target.isLoading,
         isResult: state.target.isResult,
 
@@ -101,7 +101,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        getListTarget: (dataFilter) => dispatch(actions.getListTargetRedux(dataFilter)),
+        getListTargetShop: (dataFilter) => dispatch(actions.getListTargetShopRedux(dataFilter)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

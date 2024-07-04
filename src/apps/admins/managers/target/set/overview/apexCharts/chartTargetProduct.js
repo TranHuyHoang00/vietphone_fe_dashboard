@@ -13,7 +13,7 @@ class chartTargetProduct extends Component {
 
     }
     render() {
-        const { dataTargets } = this.props;
+        const { dataTargetShops } = this.props;
         const options = {
             chart: {
                 type: 'bar',
@@ -45,7 +45,7 @@ class chartTargetProduct extends Component {
                 intersect: false
             },
             xaxis: {
-                categories: dataTargets.map(item => (item?.store?.name)),
+                categories: dataTargetShops.map(item => (item?.store?.name)),
             },
             legend: {
                 position: 'top',
@@ -71,7 +71,7 @@ class chartTargetProduct extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataTargets: state.target.dataTargets,
+        dataTargetShops: state.target.dataTargetShops,
     };
 };
 const mapDispatchToProps = dispatch => {

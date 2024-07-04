@@ -100,7 +100,9 @@ class index extends Component {
                                                     return (
                                                         <div key={item.id}>
                                                             {permission?.id === item?.content_type?.id &&
-                                                                <Checkbox checked={this.handleChecked(item.id)} onChange={(event) => this.onChangeCheckbox(event.target.value)} value={item.id}>{item.name}</Checkbox>
+                                                                <Checkbox checked={this.handleChecked(item.id)} onChange={(event) => this.onChangeCheckbox(event.target.value)} value={item.id}>
+                                                                    {item.name} - {item?.content_type?.app_label}.{item?.codename}
+                                                                </Checkbox>
                                                             }
                                                         </div>
                                                     )

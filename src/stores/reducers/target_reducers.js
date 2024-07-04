@@ -1,7 +1,7 @@
 import action_types from '@actions/action_types';
 
 const initialState = {
-    dataTargets: [
+    dataTargetShops: [
 
     ],
     dataTarget: {},
@@ -35,7 +35,7 @@ const targetReducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                dataTargets: action.data.targets,
+                dataTargetShops: action.data.targets,
                 dataMeta: action.data.metadata
             }
         case action_types.GET_TARGET_SUCCESS:

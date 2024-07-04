@@ -13,16 +13,16 @@ class chartTargetPercent extends Component {
 
     }
     render() {
-        const { dataTargets } = this.props;
+        const { dataTargetShops } = this.props;
         const options = {
             chart: { type: 'donut', },
-            labels: dataTargets.map(item => (item?.store?.name)),
+            labels: dataTargetShops.map(item => (item?.store?.name)),
         };
         return (
             <div>
                 <strong>Tổng quan Target ( % )</strong>
                 <ReactApexChart options={options}
-                    series={dataTargets.map(item => (item?.target / 1000000))} type="donut" />
+                    series={dataTargetShops.map(item => (item?.target / 1000000))} type="donut" />
             </div>
 
         );
@@ -31,7 +31,7 @@ class chartTargetPercent extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataTargets: state.target.dataTargets,
+        dataTargetShops: state.target.dataTargetShops,
     };
 };
 const mapDispatchToProps = dispatch => {

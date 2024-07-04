@@ -3,12 +3,15 @@ import {
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillBook, AiFillBuild,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook, AiOutlineUserSwitch,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard,
-    AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool, AiOutlineComment,
+    AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool, AiOutlineComment, AiFillBug, AiOutlineQq,
 } from "react-icons/ai";
-import { IoStatsChart, IoBarChartSharp, IoBookSharp, IoLocation } from "react-icons/io5";
+import { IoStatsChart, IoBarChartSharp, IoBookSharp } from "react-icons/io5";
 import { FaUserNurse, FaAndroid, FaUserShield, FaDatabase, FaCat } from "react-icons/fa6";
-import { FaCcDiscover } from "react-icons/fa";
-import { BsFillBox2HeartFill, BsCalendar2PlusFill, BsClipboardDataFill, BsAward, BsTable, BsAndroid2, BsBox2HeartFill } from "react-icons/bs";
+import { FaCcDiscover, FaUserGraduate } from "react-icons/fa";
+import {
+    BsFillBox2HeartFill, BsCalendar2PlusFill, BsClipboardDataFill, BsAward, BsAndroid2, BsBox2HeartFill,
+    BsApple,
+} from "react-icons/bs";
 
 const itemMenuLeftLayoutSider = [
     {
@@ -69,10 +72,9 @@ const itemMenuLeftLayoutSider = [
             },
             {
                 key: 'category_product_website', icon: <AiFillHdd />, label: 'Danh mục', children: [
-                    { key: 'manager/tag', icon: <AiFillTag />, label: 'Thẻ tag', title: 'product.view_tag' },
-                    { key: 'manager/brand', icon: <AiFillIdcard />, label: 'Thương hiệu', title: 'product.view_brand' },
-                    { key: 'manager/category', icon: <AiFillDropboxSquare />, label: 'Danh mục', title: 'product.view_category' },
-                    { key: 'manager/shop', icon: <IoLocation />, label: 'Cửa hàng', title: 'shop.view_shop' },
+                    { key: 'manager/website/tag', icon: <AiFillTag />, label: 'Thẻ tag', title: 'product.view_tag' },
+                    { key: 'manager/website/brand', icon: <AiFillIdcard />, label: 'Thương hiệu', title: 'product.view_brand' },
+                    { key: 'manager/website/category', icon: <AiFillDropboxSquare />, label: 'Danh mục', title: 'product.view_category' },
                 ],
             },
             {
@@ -95,15 +97,26 @@ const itemMenuLeftLayoutSider = [
 
     },
     {
-        key: 'target', icon: <BsAward />, label: 'Target', children: [
+        key: 'sapo', icon: <AiOutlineQq />, label: 'Sapo', children: [
             {
-                key: 'set', icon: <BsCalendar2PlusFill />, label: 'Đặt ra', children: [
-                    { key: 'set/target/overview', icon: <BsClipboardDataFill />, label: 'Tổng quan', title: 'account.view_user' },
-                    { key: 'set/target/table', icon: <BsTable />, label: 'Bảng', title: 'account.view_user' },
+                key: 'manager_sapo', icon: <AiFillBug />, label: 'Quản lý', children: [
+                    { key: 'manager/sapo/shop', icon: <AiFillShop />, label: 'Cửa hàng', title: 'shop.view_shop' },
+                    { key: 'manager/sapo/product_category', icon: <BsApple />, label: 'Loại sản phẩm', title: 'product.view_sapoproductcategory' },
+                    { key: 'manager/sapo/staff', icon: <FaUserGraduate />, label: 'Nhân viên', title: 'account.view_staff' },
+                ],
+            },
+        ]
+    },
+    {
+        key: 'target', icon: <BsAward />, label: 'Target', children: [
+
+            {
+                key: 'set_target', icon: <BsCalendar2PlusFill />, label: 'Đặt ra', children: [
+                    { key: 'set/target/shop', icon: <AiFillShop />, label: 'Cửa hàng', title: 'analytic.view_shopmonthlytarget' },
                 ],
             },
             {
-                key: 'achieve', icon: <BsBox2HeartFill />, label: 'Đạt được', children: [
+                key: 'achieve_target', icon: <BsBox2HeartFill />, label: 'Đạt được', children: [
                     { key: 'achieve/target/overview', icon: <BsClipboardDataFill />, label: 'Tổng quan', title: 'account.view_user' },
                     { key: 'achieve/target/individual', icon: <BsAndroid2 />, label: 'Cá nhân', title: 'account.view_user' },
                 ],

@@ -15,10 +15,10 @@ import NotFound from './pages_error/not_found';
 import Empty from './pages/empty';
 
 import ManagerCustomer from './managers/customer/index';
-import ManagerBrand from './managers/brand/index';
-import ManagerCategory from './managers/category/index';
-import ManagerTag from './managers/tag/index';
-import ManagerOrder from './managers/order/index';
+
+
+
+import ManagerOrder from './managers/sapo/order/index';
 import ManagerGroupAttribute from './managers/group_attribute/index';
 import ManagerAttribute from './managers/attribute/index';
 import ManagerAttributeValue from './managers/attribute_value/index';
@@ -41,12 +41,22 @@ import ManagerPromotion from './managers/promotion/index';
 import EditPromotion from './managers/promotion/edit/index';
 import ManagerWarranty from './managers/warranty/index';
 import ManagerRepair from './managers/repair/index';
-import ManagerShop from './managers/shop/index';
+
+// WEBSITE
+import ManagerBrand from './managers/website/brand/index';
+import ManagerTag from './managers/website/tag/index';
+import ManagerCategory from './managers/website/category/index';
+// SAPO
+import ManagerShop from './managers/sapo/shop/index';
+import ManagerStaff from './managers/sapo/staff/index';
+import ManagerProductCategory from './managers/sapo/productCategory/index';
+
 // import ManagerComment from './managers/comment/index';
-import SetTableTarget from './managers/target/set/table/index';
+import SetTargetShop from './managers/target/set/shop/index';
 // import SetOverviewTarget from './managers/target/set/overview/index';
 // import AchieveIndividualTarget from './managers/target/achieve/individual/index';
 import AchieveOverviewTarget from './managers/target/achieve/overview/index';
+
 
 import StatisticalViewWeb from './managers/statisticals/web/view_web/index';
 import StatisticalViewProduct from './managers/statisticals/web/view_product/index';
@@ -142,8 +152,7 @@ class index extends Component {
                                     {dataCheckPermis['group.view_group'] &&
                                         <Route exact path={`${url}manager/group`}><ManagerGroup /></Route>}
 
-                                    {dataCheckPermis['order.view_order'] &&
-                                        <Route exact path={`${url}`}><ManagerOrder /></Route>}
+
 
                                     {dataCheckPermis['product.view_product'] &&
                                         <Route exact path={`${url}manager/product`}><ManagerProduct /></Route>}
@@ -185,16 +194,15 @@ class index extends Component {
                                         <Route exact path={`${url}manager/variant_attribute_group`}><ManagerVariantAttributeGroup /></Route>}
 
                                     {dataCheckPermis['product.view_tag'] &&
-                                        <Route exact path={`${url}manager/tag`}><ManagerTag /></Route>}
+                                        <Route exact path={`${url}manager/website/tag`}><ManagerTag /></Route>}
                                     {dataCheckPermis['product.view_brand'] &&
-                                        <Route exact path={`${url}manager/brand`}><ManagerBrand /></Route>}
+                                        <Route exact path={`${url}manager/website/brand`}><ManagerBrand /></Route>}
                                     {dataCheckPermis['product.view_category'] &&
-                                        <Route exact path={`${url}manager/category`}><ManagerCategory /></Route>}
+                                        <Route exact path={`${url}manager/website/category`}><ManagerCategory /></Route>}
                                     {dataCheckPermis['promotion.view_flashsale'] &&
                                         <Route exact path={`${url}manager/flash_sale`}><ManagerFlashSale /></Route>}
 
-                                    {dataCheckPermis['shop.view_shop'] &&
-                                        <Route exact path={`${url}manager/shop`}><ManagerShop /></Route>}
+
 
                                     {dataCheckPermis['post.view_post'] &&
                                         <Route exact path={`${url}manager/post`}><ManagerPost /></Route>}
@@ -204,8 +212,20 @@ class index extends Component {
                                     {dataCheckPermis['post.view_category'] &&
                                         <Route exact path={`${url}manager/category_post`}><ManagerCategoryPost /></Route>}
 
+                                    {dataCheckPermis['analytic.view_shopmonthlytarget'] &&
+                                        <Route exact path={`${url}set/target/shop`}><SetTargetShop /></Route>}
 
-                                    <Route exact path={`${url}set/target/table`}><SetTableTarget /></Route>
+
+                                    {dataCheckPermis['product.view_sapoproductcategory'] &&
+                                        <Route exact path={`${url}manager/sapo/product_category`}><ManagerProductCategory /></Route>}
+                                    {dataCheckPermis['shop.view_shop'] &&
+                                        <Route exact path={`${url}manager/sapo/shop`}><ManagerShop /></Route>}
+                                    {dataCheckPermis['account.view_staff'] &&
+                                        <Route exact path={`${url}manager/sapo/staff`}><ManagerStaff /></Route>}
+                                    {dataCheckPermis['order.view_order'] &&
+                                        <Route exact path={`${url}`}><ManagerOrder /></Route>}
+
+
                                     {/* <Route exact path={`${url}set/target/overview`}><SetOverviewTarget /></Route>
                                     <Route exact path={`${url}achieve/target/individual`}><AchieveIndividualTarget /></Route> */}
                                     <Route exact path={`${url}achieve/target/overview`}><AchieveOverviewTarget /></Route>

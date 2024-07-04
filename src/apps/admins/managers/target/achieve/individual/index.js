@@ -6,7 +6,7 @@ import { Space, Divider, Button, Spin } from 'antd';
 import { AiFillFilter } from "react-icons/ai";
 import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
-import { dataTargets } from '@datas/dataPermissionsOrigin';
+import { dataTargetShops } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 
 import RadialBarBasic from '../../component/radialBar/basic';
@@ -34,7 +34,7 @@ class index extends Component {
         // const { getListTarget, dataUserPermis, isSuperUser } = this.props;
         // await getListTarget(dataFilter);
         const { dataUserPermis, isSuperUser } = this.props;
-        const dataCheckPermis = await handleCheckPermis(dataTargets, dataUserPermis, isSuperUser);
+        const dataCheckPermis = await handleCheckPermis(dataTargetShops, dataUserPermis, isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
         });
@@ -90,7 +90,7 @@ class index extends Component {
             <>
                 <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
-                        <Button disabled={!dataCheckPermis['target.view_target']}
+                        <Button disabled={!dataCheckPermis['analytic.view_shopmonthlytarget']}
                             onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                             <Space className='text-white dark:text-black'>
                                 <AiFillFilter />
@@ -128,7 +128,7 @@ class index extends Component {
                         </div>
                     </div>
                 </Spin>
-                {drawerFilter && dataCheckPermis['target.view_target'] &&
+                {drawerFilter && dataCheckPermis['analytic.view_shopmonthlytarget'] &&
                     <DrawerFilter drawerFilter={drawerFilter}
                         openDrawer={this.openDrawer} dataFilter={dataFilter}
                         onChangePage={this.onChangePage} />}
@@ -139,7 +139,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataTargets: state.target.dataTargets,
+        dataTargetShops: state.target.dataTargetShops,
         dataTarget: state.target.dataTarget,
         dataMeta: state.target.dataMeta,
         isLoading: state.target.isLoading,

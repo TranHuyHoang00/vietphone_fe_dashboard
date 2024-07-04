@@ -1,6 +1,8 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListWarranty = (date_filter) => {
-    return apiAdmin.get(`/product/api/v1/list-warranty?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
+const getListWarranty = ({ page, limit, search }) => {
+    const searchQuery = search ? `&search=${search}` : '';
+    const url = `/product/api/v1/list-warranty?page=${page}&limit=${limit}${searchQuery}`;
+    return apiAdmin.get(url);
 }
 const createWarranty = (data) => {
     return apiAdmin.post(`/product/api/v1/create-warranty`, data);

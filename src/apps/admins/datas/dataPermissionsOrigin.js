@@ -10,6 +10,8 @@ const dataPermiViews = [
     "product.view_attributevalue", "product.view_attribute", "product.view_groupattribute", "product.view_variantattributegroup",
     "product.view_tag", "product.view_brand", "product.view_category", "shop.view_shop",
     "post.view_post", "post.view_category",
+    "analytic.view_shopmonthlytarget", "product.view_sapoproductcategory",
+    "account.view_staff",
     "sync.view_sync", "task.view_task",
 ];
 const dataCustomers = [
@@ -82,9 +84,15 @@ const dataPosts = [
 const dataCategoryPosts = [
     "post.view_category", "post.change_category", "post.delete_category", "post.add_category",
 ];
-const dataTargets = [
-    "target.view_target", "target.change_target", "target.delete_target", "target.add_target",
+const dataTargetShops = [
+    "analytic.view_shopmonthlytarget", "analytic.change_shopmonthlytarget", "analytic.delete_shopmonthlytarget", "analytic.add_shopmonthlytarget",
 ]
+const dataProductCategorys = [
+    "product.view_sapoproductcategory", "product.delete_sapoproductcategory", "product.change_sapoproductcategory", "product.add_sapoproductcategory"
+]
+const dataStaffs = [
+    "account.view_staff", "account.change_staff", "account.delete_staff", "account.add_staff",
+];
 const dataSyncs = [
     "sync.view_task", "sync.change_sync", "sync.delete_sync", "sync.add_sync",
 ];
@@ -104,6 +112,6 @@ export {
     dataAttributeValues, dataAttributes, dataGroupAttributes, dataVariantAttributeGroups,
     dataTags, dataBrands, dataCategorys, dataShops,
     dataPosts, dataCategoryPosts,
-    dataTargets,
+    dataTargetShops, dataProductCategorys, dataStaffs,
     dataSyncs, dataTasks,
 }

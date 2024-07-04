@@ -9,7 +9,7 @@ const getDataBanner = (id) => {
     return apiAdmin.get(`/settings/api/v1/get-banner/${id}`);
 }
 const deleteBanner = (id) => {
-    return apiAdmin.delete(`/settings/api/v1/update-banner/${id}`);
+    return apiAdmin.delete(`/settings/api/v1/delete-banner/${id}`);
 }
 const editBanner = (id, data) => {
     return apiAdmin.put(`/settings/api/v1/update-banner/${id}`, data);
