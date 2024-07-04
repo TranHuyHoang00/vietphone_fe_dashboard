@@ -1,5 +1,5 @@
-import action_types from '@actions/action_types';
-import { getListFlashSale, getDataFlashSale, createFlashSale, deleteFlashSale, editFlashSale } from '@services/flash_sale_service';
+import actionTypes from './actionTypes';
+import { getListFlashSale, getDataFlashSale, createFlashSale, deleteFlashSale, editFlashSale } from '@services/website/flashSaleServices';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -114,29 +114,29 @@ export const editFlashSaleRedux = (id, dataFlashSale) => {
     }
 }
 export const flashSaleStart = () => ({
-    type: action_types.FLASH_SALE_START,
+    type: actionTypes.FLASH_SALE_START,
 })
 export const flashSaleSuccess = () => ({
-    type: action_types.FLASH_SALE_SUCCESS,
+    type: actionTypes.FLASH_SALE_SUCCESS,
 })
 export const flashSaleFaided = () => ({
-    type: action_types.FLASH_SALE_FAIDED,
+    type: actionTypes.FLASH_SALE_FAIDED,
 })
 
 export const getListFlashSaleSuccess = (data) => ({
-    type: action_types.GET_LIST_FLASH_SALE_SUCCESS,
+    type: actionTypes.GET_LIST_FLASH_SALE_SUCCESS,
     data
 })
 export const getFlashSaleSuccess = (data) => ({
-    type: action_types.GET_FLASH_SALE_SUCCESS,
+    type: actionTypes.GET_FLASH_SALE_SUCCESS,
     data
 })
 export const onChangeFlashSaleRedux = (value, id) => ({
-    type: action_types.ON_CHANGE_FLASH_SALE,
+    type: actionTypes.ON_CHANGE_FLASH_SALE,
     value,
     id,
 })
 export const setDataFlashSaleRedux = (data) => ({
-    type: action_types.SET_DATA_FLASH_SALE,
+    type: actionTypes.SET_DATA_FLASH_SALE,
     data,
 })

@@ -1,4 +1,4 @@
-import action_types from '@actions/action_types';
+import actionTypes from '@actions/website/actionTypes';
 
 const initialState = {
     dataFlashSales: [],
@@ -10,25 +10,25 @@ const initialState = {
 
 const flashSaleReducers = (state = initialState, action) => {
     switch (action.type) {
-        case action_types.FLASH_SALE_START:
+        case actionTypes.FLASH_SALE_START:
             return {
                 ...state,
                 isLoading: true,
                 isResult: false,
             }
-        case action_types.FLASH_SALE_SUCCESS:
+        case actionTypes.FLASH_SALE_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.FLASH_SALE_FAIDED:
+        case actionTypes.FLASH_SALE_FAIDED:
             return {
                 ...state,
                 isLoading: false,
                 isResult: false,
             }
-        case action_types.GET_LIST_FLASH_SALE_SUCCESS:
+        case actionTypes.GET_LIST_FLASH_SALE_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
@@ -36,43 +36,43 @@ const flashSaleReducers = (state = initialState, action) => {
                 dataFlashSales: action.data.flash_sales,
                 dataMeta: action.data.metadata
             }
-        case action_types.GET_FLASH_SALE_SUCCESS:
+        case actionTypes.GET_FLASH_SALE_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
                 dataFlashSale: action.data
             }
-        case action_types.CREATE_FLASH_SALE_SUCCESS:
+        case actionTypes.CREATE_FLASH_SALE_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.EDIT_FLASH_SALE_SUCCESS:
+        case actionTypes.EDIT_FLASH_SALE_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.EDIT_LIST_FLASH_SALE_SUCCESS:
+        case actionTypes.EDIT_LIST_FLASH_SALE_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.DELETE_LIST_FLASH_SALE_SUCCESS:
+        case actionTypes.DELETE_LIST_FLASH_SALE_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 isResult: true,
             }
-        case action_types.SET_DATA_FLASH_SALE:
+        case actionTypes.SET_DATA_FLASH_SALE:
             return {
                 ...state,
                 dataFlashSale: action.data,
             }
-        case action_types.ON_CHANGE_FLASH_SALE:
+        case actionTypes.ON_CHANGE_FLASH_SALE:
             let copyState = { ...state.dataFlashSale };
             copyState[action.id] = action.value;
             return {

@@ -31,7 +31,7 @@ const itemMenuLeftLayoutSider = [
                 key: 'store_website', icon: <AiFillShop />, label: 'Gian hàng', children: [
                     { key: 'manager/product', icon: <AiFillMobile />, label: 'Sản phẩm', title: 'product.view_product' },
                     { key: 'manager/product_repair', icon: <AiFillTool />, label: 'Sửa chữa', title: 'product.view_product' },
-                    { key: 'manager/flash_sale_item', icon: <AiFillPayCircle />, label: 'Giảm giá', title: 'promotion.view_flashsaleitem' },
+                    { key: 'manager/website/flash_sale_item', icon: <AiFillPayCircle />, label: 'Giảm giá', title: 'promotion.view_flashsaleitem' },
                 ],
             },
             {
@@ -46,8 +46,8 @@ const itemMenuLeftLayoutSider = [
             },
             {
                 key: 'promotion_product_webiste', icon: <FaCcDiscover />, label: 'Khuyến mãi', children: [
-                    { key: 'manager/promotion', icon: <BsFillBox2HeartFill />, label: 'Quà tặng', title: 'product.view_promotioninfo' },
-                    { key: 'manager/flash_sale', icon: <AiFillMoneyCollect />, label: 'Flash_sale', title: 'promotion.view_flashsale' },
+                    { key: 'manager/website/promotion', icon: <BsFillBox2HeartFill />, label: 'Quà tặng', title: 'product.view_promotioninfo' },
+                    { key: 'manager/website/flash_sale', icon: <AiFillMoneyCollect />, label: 'Flash_sale', title: 'promotion.view_flashsale' },
                 ],
             },
             {

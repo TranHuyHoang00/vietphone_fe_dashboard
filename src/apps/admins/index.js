@@ -26,7 +26,7 @@ import ManagerProductRepair from './managers/product_repair/index';
 import EditProduct from './managers/product/edit/index';
 
 import ManagerSyncData from './managers/sync_data/index';
-import ManagerFlashSale from './managers/flash_sale/index';
+
 import ManagerFlashSaleItem from './managers/flash_sale_item/index';
 import ManagerTask from './managers/task/index';
 
@@ -34,8 +34,7 @@ import ManagerTask from './managers/task/index';
 
 import ManagerGroup from './managers/group/index';
 import ManagerUser from './managers/user/index';
-import ManagerPromotion from './managers/promotion/index';
-import EditPromotion from './managers/promotion/edit/index';
+
 
 
 // WEBSITE
@@ -53,6 +52,9 @@ import ManagerLocation from './managers/website/location/index';
 import ManagerBanner from './managers/website/banner/index';
 import ManagerWarranty from './managers/website/warranty/index';
 import ManagerRepair from './managers/website/repair/index';
+import ManagerFlashSale from './managers/website/flashSale/index';
+import ManagerPromotion from './managers/website/promotion/index';
+import EditPromotion from './managers/website/promotion/edit/index';
 // SAPO
 import ManagerShop from './managers/sapo/shop/index';
 import ManagerStaff from './managers/sapo/staff/index';
@@ -174,12 +176,12 @@ class index extends Component {
                                         <Route exact path={`${url}manager/product/edit/:id`}><EditProduct /></Route>}
 
                                     {dataCheckPermis['promotion.view_flashsaleitem'] &&
-                                        <Route exact path={`${url}manager/flash_sale_item`}><ManagerFlashSaleItem /></Route>}
+                                        <Route exact path={`${url}manager/website/flash_sale_item`}><ManagerFlashSaleItem /></Route>}
 
                                     {dataCheckPermis['product.view_promotioninfo'] &&
-                                        <Route exact path={`${url}manager/promotion`}><ManagerPromotion /></Route>}
+                                        <Route exact path={`${url}manager/website/promotion`}><ManagerPromotion /></Route>}
                                     {dataCheckPermis['product.view_promotioninfo'] &&
-                                        <Route exact path={`${url}manager/promotion/edit/:id`}><EditPromotion /></Route>}
+                                        <Route exact path={`${url}manager/website/promotion/edit/:id`}><EditPromotion /></Route>}
 
                                     {dataCheckPermis['product.view_warranty'] &&
                                         <Route exact path={`${url}manager/website/warranty`}><ManagerWarranty /></Route>}
@@ -207,7 +209,7 @@ class index extends Component {
                                     {dataCheckPermis['product.view_category'] &&
                                         <Route exact path={`${url}manager/website/category`}><ManagerCategory /></Route>}
                                     {dataCheckPermis['promotion.view_flashsale'] &&
-                                        <Route exact path={`${url}manager/flash_sale`}><ManagerFlashSale /></Route>}
+                                        <Route exact path={`${url}manager/website/flash_sale`}><ManagerFlashSale /></Route>}
 
 
 

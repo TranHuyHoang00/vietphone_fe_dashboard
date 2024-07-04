@@ -77,12 +77,12 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'Tên', dataIndex: 'name',
+                title: 'TÊN', dataIndex: 'name',
                 render: (name) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{name}</Typography.Text>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
             },
             {
-                title: 'Thời gian', dataIndex: 'start_time', responsive: ['md'],
+                title: 'THỜI GIAN', dataIndex: 'start_time', responsive: ['md'],
                 render: (start_time, item) => <>
                     <div>
                         <span>Ngày BĐ : </span>
@@ -95,23 +95,16 @@ class index extends Component {
                 </>
             },
             {
-                title: 'Màu nền', dataIndex: 'color', responsive: ['lg'],
+                title: 'MÀU NỀN', dataIndex: 'color', responsive: ['lg'],
                 render: (color) => <Typography.Text>{color}</Typography.Text>,
             },
             {
-                title: 'Ảnh nền', dataIndex: 'background', responsive: ['lg'], width: 100,
+                title: 'ẢNH NỀN', dataIndex: 'background', responsive: ['lg'], width: 100,
                 render: (background) => <>{background && <Image src={background} height={30} width={90} className='object-cover' />}</>
             },
             {
-                title: 'Status', dataIndex: 'is_active', width: 70, responsive: ['md'],
-                render: (is_active) =>
-                    <div className='flex items-center justify-start'>
-                        {is_active ?
-                            <Tag color='green'>Mở</Tag>
-                            :
-                            <Tag color='red'>Khóa</Tag>
-                        }
-                    </div>
+                title: 'STATUS', dataIndex: 'is_active', width: 70, responsive: ['md'],
+                render: (is_active) => <>{is_active ? <Tag color='green'>Mở</Tag> : <Tag color='red'>Khóa</Tag>}</>
             },
             {
                 title: 'HĐ', width: 80,
@@ -147,7 +140,7 @@ class index extends Component {
                                 onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
-                                    Tạo mới
+                                    Tạo
                                 </Space>
                             </Button>
                             <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên flash_sale!" /></div>

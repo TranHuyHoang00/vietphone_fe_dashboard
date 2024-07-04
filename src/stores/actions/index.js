@@ -9,7 +9,7 @@ export * from '@actions/variant_types';
 
 
 
-export * from '@actions/flash_sale_types';
+
 export * from '@actions/flash_sale_item_types';
 export * from '@actions/task_types';
 
@@ -24,7 +24,7 @@ export * from '@actions/dark_mode_types';
 export * from '@actions/user_types';
 export * from '@actions/statistical_types';
 export * from '@actions/login_types';
-export * from '@actions/promotion_types';
+
 
 
 export * from '@actions/address_types';
@@ -45,6 +45,8 @@ export * from '@actions/website/locationTypes';
 export * from '@actions/website/bannerTypes';
 export * from '@actions/website/repairTypes';
 export * from '@actions/website/warrantyTypes';
+export * from '@actions/website/flashSaleTypes';
+export * from '@actions/website/promotionTypes';
 // SAPO
 export * from '@actions/sapo/productCategoryTypes';
 export * from '@actions/sapo/shopTypes';

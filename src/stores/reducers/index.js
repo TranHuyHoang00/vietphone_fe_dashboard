@@ -6,7 +6,7 @@ import variantReducers from '@reducers/variant_reducers';
 
 
 import customerReducers from '@reducers/customer_reducers';
-import flashSaleReducers from '@reducers/flash_sale_reducers';
+
 import flashSaleItemReducers from '@reducers/flash_sale_item_reducers';
 import taskReducers from '@reducers/task_reducers';
 import productPageReducers from '@reducers/product_page_reducers';
@@ -19,7 +19,6 @@ import darkModeReducers from '@reducers/dark_mode_reducers';
 import userReducers from '@reducers/user_reducers';
 import statisticalReducers from '@reducers/statistical_reducers';
 import loginReducers from '@reducers/login_reducers';
-import promotionReducers from '@reducers/promotion_reducers';
 
 import addressReducers from '@reducers/address_reducers';
 
@@ -40,6 +39,8 @@ import locationReducers from '@reducers/website/locationReducers';
 import bannerReducers from '@reducers/website/bannerReducers';
 import repairReducers from '@reducers/website/repairReducers';
 import warrantyReducers from '@reducers/website/warrantyReducers';
+import flashSaleReducers from '@reducers/website/flashSaleReducers';
+import promotionReducers from '@reducers/website/promotionReducers';
 
 // SAPO
 import productCategoryReducers from '@reducers/sapo/productCategoryReducers';
@@ -66,7 +67,6 @@ export default combineReducers({
     user: userReducers,
     statistical: statisticalReducers,
     login: loginReducers,
-    promotion: promotionReducers,
     address: addressReducers,
     comment: commentReducers,
     target: targetReducers,
@@ -85,6 +85,7 @@ export default combineReducers({
     banner: bannerReducers,
     repair: repairReducers,
     warranty: warrantyReducers,
+    promotion: promotionReducers,
 
     // SAPO
     shop: shopReducers,

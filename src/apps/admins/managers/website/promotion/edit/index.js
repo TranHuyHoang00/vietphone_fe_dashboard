@@ -22,7 +22,7 @@ class index extends Component {
             if (promotionId) { await getDataPromotion(promotionId); }
         }
     }
-    goBackHome = () => { this.props.history.push(`/admin/manager/promotion`) };
+    goBackHome = () => { this.props.history.push(`/admin/manager/website/promotion`) };
     validationData = (data) => {
         if (!data.name) {
             return { mess: "Không được bỏ trống 'Tên' ", check: false };
@@ -33,7 +33,7 @@ class index extends Component {
         return { check: true };
     }
     handleEdit = async () => {
-        const { dataPromotion,editPromotion } = this.props;
+        const { dataPromotion, editPromotion } = this.props;
         const result = this.validationData(dataPromotion);
         const { isEditImage } = this.state;
         let newDataPromotion = { ...dataPromotion };

@@ -1,6 +1,8 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListFlashSale = (date_filter) => {
-    return apiAdmin.get(`/promotion/api/v1/list-flash-sale?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
+const getListFlashSale = ({ page, limit, search }) => {
+    const searchQuery = search ? `&search=${search}` : '';
+    const url = `/promotion/api/v1/list-flash-sale?page=${page}&limit=${limit}${searchQuery}`;
+    return apiAdmin.get(url);
 }
 const createFlashSale = (data) => {
     return apiAdmin.post(`/promotion/api/v1/create-flash-sale`, data);

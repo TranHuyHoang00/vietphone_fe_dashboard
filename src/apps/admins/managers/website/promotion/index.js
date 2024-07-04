@@ -74,9 +74,9 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'Tên', dataIndex: 'name',
+                title: 'TÊN', dataIndex: 'name',
                 render: (name, item) =>
-                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/promotion/edit/${item.id}`)}>
+                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/website/promotion/edit/${item.id}`)}>
                         <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{name}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),
@@ -84,12 +84,12 @@ class index extends Component {
             },
 
             {
-                title: 'Trả góp', dataIndex: 'instalment',
+                title: 'TRẢ GÓP', dataIndex: 'instalment',
                 render: (instalment) => <Typography.Text className='text-[#0574b8] dark:text-white'>{instalment}</Typography.Text>,
                 sorter: (a, b) => a.instalment.localeCompare(b.instalment),
             },
             {
-                title: 'Ảnh', dataIndex: 'image', responsive: ['lg'], width: 210,
+                title: 'ẢNH', dataIndex: 'image', responsive: ['lg'], width: 210,
                 render: (image) => <>{image && <Image src={image} height={40} width={200} className='object-cover' />}</>
             },
         ];
@@ -112,7 +112,7 @@ class index extends Component {
                                 onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
-                                    Tạo mới
+                                    Tạo
                                 </Space>
                             </Button>
                             <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên !" /></div>

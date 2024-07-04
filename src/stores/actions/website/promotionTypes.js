@@ -1,5 +1,5 @@
-import action_types from '@actions/action_types';
-import { getListPromotion, getDataPromotion, createPromotion, deletePromotion, editPromotion } from '@services/promotion_service';
+import actionTypes from './actionTypes';
+import { getListPromotion, getDataPromotion, createPromotion, deletePromotion, editPromotion } from '@services/website/promotionServices';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
@@ -110,29 +110,29 @@ export const editPromotionRedux = (id, dataPromotion) => {
     }
 }
 export const promotionStart = () => ({
-    type: action_types.PROMOTION_START,
+    type: actionTypes.PROMOTION_START,
 })
 export const promotionSuccess = () => ({
-    type: action_types.PROMOTION_SUCCESS,
+    type: actionTypes.PROMOTION_SUCCESS,
 })
 export const promotionFaided = () => ({
-    type: action_types.PROMOTION_FAIDED,
+    type: actionTypes.PROMOTION_FAIDED,
 })
 
 export const getListPromotionSuccess = (data) => ({
-    type: action_types.GET_LIST_PROMOTION_SUCCESS,
+    type: actionTypes.GET_LIST_PROMOTION_SUCCESS,
     data
 })
 export const getPromotionSuccess = (data) => ({
-    type: action_types.GET_PROMOTION_SUCCESS,
+    type: actionTypes.GET_PROMOTION_SUCCESS,
     data
 })
 export const onChangePromotionRedux = (value, id) => ({
-    type: action_types.ON_CHANGE_PROMOTION,
+    type: actionTypes.ON_CHANGE_PROMOTION,
     value,
     id,
 })
 export const setDataPromotionRedux = (data) => ({
-    type: action_types.SET_DATA_PROMOTION,
+    type: actionTypes.SET_DATA_PROMOTION,
     data,
 })
