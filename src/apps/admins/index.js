@@ -46,11 +46,12 @@ import ManagerSyncData from './managers/system/syncData/index';
 import ManagerTask from './managers/system/task/index';
 import ManagerGroup from './managers/system/group/index';
 import ManagerUser from './managers/system/user/index';
-
+// TARGET
 import SetTargetShop from './managers/target/set/shop/index';
+import SetTargetStaff from './managers/target/set/staff/index';
 // import SetOverviewTarget from './managers/target/set/overview/index';
 // import AchieveIndividualTarget from './managers/target/achieve/individual/index';
-import AchieveOverviewTarget from './managers/target/achieve/overview/index';
+// import AchieveOverviewTarget from './managers/target/achieve/overview/index';
 
 // STATISTICAL
 import StatisticalViewWeb from './managers/statistical/viewWeb/index';
@@ -185,6 +186,8 @@ class index extends Component {
                                         <Route exact path={`${url}manager/website/category_post`}><ManagerCategoryPost /></Route>}
                                     {dataCheckPermis['analytic.view_shopmonthlytarget'] &&
                                         <Route exact path={`${url}set/target/shop`}><SetTargetShop /></Route>}
+                                    {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
+                                        <Route exact path={`${url}set/target/staff`}><SetTargetStaff /></Route>}
                                     {dataCheckPermis['product.view_sapoproductcategory'] &&
                                         <Route exact path={`${url}manager/sapo/product_category`}><ManagerProductCategory /></Route>}
                                     {dataCheckPermis['shop.view_shop'] &&
@@ -197,7 +200,9 @@ class index extends Component {
 
                                     {/* <Route exact path={`${url}set/target/overview`}><SetOverviewTarget /></Route>
                                     <Route exact path={`${url}achieve/target/individual`}><AchieveIndividualTarget /></Route> */}
-                                    <Route exact path={`${url}achieve/target/overview`}><AchieveOverviewTarget /></Route>
+                                    {/* <Route exact path={`${url}achieve/target/overview`}><AchieveOverviewTarget /></Route> */}
+
+
                                     {dataCheckPermis['sync.view_sync'] &&
                                         <Route exact path={`${url}manager/system/sync_data`}><ManagerSyncData /></Route>}
                                     {dataCheckPermis['task.view_task'] &&

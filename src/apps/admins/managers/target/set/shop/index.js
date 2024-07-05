@@ -9,6 +9,7 @@ import {
 import { AiFillEdit, AiFillEye, AiOutlinePlus, AiFillFilter } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
+import ModalDetail from './modals/modalDetail';
 import ModalEdit from './modals/modalEdit';
 import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
@@ -26,6 +27,7 @@ class index extends Component {
             listItemSelected: [],
             modalCreate: false,
             modalEdit: false,
+            modalDetail: false,
             drawerFilter: false,
             dataFilter: {
                 page: 1,
@@ -92,18 +94,12 @@ class index extends Component {
             },
             {
                 title: 'CỬA HÀNG', dataIndex: ['shop', 'name'],
-                render: (value) => {
-                    return {
-                        children: <Text strong className='text-[#0574b8] dark:text-white uppercase'>{value}</Text>,
-                    };
-                },
+                render: (value) => <Text strong className='text-[#0574b8] dark:text-white uppercase'>{value}</Text>,
                 sorter: (a, b) => a?.shop?.name.localeCompare(b?.shop?.name),
             },
             {
                 title: 'TARGET', dataIndex: 'value',
-                render: (value) => {
-                    return { children: <Text >{formatNumber(value)}</Text> }
-                },
+                render: (value) => <Text >{formatNumber(value)}</Text>,
                 sorter: (a, b) => a?.value - b?.value,
             },
             {
@@ -137,7 +133,7 @@ class index extends Component {
 
         ];
         const { dataCheckPermis, listItemSelected, dataFilter, dropButtonType,
-            modalCreate, modalEdit, drawerFilter } = this.state;
+            modalCreate, modalEdit, drawerFilter, modalDetail } = this.state;
         const { isLoading, dataTargetShops, dataMeta } = this.props;
         const items = [
             { key: 1, label: 'Xóa', disabled: !dataCheckPermis['analytic.delete_shopmonthlytarget'] },
@@ -206,6 +202,9 @@ class index extends Component {
                     <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
                         dataFilter={dataFilter} onChangePage={this.onChangePage} />}
+                {modalDetail && dataCheckPermis['analytic.view_shopmonthlytarget'] &&
+                    <ModalDetail modalDetail={modalDetail}
+                        openModal={this.openModal} />}
                 {modalEdit && dataCheckPermis['analytic.change_shopmonthlytarget'] &&
                     <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}

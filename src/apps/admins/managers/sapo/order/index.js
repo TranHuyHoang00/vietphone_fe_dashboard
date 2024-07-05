@@ -142,7 +142,7 @@ class index extends Component {
                                     onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiFillFilter />
-                                        Bộ lọc
+                                        Lọc
                                     </Space>
                                 </Button>
                             </Space>

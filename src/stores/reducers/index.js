@@ -29,6 +29,7 @@ import customerReducers from '@reducers/sapo/customerReducers';
 // TARGET
 import targetProductCategoryReducers from '@reducers/target/targetProductCategoryReducers';
 import targetShopReducers from '@reducers/target/targetShopReducers';
+import targetStaffReducers from '@reducers/target/targetStaffReducers';
 // SYSTEM
 import taskReducers from '@reducers/system/taskReducers';
 import groupReducers from '@reducers/system/groupReducers';
@@ -69,6 +70,7 @@ export default combineReducers({
     // TARGET
     targetProductCategory: targetProductCategoryReducers,
     targetShop: targetShopReducers,
+    targetStaff: targetStaffReducers,
     // SYSTEM
     task: taskReducers,
     permission: permissionReducers,

@@ -7,7 +7,7 @@ import {
 } from "react-icons/ai";
 import { IoStatsChart, IoBarChartSharp } from "react-icons/io5";
 import { FaUserShield, FaDatabase } from "react-icons/fa6";
-import { FaCcDiscover, FaUserGraduate } from "react-icons/fa";
+import { FaCcDiscover, FaUserGraduate, FaUserTie } from "react-icons/fa";
 import {
     BsFillBox2HeartFill, BsCalendar2PlusFill, BsClipboardDataFill, BsAward, BsAndroid2, BsBox2HeartFill,
     BsApple,
@@ -78,7 +78,7 @@ const itemMenuLeftLayoutSider = [
     {
         key: 'sapo', icon: <AiOutlineQq />, label: 'Sapo', children: [
             {
-                key: 'manager_sapo', icon: <AiFillBug />, label: 'Quản lý', children: [
+                key: 'sapo_manager', icon: <AiFillBug />, label: 'Quản lý', children: [
                     { key: 'manager/sapo/shop', icon: <AiFillShop />, label: 'Cửa hàng', title: 'shop.view_shop' },
                     { key: 'manager/sapo/product_category', icon: <BsApple />, label: 'Loại sản phẩm', title: 'product.view_sapoproductcategory' },
                     { key: 'manager/sapo/staff', icon: <FaUserGraduate />, label: 'Nhân viên', title: 'account.view_staff' },
@@ -93,6 +93,8 @@ const itemMenuLeftLayoutSider = [
             {
                 key: 'set_target', icon: <BsCalendar2PlusFill />, label: 'Đặt ra', children: [
                     { key: 'set/target/shop', icon: <AiFillShop />, label: 'Cửa hàng', title: 'analytic.view_shopmonthlytarget' },
+                    { key: 'set/target/staff', icon: <FaUserTie />, label: 'Nhân viên', title: 'analytic.view_staffmonthlytarget' },
+
                 ],
             },
             {
@@ -113,7 +115,7 @@ const itemMenuLeftLayoutSider = [
                 ],
             },
             {
-                key: 'user_manager', icon: <FaUserShield />, label: 'Người dùng', children: [
+                key: 'user_system', icon: <FaUserShield />, label: 'Người dùng', children: [
                     { key: 'manager/system/user', icon: <AiOutlineUserSwitch />, label: 'Tài khoản', title: 'account.view_user' },
                     { key: 'manager/system/group', icon: <AiFillRobot />, label: 'Phân quyền', title: 'group.view_group' },
                 ],

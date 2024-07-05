@@ -135,7 +135,7 @@ class index extends Component {
                                 onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
-                                    Tạo mới
+                                    Tạo
                                 </Space>
                             </Button>
                             <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên băng rôn !" /></div>

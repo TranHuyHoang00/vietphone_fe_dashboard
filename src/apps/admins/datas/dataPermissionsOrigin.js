@@ -11,6 +11,7 @@ const dataPermiViews = [
     "product.view_tag", "product.view_brand", "product.view_category", "shop.view_shop",
     "post.view_post", "post.view_category",
     "analytic.view_shopmonthlytarget", "product.view_sapoproductcategory",
+    "analytic.view_staffmonthlytarget",
     "account.view_staff",
     "sync.view_sync", "task.view_task",
 ];
@@ -87,6 +88,9 @@ const dataCategoryPosts = [
 const dataTargetShops = [
     "analytic.view_shopmonthlytarget", "analytic.change_shopmonthlytarget", "analytic.delete_shopmonthlytarget", "analytic.add_shopmonthlytarget",
 ]
+const dataTargetStaffs = [
+    "analytic.view_staffmonthlytarget", "analytic.change_staffmonthlytarget", "analytic.delete_staffmonthlytarget", "analytic.add_staffmonthlytarget",
+]
 const dataProductCategorys = [
     "product.view_sapoproductcategory", "product.delete_sapoproductcategory", "product.change_sapoproductcategory", "product.add_sapoproductcategory"
 ]
@@ -113,5 +117,6 @@ export {
     dataTags, dataBrands, dataCategorys, dataShops,
     dataPosts, dataCategoryPosts,
     dataTargetShops, dataProductCategorys, dataStaffs,
+    dataTargetStaffs,
     dataSyncs, dataTasks,
 }

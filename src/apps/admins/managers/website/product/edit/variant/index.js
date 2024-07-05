@@ -176,7 +176,7 @@ class index extends Component {
                             <Button disabled={!dataCheckPermis['product.change_product']}
                                 onClick={() => this.openModal()} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
-                                    Tạo mới
+                                    Tạo
                                 </Space>
                             </Button>
                             {/* <Button disabled={!dataCheckPermis['product.change_product']}
