@@ -151,7 +151,7 @@ class index extends Component {
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider>LOẠI SẢN PHẨM - SAPO</Divider>
+                            <Divider>LOẠI SẢN PHẨM</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={dataProductCategorys} pagination={false}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Modal, message, Spin ,Typography} from 'antd';
+import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormTextare from '@components/inputs/formTextare';
 import FormDate from '@components/inputs/formDate';
@@ -79,11 +79,11 @@ class index extends Component {
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>
                                 Màu nền
-                               <Typography.Text type="danger" strong> *</Typography.Text>
+                                <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
                             <div>
-                                <input onChange={(event)=>{onChangeFlashSale(event.target.value,'color');}}
-                                value={dataFlashSale.color} type='color' className='w-full'/>
+                                <input onChange={(event) => { onChangeFlashSale(event.target.value, 'color'); }}
+                                    value={dataFlashSale.color} type='color' className='w-full' />
                             </div>
                         </div>
 
@@ -108,9 +108,9 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataFlashSale: state.flash_sale.dataFlashSale,
-        isLoading: state.flash_sale.isLoading,
-        isResult: state.flash_sale.isResult,
+        dataFlashSale: state.flashSale.dataFlashSale,
+        isLoading: state.flashSale.isLoading,
+        isResult: state.flashSale.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {

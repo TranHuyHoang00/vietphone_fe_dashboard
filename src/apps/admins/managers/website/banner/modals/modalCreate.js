@@ -8,7 +8,7 @@ import FormSelectSingle from '@components/selects/formSelectSingle';
 import ModalFooter from '@components/modals/modalFooter';
 import { convertImageToBase64 } from '@utils/handleFuncImage';
 import { DeleteOutlined } from '@ant-design/icons';
-import { createMediaBase } from '@services/media_base_service';
+import { createMediaBase } from '@services/website/mediaBaseServices';
 import { showNotification } from '@utils/handleFuncNotification';
 
 class index extends Component {

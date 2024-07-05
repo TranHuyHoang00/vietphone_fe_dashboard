@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Modal, Button, Spin } from 'antd';
-import { textLine13,imageLine13 } from '@components/displays/line13';
+import { textLine13, imageLine13 } from '@components/displays/line13';
 import moment from 'moment';
 class index extends Component {
     constructor(props) {
@@ -41,8 +41,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataFlashSale: state.flash_sale.dataFlashSale,
-        isLoading: state.flash_sale.isLoading,
+        dataFlashSale: state.flashSale.dataFlashSale,
+        isLoading: state.flashSale.isLoading,
 
     };
 };

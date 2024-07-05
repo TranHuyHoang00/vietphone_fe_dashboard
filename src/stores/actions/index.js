@@ -1,36 +1,3 @@
-export * from '@actions/product_types';
-
-export * from '@actions/customer_types';
-export * from '@actions/variant_types';
-
-
-
-
-
-
-
-
-export * from '@actions/flash_sale_item_types';
-export * from '@actions/task_types';
-
-
-export * from '@actions/product_page';
-export * from '@actions/media_base_types';
-
-
-export * from '@actions/group_types';
-export * from '@actions/permission_types';
-export * from '@actions/dark_mode_types';
-export * from '@actions/user_types';
-export * from '@actions/statistical_types';
-export * from '@actions/login_types';
-
-
-
-export * from '@actions/address_types';
-export * from '@actions/comment_types';
-export * from '@actions/target_types';
-
 // WEBSITE
 export * from '@actions/website/brandTypes';
 export * from '@actions/website/tagTypes';
@@ -47,11 +14,26 @@ export * from '@actions/website/repairTypes';
 export * from '@actions/website/warrantyTypes';
 export * from '@actions/website/flashSaleTypes';
 export * from '@actions/website/promotionTypes';
+export * from '@actions/website/productTypes';
+export * from '@actions/website/flashSaleItemTypes';
+export * from '@actions/website/productPageTypes';
+export * from '@actions/website/mediaBaseTypes';
+export * from '@actions/website/variantTypes';
 // SAPO
 export * from '@actions/sapo/productCategoryTypes';
 export * from '@actions/sapo/shopTypes';
 export * from '@actions/sapo/staffTypes';
 export * from '@actions/sapo/orderTypes';
+export * from '@actions/sapo/customerTypes';
+// SYSTEM
+export * from '@actions/system/taskTypes';
+export * from '@actions/system/groupTypes';
+export * from '@actions/system/userTypes';
+export * from '@actions/system/permissionTypes';
+export * from '@actions/system/loginTypes';
+export * from '@actions/system/darkModeTypes';
 // TARGET
-export * from '@actions/targets/targetProductCategoryTypes';
-export * from '@actions/targets/targetShopTypes';
+export * from '@actions/target/targetProductCategoryTypes';
+export * from '@actions/target/targetShopTypes';
+// STATISTICAL
+export * from '@actions/statistical/statisticalTypes';

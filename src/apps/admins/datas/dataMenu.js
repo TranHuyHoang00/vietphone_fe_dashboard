@@ -3,10 +3,10 @@ import {
     , AiFillDropboxSquare, AiFillIdcard, AiFillSetting, AiFillTag, AiFillMobile, AiFillBook, AiFillBuild,
     AiFillContainer, AiFillFileMarkdown, AiFillCrown, AiFillPayCircle, AiFillProject, AiOutlineBook, AiOutlineUserSwitch,
     AiFillFire, AiFillUsb, AiFillRocket, AiFillControl, AiFillMoneyCollect, AiFillEnvironment, AiFillRobot, AiFillDashboard,
-    AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool, AiOutlineComment, AiFillBug, AiOutlineQq,
+    AiFillChrome, AiFillSnippets, AiOutlineAudit, AiFillTool, AiFillBug, AiOutlineQq,
 } from "react-icons/ai";
-import { IoStatsChart, IoBarChartSharp, IoBookSharp } from "react-icons/io5";
-import { FaUserNurse, FaAndroid, FaUserShield, FaDatabase, FaCat } from "react-icons/fa6";
+import { IoStatsChart, IoBarChartSharp } from "react-icons/io5";
+import { FaUserShield, FaDatabase } from "react-icons/fa6";
 import { FaCcDiscover, FaUserGraduate } from "react-icons/fa";
 import {
     BsFillBox2HeartFill, BsCalendar2PlusFill, BsClipboardDataFill, BsAward, BsAndroid2, BsBox2HeartFill,
@@ -18,8 +18,8 @@ const itemMenuLeftLayoutSider = [
         key: 'website', icon: <AiFillChrome />, label: 'Website', children: [
             {
                 key: 'statistical_website', icon: <AiFillDashboard />, label: 'Thống kê', children: [
-                    { key: 'statistical/view_web', icon: <IoStatsChart />, label: 'Lượt truy cập', title: 'statistical.view_web' },
-                    { key: 'statistical/view_product', icon: <IoBarChartSharp />, label: 'Lượt xem sản phẩm', title: 'statistical.view_product' },
+                    { key: 'manager/statistical/view_web', icon: <IoStatsChart />, label: 'Lượt truy cập', title: 'statistical.view_web' },
+                    { key: 'manager/statistical/view_product', icon: <IoBarChartSharp />, label: 'Lượt xem sản phẩm', title: 'statistical.view_product' },
                 ],
             },
             {
@@ -29,19 +29,9 @@ const itemMenuLeftLayoutSider = [
             },
             {
                 key: 'store_website', icon: <AiFillShop />, label: 'Gian hàng', children: [
-                    { key: 'manager/product', icon: <AiFillMobile />, label: 'Sản phẩm', title: 'product.view_product' },
-                    { key: 'manager/product_repair', icon: <AiFillTool />, label: 'Sửa chữa', title: 'product.view_product' },
+                    { key: 'manager/website/product', icon: <AiFillMobile />, label: 'Sản phẩm', title: 'product.view_product' },
+                    { key: 'manager/website/product_repair', icon: <AiFillTool />, label: 'Sửa chữa', title: 'product.view_product' },
                     { key: 'manager/website/flash_sale_item', icon: <AiFillPayCircle />, label: 'Giảm giá', title: 'promotion.view_flashsaleitem' },
-                ],
-            },
-            {
-                key: 'user_webiste', icon: <FaUserShield />, label: 'Người dùng', children: [
-                    { key: 'manager/customer', icon: <AiOutlineUser />, label: 'Khách hàng', title: 'account.view_customer' },
-                ],
-            },
-            {
-                key: 'comment_webiste', icon: <AiOutlineComment />, label: 'Phản hồi', children: [
-                    { key: 'manager/comment', icon: <AiOutlineComment />, label: 'Bình luận', title: 'product.view_comment' },
                 ],
             },
             {
@@ -86,23 +76,13 @@ const itemMenuLeftLayoutSider = [
         ],
     },
     {
-        key: 'manager', icon: <FaCat />, label: 'Quản lý', children: [
-            {
-                key: 'user_manager', icon: <FaUserShield />, label: 'Người dùng', children: [
-                    { key: 'manager/user', icon: <AiOutlineUserSwitch />, label: 'Tài khoản', title: 'account.view_user' },
-                    { key: 'manager/group', icon: <AiFillRobot />, label: 'Phân quyền', title: 'group.view_group' },
-                ],
-            }
-        ]
-
-    },
-    {
         key: 'sapo', icon: <AiOutlineQq />, label: 'Sapo', children: [
             {
                 key: 'manager_sapo', icon: <AiFillBug />, label: 'Quản lý', children: [
                     { key: 'manager/sapo/shop', icon: <AiFillShop />, label: 'Cửa hàng', title: 'shop.view_shop' },
                     { key: 'manager/sapo/product_category', icon: <BsApple />, label: 'Loại sản phẩm', title: 'product.view_sapoproductcategory' },
                     { key: 'manager/sapo/staff', icon: <FaUserGraduate />, label: 'Nhân viên', title: 'account.view_staff' },
+                    { key: 'manager/sapo/customer', icon: <AiOutlineUser />, label: 'Khách hàng', title: 'account.view_customer' },
                 ],
             },
         ]
@@ -128,16 +108,16 @@ const itemMenuLeftLayoutSider = [
         key: 'sytem', icon: <AiFillAndroid />, label: 'Hệ thống', children: [
             {
                 key: 'data_sytem', icon: <FaDatabase />, label: 'Dữ liệu', children: [
-                    { key: 'manager/sync_data', icon: <AiFillControl />, label: 'Đồng bộ', title: 'sync.view_sync' },
-                    { key: 'manager/task', icon: <AiFillSwitcher />, label: 'Lịch sử', title: 'task.view_task' }
+                    { key: 'manager/system/sync_data', icon: <AiFillControl />, label: 'Đồng bộ', title: 'sync.view_sync' },
+                    { key: 'manager/system/task', icon: <AiFillSwitcher />, label: 'Lịch sử', title: 'task.view_task' }
+                ],
+            },
+            {
+                key: 'user_manager', icon: <FaUserShield />, label: 'Người dùng', children: [
+                    { key: 'manager/system/user', icon: <AiOutlineUserSwitch />, label: 'Tài khoản', title: 'account.view_user' },
+                    { key: 'manager/system/group', icon: <AiFillRobot />, label: 'Phân quyền', title: 'group.view_group' },
                 ],
             }
-        ],
-    },
-    {
-        key: 2, icon: <FaUserNurse />, label: 'Nhân viên', children: [
-            { key: 'system_staff/roll_call', icon: <FaAndroid />, label: 'Chấm công', },
-            { key: 'system_staff/history', icon: <IoBookSharp />, label: 'Lịch sử', },
         ],
     },
 ];

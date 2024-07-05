@@ -195,11 +195,11 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataFlashSales: state.flash_sale.dataFlashSales,
-        dataFlashSale: state.flash_sale.dataFlashSale,
-        dataMeta: state.flash_sale.dataMeta,
-        isLoading: state.flash_sale.isLoading,
-        isResult: state.flash_sale.isResult,
+        dataFlashSales: state.flashSale.dataFlashSales,
+        dataFlashSale: state.flashSale.dataFlashSale,
+        dataMeta: state.flashSale.dataMeta,
+        isLoading: state.flashSale.isLoading,
+        isResult: state.flashSale.isResult,
 
         dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,

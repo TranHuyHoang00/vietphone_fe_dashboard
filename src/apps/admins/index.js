@@ -13,30 +13,6 @@ import LoginDB from './pages/login';
 import NotLogged from './pages_error/not_logged';
 import NotFound from './pages_error/not_found';
 import Empty from './pages/empty';
-
-import ManagerCustomer from './managers/customer/index';
-
-
-
-import ManagerOrder from './managers/sapo/order/index';
-
-
-import ManagerProduct from './managers/product/index';
-import ManagerProductRepair from './managers/product_repair/index';
-import EditProduct from './managers/product/edit/index';
-
-import ManagerSyncData from './managers/sync_data/index';
-
-import ManagerFlashSaleItem from './managers/flash_sale_item/index';
-import ManagerTask from './managers/task/index';
-
-
-
-import ManagerGroup from './managers/group/index';
-import ManagerUser from './managers/user/index';
-
-
-
 // WEBSITE
 import ManagerBrand from './managers/website/brand/index';
 import ManagerTag from './managers/website/tag/index';
@@ -55,23 +31,31 @@ import ManagerRepair from './managers/website/repair/index';
 import ManagerFlashSale from './managers/website/flashSale/index';
 import ManagerPromotion from './managers/website/promotion/index';
 import EditPromotion from './managers/website/promotion/edit/index';
+import ManagerProduct from './managers/website/product/index';
+import ManagerProductRepair from './managers/website/productRepair/index';
+import EditProduct from './managers/website/product/edit/index';
+import ManagerFlashSaleItem from './managers/website/flashSaleItem/index';
 // SAPO
 import ManagerShop from './managers/sapo/shop/index';
 import ManagerStaff from './managers/sapo/staff/index';
 import ManagerProductCategory from './managers/sapo/productCategory/index';
+import ManagerCustomer from './managers/sapo/customer/index';
+import ManagerOrder from './managers/sapo/order/index';
+// SYSTEM
+import ManagerSyncData from './managers/system/syncData/index';
+import ManagerTask from './managers/system/task/index';
+import ManagerGroup from './managers/system/group/index';
+import ManagerUser from './managers/system/user/index';
 
-// import ManagerComment from './managers/comment/index';
 import SetTargetShop from './managers/target/set/shop/index';
 // import SetOverviewTarget from './managers/target/set/overview/index';
 // import AchieveIndividualTarget from './managers/target/achieve/individual/index';
 import AchieveOverviewTarget from './managers/target/achieve/overview/index';
 
+// STATISTICAL
+import StatisticalViewWeb from './managers/statistical/viewWeb/index';
+import StatisticalViewProduct from './managers/statistical/viewProduct/index';
 
-import StatisticalViewWeb from './managers/statisticals/web/view_web/index';
-import StatisticalViewProduct from './managers/statisticals/web/view_product/index';
-
-import StaffRollCall from './managers/system_staff/roll_call/index';
-import HistoryRollCall from './managers/system_staff/history/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -148,51 +132,35 @@ class index extends Component {
                             <HeaderDB openDrawerMenu={this.openDrawerMenu} />
                             <Layout.Content className='py-[10px]'>
                                 <Switch>
-                                    <Route exact path={`${url}statistical/view_web`}><StatisticalViewWeb /></Route>
-                                    <Route exact path={`${url}statistical/view_product`}><StatisticalViewProduct /></Route>
-
-                                    <Route exact path={`${url}system_staff/roll_call`}><StaffRollCall /></Route>
-                                    <Route exact path={`${url}system_staff/history`}><HistoryRollCall /></Route>
+                                    <Route exact path={`${url}manager/statistical/view_web`}><StatisticalViewWeb /></Route>
+                                    <Route exact path={`${url}manager/statistical/view_product`}><StatisticalViewProduct /></Route>
 
                                     {dataCheckPermis['account.view_customer'] &&
-                                        <Route exact path={`${url}manager/customer`}><ManagerCustomer /></Route>}
+                                        <Route exact path={`${url}manager/sapo/customer`}><ManagerCustomer /></Route>}
                                     {dataCheckPermis['account.view_user'] &&
-                                        <Route Route exact path={`${url}manager/user`}><ManagerUser /></Route>}
+                                        <Route Route exact path={`${url}manager/system/user`}><ManagerUser /></Route>}
                                     {dataCheckPermis['group.view_group'] &&
-                                        <Route exact path={`${url}manager/group`}><ManagerGroup /></Route>}
-
-
-
+                                        <Route exact path={`${url}manager/system/group`}><ManagerGroup /></Route>}
                                     {dataCheckPermis['product.view_product'] &&
-                                        <Route exact path={`${url}manager/product`}><ManagerProduct /></Route>}
-
-                                    {/* {dataCheckPermis['product.view_comment'] &&
-                                        <Route exact path={`${url}manager/comment`}><ManagerComment /></Route>} */}
-
+                                        <Route exact path={`${url}manager/website/product`}><ManagerProduct /></Route>}
                                     {dataCheckPermis['product.view_product'] &&
-                                        <Route exact path={`${url}manager/product_repair`}><ManagerProductRepair /></Route>}
-
+                                        <Route exact path={`${url}manager/website/product_repair`}><ManagerProductRepair /></Route>}
                                     {dataCheckPermis['product.view_product'] &&
-                                        <Route exact path={`${url}manager/product/edit/:id`}><EditProduct /></Route>}
-
+                                        <Route exact path={`${url}manager/website/product/edit/:id`}><EditProduct /></Route>}
                                     {dataCheckPermis['promotion.view_flashsaleitem'] &&
                                         <Route exact path={`${url}manager/website/flash_sale_item`}><ManagerFlashSaleItem /></Route>}
-
                                     {dataCheckPermis['product.view_promotioninfo'] &&
                                         <Route exact path={`${url}manager/website/promotion`}><ManagerPromotion /></Route>}
                                     {dataCheckPermis['product.view_promotioninfo'] &&
                                         <Route exact path={`${url}manager/website/promotion/edit/:id`}><EditPromotion /></Route>}
-
                                     {dataCheckPermis['product.view_warranty'] &&
                                         <Route exact path={`${url}manager/website/warranty`}><ManagerWarranty /></Route>}
                                     {dataCheckPermis['product.view_repair'] &&
                                         <Route exact path={`${url}manager/website/repair`}><ManagerRepair /></Route>}
-
                                     {dataCheckPermis['settings.view_banner'] &&
                                         <Route exact path={`${url}manager/website/banner`}><ManagerBanner /></Route>}
                                     {dataCheckPermis['settings.view_location'] &&
                                         <Route exact path={`${url}manager/website/location`}><ManagerLocation /></Route>}
-
                                     {dataCheckPermis['product.view_attributevalue'] &&
                                         <Route exact path={`${url}manager/website/attribute_value`}><ManagerAttributeValue /></Route>}
                                     {dataCheckPermis['product.view_attribute'] &&
@@ -201,7 +169,6 @@ class index extends Component {
                                         <Route exact path={`${url}manager/website/group_attribute`}><ManagerGroupAttribute /></Route>}
                                     {dataCheckPermis['product.view_variantattributegroup'] &&
                                         <Route exact path={`${url}manager/website/variant_attribute_group`}><ManagerVariantAttributeGroup /></Route>}
-
                                     {dataCheckPermis['product.view_tag'] &&
                                         <Route exact path={`${url}manager/website/tag`}><ManagerTag /></Route>}
                                     {dataCheckPermis['product.view_brand'] &&
@@ -210,21 +177,14 @@ class index extends Component {
                                         <Route exact path={`${url}manager/website/category`}><ManagerCategory /></Route>}
                                     {dataCheckPermis['promotion.view_flashsale'] &&
                                         <Route exact path={`${url}manager/website/flash_sale`}><ManagerFlashSale /></Route>}
-
-
-
                                     {dataCheckPermis['post.view_post'] &&
                                         <Route exact path={`${url}manager/website/post`}><ManagerPost /></Route>}
                                     {dataCheckPermis['post.view_post'] &&
                                         <Route exact path={`${url}manager/website/post/edit/:id`}><EditPost /></Route>}
-
                                     {dataCheckPermis['post.view_category'] &&
                                         <Route exact path={`${url}manager/website/category_post`}><ManagerCategoryPost /></Route>}
-
                                     {dataCheckPermis['analytic.view_shopmonthlytarget'] &&
                                         <Route exact path={`${url}set/target/shop`}><SetTargetShop /></Route>}
-
-
                                     {dataCheckPermis['product.view_sapoproductcategory'] &&
                                         <Route exact path={`${url}manager/sapo/product_category`}><ManagerProductCategory /></Route>}
                                     {dataCheckPermis['shop.view_shop'] &&
@@ -238,14 +198,10 @@ class index extends Component {
                                     {/* <Route exact path={`${url}set/target/overview`}><SetOverviewTarget /></Route>
                                     <Route exact path={`${url}achieve/target/individual`}><AchieveIndividualTarget /></Route> */}
                                     <Route exact path={`${url}achieve/target/overview`}><AchieveOverviewTarget /></Route>
-
-
                                     {dataCheckPermis['sync.view_sync'] &&
-                                        <Route exact path={`${url}manager/sync_data`}><ManagerSyncData /></Route>}
+                                        <Route exact path={`${url}manager/system/sync_data`}><ManagerSyncData /></Route>}
                                     {dataCheckPermis['task.view_task'] &&
-                                        <Route exact path={`${url}manager/task`}><ManagerTask /></Route>}
-
-
+                                        <Route exact path={`${url}manager/system/task`}><ManagerTask /></Route>}
                                     <Route exact path={`${url}login`}><Empty /></Route>
                                     <Route ><NotFound /></Route>
                                 </Switch>
