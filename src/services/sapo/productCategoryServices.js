@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListProductCategory = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/product/api/v1/list-sapo-product-category?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListProductCategory = (dataFilter) => {
+    return apiAdmin.get(`/product/api/v1/list-sapo-product-category?${getUrlApi(dataFilter)}`);
 }
 const createProductCategory = (data) => {
     return apiAdmin.post(`/product/api/v1/create-sapo-product-category`, data);

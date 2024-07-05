@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListWarranty = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/product/api/v1/list-warranty?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListWarranty = (dataFilter) => {
+    return apiAdmin.get(`/product/api/v1/list-warranty?${getUrlApi(dataFilter)}`);
 }
 const createWarranty = (data) => {
     return apiAdmin.post(`/product/api/v1/create-warranty`, data);

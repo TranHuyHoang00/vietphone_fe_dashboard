@@ -1,6 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListMedia = (date_filter) => {
-    return apiAdmin.get(`/product/api/v1/list-product-media?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListMedia = (dataFilter) => {
+    return apiAdmin.get(`/product/api/v1/list-product-media?${getUrlApi(dataFilter)}`);
 }
 const createMedia = (data) => {
     return apiAdmin.post(`/product/api/v1/create-product-media`, data);

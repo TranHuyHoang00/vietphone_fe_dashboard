@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListCategoryPost = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/bai-viet/api/v1/list-category?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListCategoryPost = (dataFilter) => {
+    return apiAdmin.get(`/bai-viet/api/v1/list-category?${getUrlApi(dataFilter)}`);
 }
 const createCategoryPost = (data) => {
     return apiAdmin.post(`/bai-viet/api/v1/create-category`, data);

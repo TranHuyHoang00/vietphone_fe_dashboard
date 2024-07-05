@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListVariantAttributeGroup = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/product/api/v1/list-variant-attribute-group?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListVariantAttributeGroup = (dataFilter) => {
+    return apiAdmin.get(`/product/api/v1/list-variant-attribute-group?${getUrlApi(dataFilter)}`);
 }
 const createVariantAttributeGroup = (data) => {
     return apiAdmin.post(`/product/api/v1/create-variant-attribute-group`, data);

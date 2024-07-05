@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListCategory = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/product/api/v1/list-category?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListCategory = (dataFilter) => {
+    return apiAdmin.get(`/product/api/v1/list-category?${getUrlApi(dataFilter)}`);
 }
 const createCategory = (data) => {
     return apiAdmin.post(`/product/api/v1/create-category`, data);

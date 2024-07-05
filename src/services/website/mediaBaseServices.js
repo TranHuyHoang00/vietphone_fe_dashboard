@@ -1,6 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListMediaBase = (date_filter) => {
-    return apiAdmin.get(`/settings/api/v1/list-media-base?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListMediaBase = (dataFilter) => {
+    return apiAdmin.get(`/settings/api/v1/list-media-base?${getUrlApi(dataFilter)}`);
 }
 const createMediaBase = (data) => {
     return apiAdmin.post(`/settings/api/v1/create-media-base`, data);

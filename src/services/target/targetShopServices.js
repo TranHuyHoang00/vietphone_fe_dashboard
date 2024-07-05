@@ -1,9 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListTargetShop = ({ page, limit, search, month }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const monthQuery = month ? `&month=${month}` : '';
-    const url = `/analytic/api/v1/list-shop-monthly-target?page=${page}&limit=${limit}${searchQuery}${monthQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListTargetShop = (dataFilter) => {
+    return apiAdmin.get(`/analytic/api/v1/list-shop-monthly-target?${getUrlApi(dataFilter)}`);
 }
 const createTargetShop = (data) => {
     return apiAdmin.post(`/analytic/api/v1/create-shop-monthly-target`, data);

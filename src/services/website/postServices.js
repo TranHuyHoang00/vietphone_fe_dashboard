@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListPost = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/bai-viet/api/v1/list-post?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListPost = (dataFilter) => {
+    return apiAdmin.get(`/bai-viet/api/v1/list-post?${getUrlApi(dataFilter)}`);
 }
 const createPost = (data) => {
     return apiAdmin.post(`/bai-viet/api/v1/create-post`, data);

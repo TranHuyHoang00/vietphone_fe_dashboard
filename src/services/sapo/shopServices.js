@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListShop = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/shop/api/v1/list-shop?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListShop = (dataFilter) => {
+    return apiAdmin.get(`/shop/api/v1/list-shop?${getUrlApi(dataFilter)}`);
 }
 const createShop = (data) => {
     return apiAdmin.post(`/shop/api/v1/create-shop`, data);

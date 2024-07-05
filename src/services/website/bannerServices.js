@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListBanner = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/settings/api/v1/list-banner?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListBanner = (dataFilter) => {
+    return apiAdmin.get(`/settings/api/v1/list-banner?${getUrlApi(dataFilter)}`);
 }
 const createBanner = (data) => {
     return apiAdmin.post(`/settings/api/v1/create-banner`, data);

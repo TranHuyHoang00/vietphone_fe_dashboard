@@ -1,10 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListOrder = ({ page, limit, search, status, source }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const statusQuery = status ? `&status=${status}` : '';
-    const sourceQuery = source ? `&status=${source}` : '';
-    const url = `/order/api/v1/list-order?page=${page}&limit=${limit}${searchQuery}${statusQuery}${sourceQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListOrder = (dataFilter) => {
+    return apiAdmin.get(`/order/api/v1/list-order?${getUrlApi(dataFilter)}`);
 }
 const createOrder = (data) => {
     return apiAdmin.post(`/auth/api/v1/create-order`, data,);

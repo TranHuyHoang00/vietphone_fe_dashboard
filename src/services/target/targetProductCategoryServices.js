@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListTargetProductCategory = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/analytic/api/v1/list-target-product-category?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListTargetProductCategory = (dataFilter) => {
+    return apiAdmin.get(`/analytic/api/v1/list-target-product-category?${getUrlApi(dataFilter)}`);
 }
 const createTargetProductCategory = (data) => {
     return apiAdmin.post(`/analytic/api/v1/create-target-product-category`, data);

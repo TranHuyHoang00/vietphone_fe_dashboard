@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListFlashSaleItem = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/promotion/api/v1/list-flash-sale-item?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListFlashSaleItem = (dataFilter) => {
+    return apiAdmin.get(`/promotion/api/v1/list-flash-sale-item?${getUrlApi(dataFilter)}`);
 }
 const createFlashSaleItem = (data) => {
     return apiAdmin.post(`/promotion/api/v1/create-flash-sale-item`, data);

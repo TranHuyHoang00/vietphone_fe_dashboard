@@ -1,6 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListUser = (date_filter) => {
-    return apiAdmin.get(`/auth/api/v1/list-user?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}${date_filter.is_active === '' ? '' : `&is_active=${date_filter.is_active}`}${date_filter.is_superuser === '' ? '' : `&is_superuser=${date_filter.is_superuser}`}${date_filter.groups === '' ? '' : `&groups=${date_filter.groups}`}`);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListUser = (dataFilter) => {
+    return apiAdmin.get(`/auth/api/v1/list-user?${getUrlApi(dataFilter)}`);
 }
 const createUser = (data) => {
     return apiAdmin.post(`/auth/api/v1/register`, data,);

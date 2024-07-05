@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListStaff = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/account/api/v1/list-staff?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListStaff = (dataFilter) => {
+    return apiAdmin.get(`/account/api/v1/list-staff?${getUrlApi(dataFilter)}`);
 }
 const createStaff = (data) => {
     return apiAdmin.post(`/account/api/v1/create-staff`, data);

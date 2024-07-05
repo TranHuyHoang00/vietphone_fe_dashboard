@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListAttribute = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/product/api/v1/list-attribute?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListAttribute = (dataFilter) => {
+    return apiAdmin.get(`/product/api/v1/list-attribute?${getUrlApi(dataFilter)}`);
 }
 const createAttribute = (data) => {
     return apiAdmin.post(`/product/api/v1/create-attribute`, data);

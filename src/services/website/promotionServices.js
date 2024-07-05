@@ -1,8 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListPromotion = ({ page, limit, search }) => {
-    const searchQuery = search ? `&search=${search}` : '';
-    const url = `/product/api/v1/list-promotion-info?page=${page}&limit=${limit}${searchQuery}`;
-    return apiAdmin.get(url);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListPromotion = (dataFilter) => {
+    return apiAdmin.get(`/product/api/v1/list-promotion-info?${getUrlApi(dataFilter)}`);
 }
 const createPromotion = (data) => {
     return apiAdmin.post(`/product/api/v1/create-promotion-info`, data);

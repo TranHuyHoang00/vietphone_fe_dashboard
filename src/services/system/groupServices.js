@@ -1,6 +1,7 @@
 import apiAdmin from '@auths/apiAdmin';
-const getListGroup = (date_filter) => {
-    return apiAdmin.get(`/auth/api/v1/list-group?page=${date_filter.page}&limit=${date_filter.limit}${date_filter.search === '' ? '' : `&search=${date_filter.search}`}`);
+import { getUrlApi } from '@utils/handleFuncUrl';
+const getListGroup = (dataFilter) => {
+    return apiAdmin.get(`/auth/api/v1/list-group?${getUrlApi(dataFilter)}`);
 }
 const createGroup = (data) => {
     return apiAdmin.post(`/auth/api/v1/create-group`, data);
