@@ -39,27 +39,35 @@ class index extends Component {
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Người tạo đơn</Typography.Text>
                         <div>
-                            <Select allowClear style={{ width: '100%' }} showSearch
+                            <Select style={{ width: '100%' }} showSearch
                                 onSelect={(value) => onChangePage(value, 'staff')}
                                 value={dataFilter?.staff}
                                 filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
-                                options={dataStaffs && dataStaffs.map((item) => ({
-                                    label: item?.user?.full_name,
-                                    value: item.id,
-                                }))} />
+                                options={[
+                                    { label: 'Bỏ trống', value: '' },
+                                    ...dataStaffs && dataStaffs
+                                        .map((item) => ({
+                                            label: item?.user?.full_name,
+                                            value: item.id,
+                                        })),
+                                ]} />
                         </div>
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Người bán</Typography.Text>
                         <div>
-                            <Select allowClear style={{ width: '100%' }} showSearch
+                            <Select style={{ width: '100%' }} showSearch
                                 onSelect={(value) => onChangePage(value, 'assignee')}
                                 value={dataFilter?.assignee}
                                 filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
-                                options={dataStaffs && dataStaffs.map((item) => ({
-                                    label: item?.user?.full_name,
-                                    value: item.id,
-                                }))} />
+                                options={[
+                                    { label: 'Bỏ trống', value: '' },
+                                    ...dataStaffs && dataStaffs
+                                        .map((item) => ({
+                                            label: item?.user?.full_name,
+                                            value: item.id,
+                                        })),
+                                ]} />
                         </div>
                     </div>
                 </Space>
