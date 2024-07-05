@@ -44,7 +44,6 @@ export const createTargetShopRedux = (dataTargetShop) => {
             const data = await createTargetShop(dataTargetShop);
             if (data && data.data && data.data.success === 1) {
                 dispatch(targetShopSuccess());
-                message.success('Thành công');
             } else {
                 dispatch(targetShopFaided());
                 message.error('Lỗi');

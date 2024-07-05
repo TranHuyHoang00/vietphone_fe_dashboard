@@ -44,7 +44,6 @@ export const createTargetStaffRedux = (dataTargetStaff) => {
             const data = await createTargetStaff(dataTargetStaff);
             if (data && data.data && data.data.success === 1) {
                 dispatch(targetStaffSuccess());
-                message.success('Thành công');
             } else {
                 dispatch(targetStaffFaided());
                 message.error('Lỗi');

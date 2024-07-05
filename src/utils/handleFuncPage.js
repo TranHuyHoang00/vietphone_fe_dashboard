@@ -51,6 +51,14 @@ const handleOnChangePage = async (pageValue, pageType, dataFilter) => {
             newDataFilter.month = pageValue;
             newDataFilter.page = 1;
             break;
+        case 'staff':
+            newDataFilter.staff = pageValue;
+            newDataFilter.page = 1;
+            break;
+        case 'assignee':
+            newDataFilter.assignee = pageValue;
+            newDataFilter.page = 1;
+            break;
         default:
             break;
     }

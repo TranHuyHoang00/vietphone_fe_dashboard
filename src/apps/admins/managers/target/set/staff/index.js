@@ -33,7 +33,7 @@ class index extends Component {
                 page: 1,
                 limit: 20,
                 search: '',
-                month: '',
+                month: dayjs().startOf('month').format("YYYY-MM-DD"),
             },
             dataCheckPermis: {},
         }
@@ -41,12 +41,10 @@ class index extends Component {
     async componentDidMount() {
         const { dataFilter } = this.state;
         const { getListTargetShop, dataUserPermis, isSuperUser } = this.props;
-        const newDataFilter = { ...dataFilter, month: dayjs().startOf('month').format("YYYY-MM-DD") }
-        await getListTargetShop(newDataFilter);
+        await getListTargetShop(dataFilter);
         const dataCheckPermis = await handleCheckPermis(dataTargetShops, dataUserPermis, isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
-            dataFilter: newDataFilter,
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {

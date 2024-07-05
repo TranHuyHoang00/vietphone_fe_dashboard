@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Drawer, Space, Typography, Radio } from 'antd';
+import { connect } from 'react-redux';
+import * as actions from '@actions';
+import { Drawer, Space, Typography, Radio, Select } from 'antd';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            dataFilter: { page: 1, limit: 100, search: '' },
         }
     }
     async componentDidMount() {
+        const { getListStaff } = this.props;
+        const { dataFilter } = this.state;
+        await getListStaff(dataFilter);
     }
     render() {
-        const { dataFilter, openDrawer, drawerFilter, onChangePage } = this.props;
+        const { dataFilter, openDrawer, drawerFilter, onChangePage, dataStaffs } = this.props;
         return (
             <Drawer title="Bộ lọc" onClose={() => openDrawer('filter', false)} open={drawerFilter}>
                 <Space direction='vertical'>
@@ -30,10 +36,50 @@ class index extends Component {
                             <Radio.Button value="web">Web</Radio.Button>
                         </Radio.Group>
                     </div>
+                    <div className='space-y-[2px]'>
+                        <Typography.Text strong>Người tạo đơn</Typography.Text>
+                        <div>
+                            <Select allowClear style={{ width: '100%' }} showSearch
+                                onSelect={(value) => onChangePage(value, 'staff')}
+                                value={dataFilter?.staff}
+                                filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+                                options={dataStaffs && dataStaffs.map((item) => ({
+                                    label: item?.user?.full_name,
+                                    value: item.id,
+                                }))} />
+                        </div>
+                    </div>
+                    <div className='space-y-[2px]'>
+                        <Typography.Text strong>Người bán</Typography.Text>
+                        <div>
+                            <Select allowClear style={{ width: '100%' }} showSearch
+                                onSelect={(value) => onChangePage(value, 'assignee')}
+                                value={dataFilter?.assignee}
+                                filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+                                options={dataStaffs && dataStaffs.map((item) => ({
+                                    label: item?.user?.full_name,
+                                    value: item.id,
+                                }))} />
+                        </div>
+                    </div>
                 </Space>
             </Drawer>
         );
     }
 
 }
-export default withRouter(index);
+
+const mapStateToProps = state => {
+    return {
+        dataStaffs: state.staff.dataStaffs,
+        dataMeta: state.staff.dataMeta,
+        isLoading: state.staff.isLoading,
+        isResult: state.staff.isResult,
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        getListStaff: (dataFilter) => dispatch(actions.getListStaffRedux(dataFilter)),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

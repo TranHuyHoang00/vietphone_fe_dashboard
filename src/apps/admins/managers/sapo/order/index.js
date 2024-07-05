@@ -31,6 +31,8 @@ class index extends Component {
                 search: '',
                 status: '',
                 source: '',
+                staff: '',
+                assignee: '',
             },
             dataCheckPermis: {},
         }

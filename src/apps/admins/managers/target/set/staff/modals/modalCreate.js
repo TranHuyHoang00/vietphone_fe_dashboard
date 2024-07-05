@@ -2,29 +2,41 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Modal, Spin, Typography, Card, message, Collapse } from 'antd';
-import FormSelectSingle from '@components/selects/formSelectSingle';
+import { Modal, Spin, Typography, Card, message, Collapse, Select } from 'antd';
 import ModalFooter from '@components/modals/modalFooter';
 import dayjs from 'dayjs';
 import { createTargetProductCategory } from '@services/target/targetProductCategoryServices';
 import { showNotification } from '@utils/handleFuncNotification';
+import { getListTargetShop } from '@services/target/targetShopServices';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
             dataFilter: { page: 1, limit: 100, search: '' },
-            dataTargetShop: { month: dayjs().startOf('month').format("YYYY-MM-DD") },
             dataTPCs: [],
             newDataShops: [],
+            listSelectedShopId: [],
         }
     }
     async componentDidMount() {
-        const { getListProductCategory, getListShop, setDataTargetShop, dataTargetShops } = this.props;
-        const { dataFilter, dataTargetShop } = this.state;
+        const { getListProductCategory, getListShop, setDataTargetShop } = this.props;
+        const { dataFilter } = this.state;
         await getListProductCategory(dataFilter);
         await getListShop(dataFilter);
-        await setDataTargetShop(dataTargetShop);
-        this.getDataShops(this.props.dataShops, dataTargetShops);
+        await setDataTargetShop({ month: this.props.dataFilter.month });
+        await this.handleGetListTargetShop({ page: 1, limit: 100, month: this.props.dataFilter.month });
+    }
+    handleGetListTargetShop = async (dataFilter) => {
+        try {
+            const data = await getListTargetShop(dataFilter);
+            const { dataShops } = this.props;
+            if (data && data.data && data.data.success === 1) {
+                const dataTargetShops = data.data.data.shop_monthly_target;
+                this.getDataShops(dataShops, dataTargetShops);
+            }
+        } catch (error) {
+            console.warn(error);
+        }
     }
     handleOnchangeInput = (itemValue, itemVariable, item) => {
         const { dataTPCs } = this.state;
@@ -46,7 +58,8 @@ class index extends Component {
         }
     }
     validationData = (data) => {
-        if (!data.shop) {
+        const { listSelectedShopId } = this.state;
+        if (listSelectedShopId && listSelectedShopId.length === 0) {
             return { mess: "Không được bỏ trống 'Cửa hàng' ", check: false };
         }
         if (!data.month) {
@@ -76,21 +89,25 @@ class index extends Component {
         return newDataTPCs;
     }
     handleCreate = async () => {
-        const { dataTargetShop, createTargetShop, isResultShop, openModal, getListTargetShop, dataFilter
+        const { dataTargetShop, createTargetShop, openModal, getListTargetShop, dataFilter
         } = this.props;
         const { dataTPCs } = this.state;
         const result = this.validationData(dataTargetShop);
         if (result.check) {
             let newDataTargetShop = { ...dataTargetShop }
+            const { listSelectedShopId } = this.state;
             if (dataTPCs && dataTPCs.length !== 0) {
                 const newDataTPCIds = await this.handleDataTPCs(dataTPCs);
                 newDataTargetShop.target_product_category = newDataTPCIds;
             }
-            await createTargetShop(newDataTargetShop);
-            if (isResultShop) {
-                await getListTargetShop(dataFilter);
-                openModal("create", false);
-            }
+            const promises = listSelectedShopId.map(async shopId => {
+                newDataTargetShop.shop = shopId;
+                return createTargetShop(newDataTargetShop);
+            });
+            await Promise.all(promises);
+            message.success('Thành công');
+            await getListTargetShop(dataFilter);
+            openModal("create", false);
         } else {
             message.error(result.mess);
         }
@@ -113,11 +130,14 @@ class index extends Component {
         this.setState({ newDataShops: newDataShops })
     }
     onChangeTime = async (value) => {
-        const { onChangeTargetShop, onChangePage, dataShops } = this.props;
+        const { onChangeTargetShop, onChangePage } = this.props;
         await onChangePage(value, 'month');
         await onChangeTargetShop(value, 'month');
-        this.getDataShops(dataShops, this.props.dataTargetShops);
+        await this.handleGetListTargetShop({ page: 1, limit: 100, month: value });
     }
+    handleOnChangeSelect = (value) => {
+        this.setState({ listSelectedShopId: value });
+    };
     render() {
         const { Text } = Typography;
         const { isLoadingTargetShop, isLoadingProductCategory, isLoadingShop,
@@ -136,13 +156,17 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoadingTargetShop || isLoadingProductCategory || isLoadingShop}>
                     <div className="space-y-[10px]">
-                        <FormSelectSingle name={'Cửa hàng'} variable={'shop'} value={dataTargetShop?.shop}
-                            important={true} width={'100%'}
-                            options={newDataShops && newDataShops.map((item) => ({
-                                label: item.name,
-                                value: item.id,
-                            }))}
-                            onChangeInput={onChangeTargetShop} />
+                        <div className='space-y-[3px]'>
+                            <Text italic strong>Cửa hàng<Text type="danger" strong> *</Text></Text>
+                            <Select mode="multiple" allowClear style={{ width: '100%' }} showSearch
+                                filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+                                onChange={(value) => this.handleOnChangeSelect(value)}
+                                options={newDataShops && newDataShops.map((item) => ({
+                                    label: item.name,
+                                    value: item.id,
+                                }))}
+                            />
+                        </div>
                         <div className='space-y-[10px]'>
                             <div className='flex items-center justify-center space-x-[5px]'>
                                 <div className='space-y-[3px]'>
@@ -159,7 +183,8 @@ class index extends Component {
                                         Target
                                         <Text type="danger" strong> *</Text>
                                     </Text>
-                                    <input className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
+                                    <input onKeyPress={(event) => { if (!/[0-9]/.test(event.key)) { event.preventDefault(); } }}
+                                        className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                         type="number" min="0"
                                         value={dataTargetShop?.value}
                                         onChange={(event) => onChangeTargetShop(event.target.value, 'value')} />
