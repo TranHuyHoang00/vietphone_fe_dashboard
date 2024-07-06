@@ -13,7 +13,7 @@ import ModalDetail from './modals/modalDetail';
 import ModalEdit from './modals/modalEdit';
 import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
-import { dataTargetShops } from '@datas/dataPermissionsOrigin';
+import { dataTargetStaffs } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
@@ -40,29 +40,29 @@ class index extends Component {
     }
     async componentDidMount() {
         const { dataFilter } = this.state;
-        const { getListTargetShop, dataUserPermis, isSuperUser } = this.props;
-        await getListTargetShop(dataFilter);
-        const dataCheckPermis = await handleCheckPermis(dataTargetShops, dataUserPermis, isSuperUser);
+        const { getListTargetStaff, dataUserPermis, isSuperUser } = this.props;
+        await getListTargetStaff(dataFilter);
+        const dataCheckPermis = await handleCheckPermis(dataTargetStaffs, dataUserPermis, isSuperUser);
         this.setState({
             dataCheckPermis: dataCheckPermis,
         });
     }
     openModal = async (modalName, modalValue, itemId,) => {
-        const { setDataTargetShop, getDataTargetShop } = this.props;
+        const { setDataTargetStaff, getDataTargetStaff } = this.props;
         const actions = {
-            setData: setDataTargetShop,
-            getData: getDataTargetShop,
+            setData: setDataTargetStaff,
+            getData: getDataTargetStaff,
         };
         const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
         this.setState(newStateModal);
     }
     funcDropButtonHeaderOfTable = async () => {
         const { listItemSelected, dropButtonType, dataFilter } = this.state;
-        const { deleteListTargetShop, editListTargetShop, getListTargetShop } = this.props;
+        const { deleteListTargetStaff, editListTargetStaff, getListTargetStaff } = this.props;
         const actions = {
-            deleteList: deleteListTargetShop,
-            editList: editListTargetShop,
-            getList: getListTargetShop
+            deleteList: deleteListTargetStaff,
+            editList: editListTargetStaff,
+            getList: getListTargetStaff
         };
         const newListItemSelected = await handleFuncDropButtonHeaderOfTable(dropButtonType, listItemSelected, dataFilter, actions);
         this.setState({ listItemSelected: newListItemSelected });
@@ -78,10 +78,10 @@ class index extends Component {
     }
     onChangePage = async (pageValue, pageType,) => {
         const { dataFilter } = this.state;
-        const { getListTargetShop } = this.props;
+        const { getListTargetStaff } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
         this.setState({ dataFilter: newDataFilter });
-        await getListTargetShop(newDataFilter);
+        await getListTargetStaff(newDataFilter);
     }
     render() {
         const { Text } = Typography;
@@ -91,9 +91,13 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'CỬA HÀNG', dataIndex: ['shop', 'name'],
-                render: (value) => <Text strong className='text-[#0574b8] dark:text-white uppercase'>{value}</Text>,
-                sorter: (a, b) => a?.shop?.name.localeCompare(b?.shop?.name),
+                title: 'NHÂN VIÊN', dataIndex: 'staff',
+                render: (staff) =>
+                    <>
+                        <Text strong className='text-[#0574b8] dark:text-white uppercase'>{staff?.user?.full_name}</Text><br />
+                        <Text strong>{staff?.user?.phone}</Text>
+                    </>,
+                sorter: (a, b) => a?.staff?.user?.full_name.localeCompare(b?.staff?.user?.full_name),
             },
             {
                 title: 'TARGET', dataIndex: 'value',
@@ -121,8 +125,8 @@ class index extends Component {
                 title: 'HĐ', width: 80,
                 render: (_, item) => (
                     <Space size="middle" >
-                        <button disabled={!dataCheckPermis['analytic.view_shopmonthlytarget']} onClick={() => this.openModal('detail', true, item.id)}><AiFillEye /></button>
-                        <button disabled={!dataCheckPermis['analytic.change_shopmonthlytarget']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
+                        <button disabled={!dataCheckPermis['analytic.view_staffmonthlytarget']} onClick={() => this.openModal('detail', true, item.id)}><AiFillEye /></button>
+                        <button disabled={!dataCheckPermis['analytic.change_staffmonthlytarget']} className='cursor-pointer' onClick={() => this.openModal('edit', true, item.id)}>
                             <AiFillEdit />
                         </button>
                     </Space >
@@ -132,9 +136,9 @@ class index extends Component {
         ];
         const { dataCheckPermis, listItemSelected, dataFilter, dropButtonType,
             modalCreate, modalEdit, drawerFilter, modalDetail } = this.state;
-        const { isLoading, dataTargetShops, dataMeta } = this.props;
+        const { isLoading, dataTargetStaffs, dataMeta } = this.props;
         const items = [
-            { key: 1, label: 'Xóa', disabled: !dataCheckPermis['analytic.delete_shopmonthlytarget'] },
+            { key: 1, label: 'Xóa', disabled: !dataCheckPermis['analytic.delete_staffmonthlytarget'] },
         ];
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -145,7 +149,7 @@ class index extends Component {
                 <Spin size='large' spinning={isLoading}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between gap-[10px]'>
-                            <Button disabled={!dataCheckPermis['analytic.add_shopmonthlytarget']}
+                            <Button disabled={!dataCheckPermis['analytic.add_staffmonthlytarget']}
                                 onClick={() => this.openModal("create", true)} className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
                                     <AiOutlinePlus />
@@ -153,7 +157,7 @@ class index extends Component {
                                 </Space>
                             </Button>
                             <div>
-                                <Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên cửa hàng !"
+                                <Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên nhân viên !"
                                     enterButton="Tìm" className='bg-[#0e97ff]' />
                             </div>
                         </div>
@@ -161,7 +165,7 @@ class index extends Component {
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <Space>
                                     <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
-                                    <Button disabled={!dataCheckPermis['analytic.view_shopmonthlytarget']}
+                                    <Button disabled={!dataCheckPermis['analytic.view_staffmonthlytarget']}
                                         onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                         <Space className='text-white dark:text-black'>
                                             <AiFillFilter />
@@ -174,7 +178,7 @@ class index extends Component {
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
                                         <Dropdown.Button
-                                            disabled={!dataCheckPermis['analytic.delete_shopmonthlytarget']}
+                                            disabled={!dataCheckPermis['analytic.delete_staffmonthlytarget']}
                                             menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
                                                 {dropButtonType === 1 && <span>Xóa</span>}
@@ -184,10 +188,10 @@ class index extends Component {
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider>TARGET THÁNG {dayjs(dataFilter?.month).format('MM-YYYY')}</Divider>
+                            <Divider>TARGET NHÂN VIÊN THÁNG {dayjs(dataFilter?.month).format('MM-YYYY')}</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
-                                    columns={columns} dataSource={dataTargetShops} pagination={false}
+                                    columns={columns} dataSource={dataTargetStaffs} pagination={false}
                                     size="middle" bordered scroll={{ x: 700 }} />
                                 <Pagination responsive current={dataFilter.page}
                                     showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
@@ -196,18 +200,18 @@ class index extends Component {
                         </div>
                     </div>
                 </Spin>
-                {modalCreate && dataCheckPermis['analytic.add_shopmonthlytarget'] &&
+                {modalCreate && dataCheckPermis['analytic.add_staffmonthlytarget'] &&
                     <ModalCreate modalCreate={modalCreate}
                         openModal={this.openModal}
                         dataFilter={dataFilter} onChangePage={this.onChangePage} />}
-                {modalDetail && dataCheckPermis['analytic.view_shopmonthlytarget'] &&
+                {modalDetail && dataCheckPermis['analytic.view_staffmonthlytarget'] &&
                     <ModalDetail modalDetail={modalDetail}
                         openModal={this.openModal} />}
-                {modalEdit && dataCheckPermis['analytic.change_shopmonthlytarget'] &&
+                {modalEdit && dataCheckPermis['analytic.change_staffmonthlytarget'] &&
                     <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
-                {drawerFilter && dataCheckPermis['analytic.view_shopmonthlytarget'] &&
+                {drawerFilter && dataCheckPermis['analytic.view_staffmonthlytarget'] &&
                     <DrawerFilter drawerFilter={drawerFilter}
                         openDrawer={this.openDrawer} dataFilter={dataFilter}
                         onChangePage={this.onChangePage} />}
@@ -218,11 +222,11 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataTargetShops: state.targetShop.dataTargetShops,
-        dataTargetShop: state.targetShop.dataTargetShop,
-        dataMeta: state.targetShop.dataMeta,
-        isLoading: state.targetShop.isLoading,
-        isResult: state.targetShop.isResult,
+        dataTargetStaffs: state.targetStaff.dataTargetStaffs,
+        dataTargetStaff: state.targetStaff.dataTargetStaff,
+        dataMeta: state.targetStaff.dataMeta,
+        isLoading: state.targetStaff.isLoading,
+        isResult: state.targetStaff.isResult,
 
         dataUserPermis: state.user.dataUserPermis,
         isSuperUser: state.user.isSuperUser,
@@ -230,11 +234,11 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        getListTargetShop: (dataFilter) => dispatch(actions.getListTargetShopRedux(dataFilter)),
-        getDataTargetShop: (id) => dispatch(actions.getDataTargetShopRedux(id)),
-        editListTargetShop: (id, data) => dispatch(actions.editListTargetShopRedux(id, data)),
-        deleteListTargetShop: (id) => dispatch(actions.deleteListTargetShopRedux(id)),
-        setDataTargetShop: (data) => dispatch(actions.setDataTargetShopRedux(data)),
+        getListTargetStaff: (dataFilter) => dispatch(actions.getListTargetStaffRedux(dataFilter)),
+        getDataTargetStaff: (id) => dispatch(actions.getDataTargetStaffRedux(id)),
+        editListTargetStaff: (id, data) => dispatch(actions.editListTargetStaffRedux(id, data)),
+        deleteListTargetStaff: (id) => dispatch(actions.deleteListTargetStaffRedux(id)),
+        setDataTargetStaff: (data) => dispatch(actions.setDataTargetStaffRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

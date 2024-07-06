@@ -18,7 +18,8 @@ class index extends Component {
                         {this.props.important && <Typography.Text type="danger" strong> *</Typography.Text>}
                     </Typography.Text>
                 </div>
-                <Select style={{ width: this.props.width }} value={this.props.value}
+                <Select style={{ width: this.props.width }} value={this.props.value} showSearch
+                    filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
                     onChange={(event) => this.props.onChangeInput(event, this.props.variable)}
                     options={this.props.options} />
             </div>

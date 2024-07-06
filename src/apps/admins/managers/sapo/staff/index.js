@@ -77,18 +77,14 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'TÊN', dataIndex: ['user', 'full_name'],
-                render: (value) => {
-                    return { children: <Text strong className='text-[#0574b8] dark:text-white'>{value}</Text> }
-                },
-                sorter: (a, b) => a.name.localeCompare(b.name),
+                title: 'TÊN', dataIndex: 'user',
+                render: (user) => <Text strong className='text-[#0574b8] dark:text-white uppercase'>{user?.full_name}</Text>,
+                sorter: (a, b) => a?.user?.full_name.localeCompare(b?.user?.full_name),
             },
             {
-                title: 'SĐT', dataIndex: ['user', 'phone'],
-                render: (value) => {
-                    return { children: <Text strong className='text-[#0574b8] dark:text-white'>{value}</Text> }
-                },
-                sorter: (a, b) => a.name.localeCompare(b.name),
+                title: 'SĐT', dataIndex: 'user',
+                render: (user) => <Text strong className='text-[#0574b8] dark:text-white'>{user?.phone}</Text>,
+                sorter: (a, b) => a?.user?.phone.localeCompare(b?.user?.phone),
             },
             {
                 title: 'HĐ', width: 80,

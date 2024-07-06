@@ -17,13 +17,13 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { getListProductCategory, dataTargetShop } = this.props;
+        const { getListProductCategory, dataTargetStaff } = this.props;
         const { dataFilter } = this.state;
         await getListProductCategory(dataFilter);
-        this.handleDataProductCategorys(dataTargetShop, this.props.dataProductCategorys);
+        this.handleDataProductCategorys(dataTargetStaff, this.props.dataProductCategorys);
     }
-    handleDataProductCategorys = (dataTargetShop, dataProductCategorys) => {
-        const dataTPCs = dataTargetShop?.target_product_category;
+    handleDataProductCategorys = (dataTargetStaff, dataProductCategorys) => {
+        const dataTPCs = dataTargetStaff?.target_product_category;
         const dataPCs = dataProductCategorys.map(category => {
             const targetProduct = dataTPCs.find(product => product.product_category.id === category.id);
             return {
@@ -53,7 +53,7 @@ class index extends Component {
         this.setState({ dataPCs: newDataPcs });
     }
     validationData = (data) => {
-        if (!data.shop) {
+        if (!data.staff) {
             return { mess: "Không được bỏ trống 'Cửa hàng' ", check: false };
         }
         if (!data.month) {
@@ -104,18 +104,18 @@ class index extends Component {
         return newDataTPCs.filter(id => id !== null);
     }
     handleEdit = async () => {
-        const { dataTargetShop, editTargetShop, openModal, getListTargetShop, dataFilter } = this.props;
+        const { dataTargetStaff, editTargetStaff, openModal, getListTargetStaff, dataFilter } = this.props;
         const { dataPCs } = this.state;
-        const result = this.validationData(dataTargetShop);
+        const result = this.validationData(dataTargetStaff);
         if (result.check) {
-            let newDataTargetShop = { ...dataTargetShop }
+            let newDataTargetStaff = { ...dataTargetStaff }
             const newDataTPCIds = await this.handleDataPCs(dataPCs);
-            newDataTargetShop.target_product_category = newDataTPCIds;
-            if (newDataTargetShop?.shop?.id) {
-                newDataTargetShop.shop = newDataTargetShop.shop?.id
+            newDataTargetStaff.target_product_category = newDataTPCIds;
+            if (newDataTargetStaff?.staff?.id) {
+                newDataTargetStaff.staff = newDataTargetStaff.staff?.id
             }
-            await editTargetShop(newDataTargetShop.id, newDataTargetShop);
-            await getListTargetShop(dataFilter);
+            await editTargetStaff(newDataTargetStaff.id, newDataTargetStaff);
+            await getListTargetStaff(dataFilter);
             openModal("edit", false);
         } else {
             message.error(result.mess);
@@ -123,29 +123,29 @@ class index extends Component {
     }
     render() {
         const { Text } = Typography;
-        const { isLoadingTargetShop, isLoadingProductCategory,
-            onChangeTargetShop, modalEdit, openModal, dataTargetShop } = this.props;
+        const { isLoadingTargetStaff, isLoadingProductCategory,
+            onChangeTargetStaff, modalEdit, openModal, dataTargetStaff } = this.props;
         const { dataPCs } = this.state;
         return (
             <Modal title="CHỈNH SỬA" open={modalEdit}
                 onCancel={() => openModal("edit", false)} width={400}
-                maskClosable={!isLoadingTargetShop}
+                maskClosable={!isLoadingTargetStaff}
                 footer={[
                     <ModalFooter openModal={openModal} type={'edit'}
-                        isLoading={isLoadingTargetShop} selectFuncFooterModal={this.handleEdit} />
+                        isLoading={isLoadingTargetStaff} selectFuncFooterModal={this.handleEdit} />
                 ]}>
-                <Spin spinning={isLoadingTargetShop || isLoadingProductCategory}>
+                <Spin spinning={isLoadingTargetStaff || isLoadingProductCategory}>
                     <div className="space-y-[10px]">
-                        <FormInput name={'Tên cửa hàng'} variable={'name'}
-                            value={dataTargetShop?.shop?.name}
-                            important={true} disabled={true} onChangeInput={onChangeTargetShop} />
+                        <FormInput name={'Tên nhân viên'} variable={'name'}
+                            value={dataTargetStaff?.staff?.user?.full_name}
+                            important={true} disabled={true} onChangeInput={onChangeTargetStaff} />
 
                         <div className='space-y-[10px]'>
                             <div className='flex items-center justify-center space-x-[5px]'>
                                 <div className='space-y-[3px]'>
                                     <Text italic strong>Thời gian<Text type="danger" strong> *</Text></Text>
                                     <input disabled className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
-                                        type="month" value={dayjs(dataTargetShop?.month).format('YYYY-MM')} />
+                                        type="month" value={dayjs(dataTargetStaff?.month).format('YYYY-MM')} />
                                 </div>
                                 <div className='space-y-[3px]'>
                                     <Text italic strong>
@@ -154,8 +154,8 @@ class index extends Component {
                                     </Text>
                                     <input className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                         type="number" min="0"
-                                        value={dataTargetShop?.value}
-                                        onChange={(event) => onChangeTargetShop(event.target.value, 'value')} />
+                                        value={dataTargetStaff?.value}
+                                        onChange={(event) => onChangeTargetStaff(event.target.value, 'value')} />
                                 </div>
                             </div>
 
@@ -197,31 +197,31 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataTargetShop: state.targetShop.dataTargetShop,
-        dataTargetShops: state.targetShop.dataTargetShops,
+        dataTargetStaff: state.targetStaff.dataTargetStaff,
+        dataTargetStaffs: state.targetStaff.dataTargetStaffs,
 
-        isLoadingTargetShop: state.targetShop.isLoading,
-        isResultTargetShop: state.targetShop.isResult,
+        isLoadingTargetStaff: state.targetStaff.isLoading,
+        isResultTargetStaff: state.targetStaff.isResult,
 
         dataProductCategorys: state.productCategory.dataProductCategorys,
         isLoadingProductCategory: state.productCategory.isLoading,
         isResultProductCategory: state.productCategory.isResult,
 
-        dataShops: state.shop.dataShops,
-        isLoadingShop: state.shop.isLoading,
-        isResultShop: state.shop.isResult,
+        dataStaffs: state.staff.dataStaffs,
+        isLoadingStaff: state.staff.isLoading,
+        isResultStaff: state.staff.isResult,
 
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        getListTargetShop: (dataFilter) => dispatch(actions.getListTargetShopRedux(dataFilter)),
-        editTargetShop: (id, data) => dispatch(actions.editTargetShopRedux(id, data)),
-        onChangeTargetShop: (id, value) => dispatch(actions.onChangeTargetShopRedux(id, value)),
-        setDataTargetShop: (data) => dispatch(actions.setDataTargetShopRedux(data)),
+        getListTargetStaff: (dataFilter) => dispatch(actions.getListTargetStaffRedux(dataFilter)),
+        editTargetStaff: (id, data) => dispatch(actions.editTargetStaffRedux(id, data)),
+        onChangeTargetStaff: (id, value) => dispatch(actions.onChangeTargetStaffRedux(id, value)),
+        setDataTargetStaff: (data) => dispatch(actions.setDataTargetStaffRedux(data)),
 
         getListProductCategory: (dataFilter) => dispatch(actions.getListProductCategoryRedux(dataFilter)),
-        getListShop: (dataFilter) => dispatch(actions.getListShopRedux(dataFilter)),
+        getListStaff: (dataFilter) => dispatch(actions.getListStaffRedux(dataFilter)),
 
     };
 };

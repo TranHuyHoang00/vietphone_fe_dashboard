@@ -86,12 +86,12 @@ class index extends Component {
     render() {
         const columns = [
             {
-                title: 'Ngày tạo', dataIndex: 'created_at', width: 140, responsive: ['sm'],
+                title: 'NGÀY TẠO', dataIndex: 'created_at', width: 140, responsive: ['sm'],
                 render: (created_at) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{formatDay(created_at)}</Typography.Text>,
                 sorter: (a, b) => a.created_at - b.created_at,
             },
             {
-                title: 'Thông tin KH', dataIndex: 'user',
+                title: 'THÔNG TIN KH', dataIndex: 'user',
                 render: (user, item) =>
                     <div className='flex items-center justify-start gap-x-[5px]'>
                         <Avatar size={60} src={AvatarNone} />
@@ -107,7 +107,7 @@ class index extends Component {
                     </div>
             },
             {
-                title: 'Thông tin ĐH', dataIndex: 'id',
+                title: 'THÔNG TIN ĐH', dataIndex: 'id',
                 render: (id, item) =>
                     <div >
                         {textLine13('Mã ĐH', item.code, 'font-medium')}

@@ -13,7 +13,7 @@ class index extends Component {
     async componentDidMount() {
     }
     render() {
-        const { dataTargetShop, isLoading, modalDetail, openModal } = this.props;
+        const { dataTargetStaff, isLoading, modalDetail, openModal } = this.props;
         return (
             <Modal title="CHI TIẾT" open={modalDetail}
                 onCancel={() => openModal("detail", false)} width={400}
@@ -25,11 +25,11 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {textLine13('Cửa hàng', dataTargetShop?.shop?.name)}
-                        {textLine13('Target', `${formatNumber(dataTargetShop.value)}đ`)}
-                        {textLine13('Thời gian', dataTargetShop.month)}
-                        {dataTargetShop && dataTargetShop.target_product_category && dataTargetShop.target_product_category.length !== 0 &&
-                            dataTargetShop.target_product_category.map((item) => {
+                        {textLine13('Nhân viên', dataTargetStaff?.staff?.user?.full_name)}
+                        {textLine13('Target', `${formatNumber(dataTargetStaff.value)}đ`)}
+                        {textLine13('Thời gian', dataTargetStaff.month)}
+                        {dataTargetStaff && dataTargetStaff.target_product_category && dataTargetStaff.target_product_category.length !== 0 &&
+                            dataTargetStaff.target_product_category.map((item) => {
                                 return (
                                     <div key={item?.id}>
                                         {textLine13(`${item?.product_category?.name}`, `${item?.quantity} cái - ${formatNumber(item?.value)}đ`)}
@@ -46,8 +46,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataTargetShop: state.targetShop.dataTargetShop,
-        isLoading: state.targetShop.isLoading,
+        dataTargetStaff: state.targetStaff.dataTargetStaff,
+        isLoading: state.targetStaff.isLoading,
     };
 };
 const mapDispatchToProps = dispatch => {

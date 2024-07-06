@@ -36,5 +36,6 @@ export * from '@actions/system/darkModeTypes';
 export * from '@actions/target/targetProductCategoryTypes';
 export * from '@actions/target/targetShopTypes';
 export * from '@actions/target/targetStaffTypes';
+export * from '@actions/target/reportTargetTypes';
 // STATISTICAL
 export * from '@actions/statistical/statisticalTypes';

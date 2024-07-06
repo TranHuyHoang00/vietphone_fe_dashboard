@@ -56,7 +56,8 @@ class login extends Component {
             try {
                 let data = await Login(phone, password);
                 if (data && data.data && data.data.success === 1) {
-                    await setDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, data.data.data);
+                    const dataUser = data.data.data;
+                    await setDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, dataUser);
                     setLogin(true);
                     this.props.history.push(`/admin`);
                     window.location.href = '/admin';

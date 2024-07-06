@@ -17,6 +17,8 @@ class index extends Component {
         } = this.props;
         return (
             <Select style={{ width: width }} placement='topRight' mode={mode}
+                showSearch
+                filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
                 onChange={(value) => onChangeSelect(value, variableSelect)}
                 value={value} disabled={disabledSelect}
                 dropdownRender={(menu) => (

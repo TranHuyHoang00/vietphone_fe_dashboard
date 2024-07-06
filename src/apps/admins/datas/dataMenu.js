@@ -9,7 +9,7 @@ import { IoStatsChart, IoBarChartSharp } from "react-icons/io5";
 import { FaUserShield, FaDatabase } from "react-icons/fa6";
 import { FaCcDiscover, FaUserGraduate, FaUserTie } from "react-icons/fa";
 import {
-    BsFillBox2HeartFill, BsCalendar2PlusFill, BsClipboardDataFill, BsAward, BsAndroid2, BsBox2HeartFill,
+    BsFillBox2HeartFill, BsCalendar2PlusFill, BsAward, BsBox2HeartFill,
     BsApple,
 } from "react-icons/bs";
 
@@ -99,8 +99,8 @@ const itemMenuLeftLayoutSider = [
             },
             {
                 key: 'achieve_target', icon: <BsBox2HeartFill />, label: 'Đạt được', children: [
-                    { key: 'achieve/target/overview', icon: <BsClipboardDataFill />, label: 'Tổng quan', title: 'account.view_user' },
-                    { key: 'achieve/target/individual', icon: <BsAndroid2 />, label: 'Cá nhân', title: 'account.view_user' },
+                    { key: 'achieve/target/shop', icon: <AiFillShop />, label: 'Cửa hàng', title: true },
+                    { key: 'achieve/target/staff', icon: <FaUserTie />, label: 'Nhân viên', title: true },
                 ],
             },
         ]

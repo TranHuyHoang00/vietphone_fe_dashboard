@@ -206,7 +206,7 @@ class index extends Component {
                                     onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
                                     <Space className='text-white dark:text-black'>
                                         <AiFillFilter />
-                                        Bộ
+                                        Lọc
                                     </Space>
                                 </Button>
                                 <Button disabled={(!dataCheckPermis['product.view_product'] === false && (listItemSelected && listItemSelected.length > 0)) ? false : true}

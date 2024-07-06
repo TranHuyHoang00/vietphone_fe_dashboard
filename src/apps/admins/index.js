@@ -49,10 +49,8 @@ import ManagerUser from './managers/system/user/index';
 // TARGET
 import SetTargetShop from './managers/target/set/shop/index';
 import SetTargetStaff from './managers/target/set/staff/index';
-// import SetOverviewTarget from './managers/target/set/overview/index';
-// import AchieveIndividualTarget from './managers/target/achieve/individual/index';
-// import AchieveOverviewTarget from './managers/target/achieve/overview/index';
-
+import AchieveTargetShop from './managers/target/achieve/shop/index';
+import AchieveTargetStaff from './managers/target/achieve/staff/index';
 // STATISTICAL
 import StatisticalViewWeb from './managers/statistical/viewWeb/index';
 import StatisticalViewProduct from './managers/statistical/viewProduct/index';
@@ -101,7 +99,7 @@ class index extends Component {
             return items.map(item => {
                 const hasChildren = Array.isArray(item.children) && item.children.length > 0;
                 const filteredChildren = hasChildren ? filterItems(item.children) : false;
-                if (filteredChildren.length > 0 || dataCheckPermis[item.title]) {
+                if (filteredChildren.length > 0 || dataCheckPermis[item.title] || item.title === true) {
                     return { ...item, children: filteredChildren };
                 }
                 return null;
@@ -184,10 +182,20 @@ class index extends Component {
                                         <Route exact path={`${url}manager/website/post/edit/:id`}><EditPost /></Route>}
                                     {dataCheckPermis['post.view_category'] &&
                                         <Route exact path={`${url}manager/website/category_post`}><ManagerCategoryPost /></Route>}
+
                                     {dataCheckPermis['analytic.view_shopmonthlytarget'] &&
                                         <Route exact path={`${url}set/target/shop`}><SetTargetShop /></Route>}
                                     {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
                                         <Route exact path={`${url}set/target/staff`}><SetTargetStaff /></Route>}
+
+                                    {/* {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
+                                        <Route exact path={`${url}achieve/target/shop`}><AchieveTargetShop /></Route>}
+                                    {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
+                                        <Route exact path={`${url}achieve/target/staff`}><AchieveTargetStaff /></Route>} */}
+
+                                    <Route exact path={`${url}achieve/target/shop`}><AchieveTargetShop /></Route>
+                                    <Route exact path={`${url}achieve/target/staff`}><AchieveTargetStaff /></Route>
+
                                     {dataCheckPermis['product.view_sapoproductcategory'] &&
                                         <Route exact path={`${url}manager/sapo/product_category`}><ManagerProductCategory /></Route>}
                                     {dataCheckPermis['shop.view_shop'] &&
@@ -196,11 +204,6 @@ class index extends Component {
                                         <Route exact path={`${url}manager/sapo/staff`}><ManagerStaff /></Route>}
                                     {dataCheckPermis['order.view_order'] &&
                                         <Route exact path={`${url}`}><ManagerOrder /></Route>}
-
-
-                                    {/* <Route exact path={`${url}set/target/overview`}><SetOverviewTarget /></Route>
-                                    <Route exact path={`${url}achieve/target/individual`}><AchieveIndividualTarget /></Route> */}
-                                    {/* <Route exact path={`${url}achieve/target/overview`}><AchieveOverviewTarget /></Route> */}
 
 
                                     {dataCheckPermis['sync.view_sync'] &&

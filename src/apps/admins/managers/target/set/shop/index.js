@@ -184,7 +184,7 @@ class index extends Component {
                                     </Popconfirm>
                                 </div>
                             </div>
-                            <Divider>TARGET THÁNG {dayjs(dataFilter?.month).format('MM-YYYY')}</Divider>
+                            <Divider>TARGET CỬA HÀNG THÁNG {dayjs(dataFilter?.month).format('MM-YYYY')}</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={dataTargetShops} pagination={false}

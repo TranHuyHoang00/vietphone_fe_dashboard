@@ -7,32 +7,32 @@ import ModalFooter from '@components/modals/modalFooter';
 import dayjs from 'dayjs';
 import { createTargetProductCategory } from '@services/target/targetProductCategoryServices';
 import { showNotification } from '@utils/handleFuncNotification';
-import { getListTargetShop } from '@services/target/targetShopServices';
+import { getListTargetStaff } from '@services/target/targetStaffServices';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
             dataFilter: { page: 1, limit: 100, search: '' },
             dataTPCs: [],
-            newDataShops: [],
-            listSelectedShopId: [],
+            newDataStaffs: [],
+            listSelectedStaffId: [],
         }
     }
     async componentDidMount() {
-        const { getListProductCategory, getListShop, setDataTargetShop } = this.props;
+        const { getListProductCategory, getListStaff, setDataTargetStaff } = this.props;
         const { dataFilter } = this.state;
         await getListProductCategory(dataFilter);
-        await getListShop(dataFilter);
-        await setDataTargetShop({ month: this.props.dataFilter.month });
-        await this.handleGetListTargetShop({ page: 1, limit: 100, month: this.props.dataFilter.month });
+        await getListStaff(dataFilter);
+        await setDataTargetStaff({ month: this.props.dataFilter.month });
+        await this.handleGetListTargetStaff({ page: 1, limit: 100, month: this.props.dataFilter.month });
     }
-    handleGetListTargetShop = async (dataFilter) => {
+    handleGetListTargetStaff = async (dataFilter) => {
         try {
-            const data = await getListTargetShop(dataFilter);
-            const { dataShops } = this.props;
+            const data = await getListTargetStaff(dataFilter);
+            const { dataStaffs } = this.props;
             if (data && data.data && data.data.success === 1) {
-                const dataTargetShops = data.data.data.shop_monthly_target;
-                this.getDataShops(dataShops, dataTargetShops);
+                const dataTargetStaffs = data.data.data.staff_monthly_target;
+                this.getDataStaffs(dataStaffs, dataTargetStaffs);
             }
         } catch (error) {
             console.warn(error);
@@ -58,8 +58,8 @@ class index extends Component {
         }
     }
     validationData = (data) => {
-        const { listSelectedShopId } = this.state;
-        if (listSelectedShopId && listSelectedShopId.length === 0) {
+        const { listSelectedStaffId } = this.state;
+        if (listSelectedStaffId && listSelectedStaffId.length === 0) {
             return { mess: "Không được bỏ trống 'Cửa hàng' ", check: false };
         }
         if (!data.month) {
@@ -89,24 +89,24 @@ class index extends Component {
         return newDataTPCs;
     }
     handleCreate = async () => {
-        const { dataTargetShop, createTargetShop, openModal, getListTargetShop, dataFilter
+        const { dataTargetStaff, createTargetStaff, openModal, getListTargetStaff, dataFilter
         } = this.props;
         const { dataTPCs } = this.state;
-        const result = this.validationData(dataTargetShop);
+        const result = this.validationData(dataTargetStaff);
         if (result.check) {
-            let newDataTargetShop = { ...dataTargetShop }
-            const { listSelectedShopId } = this.state;
+            let newDataTargetStaff = { ...dataTargetStaff }
+            const { listSelectedStaffId } = this.state;
             if (dataTPCs && dataTPCs.length !== 0) {
                 const newDataTPCIds = await this.handleDataTPCs(dataTPCs);
-                newDataTargetShop.target_product_category = newDataTPCIds;
+                newDataTargetStaff.target_product_category = newDataTPCIds;
             }
-            const promises = listSelectedShopId.map(async shopId => {
-                newDataTargetShop.shop = shopId;
-                return createTargetShop(newDataTargetShop);
+            const promises = listSelectedStaffId.map(async staffId => {
+                newDataTargetStaff.staff = staffId;
+                return createTargetStaff(newDataTargetStaff);
             });
             await Promise.all(promises);
             message.success('Thành công');
-            await getListTargetShop(dataFilter);
+            await getListTargetStaff(dataFilter);
             openModal("create", false);
         } else {
             message.error(result.mess);
@@ -124,45 +124,45 @@ class index extends Component {
                 break;
         }
     }
-    getDataShops = (dataShops, dataTargetShops) => {
-        let targetShopIds = dataTargetShops.map(item => item?.shop?.id);
-        const newDataShops = dataShops.filter(shop => !targetShopIds.includes(shop?.id));
-        this.setState({ newDataShops: newDataShops })
+    getDataStaffs = (dataStaffs, dataTargetStaffs) => {
+        let targetStaffIds = dataTargetStaffs.map(item => item?.staff?.id);
+        const newDataStaffs = dataStaffs.filter(staff => !targetStaffIds.includes(staff?.id));
+        this.setState({ newDataStaffs: newDataStaffs })
     }
     onChangeTime = async (value) => {
-        const { onChangeTargetShop, onChangePage } = this.props;
+        const { onChangeTargetStaff, onChangePage } = this.props;
         await onChangePage(value, 'month');
-        await onChangeTargetShop(value, 'month');
-        await this.handleGetListTargetShop({ page: 1, limit: 100, month: value });
+        await onChangeTargetStaff(value, 'month');
+        await this.handleGetListTargetStaff({ page: 1, limit: 100, month: value });
     }
     handleOnChangeSelect = (value) => {
-        this.setState({ listSelectedShopId: value });
+        this.setState({ listSelectedStaffId: value });
     };
     render() {
         const { Text } = Typography;
-        const { isLoadingTargetShop, isLoadingProductCategory, isLoadingShop,
-            onChangeTargetShop, modalCreate, openModal,
-            dataTargetShop, dataProductCategorys, dataFilter
+        const { isLoadingTargetStaff, isLoadingProductCategory, isLoadingStaff,
+            onChangeTargetStaff, modalCreate, openModal,
+            dataTargetStaff, dataProductCategorys, dataFilter
         } = this.props;
-        const { newDataShops } = this.state;
+        const { newDataStaffs } = this.state;
         return (
 
             <Modal title="TẠO MỚI" open={modalCreate}
                 onCancel={() => openModal("create", false)} width={500}
-                maskClosable={!isLoadingTargetShop}
+                maskClosable={!isLoadingTargetStaff}
                 footer={[
                     <ModalFooter openModal={openModal} type={'create'}
-                        isLoading={isLoadingTargetShop} selectFuncFooterModal={this.handleCreate} />
+                        isLoading={isLoadingTargetStaff} selectFuncFooterModal={this.handleCreate} />
                 ]}>
-                <Spin spinning={isLoadingTargetShop || isLoadingProductCategory || isLoadingShop}>
+                <Spin spinning={isLoadingTargetStaff || isLoadingProductCategory || isLoadingStaff}>
                     <div className="space-y-[10px]">
                         <div className='space-y-[3px]'>
-                            <Text italic strong>Cửa hàng<Text type="danger" strong> *</Text></Text>
+                            <Text italic strong>Nhân viên<Text type="danger" strong> *</Text></Text>
                             <Select mode="multiple" allowClear style={{ width: '100%' }} showSearch
                                 filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
                                 onChange={(value) => this.handleOnChangeSelect(value)}
-                                options={newDataShops && newDataShops.map((item) => ({
-                                    label: item.name,
+                                options={newDataStaffs && newDataStaffs.map((item) => ({
+                                    label: item?.user.full_name,
                                     value: item.id,
                                 }))}
                             />
@@ -186,8 +186,8 @@ class index extends Component {
                                     <input onKeyPress={(event) => { if (!/[0-9]/.test(event.key)) { event.preventDefault(); } }}
                                         className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                         type="number" min="0"
-                                        value={dataTargetShop?.value}
-                                        onChange={(event) => onChangeTargetShop(event.target.value, 'value')} />
+                                        value={dataTargetStaff?.value}
+                                        onChange={(event) => onChangeTargetStaff(event.target.value, 'value')} />
                                 </div>
                             </div>
                             <Collapse size='small'>
@@ -228,30 +228,30 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataTargetShop: state.targetShop.dataTargetShop,
-        dataTargetShops: state.targetShop.dataTargetShops,
+        dataTargetStaff: state.targetStaff.dataTargetStaff,
+        dataTargetStaffs: state.targetStaff.dataTargetStaffs,
 
-        isLoadingTargetShop: state.targetShop.isLoading,
-        isResultTargetShop: state.targetShop.isResult,
+        isLoadingTargetStaff: state.targetStaff.isLoading,
+        isResultTargetStaff: state.targetStaff.isResult,
 
         dataProductCategorys: state.productCategory.dataProductCategorys,
         isLoadingProductCategory: state.productCategory.isLoading,
         isResultProductCategory: state.productCategory.isResult,
 
-        dataShops: state.shop.dataShops,
-        isLoadingShop: state.shop.isLoading,
-        isResultShop: state.shop.isResult,
+        dataStaffs: state.staff.dataStaffs,
+        isLoadingStaff: state.staff.isLoading,
+        isResultStaff: state.staff.isResult,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        getListTargetShop: (dataFilter) => dispatch(actions.getListTargetShopRedux(dataFilter)),
-        createTargetShop: (data) => dispatch(actions.createTargetShopRedux(data)),
-        onChangeTargetShop: (id, value) => dispatch(actions.onChangeTargetShopRedux(id, value)),
-        setDataTargetShop: (data) => dispatch(actions.setDataTargetShopRedux(data)),
+        getListTargetStaff: (dataFilter) => dispatch(actions.getListTargetStaffRedux(dataFilter)),
+        createTargetStaff: (data) => dispatch(actions.createTargetStaffRedux(data)),
+        onChangeTargetStaff: (id, value) => dispatch(actions.onChangeTargetStaffRedux(id, value)),
+        setDataTargetStaff: (data) => dispatch(actions.setDataTargetStaffRedux(data)),
 
         getListProductCategory: (dataFilter) => dispatch(actions.getListProductCategoryRedux(dataFilter)),
-        getListShop: (dataFilter) => dispatch(actions.getListShopRedux(dataFilter)),
+        getListStaff: (dataFilter) => dispatch(actions.getListStaffRedux(dataFilter)),
 
     };
 };
