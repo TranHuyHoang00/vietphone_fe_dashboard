@@ -18,6 +18,8 @@ const handleCheckPermis = (dataOriginalPermis, dataUserPermis, isSuperUser) => {
                 }
             }
         }
+    } else {
+        return {};
     }
     return dataCheckPermis;
 

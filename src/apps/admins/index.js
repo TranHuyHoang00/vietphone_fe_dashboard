@@ -78,7 +78,7 @@ class index extends Component {
     checkPermis = async () => {
         const { dataUserPermis, isSuperUser } = this.props;
         const dataCheckPermis = await handleCheckPermis(dataPermiViews, dataUserPermis, isSuperUser);
-        this.setState({ dataCheckPermis: dataCheckPermis, });
+        if (dataCheckPermis) { this.setState({ dataCheckPermis: dataCheckPermis }); }
     }
     setCollapsed = () => {
         const { collapsed } = this.state;
@@ -202,6 +202,7 @@ class index extends Component {
                                         <Route exact path={`${url}manager/sapo/shop`}><ManagerShop /></Route>}
                                     {dataCheckPermis['account.view_staff'] &&
                                         <Route exact path={`${url}manager/sapo/staff`}><ManagerStaff /></Route>}
+
                                     {dataCheckPermis['order.view_order'] &&
                                         <Route exact path={`${url}`}><ManagerOrder /></Route>}
 

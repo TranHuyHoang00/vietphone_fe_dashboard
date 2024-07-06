@@ -265,7 +265,7 @@ class index extends Component {
                         title: 'NHÂN VIÊN', dataIndex: ['staff', 'name'],
                         render: (value) => {
                             return {
-                                children: <Text size strong className='text-[#0574b8] dark:text-white uppercase'>{value}</Text>,
+                                children: <Text strong className='text-[#0574b8] dark:text-white uppercase'>{value}</Text>,
                                 __style__: { color: '0574b8' }, bold: true,
                             };
                         },
