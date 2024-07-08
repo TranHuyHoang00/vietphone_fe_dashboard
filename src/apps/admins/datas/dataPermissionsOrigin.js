@@ -1,4 +1,4 @@
-
+// VIEW ALL
 const dataPermiViews = [
     "statistical.view_web", "statistical.view_product",
     "order.view_order",
@@ -16,24 +16,12 @@ const dataPermiViews = [
     "account.view_staff",
     "sync.view_sync", "task.view_task",
 ];
-const dataCustomers = [
-    "account.view_customer", "account.change_customer", "account.delete_customer", "account.add_customer",
-];
-const dataUsers = [
-    "account.view_user", "account.change_user", "account.delete_user", "account.add_user",
-    "group.view_group",
-];
-const dataGroups = [
-    "group.view_group", "group.change_group", "group.delete_group", "group.add_group",
-];
+// WEBSITE
 const dataOrders = [
     "order.view_order", "order.change_order", "order.delete_order", "order.add_order",
 ];
 const dataProducts = [
     "product.view_product", "product.change_product", "product.delete_product", "product.add_product",
-];
-const dataComments = [
-    "product.view_comment", "product.change_comment", "product.delete_comment", "product.add_comment",
 ];
 const dataFlashSaleItems = [
     "promotion.view_flashsaleitem", "promotion.change_flashsaleitem", "promotion.delete_flashsaleitem", "promotion.add_flashsaleitem",
@@ -77,47 +65,65 @@ const dataBrands = [
 const dataCategorys = [
     "product.view_category", "product.change_category", "product.delete_category", "product.add_category",
 ];
-const dataShops = [
-    "shop.view_shop", "shop.change_shop", "shop.delete_shop", "shop.add_shop",
-];
 const dataPosts = [
     "post.view_post", "post.change_post", "post.delete_post", "post.add_post",
 ];
 const dataCategoryPosts = [
     "post.view_category", "post.change_category", "post.delete_category", "post.add_category",
 ];
-const dataTargetShops = [
-    "analytic.view_shopmonthlytarget", "analytic.change_shopmonthlytarget", "analytic.delete_shopmonthlytarget", "analytic.add_shopmonthlytarget",
-]
-const dataTargetStaffs = [
-    "analytic.view_staffmonthlytarget", "analytic.change_staffmonthlytarget", "analytic.delete_staffmonthlytarget", "analytic.add_staffmonthlytarget",
-]
+// SAPO
+const dataShops = [
+    "shop.view_shop", "shop.change_shop", "shop.delete_shop", "shop.add_shop",
+];
 const dataProductCategorys = [
     "product.view_sapoproductcategory", "product.delete_sapoproductcategory", "product.change_sapoproductcategory", "product.add_sapoproductcategory"
 ]
 const dataStaffs = [
     "account.view_staff", "account.change_staff", "account.delete_staff", "account.add_staff",
 ];
+const dataCustomers = [
+    "account.view_customer", "account.change_customer", "account.delete_customer", "account.add_customer",
+];
+// TARGET
+const dataTargetShops = [
+    "analytic.view_shopmonthlytarget", "analytic.change_shopmonthlytarget", "analytic.delete_shopmonthlytarget", "analytic.add_shopmonthlytarget",
+]
+const dataTargetStaffs = [
+    "analytic.view_staffmonthlytarget", "analytic.change_staffmonthlytarget", "analytic.delete_staffmonthlytarget", "analytic.add_staffmonthlytarget",
+]
+// SYSTEM
 const dataSyncs = [
     "sync.view_task", "sync.change_sync", "sync.delete_sync", "sync.add_sync",
 ];
 const dataTasks = [
     "task.view_task", "task.change_task", "task.delete_task", "task.add_task",
 ];
-
+const dataUsers = [
+    "account.view_user", "account.change_user", "account.delete_user", "account.add_user",
+    "group.view_group",
+];
+const dataGroups = [
+    "group.view_group", "group.change_group", "group.delete_group", "group.add_group",
+];
 export {
+    // VIEW ALL
     dataPermiViews,
-    dataCustomers, dataUsers, dataGroups,
+    // WEBSITE
     dataOrders,
     dataProducts, dataFlashSaleItems,
-    dataComments,
     dataPromotions, dataFlashSales,
     dataWarrantys, dataRepairs,
     dataBanners, dataLocations,
     dataAttributeValues, dataAttributes, dataGroupAttributes, dataVariantAttributeGroups,
-    dataTags, dataBrands, dataCategorys, dataShops,
+    dataTags, dataBrands, dataCategorys,
     dataPosts, dataCategoryPosts,
-    dataTargetShops, dataProductCategorys, dataStaffs,
-    dataTargetStaffs,
+    // SAPO
+    dataShops, dataProductCategorys, dataStaffs, dataCustomers,
+    // TARGET
+    dataTargetShops, dataTargetStaffs,
+    // SYSTEM
     dataSyncs, dataTasks,
+    dataUsers, dataGroups,
+
+
 }

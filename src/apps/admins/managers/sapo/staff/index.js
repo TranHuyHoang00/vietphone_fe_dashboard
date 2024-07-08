@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown
+    Spin, Pagination, Typography, Dropdown, Tag
 } from 'antd';
-import { AiFillEdit, AiFillEye, AiOutlinePlus } from "react-icons/ai";
+import { AiFillEdit, AiFillEye, AiOutlinePlus, AiFillFilter } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import ModalDetail from './modals/modalDetail';
 import ModalEdit from './modals/modalEdit';
+import DrawerFilter from './drawers/drawerFilter';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataStaffs } from '@datas/dataPermissionsOrigin';
 import { handleOnChangePage } from '@utils/handleFuncPage';
@@ -25,10 +26,12 @@ class index extends Component {
             modalDetail: false,
             modalCreate: false,
             modalEdit: false,
+            drawerFilter: false,
             dataFilter: {
                 page: 1,
                 limit: 5,
-                search: ''
+                search: '',
+                status: 'active',
             },
             dataCheckPermis: {},
         }
@@ -69,6 +72,15 @@ class index extends Component {
         this.setState({ dataFilter: newDataFilter });
         await getListStaff(newDataFilter);
     }
+    openDrawer = async (drawerName, drawerValue) => {
+        switch (drawerName) {
+            case 'filter':
+                this.setState({ drawerFilter: drawerValue });
+                break;
+            default:
+                return;
+        }
+    }
     render() {
         const { Text } = Typography;
         const columns = [
@@ -77,14 +89,18 @@ class index extends Component {
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'TÊN', dataIndex: 'user',
-                render: (user) => <Text strong className='text-[#0574b8] dark:text-white uppercase'>{user?.full_name}</Text>,
-                sorter: (a, b) => a?.user?.full_name.localeCompare(b?.user?.full_name),
+                title: 'TÊN', dataIndex: 'name',
+                render: (name) => <Text strong className='text-[#0574b8] dark:text-white uppercase'>{name}</Text>,
+                sorter: (a, b) => a?.name.localeCompare(b?.name),
             },
             {
-                title: 'SĐT', dataIndex: 'user',
-                render: (user) => <Text strong className='text-[#0574b8] dark:text-white'>{user?.phone}</Text>,
-                sorter: (a, b) => a?.user?.phone.localeCompare(b?.user?.phone),
+                title: 'SĐT', dataIndex: 'phone_number',
+                render: (phone_number) => <Text strong className='text-[#0574b8] dark:text-white'>{phone_number}</Text>,
+                sorter: (a, b) => a?.phone_number.localeCompare(b?.phone_number),
+            },
+            {
+                title: 'STATUS', dataIndex: 'status', width: 70, responsive: ['md'],
+                render: (status) => <>{status === "active" ? <Tag color='green'>Mở</Tag> : <Tag color='red'>Khóa</Tag>}</>
             },
             {
                 title: 'HĐ', width: 80,
@@ -100,7 +116,7 @@ class index extends Component {
                 ),
             },
         ];
-        const { dataCheckPermis, listItemSelected, dataFilter, dropButtonType,
+        const { dataCheckPermis, listItemSelected, dataFilter, dropButtonType, drawerFilter,
             modalCreate, modalDetail, modalEdit } = this.state;
         const { isLoading, dataStaffs, dataMeta } = this.props;
         const items = [
@@ -126,6 +142,15 @@ class index extends Component {
                                         Tạo
                                     </Space>
                                 </Button>
+                                <Space>
+                                    <Button disabled={!dataCheckPermis['account.view_staff']}
+                                        onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                        <Space className='text-white dark:text-black'>
+                                            <AiFillFilter />
+                                            Lọc
+                                        </Space>
+                                    </Button>
+                                </Space>
                             </div>
                             <div><Input.Search onSearch={(value) => this.onChangePage(value, 'search')} placeholder="Tên nhân viên !" /></div>
                         </div>
@@ -173,6 +198,10 @@ class index extends Component {
                     <ModalEdit modalEdit={modalEdit}
                         openModal={this.openModal}
                         dataFilter={dataFilter} />}
+                {drawerFilter && dataCheckPermis['account.view_staff'] &&
+                    <DrawerFilter drawerFilter={drawerFilter}
+                        openDrawer={this.openDrawer} dataFilter={dataFilter}
+                        onChangePage={this.onChangePage} />}
             </>
         );
     }

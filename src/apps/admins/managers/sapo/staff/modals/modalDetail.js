@@ -24,8 +24,9 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {textLine13('Tên nhân viên', dataStaff?.user?.full_name)}
-                        {textLine13('Số điện thoại', dataStaff?.user?.phone)}
+                        {textLine13('Tên nhân viên', dataStaff?.name)}
+                        {textLine13('Số điện thoại', dataStaff?.phone_number)}
+                        {textLine13('Trạng thái', (dataStaff?.status === "active") ? "Mở" : "Khóa")}
                     </div>
                 </Spin>
             </Modal>

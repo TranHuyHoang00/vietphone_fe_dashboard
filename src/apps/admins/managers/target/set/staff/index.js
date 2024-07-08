@@ -94,10 +94,10 @@ class index extends Component {
                 title: 'NHÂN VIÊN', dataIndex: 'staff',
                 render: (staff) =>
                     <>
-                        <Text strong className='text-[#0574b8] dark:text-white uppercase'>{staff?.user?.full_name}</Text><br />
-                        <Text strong>{staff?.user?.phone}</Text>
+                        <Text strong className='text-[#0574b8] dark:text-white uppercase'>{staff?.name}</Text><br />
+                        <Text strong>{staff?.phone_number}</Text>
                     </>,
-                sorter: (a, b) => a?.staff?.user?.full_name.localeCompare(b?.staff?.user?.full_name),
+                sorter: (a, b) => a?.staff?.name.localeCompare(b?.staff?.name),
             },
             {
                 title: 'TARGET', dataIndex: 'value',

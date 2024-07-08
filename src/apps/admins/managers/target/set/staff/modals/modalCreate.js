@@ -22,7 +22,7 @@ class index extends Component {
         const { getListProductCategory, getListStaff, setDataTargetStaff } = this.props;
         const { dataFilter } = this.state;
         await getListProductCategory(dataFilter);
-        await getListStaff(dataFilter);
+        await getListStaff({ page: 1, limit: 100, status: 'active' });
         await setDataTargetStaff({ month: this.props.dataFilter.month });
         await this.handleGetListTargetStaff({ page: 1, limit: 100, month: this.props.dataFilter.month });
     }
@@ -162,7 +162,7 @@ class index extends Component {
                                 filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
                                 onChange={(value) => this.handleOnChangeSelect(value)}
                                 options={newDataStaffs && newDataStaffs.map((item) => ({
-                                    label: item?.user.full_name,
+                                    label: item?.name,
                                     value: item.id,
                                 }))}
                             />

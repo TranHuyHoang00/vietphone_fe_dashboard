@@ -137,7 +137,7 @@ class index extends Component {
                 <Spin spinning={isLoadingTargetStaff || isLoadingProductCategory}>
                     <div className="space-y-[10px]">
                         <FormInput name={'Tên nhân viên'} variable={'name'}
-                            value={dataTargetStaff?.staff?.user?.full_name}
+                            value={dataTargetStaff?.staff?.name}
                             important={true} disabled={true} onChangeInput={onChangeTargetStaff} />
 
                         <div className='space-y-[10px]'>

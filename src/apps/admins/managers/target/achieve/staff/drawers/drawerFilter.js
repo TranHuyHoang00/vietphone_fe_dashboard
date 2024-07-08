@@ -93,7 +93,7 @@ class index extends Component {
                                 filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
                                 onChange={(value) => this.onChangeTypeActive(value, 'listId')}
                                 options={dataStaffs && dataStaffs.map((item) => ({
-                                    label: item?.user.full_name,
+                                    label: item?.name,
                                     value: item.id,
                                 }))}
                             />

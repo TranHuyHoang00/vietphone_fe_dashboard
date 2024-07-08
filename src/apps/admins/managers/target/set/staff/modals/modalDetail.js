@@ -25,7 +25,7 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {textLine13('Nhân viên', dataTargetStaff?.staff?.user?.full_name)}
+                        {textLine13('Nhân viên', dataTargetStaff?.staff?.name)}
                         {textLine13('Target', `${formatNumber(dataTargetStaff.value)}đ`)}
                         {textLine13('Thời gian', dataTargetStaff.month)}
                         {dataTargetStaff && dataTargetStaff.target_product_category && dataTargetStaff.target_product_category.length !== 0 &&

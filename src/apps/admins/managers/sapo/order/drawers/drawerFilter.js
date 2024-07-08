@@ -7,7 +7,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataFilter: { page: 1, limit: 100, search: '' },
+            dataFilter: { page: 1, limit: 100, search: '', status: 'active' },
         }
     }
     async componentDidMount() {
@@ -47,7 +47,7 @@ class index extends Component {
                                     { label: 'Bỏ trống', value: '' },
                                     ...dataStaffs && dataStaffs
                                         .map((item) => ({
-                                            label: item?.user?.full_name,
+                                            label: item?.name,
                                             value: item.id,
                                         })),
                                 ]} />
@@ -64,7 +64,7 @@ class index extends Component {
                                     { label: 'Bỏ trống', value: '' },
                                     ...dataStaffs && dataStaffs
                                         .map((item) => ({
-                                            label: item?.user?.full_name,
+                                            label: item?.name,
                                             value: item.id,
                                         })),
                                 ]} />

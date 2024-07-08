@@ -35,7 +35,7 @@ class index extends Component {
         const { getListProductCategory, getListStaff, getAllReportTargetStaff } = this.props;
         await getAllReportTargetStaff(dataFilter);
         await getListProductCategory({ page: 1, limit: 50 });
-        await getListStaff({ page: 1, limit: 100 });
+        await getListStaff({ page: 1, limit: 100, status: 'active' });
     }
     openDrawer = async (drawerName, drawerValue) => {
         switch (drawerName) {

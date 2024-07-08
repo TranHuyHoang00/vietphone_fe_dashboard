@@ -83,7 +83,7 @@ class index extends Component {
             },
             {
                 title: 'ĐỊA CHỈ', dataIndex: 'address', responsive: ['lg'],
-                sorter: (a, b) => a.name.localeCompare(b.name),
+                sorter: (a, b) => a.address.localeCompare(b.address),
             },
             {
                 title: 'ẢNH', dataIndex: 'image', responsive: ['md'], width: 60,
