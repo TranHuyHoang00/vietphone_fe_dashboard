@@ -56,7 +56,7 @@ class index extends Component {
         }
     }
     render() {
-        const { openDrawer, drawerFilter, handleFilter, dataStaffs } = this.props;
+        const { openDrawer, drawerFilter, handleFilter, dataShops } = this.props;
         const { dataFilter, typeActive } = this.state;
         return (
             <Drawer title="Bộ lọc" onClose={() => openDrawer('filter', false)} open={drawerFilter}>
@@ -86,14 +86,14 @@ class index extends Component {
                     {typeActive?.typeView === "individual" &&
                         <div className='space-y-[2px]'>
                             <Typography.Text strong>
-                                Danh sách nhân viên
+                                Danh sách cửa hàng
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
                             <Select mode="multiple" allowClear style={{ width: '100%' }} showSearch
                                 value={typeActive?.listId}
                                 filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
                                 onChange={(value) => this.onChangeTypeActive(value, 'listId')}
-                                options={dataStaffs && dataStaffs.map((item) => ({
+                                options={dataShops && dataShops.map((item) => ({
                                     label: item?.name,
                                     value: item.id,
                                 }))}

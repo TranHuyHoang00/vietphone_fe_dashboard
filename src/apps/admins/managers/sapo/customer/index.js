@@ -69,17 +69,17 @@ class index extends Component {
         const columns = [
             {
                 title: 'Mã KH', dataIndex: 'code', width: 120, responsive: ['sm'],
-                render: (code) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{code}</Typography.Text>,
+                render: (code) => <Text strong className='text-[#0574b8] dark:text-white'>{code}</Text>,
                 sorter: (a, b) => a.code - b.code,
             },
             {
                 title: 'TÊN', dataIndex: 'user',
-                render: (user) => <Typography.Text >{user?.full_name}</Typography.Text>,
+                render: (user) => <Text >{user?.full_name}</Text>,
                 sorter: (a, b) => a?.user?.full_name.localeCompare(b?.user?.full_name),
             },
             {
                 title: 'SĐT', dataIndex: 'user',
-                render: (user) => <Typography.Text >{user?.phone}</Typography.Text>,
+                render: (user) => <Text >{user?.phone}</Text>,
                 sorter: (a, b) => a?.user?.phone.localeCompare(b?.user?.phone),
             },
             {

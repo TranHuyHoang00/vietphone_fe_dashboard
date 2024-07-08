@@ -3,22 +3,24 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
-    Table, Space, Button,
+    Table, Space, Button, Dropdown,
     Spin, Typography, message,
     Divider,
 } from 'antd';
 import { AiFillFilter } from "react-icons/ai";
+import { FaFileExport } from "react-icons/fa";
 import { formatNumber } from '@utils/handleFuncFormat';
 import dayjs from 'dayjs';
 import DrawerFilter from './drawers/drawerFilter';
+import { exportTableAntdToExcel, exportTableAntdToImage } from '@utils/handleFuncExport'
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
             drawerFilter: false,
             dataFilter: {
-                start_time: dayjs().startOf('month').format("YYYY-MM-DD HH:mm:ss"),
-                end_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
+                start: dayjs().startOf('month').format("YYYY-MM-DD HH:mm:ss"),
+                end: dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss'),
             },
             typeActive: {
                 typeTable: 'overview',
@@ -32,15 +34,16 @@ class index extends Component {
     }
     async componentDidMount() {
         const { dataFilter } = this.state;
-        const { getListProductCategory, getListStaff, getAllReportTargetStaff } = this.props;
+        const { getListProductCategory, getAllReportTargetStaff } = this.props;
         await getAllReportTargetStaff(dataFilter);
         await getListProductCategory({ page: 1, limit: 50 });
-        await getListStaff({ page: 1, limit: 100, status: 'active' });
     }
     openDrawer = async (drawerName, drawerValue) => {
+        const { getListStaff } = this.props;
         switch (drawerName) {
             case 'filter':
                 this.setState({ drawerFilter: drawerValue });
+                await getListStaff({ page: 1, limit: 100, status: 'active' });
                 break;
             default:
                 return;
@@ -51,7 +54,7 @@ class index extends Component {
         const { classTrue, classFalse } = this.state;
         const newDataPCs = dataProductCategorys.map((product) => {
             const saleProduct = datas?.revenue?.product_sales.find((sale) => sale.category === product.name);
-            const targetProduct = datas?.target_product_category.find((target) => target?.product_category?.name === product.name);
+            const targetProduct = datas?.staff_monthly_target?.target_product_category.find((target) => target?.product_category?.name === product.name);
             const dailyProduct = datas?.daily?.product_sales.find((daily) => daily.category === product.name);
             return {
                 ...product,
@@ -98,22 +101,29 @@ class index extends Component {
         }
         if (columnName === 'targetMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='flex items-center justify-between' key={index}>
-                    <div className='border px-[2px] py-[2px] w-1/3'>
-                        {item?.target?.quantity > 0 ?
-                            <span className={classTrue}>
-                                {item?.target?.quantity} cái
-                            </span> : <span>-</span>
-                        }
-                    </div>
-                    <div className='border px-[2px] py-[2px] w-2/3'>
-                        {item?.target?.value > 0 ?
-                            <span className={classTrue}>
-                                {formatNumber(item?.target?.value)} đ
-                            </span> : <span>-</span>
-                        }
-                    </div>
+                <div className='border px-[2px] py-[2px]' key={index}>
+                    {item?.target?.quantity > 0 ?
+                        <span className={classTrue}>
+                            {item?.target?.quantity} cái
+                        </span> : <span>-</span>
+                    }
                 </div>
+                // <div className='flex items-center justify-between' key={index}>
+                //     <div className='border px-[2px] py-[2px] w-1/3'>
+                //         {item?.target?.quantity > 0 ?
+                //             <span className={classTrue}>
+                //                 {item?.target?.quantity} cái
+                //             </span> : <span>-</span>
+                //         }
+                //     </div>
+                //     <div className='border px-[2px] py-[2px] w-2/3'>
+                //         {item?.target?.value > 0 ?
+                //             <span className={classTrue}>
+                //                 {formatNumber(item?.target?.value)} đ
+                //             </span> : <span>-</span>
+                //         }
+                //     </div>
+                // </div>
             ));
         }
         if (columnName === 'achievedMonth') {
@@ -130,26 +140,32 @@ class index extends Component {
         }
         if (columnName === 'remainingMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='flex items-center justify-between' key={index}>
-                    <div className='border px-[2px] py-[2px] w-1/3'>
-                        {displayValueProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity, 'cái')}
-                    </div>
-                    <div className='border px-[2px] py-[2px] w-2/3'>
-                        {displayValueProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value, 'đ')}
-                    </div>
+                <div className='border px-[2px] py-[2px]' key={index}>
+                    {displayValueProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity, 'cái')}
                 </div>
+                // <div className='flex items-center justify-between' key={index}>
+                //     <div className='border px-[2px] py-[2px] w-1/3'>
+                //         {displayValueProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity, 'cái')}
+                //     </div>
+                //     <div className='border px-[2px] py-[2px] w-2/3'>
+                //         {displayValueProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value, 'đ')}
+                //     </div>
+                // </div>
             ));
         }
         if (columnName === 'statusMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='flex items-center justify-between' key={index}>
-                    <div className='border px-[2px] py-[2px] w-1/2'>
-                        {displayStatusProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity)}
-                    </div>
-                    <div className='border px-[2px] py-[2px] w-1/2'>
-                        {displayStatusProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value)}
-                    </div>
+                <div className='border px-[2px] py-[2px]' key={index}>
+                    {displayStatusProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity)}
                 </div>
+                // <div className='flex items-center justify-between' key={index}>
+                //     <div className='border px-[2px] py-[2px] w-1/2'>
+                //         {displayStatusProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity)}
+                //     </div>
+                //     <div className='border px-[2px] py-[2px] w-1/2'>
+                //         {displayStatusProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value)}
+                //     </div>
+                // </div>
             ));
         }
         if (columnName === 'rewardMonth') {
@@ -179,11 +195,14 @@ class index extends Component {
             ));
         }
     }
-    validationData = (data) => {
+    validationData = (typeActive) => {
+        if (typeActive?.typeView === "individual" && typeActive?.listId.length === 0) {
+            return { mess: "Vui lòng chọn nhân viên", check: false };
+        }
         return { check: true };
     }
     handleFilter = async (dataFilter, typeActive) => {
-        const result = this.validationData(dataFilter);
+        const result = this.validationData(typeActive);
         if (result.check) {
             this.setState({ dataFilter: dataFilter, typeActive: typeActive });
             if (typeActive?.typeView === "all") {
@@ -199,9 +218,9 @@ class index extends Component {
             message.error(result.mess);
         }
     }
-    getTargetDate = (end_time, targetMonth, targetAchieved) => {
+    getTargetDate = (end, targetMonth, targetAchieved) => {
         const targetRemaining = targetMonth - targetAchieved;
-        const remainingDays = dayjs(end_time).daysInMonth() - dayjs(end_time).date();
+        const remainingDays = dayjs(end).daysInMonth() - dayjs(end).date();
         if (remainingDays === 0) {
             return targetRemaining / 1;
         } else {
@@ -215,15 +234,15 @@ class index extends Component {
         const columnDetails = [
             {
                 title: `${typeActive?.typeTime === 'month' ?
-                    `CHI TIẾT DT THÁNG ${dayjs(dataFilter?.start_time).format('MM-YYYY')}` :
-                    `CHI TIẾT DT TỪ ${dayjs(dataFilter?.start_time).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end_time).format('DD-MM-YYYY')}`}`,
+                    `CHI TIẾT DOANH THU THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
+                    `CHI TIẾT DT TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
                 children: [
                     {
                         title: "TÊN LOẠI", width: 250,
                         render: (datas) => <>{this.renderColumDetail(datas, 'namePC')}</>
                     },
                     {
-                        title: "TARGET", width: 200,
+                        title: "TARGET", width: 70,
                         render: (datas) => <>{this.renderColumDetail(datas, 'targetMonth')}</>
                     },
                     {
@@ -231,11 +250,11 @@ class index extends Component {
                         render: (datas) => <>{this.renderColumDetail(datas, 'achievedMonth')}</>
                     },
                     {
-                        title: "CÒN LẠI", width: 200,
+                        title: "CÒN LẠI", width: 70,
                         render: (datas) => <>{this.renderColumDetail(datas, 'remainingMonth')}</>
                     },
                     {
-                        title: "ĐẠT/CHƯA", width: 150,
+                        title: "ĐẠT/CHƯA", width: 60,
                         render: (datas) => <>{this.renderColumDetail(datas, 'statusMonth')}</>
                     },
                     {
@@ -245,7 +264,7 @@ class index extends Component {
                 ]
             },
             {
-                title: `CTDT NGÀY ${dayjs(dataFilter?.end_time).format('DD-MM-YYYY')}`, children: [
+                title: `CTDT NGÀY ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`, children: [
                     {
                         title: "THỰC ĐẠT", width: 200,
                         render: (datas) => <>{this.renderColumDetail(datas, 'dailyDate')}</>
@@ -258,8 +277,8 @@ class index extends Component {
 
             {
                 title: `${typeActive?.typeTime === 'month' ?
-                    `TỔNG DOANH THU THÁNG ${dayjs(dataFilter?.start_time).format('MM-YYYY')}` :
-                    `TỔNG DOANH THU TỪ ${dayjs(dataFilter?.start_time).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end_time).format('DD-MM-YYYY')}`}`,
+                    `TỔNG DOANH THU THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
+                    `TỔNG DOANH THU TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
                 children: [
                     {
                         title: 'NHÂN VIÊN', dataIndex: ['staff', 'name'],
@@ -272,14 +291,14 @@ class index extends Component {
                         sorter: (a, b) => a?.staff?.name.localeCompare(b?.staff?.name),
                     },
                     {
-                        title: 'TARGET', dataIndex: ['value'],
+                        title: 'TARGET', dataIndex: ['staff_monthly_target', 'value'],
                         render: (value) => {
                             return { children: <Text >{formatNumber(value)}</Text> }
                         },
-                        sorter: (a, b) => a?.value - b?.value,
+                        sorter: (a, b) => a?.staff_monthly_target?.value - b?.staff_monthly_target?.value,
                     },
                     {
-                        title: `NGÀY ${dayjs(dataFilter?.start_time).format('DD')} TỚI ${dayjs(dataFilter?.end_time).format('DD')}`,
+                        title: `NGÀY ${dayjs(dataFilter?.start).format('DD')} TỚI ${dayjs(dataFilter?.end).format('DD')}`,
                         dataIndex: ['revenue', 'total_revenue'],
                         render: (value) => {
                             return { children: <Text >{formatNumber(value)}</Text> }
@@ -289,7 +308,7 @@ class index extends Component {
                     {
                         title: `CÒN LẠI`, dataIndex: ['revenue', 'total_revenue'],
                         render: (value, item) => {
-                            const remainingRevenue = item?.value - item?.revenue?.total_revenue;
+                            const remainingRevenue = item?.staff_monthly_target?.value - value;
                             if (remainingRevenue > 0) {
                                 return {
                                     children: <Text strong className='text-red-500'>{`-${formatNumber(remainingRevenue)}`}</Text>,
@@ -302,12 +321,12 @@ class index extends Component {
                                 }
                             }
                         },
-                        sorter: (a, b) => (a?.value - a?.revenue?.total_revenue) - (b?.value - b?.revenue?.total_revenue),
+                        sorter: (a, b) => (a?.staff_monthly_target?.value - a?.revenue?.total_revenue) - (b?.staff_monthly_target?.value - b?.revenue?.total_revenue),
                     },
                     {
                         title: 'ĐẠT', dataIndex: ['revenue', 'total_revenue'],
                         render: (value, item) => {
-                            const remainingRevenue = item?.value - item?.revenue?.total_revenue;
+                            const remainingRevenue = item?.staff_monthly_target?.value - value;
                             if (remainingRevenue > 0) {
                                 return {
                                     children: <Text strong className='text-red-500'>{`CHƯA`}</Text>,
@@ -321,24 +340,24 @@ class index extends Component {
                             }
                         },
                     },
-                ]
-            },
-            {
-                title: `DOANH THU NGÀY ${dayjs(dataFilter?.end_time).format('DD-MM-YYYY')}`, children: [
                     {
                         title: `TARGET NGÀY`, dataIndex: ['revenue', 'total_revenue'],
                         render: (value, item) => {
-                            const remainingRevenue = item?.value - item?.revenue?.total_revenue;
+                            const remainingRevenue = item?.staff_monthly_target?.value - value;
                             if (remainingRevenue > 0) {
                                 return {
-                                    children: <Text>{`${formatNumber(this.getTargetDate(dataFilter?.end_time, item?.value, item?.revenue?.total_revenue))}`}</Text>
+                                    children: <Text>{`${formatNumber(this.getTargetDate(dataFilter?.end, item?.staff_monthly_target?.value, item?.revenue?.total_revenue))}`}</Text>
                                 }
                             } else {
                                 return { children: <Text>0</Text> }
                             }
                         },
-                        sorter: (a, b) => (this.getTargetDate(dataFilter?.end_time, a?.value, a?.revenue?.total_revenue)) - (this.getTargetDate(dataFilter?.end_time, b?.value, b?.revenue?.total_revenue)),
+                        sorter: (a, b) => (this.getTargetDate(dataFilter?.end, a?.staff_monthly_target?.value, a?.revenue?.total_revenue)) - (this.getTargetDate(dataFilter?.end, b?.staff_monthly_target?.value, b?.revenue?.total_revenue)),
                     },
+                ]
+            },
+            {
+                title: `DOANH THU NGÀY ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`, children: [
                     {
                         title: `THỰC ĐẠT`, dataIndex: ['daily', 'total_revenue'],
                         render: (value) => {
@@ -349,9 +368,9 @@ class index extends Component {
                     {
                         title: `CÒN LẠI`, dataIndex: ['daily', 'total_revenue'],
                         render: (value, item) => {
-                            const remainingRevenue = item?.value - item?.revenue?.total_revenue;
+                            const remainingRevenue = item?.staff_monthly_target?.value - item?.revenue?.total_revenue;
                             if (remainingRevenue > 0) {
-                                const remainingDaily = (this.getTargetDate(dataFilter?.end_time, item?.value, item?.revenue?.total_revenue) - item?.daily?.total_revenue);
+                                const remainingDaily = (this.getTargetDate(dataFilter?.end, item?.staff_monthly_target?.value, item?.revenue?.total_revenue) - item?.daily?.total_revenue);
                                 if (remainingDaily > 0) {
                                     return {
                                         children: <Text strong className='text-red-500'>{`-${formatNumber(remainingDaily)}`}</Text>,
@@ -367,14 +386,14 @@ class index extends Component {
                                 return { children: <Text>0</Text> }
                             }
                         },
-                        sorter: (a, b) => (this.getTargetDate(dataFilter?.end_time, a?.value, a?.revenue?.total_revenue) - a?.daily?.total_revenue) - (this.getTargetDate(dataFilter?.end_time, b?.value, b?.revenue?.total_revenue) - b?.daily?.total_revenue),
+                        sorter: (a, b) => (this.getTargetDate(dataFilter?.end, a?.value, a?.revenue?.total_revenue) - a?.daily?.total_revenue) - (this.getTargetDate(dataFilter?.end, b?.value, b?.revenue?.total_revenue) - b?.daily?.total_revenue),
                     },
                     {
                         title: 'ĐẠT', dataIndex: ['daily', 'total_revenue'],
                         render: (value, item) => {
-                            const remainingRevenue = item?.value - item?.revenue?.total_revenue;
+                            const remainingRevenue = item?.staff_monthly_target?.value - item?.revenue?.total_revenue;
                             if (remainingRevenue > 0) {
-                                const remainingDaily = (this.getTargetDate(dataFilter?.end_time, item?.value, item?.revenue?.total_revenue) - item?.daily?.total_revenue);
+                                const remainingDaily = (this.getTargetDate(dataFilter?.end, item?.staff_monthly_target?.value, item?.revenue?.total_revenue) - item?.daily?.total_revenue);
                                 if (remainingDaily > 0) {
                                     return {
                                         children: <Text strong className='text-red-500'>{`CHƯA`}</Text>,
@@ -402,12 +421,12 @@ class index extends Component {
             let totalAchievedMoney = 0;
             let totalTargetMoneyDate = 0;
             let totalDailyMoney = 0;
-            datas.forEach(({ value, revenue, daily }) => {
-                totalTargetMoney += parseFloat(value);
+            datas.forEach(({ staff_monthly_target, revenue, daily }) => {
+                totalTargetMoney += parseFloat(staff_monthly_target?.value);
                 totalAchievedMoney += parseFloat(revenue?.total_revenue);
                 totalDailyMoney += parseFloat(daily?.total_revenue);
             });
-            totalTargetMoneyDate = this.getTargetDate(dataFilter?.end_time, totalTargetMoney - totalAchievedMoney, 0);
+            totalTargetMoneyDate = this.getTargetDate(dataFilter?.end, totalTargetMoney - totalAchievedMoney, 0);
             return (
                 <Table.Summary.Row>
                     <Table.Summary.Cell index={0}>
@@ -456,6 +475,26 @@ class index extends Component {
                 </Table.Summary.Row>
             );
         }
+        const items = [
+            {
+                key: '1',
+                label: (
+                    // eslint-disable-next-line
+                    <a onClick={() => exportTableAntdToExcel(columnOverViewDetails, dataReportTargetStaffs, dayjs().format("HH-mm/DD-MM-YYYY"))}>
+                        Excel
+                    </a>
+                ),
+            },
+            {
+                key: '2',
+                label: (
+                    // eslint-disable-next-line
+                    <a onClick={() => exportTableAntdToImage('tableReportTargetStaff', dayjs().format("HH-mm/DD-MM-YYYY"))}>
+                        Ảnh
+                    </a>
+                ),
+            },
+        ];
         return (
             <>
                 <Spin size='large' spinning={isLoading}>
@@ -468,6 +507,16 @@ class index extends Component {
                                     Lọc
                                 </Space>
                             </Button>
+                            {typeActive?.typeTable === 'overview' &&
+                                <Dropdown menu={{ items }} placement="bottomLeft">
+                                    <Button className='bg-[#0e97ff] dark:bg-white'>
+                                        <Space className='text-white dark:text-black'>
+                                            <FaFileExport />
+                                            Xuất file
+                                        </Space>
+                                    </Button>
+                                </Dropdown>
+                            }
                         </div>
                         {typeActive?.typeTable === 'detail' &&
                             <div className='space-y-[10px]'>
@@ -486,7 +535,7 @@ class index extends Component {
                                             <Table rowKey="id"
                                                 columns={columnDetails} dataSource={[item]}
                                                 pagination={false}
-                                                size="small" bordered scroll={{ x: 1350 }} />
+                                                size="small" bordered scroll={{ x: 1000 }} />
                                         </div>
                                     )
                                 })}
@@ -494,7 +543,7 @@ class index extends Component {
 
                         }
                         {typeActive?.typeTable === 'overview' &&
-                            <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
+                            <div id='tableReportTargetStaff' className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                                 <Table rowKey="id"
                                     columns={columnOverViewDetails} dataSource={dataReportTargetStaffs}
                                     pagination={false}

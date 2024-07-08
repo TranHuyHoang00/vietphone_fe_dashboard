@@ -18,8 +18,8 @@ class index extends Component {
         this.state = {
             drawerFilter: false,
             dataFilter: {
-                start_time: dayjs().startOf('month').format("YYYY-MM-DD"),
-                end_time: dayjs().format("YYYY-MM-DD"),
+                start: dayjs().startOf('month').format("YYYY-MM-DD"),
+                end: dayjs().format("YYYY-MM-DD"),
                 type_object: 'shop',
                 type_view: 'all',
                 list_id: [],
@@ -53,14 +53,14 @@ class index extends Component {
         if (data?.type_object === "staff" && data?.type_view === "individual") {
             return { mess: "Vui lòng chọn danh sách nhân viên ", check: false };
         }
-        if (!data.start_time) {
+        if (!data.start) {
             return { mess: "Không được bỏ trống 'Ngày bắt đầu' ", check: false };
         }
-        if (!data.end_time) {
+        if (!data.end) {
             return { mess: "Không được bỏ trống 'Ngày kết thúc' ", check: false };
         }
-        const startDate = dayjs(data.start_time, 'YYYY-MM-DD');
-        const endDate = dayjs(data.end_time, 'YYYY-MM-DD');
+        const startDate = dayjs(data.start, 'YYYY-MM-DD');
+        const endDate = dayjs(data.end, 'YYYY-MM-DD');
         const isDifferentMonthYear = !startDate.isSame(endDate, 'month') || !startDate.isSame(endDate, 'year');
         if (isDifferentMonthYear) {
             return { mess: "Ngày bắt đầu và ngày kết thúc không cùng tháng hoặc năm", check: false };
@@ -146,9 +146,9 @@ class index extends Component {
         this.setState({ dataTargetShops: dataTargetShops });
         this.handleDataForChart(dataTargetShops);
     }
-    getTargetDate = (end_time, targetMonth, targetAchieved) => {
+    getTargetDate = (end, targetMonth, targetAchieved) => {
         const targetRemaining = targetMonth - targetAchieved;
-        const remainingDays = dayjs(end_time).daysInMonth() - dayjs(end_time).date();
+        const remainingDays = dayjs(end).daysInMonth() - dayjs(end).date();
         if (remainingDays === 0) {
             return targetRemaining / 1;
         } else {
@@ -170,7 +170,7 @@ class index extends Component {
         }
 
         const dataTargetDates = dataInput.map(item => {
-            const targetDate = this.getTargetDate(dataFilter?.end_time, item?.target?.revenue, item?.achieved?.revenue) / 1000000;
+            const targetDate = this.getTargetDate(dataFilter?.end, item?.target?.revenue, item?.achieved?.revenue) / 1000000;
             if (targetDate <= 0) {
                 return 0;
             } else {
@@ -205,8 +205,8 @@ class index extends Component {
         const overviewColumns = [
             {
                 title: `${dataFilter?.type_time === 'month' ?
-                    `TỔNG DOANH THU CỬA HÀNG THÁNG ${dayjs(dataFilter?.start_time).format('MM-YYYY')}` :
-                    `TỔNG DOANH THU CỬA HÀNG TỪ ${dayjs(dataFilter?.start_time).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end_time).format('DD-MM-YYYY')}`}`,
+                    `TỔNG DOANH THU CỬA HÀNG THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
+                    `TỔNG DOANH THU CỬA HÀNG TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
                 children: [
                     {
                         title: 'Cửa hàng', dataIndex: ['shop', 'name'],
@@ -226,7 +226,7 @@ class index extends Component {
                         sorter: (a, b) => a?.target?.revenue - b?.target?.revenue,
                     },
                     {
-                        title: `Ngày ${dayjs(dataFilter?.start_time).format('DD')} tới ${dayjs(dataFilter?.end_time).format('DD')}`,
+                        title: `Ngày ${dayjs(dataFilter?.start).format('DD')} tới ${dayjs(dataFilter?.end).format('DD')}`,
                         dataIndex: ['achieved', 'revenue'],
                         render: (value) => {
                             return { children: <Text >{formatNumber(value)}</Text> }
@@ -271,20 +271,20 @@ class index extends Component {
                 ],
             },
             {
-                title: `DOANH THU NGÀY ${dayjs(dataFilter?.end_time).format('DD-MM-YYYY')}`, children: [
+                title: `DOANH THU NGÀY ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`, children: [
                     {
                         title: `Target ngày`, dataIndex: ['target', 'revenue'],
                         render: (value, item) => {
                             const remainingRevenue = item?.target?.revenue - item?.achieved?.revenue;
                             if (remainingRevenue > 0) {
                                 return {
-                                    children: <Text>{`${formatNumber(this.getTargetDate(dataFilter?.end_time, item?.target?.revenue, item?.achieved?.revenue))}`}</Text>
+                                    children: <Text>{`${formatNumber(this.getTargetDate(dataFilter?.end, item?.target?.revenue, item?.achieved?.revenue))}`}</Text>
                                 }
                             } else {
                                 return { children: <Text>0</Text> }
                             }
                         },
-                        sorter: (a, b) => (this.getTargetDate(dataFilter?.end_time, a?.target?.revenue, a?.achieved?.revenue)) - (this.getTargetDate(dataFilter?.end_time, b?.target?.revenue, b?.achieved?.revenue)),
+                        sorter: (a, b) => (this.getTargetDate(dataFilter?.end, a?.target?.revenue, a?.achieved?.revenue)) - (this.getTargetDate(dataFilter?.end, b?.target?.revenue, b?.achieved?.revenue)),
                     },
                     {
                         title: `Thực đạt`, dataIndex: ['daily', 'revenue'],
@@ -298,7 +298,7 @@ class index extends Component {
                         render: (value, item) => {
                             const remainingRevenue = item?.target?.revenue - item?.achieved?.revenue;
                             if (remainingRevenue > 0) {
-                                const remainingDaily = (this.getTargetDate(dataFilter?.end_time, item?.target?.revenue, item?.achieved?.revenue) - item?.daily?.revenue);
+                                const remainingDaily = (this.getTargetDate(dataFilter?.end, item?.target?.revenue, item?.achieved?.revenue) - item?.daily?.revenue);
                                 if (remainingDaily > 0) {
                                     return {
                                         children: <Text strong className='text-red-500'>{`-${formatNumber(remainingDaily)}`}</Text>,
@@ -314,14 +314,14 @@ class index extends Component {
                                 return { children: <Text>0</Text> }
                             }
                         },
-                        sorter: (a, b) => (this.getTargetDate(dataFilter?.end_time, a?.target?.revenue, a?.achieved?.revenue) - a?.daily?.revenue) - (this.getTargetDate(dataFilter?.end_time, b?.target?.revenue, b?.achieved?.revenue) - b?.daily?.revenue),
+                        sorter: (a, b) => (this.getTargetDate(dataFilter?.end, a?.target?.revenue, a?.achieved?.revenue) - a?.daily?.revenue) - (this.getTargetDate(dataFilter?.end, b?.target?.revenue, b?.achieved?.revenue) - b?.daily?.revenue),
                     },
                     {
                         title: 'Trạng thái', dataIndex: ['target', 'revenue'],
                         render: (value, item) => {
                             const remainingRevenue = item?.target?.revenue - item?.achieved?.revenue;
                             if (remainingRevenue > 0) {
-                                const remainingDaily = (this.getTargetDate(dataFilter?.end_time, item?.target?.revenue, item?.achieved?.revenue) - item?.daily?.revenue);
+                                const remainingDaily = (this.getTargetDate(dataFilter?.end, item?.target?.revenue, item?.achieved?.revenue) - item?.daily?.revenue);
                                 if (remainingDaily > 0) {
                                     return {
                                         children: <Text strong className='text-red-500'>{`CHƯA`}</Text>,
@@ -374,7 +374,7 @@ class index extends Component {
                 totalAchievedMoney += achieved?.revenue;
                 totalDailyMoney += daily?.revenue;
             });
-            totalTargetMoneyDate = this.getTargetDate(dataFilter?.end_time, totalTargetMoney - totalAchievedMoney, 0);
+            totalTargetMoneyDate = this.getTargetDate(dataFilter?.end, totalTargetMoney - totalAchievedMoney, 0);
             return (
                 <Table.Summary.Row>
                     <Table.Summary.Cell index={0}>

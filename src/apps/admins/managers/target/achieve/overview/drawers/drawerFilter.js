@@ -32,11 +32,11 @@ class index extends Component {
     }
     onChangeInputMonth = async (date) => {
         if (dayjs(date).isSame(dayjs(), 'month')) {
-            await this.handleOnchangeInput(dayjs(date).startOf('month').format('YYYY-MM-DD'), 'start_time');
-            await this.handleOnchangeInput(dayjs().format('YYYY-MM-DD'), 'end_time');
+            await this.handleOnchangeInput(dayjs(date).startOf('month').format('YYYY-MM-DD'), 'start');
+            await this.handleOnchangeInput(dayjs().format('YYYY-MM-DD'), 'end');
         } else {
-            await this.handleOnchangeInput(dayjs(date).startOf('month').format('YYYY-MM-DD'), 'start_time');
-            await this.handleOnchangeInput(dayjs(date).endOf('month').format('YYYY-MM-DD'), 'end_time');
+            await this.handleOnchangeInput(dayjs(date).startOf('month').format('YYYY-MM-DD'), 'start');
+            await this.handleOnchangeInput(dayjs(date).endOf('month').format('YYYY-MM-DD'), 'end');
         }
     }
     render() {
@@ -120,7 +120,7 @@ class index extends Component {
                                             <Typography.Text type="danger" strong> *</Typography.Text>
                                         </Typography.Text>
                                         <input className='border w-full h-[35px] px-[5px]'
-                                            type="month" value={dayjs(dataFilter?.end_time).format('YYYY-MM')}
+                                            type="month" value={dayjs(dataFilter?.end).format('YYYY-MM')}
                                             onChange={(event) => this.onChangeInputMonth(event.target.value)}
                                             max={dayjs().format('YYYY-MM')} />
                                     </div>
@@ -132,8 +132,8 @@ class index extends Component {
                                             <Typography.Text type="danger" strong> * <small>(cùng tháng - năm)</small></Typography.Text>
                                         </Typography.Text>
                                         <input type='date' className='border w-full h-[35px] px-[5px]' required
-                                            value={dayjs(dataFilter?.start_time).format('YYYY-MM-DD')}
-                                            onChange={(event) => this.handleOnchangeInput(dayjs(event.target.value).format('YYYY-MM-DD'), 'start_time')} />
+                                            value={dayjs(dataFilter?.start).format('YYYY-MM-DD')}
+                                            onChange={(event) => this.handleOnchangeInput(dayjs(event.target.value).format('YYYY-MM-DD'), 'start')} />
                                     </div>
                                     <div className='space-y-[2px]'>
                                         <Typography.Text strong>
@@ -141,8 +141,8 @@ class index extends Component {
                                             <Typography.Text type="danger" strong> * <small>(cùng tháng - năm)</small></Typography.Text>
                                         </Typography.Text>
                                         <input type='date' className='border w-full h-[35px] px-[5px]' required
-                                            value={dayjs(dataFilter?.end_time).format('YYYY-MM-DD')}
-                                            onChange={(event) => this.handleOnchangeInput(dayjs(event.target.value).format('YYYY-MM-DD'), 'end_time')} />
+                                            value={dayjs(dataFilter?.end).format('YYYY-MM-DD')}
+                                            onChange={(event) => this.handleOnchangeInput(dayjs(event.target.value).format('YYYY-MM-DD'), 'end')} />
                                     </div>
                                 </>}
                                 <Button onClick={() => handleFilter(dataFilter)}
