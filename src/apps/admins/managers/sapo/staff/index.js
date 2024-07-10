@@ -21,7 +21,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dropButtonType: 1,
+            dropButtonType: 4,
             listItemSelected: [],
             modalDetail: false,
             modalCreate: false,
@@ -32,6 +32,7 @@ class index extends Component {
                 limit: 5,
                 search: '',
                 status: 'active',
+                role: '',
             },
             dataCheckPermis: {},
         }
@@ -94,12 +95,16 @@ class index extends Component {
                 sorter: (a, b) => a?.name.localeCompare(b?.name),
             },
             {
-                title: 'SĐT', dataIndex: 'phone_number',
+                title: 'SĐT', dataIndex: 'phone_number', responsive: ['sm'],
                 render: (phone_number) => <Text strong className='text-[#0574b8] dark:text-white'>{phone_number}</Text>,
                 sorter: (a, b) => a?.phone_number.localeCompare(b?.phone_number),
             },
             {
-                title: 'STATUS', dataIndex: 'status', width: 70, responsive: ['md'],
+                title: 'QUYỀN', dataIndex: 'role', responsive: ['md'],
+                render: (role) => <Text >{role?.name}</Text>,
+            },
+            {
+                title: 'STATUS', dataIndex: 'status', width: 70, responsive: ['lg'],
                 render: (status) => <>{status === "active" ? <Tag color='green'>Mở</Tag> : <Tag color='red'>Khóa</Tag>}</>
             },
             {
@@ -107,7 +112,7 @@ class index extends Component {
                 render: (_, item) => (
                     <Space size="middle" >
                         <button disabled={!dataCheckPermis['account.view_staff']} onClick={() => this.openModal('detail', true, item.id)}><AiFillEye /></button>
-                        <button hidden
+                        <button
                             disabled={!dataCheckPermis['account.change_staff']}
                             onClick={() => this.openModal('edit', true, item.id)}>
                             <AiFillEdit />
@@ -120,9 +125,9 @@ class index extends Component {
             modalCreate, modalDetail, modalEdit } = this.state;
         const { isLoading, dataStaffs, dataMeta } = this.props;
         const items = [
-            { key: 1, label: 'Xóa', disabled: !dataCheckPermis['account.delete_staff'] },
-            { key: 2, label: 'Khóa', disabled: !dataCheckPermis['account.change_staff'] },
-            { key: 3, label: 'Mở', disabled: !dataCheckPermis['account.change_staff'] },
+            // { key: 1, label: 'Xóa', disabled: !dataCheckPermis['account.delete_staff'] },
+            { key: 4, label: 'Khóa', disabled: !dataCheckPermis['account.change_staff'] },
+            { key: 5, label: 'Mở', disabled: !dataCheckPermis['account.change_staff'] },
         ];
         const onChangeSelectedRow = (dataNew) => {
             this.setState({ listItemSelected: dataNew })
@@ -158,17 +163,17 @@ class index extends Component {
                             <div className='flex items-center justify-between gap-[10px]'>
                                 <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
                                 <div>
-                                    <Popconfirm hidden
+                                    <Popconfirm
                                         disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
                                         placement="bottomLeft" okType='default' onConfirm={() => this.funcDropButtonHeaderOfTable()}>
-                                        <Dropdown.Button hidden
+                                        <Dropdown.Button
                                             disabled={!dataCheckPermis['account.delete_staff']}
                                             menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
                                             <div>
-                                                {dropButtonType === 1 && <span>Xóa</span>}
-                                                {dropButtonType === 2 && <span>Khóa</span>}
-                                                {dropButtonType === 3 && <span>Mở</span>}
+                                                {/* {dropButtonType === 1 && <span>Xóa</span>} */}
+                                                {dropButtonType === 4 && <span>Khóa</span>}
+                                                {dropButtonType === 5 && <span>Mở</span>}
                                                 <span> {listItemSelected && listItemSelected.length === 0 ? '' : `(${listItemSelected.length})`}</span>
                                             </div>
                                         </Dropdown.Button>

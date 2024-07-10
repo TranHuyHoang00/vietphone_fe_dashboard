@@ -88,22 +88,23 @@ class index extends Component {
         const columns = [
             {
                 title: 'ID', dataIndex: 'id', width: 80, responsive: ['sm'],
-                render: (id) => <Text strong className='text-[#0574b8] dark:text-white'>{id}</Text>,
+                render: (id) => <Text>{id}</Text>,
                 sorter: (a, b) => a.id - b.id,
             },
             {
-                title: 'TÊN', dataIndex: 'full_name',
-                sorter: (a, b) => a.name.localeCompare(b.name),
-            },
-            {
-                title: 'SĐT', dataIndex: 'phone',
-                sorter: (a, b) => a.name.localeCompare(b.name),
+                title: 'THÔNG TIN', dataIndex: 'full_name',
+                render: (full_name, item) =>
+                    <>
+                        <Text strong className='text-[#0574b8] dark:text-white'>{full_name}</Text><br />
+                        <Text strong italic >{item?.phone}</Text><br />
+                    </>,
+                sorter: (a, b) => a.full_name.localeCompare(b.full_name),
             },
             {
                 title: 'QUYỀN', dataIndex: 'groups', responsive: ['md'],
                 render: (groups) =>
                     <>
-                        {groups && groups.map((item, index) => {
+                        {groups && groups.map((item) => {
                             return (
                                 <div key={item.id}>
                                     <Tag color='orange'>{item.name}</Tag>

@@ -12,7 +12,8 @@ import { FaFileExport } from "react-icons/fa";
 import { formatNumber } from '@utils/handleFuncFormat';
 import dayjs from 'dayjs';
 import DrawerFilter from './drawers/drawerFilter';
-import { exportTableAntdToExcel, exportTableAntdToImage } from '@utils/handleFuncExport'
+import { exportTableAntdToExcel, exportTableAntdToImage } from '@utils/handleFuncExport';
+import { calculateSalary } from '@utils/handleFuncCalculator';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -30,13 +31,19 @@ class index extends Component {
             },
             classTrue: "text-green-600 font-medium line-clamp-1",
             classFalse: "text-red-600 font-medium line-clamp-1",
+
+            dataStaffs: [],
         }
     }
     async componentDidMount() {
         const { dataFilter } = this.state;
-        const { getListProductCategory, getAllReportTargetStaff } = this.props;
+        const { getListProductCategory, getAllReportTargetStaff, dataReportTargetStaffs } = this.props;
         await getAllReportTargetStaff(dataFilter);
+        //await getListReportTargetStaff(dataFilter, this.state.typeActive?.listId);
         await getListProductCategory({ page: 1, limit: 50 });
+
+        this.setState({ dataStaffs: dataReportTargetStaffs });
+
     }
     openDrawer = async (drawerName, drawerValue) => {
         const { getListStaff } = this.props;
@@ -53,9 +60,9 @@ class index extends Component {
         const { dataProductCategorys } = this.props;
         const { classTrue, classFalse } = this.state;
         const newDataPCs = dataProductCategorys.map((product) => {
-            const saleProduct = datas?.revenue?.product_sales.find((sale) => sale.category === product.name);
+            const saleProduct = datas?.revenue?.product_sales.find((sale) => sale.category_name === product.name);
             const targetProduct = datas?.staff_monthly_target?.target_product_category.find((target) => target?.product_category?.name === product.name);
-            const dailyProduct = datas?.daily?.product_sales.find((daily) => daily.category === product.name);
+            const dailyProduct = datas?.daily?.product_sales.find((daily) => daily.category_name === product.name);
             return {
                 ...product,
                 sale: saleProduct ? saleProduct : { quantity: 0, revenue: 0 },
@@ -94,45 +101,38 @@ class index extends Component {
         };
         if (columnName === 'namePC') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[2px] py-[2px]' key={index}>
+                <div className='border px-[5px] py-[2px]' key={index}>
                     <span className='line-clamp-1'>{item?.name}</span>
                 </div>
             ));
         }
         if (columnName === 'targetMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[2px] py-[2px]' key={index}>
-                    {item?.target?.quantity > 0 ?
-                        <span className={classTrue}>
-                            {item?.target?.quantity} cái
-                        </span> : <span>-</span>
-                    }
+                <div className='flex items-center justify-between' key={index}>
+                    <div className='border px-[5px] py-[2px] w-1/3'>
+                        {item?.target?.quantity > 0 ?
+                            <span className={classTrue}>
+                                {item?.target?.quantity} cái
+                            </span> : <span>-</span>
+                        }
+                    </div>
+                    <div className='border px-[5px] py-[2px] w-2/3'>
+                        {item?.target?.value > 0 ?
+                            <span className={classTrue}>
+                                {formatNumber(item?.target?.value)} đ
+                            </span> : <span>-</span>
+                        }
+                    </div>
                 </div>
-                // <div className='flex items-center justify-between' key={index}>
-                //     <div className='border px-[2px] py-[2px] w-1/3'>
-                //         {item?.target?.quantity > 0 ?
-                //             <span className={classTrue}>
-                //                 {item?.target?.quantity} cái
-                //             </span> : <span>-</span>
-                //         }
-                //     </div>
-                //     <div className='border px-[2px] py-[2px] w-2/3'>
-                //         {item?.target?.value > 0 ?
-                //             <span className={classTrue}>
-                //                 {formatNumber(item?.target?.value)} đ
-                //             </span> : <span>-</span>
-                //         }
-                //     </div>
-                // </div>
             ));
         }
         if (columnName === 'achievedMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
                 <div className='flex items-center justify-between' key={index}>
-                    <div className='border px-[2px] py-[2px] w-1/3'>
+                    <div className='border px-[5px] py-[2px] w-1/3'>
                         {displayValue(item?.sale?.quantity, 'cái')}
                     </div>
-                    <div className='border px-[2px] py-[2px] w-2/3 '>
+                    <div className='border px-[5px] py-[2px] w-2/3 '>
                         {displayValue(item?.sale?.revenue, 'đ')}
                     </div>
                 </div>
@@ -140,55 +140,61 @@ class index extends Component {
         }
         if (columnName === 'remainingMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[2px] py-[2px]' key={index}>
-                    {displayValueProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity, 'cái')}
+                <div className='flex items-center justify-between' key={index}>
+                    <div className='border px-[5px] py-[2px] w-1/3'>
+                        {displayValueProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity, 'cái')}
+                    </div>
+                    <div className='border px-[5px] py-[2px] w-2/3'>
+                        {displayValueProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value, 'đ')}
+                    </div>
                 </div>
-                // <div className='flex items-center justify-between' key={index}>
-                //     <div className='border px-[2px] py-[2px] w-1/3'>
-                //         {displayValueProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity, 'cái')}
-                //     </div>
-                //     <div className='border px-[2px] py-[2px] w-2/3'>
-                //         {displayValueProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value, 'đ')}
-                //     </div>
-                // </div>
             ));
         }
         if (columnName === 'statusMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[2px] py-[2px]' key={index}>
-                    {displayStatusProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity)}
+                <div className='flex items-center justify-between' key={index}>
+                    <div className='border px-[5px] py-[2px] w-1/2'>
+                        {displayStatusProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity)}
+                    </div>
+                    <div className='border px-[5px] py-[2px] w-1/2'>
+                        {displayStatusProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value)}
+                    </div>
                 </div>
-                // <div className='flex items-center justify-between' key={index}>
-                //     <div className='border px-[2px] py-[2px] w-1/2'>
-                //         {displayStatusProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity)}
-                //     </div>
-                //     <div className='border px-[2px] py-[2px] w-1/2'>
-                //         {displayStatusProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value)}
-                //     </div>
-                // </div>
             ));
         }
         if (columnName === 'rewardMonth') {
-            return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[2px] py-[2px]' key={index}>
-                    {item?.target?.quantity === 0 ? <span>-</span> :
-                        <>
-                            {(item?.sale?.quantity - item?.target?.quantity >= 0) &&
-                                <span className="text-green-600 font-medium line-clamp-1">+ 100,000 đ</span>}
-                            {(item?.sale?.quantity - item?.target?.quantity < 0) &&
-                                <span>-</span>}
-                        </>
-                    }
-                </div>
-            ));
+            const dataSalary = calculateSalary(datas, 'rewardKPI');
+            const dataRewardKPI = dataSalary?.dataRewardKPI;
+            if (dataRewardKPI && dataRewardKPI.length !== 0) {
+                return newDataPCs && newDataPCs.map((item, index) => {
+                    const itemSelected = dataSalary.dataRewardKPI.find((rewardKPI) => rewardKPI?.name === item?.name);
+                    return (
+                        <div key={index} className='border px-[5px] py-[2px]'>
+                            {itemSelected === undefined ?
+                                <span>-</span>
+                                :
+                                <>
+                                    {itemSelected?.rewardKPI === 0 ?
+                                        <span >-</span>
+                                        :
+                                        <span className={classTrue}>{formatNumber(itemSelected?.rewardKPI)} đ</span>
+                                    }
+                                </>
+                            }
+                        </div>
+                    );
+                });
+            } else {
+                return <span>-</span>;
+            }
         }
         if (columnName === 'dailyDate') {
             return newDataPCs && newDataPCs.map((item, index) => (
                 <div className='flex items-center justify-between' key={index}>
-                    <div className='border px-[2px] py-[2px] w-1/3'>
+                    <div className='border px-[5px] py-[2px] w-1/3'>
                         {displayValue(item?.daily?.quantity, 'cái')}
                     </div>
-                    <div className='border px-[2px] py-[2px] w-2/3'>
+                    <div className='border px-[5px] py-[2px] w-2/3'>
                         {displayValue(item?.daily?.revenue, 'đ')}
                     </div>
                 </div>
@@ -228,9 +234,9 @@ class index extends Component {
         }
     }
     render() {
-        const { dataFilter, drawerFilter, typeActive } = this.state;
+        const { dataFilter, drawerFilter, typeActive, dataStaffs } = this.state;
         const { Text } = Typography;
-        const { isLoading, dataReportTargetStaffs, dataStaffs } = this.props;
+        const { isLoading, dataReportTargetStaffs } = this.props;
         const columnDetails = [
             {
                 title: `${typeActive?.typeTime === 'month' ?
@@ -242,7 +248,7 @@ class index extends Component {
                         render: (datas) => <>{this.renderColumDetail(datas, 'namePC')}</>
                     },
                     {
-                        title: "TARGET", width: 70,
+                        title: "TARGET", width: 200,
                         render: (datas) => <>{this.renderColumDetail(datas, 'targetMonth')}</>
                     },
                     {
@@ -250,11 +256,11 @@ class index extends Component {
                         render: (datas) => <>{this.renderColumDetail(datas, 'achievedMonth')}</>
                     },
                     {
-                        title: "CÒN LẠI", width: 70,
+                        title: "CÒN LẠI", width: 200,
                         render: (datas) => <>{this.renderColumDetail(datas, 'remainingMonth')}</>
                     },
                     {
-                        title: "ĐẠT/CHƯA", width: 60,
+                        title: "ĐẠT/CHƯA", width: 150,
                         render: (datas) => <>{this.renderColumDetail(datas, 'statusMonth')}</>
                     },
                     {
@@ -353,6 +359,19 @@ class index extends Component {
                             }
                         },
                         sorter: (a, b) => (this.getTargetDate(dataFilter?.end, a?.staff_monthly_target?.value, a?.revenue?.total_revenue)) - (this.getTargetDate(dataFilter?.end, b?.staff_monthly_target?.value, b?.revenue?.total_revenue)),
+                    },
+                    {
+                        title: `THƯỞNG`, dataIndex: ['revenue', 'total_revenue'],
+                        render: (value, item) => {
+                            const dataSalary = calculateSalary(item, 'rewardTarget');
+                            if (dataSalary?.dataRewardTarget > 0) {
+                                return {
+                                    children: <Text strong className='text-green-500'>{`${formatNumber(dataSalary?.dataRewardTarget)}`}</Text>
+                                }
+                            } else {
+                                return { children: <Text>0</Text> }
+                            }
+                        },
                     },
                 ]
             },
@@ -456,16 +475,19 @@ class index extends Component {
                         <Text strong>{formatNumber(totalTargetMoneyDate)}</Text>
                     </Table.Summary.Cell>
                     <Table.Summary.Cell index={6}>
-                        <Text strong>{formatNumber(totalDailyMoney)}</Text>
+                        <Text strong>0</Text>
                     </Table.Summary.Cell>
                     <Table.Summary.Cell index={7}>
+                        <Text strong>{formatNumber(totalDailyMoney)}</Text>
+                    </Table.Summary.Cell>
+                    <Table.Summary.Cell index={8}>
                         {(totalTargetMoneyDate - totalDailyMoney) > 0 ?
                             <Text className='text-red-500' strong>{`-${formatNumber(totalTargetMoneyDate - totalDailyMoney)}`}</Text>
                             :
                             <Text className='text-green-500' strong>{`+${formatNumber(Math.abs(totalTargetMoneyDate - totalDailyMoney))}`}</Text>
                         }
                     </Table.Summary.Cell>
-                    <Table.Summary.Cell index={8}>
+                    <Table.Summary.Cell index={9}>
                         {(totalTargetMoneyDate - totalDailyMoney) > 0 ?
                             <Text className='text-red-500' strong>CHƯA</Text>
                             :
@@ -535,7 +557,7 @@ class index extends Component {
                                             <Table rowKey="id"
                                                 columns={columnDetails} dataSource={[item]}
                                                 pagination={false}
-                                                size="small" bordered scroll={{ x: 1000 }} />
+                                                size="small" bordered scroll={{ x: 1350 }} />
                                         </div>
                                     )
                                 })}

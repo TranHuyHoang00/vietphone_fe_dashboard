@@ -36,14 +36,7 @@ class index extends Component {
             if (!regex.test(data?.password)) {
                 return { mess: "Mật khẩu phải > 8 kí tự, chứa chữ cái IN HOA và KÍ TỰ ĐẶC BIỆT", check: false };
             }
-            if (!data.password2) {
-                return { mess: "Không được bỏ trống 'Mật khẩu nhập lại' ", check: false };
-            }
-            if (data?.password2 !== data?.password) {
-                return { mess: "Mật khẩu nhập lại không chính xác", check: false };
-            }
         }
-
         if (!data.groups || data?.groups.length === 0) {
             return { mess: "Không được bỏ trống 'Phân quyền' ", check: false };
         }
@@ -84,10 +77,6 @@ class index extends Component {
                             onChangeInput={onChangeUser} />
 
                         <FormInput name={'Mật khẩu'} variable={'password'} value={dataUser.password}
-                            important={true}
-                            onChangeInput={onChangeUser} />
-
-                        <FormInput name={'Nhập lại mật khẩu'} variable={'password2'} value={dataUser.password2}
                             important={true}
                             onChangeInput={onChangeUser} />
 

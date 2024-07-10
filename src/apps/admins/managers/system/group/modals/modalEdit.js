@@ -15,7 +15,7 @@ class index extends Component {
     }
     async componentDidMount() {
         const { getListPermission, dataPermissions, dataGroup, isResultPermis } = this.props;
-        await getListPermission({ page: 1, limit: 1000, search: '' });
+        await getListPermission({ page: 1, limit: 10000, search: '' });
         if (isResultPermis) {
             await this.handleDataUnique(dataPermissions);
             this.setState({ dataPermisIds: dataGroup.permissions })

@@ -11,6 +11,12 @@ const handleFuncDropButtonHeaderOfTable = async (dropButtonType, listItemSelecte
         case 3:
             await editList(listItemSelected, { is_active: true });
             break;
+        case 4:
+            await editList(listItemSelected, { status: 'inactive' });
+            break;
+        case 5:
+            await editList(listItemSelected, { status: 'active' });
+            break;
         default:
             return;
     }

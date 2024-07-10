@@ -13,7 +13,26 @@ class index extends Component {
         super(props);
         this.state = {
             dataFilter: { page: 1, limit: 100, search: '' },
-            dataTPCs: [],
+            dataTPCs: [
+                {
+                    product_category: 1,
+                    name: "PHỤ KIỆN",
+                    value: "10000000",
+                    quantity: 0
+                },
+                {
+                    product_category: 3,
+                    name: "ĐIỆN THOẠI CẢM ỨNG",
+                    value: "0",
+                    quantity: 10
+                },
+                {
+                    product_category: 14,
+                    name: "ÂM THANH",
+                    value: "25000000",
+                    quantity: 0
+                }
+            ],
             newDataStaffs: [],
             listSelectedStaffId: [],
         }

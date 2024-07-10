@@ -85,6 +85,11 @@ const itemMenuLeftLayoutSider = [
                     { key: 'manager/sapo/customer', icon: <AiOutlineUser />, label: 'Khách hàng', title: 'account.view_customer' },
                 ],
             },
+            {
+                key: 'sapo_role', icon: <AiFillRobot />, label: 'Phân quyền', children: [
+                    { key: 'role/sapo/staff', icon: <FaUserGraduate />, label: 'Nhân viên', title: 'account.view_staffrole' },
+                ]
+            }
         ]
     },
     {
@@ -99,8 +104,8 @@ const itemMenuLeftLayoutSider = [
             },
             {
                 key: 'achieve_target', icon: <BsBox2HeartFill />, label: 'Đạt được', children: [
-                    { key: 'achieve/target/shop', icon: <AiFillShop />, label: 'Cửa hàng', title: true },
-                    { key: 'achieve/target/staff', icon: <FaUserTie />, label: 'Nhân viên', title: true },
+                    { key: 'achieve/target/shop', icon: <AiFillShop />, label: 'Cửa hàng', title: 'analytic.view_shopmonthlytarget' },
+                    { key: 'achieve/target/staff', icon: <FaUserTie />, label: 'Nhân viên', title: 'analytic.view_staffmonthlytarget' },
                 ],
             },
         ]

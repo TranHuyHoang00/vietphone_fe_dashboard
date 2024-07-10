@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown, Card
+    Spin, Pagination, Typography, Dropdown, Card, Collapse
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus, AiFillFilter } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
@@ -108,16 +108,26 @@ class index extends Component {
                 title: 'KPI', dataIndex: 'target_product_category',
                 render: (datas) => {
                     return <>
-                        {datas && datas.length !== 0 && datas.map((item) => {
-                            return (
-                                <Card key={item.id} title={`${item?.product_category?.name}`} size='small'>
-                                    <div className='flex items-center justify-between space-x-[5px]'>
-                                        {item?.quantity && <Text>Số lượng : {item?.quantity}</Text>}
-                                        {item?.value && <Text>Doanh thu : {formatNumber(item?.value)}</Text>}
-                                    </div>
-                                </Card>
-                            )
-                        })}
+                        {datas && datas.length !== 0 && <Collapse size='small' accordion items={[
+                            {
+                                key: '1',
+                                label: 'Chi tiết',
+                                children:
+                                    <>
+                                        {datas && datas.length !== 0 && datas.map((item) => {
+                                            return (
+                                                <Card key={item.id} title={`${item?.product_category?.name}`} size='small'>
+                                                    <div className='flex items-center justify-between space-x-[5px]'>
+                                                        {item?.quantity && <Text>Số lượng : {item?.quantity}</Text>}
+                                                        {item?.value && <Text>Doanh thu : {formatNumber(item?.value)}</Text>}
+                                                    </div>
+                                                </Card>
+                                            )
+                                        })}
+                                    </>,
+                            },
+                        ]} />
+                        }
                     </>
                 },
             },

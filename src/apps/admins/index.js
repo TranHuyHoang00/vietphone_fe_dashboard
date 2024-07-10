@@ -41,6 +41,7 @@ import ManagerStaff from './managers/sapo/staff/index';
 import ManagerProductCategory from './managers/sapo/productCategory/index';
 import ManagerCustomer from './managers/sapo/customer/index';
 import ManagerOrder from './managers/sapo/order/index';
+import ManagerStaffRole from './managers/sapo/staffRole/index';
 // SYSTEM
 import ManagerSyncData from './managers/system/syncData/index';
 import ManagerTask from './managers/system/task/index';
@@ -188,13 +189,10 @@ class index extends Component {
                                     {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
                                         <Route exact path={`${url}set/target/staff`}><SetTargetStaff /></Route>}
 
-                                    {/* {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
+                                    {dataCheckPermis['analytic.view_shopmonthlytarget'] &&
                                         <Route exact path={`${url}achieve/target/shop`}><AchieveTargetShop /></Route>}
                                     {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
-                                        <Route exact path={`${url}achieve/target/staff`}><AchieveTargetStaff /></Route>} */}
-
-                                    <Route exact path={`${url}achieve/target/shop`}><AchieveTargetShop /></Route>
-                                    <Route exact path={`${url}achieve/target/staff`}><AchieveTargetStaff /></Route>
+                                        <Route exact path={`${url}achieve/target/staff`}><AchieveTargetStaff /></Route>}
 
                                     {dataCheckPermis['product.view_sapoproductcategory'] &&
                                         <Route exact path={`${url}manager/sapo/product_category`}><ManagerProductCategory /></Route>}
@@ -202,10 +200,11 @@ class index extends Component {
                                         <Route exact path={`${url}manager/sapo/shop`}><ManagerShop /></Route>}
                                     {dataCheckPermis['account.view_staff'] &&
                                         <Route exact path={`${url}manager/sapo/staff`}><ManagerStaff /></Route>}
+                                    {dataCheckPermis['account.view_staffrole'] &&
+                                        <Route exact path={`${url}role/sapo/staff`}><ManagerStaffRole /></Route>}
 
                                     {dataCheckPermis['order.view_order'] &&
                                         <Route exact path={`${url}`}><ManagerOrder /></Route>}
-
 
                                     {dataCheckPermis['sync.view_sync'] &&
                                         <Route exact path={`${url}manager/system/sync_data`}><ManagerSyncData /></Route>}

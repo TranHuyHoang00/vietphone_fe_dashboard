@@ -54,9 +54,9 @@ class index extends Component {
         const { dataProductCategorys } = this.props;
         const { classTrue, classFalse } = this.state;
         const newDataPCs = dataProductCategorys.map((product) => {
-            const saleProduct = datas?.revenue?.product_sales.find((sale) => sale.category === product.name);
+            const saleProduct = datas?.revenue?.product_sales.find((sale) => sale.category_name === product.name);
             const targetProduct = datas?.shop_monthly_target?.target_product_category.find((target) => target?.product_category?.name === product.name);
-            const dailyProduct = datas?.daily?.product_sales.find((daily) => daily.category === product.name);
+            const dailyProduct = datas?.daily?.product_sales.find((daily) => daily.category_name === product.name);
             return {
                 ...product,
                 sale: saleProduct ? saleProduct : { quantity: 0, revenue: 0 },
@@ -95,14 +95,14 @@ class index extends Component {
         };
         if (columnName === 'namePC') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[2px] py-[2px]' key={index}>
+                <div className='border px-[5px] py-[2px]' key={index}>
                     <span className='line-clamp-1'>{item?.name}</span>
                 </div>
             ));
         }
         if (columnName === 'targetMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[2px] py-[2px]' key={index}>
+                <div className='border px-[5px] py-[2px]' key={index}>
                     {item?.target?.quantity > 0 ?
                         <span className={classTrue}>
                             {item?.target?.quantity} cái
@@ -110,14 +110,14 @@ class index extends Component {
                     }
                 </div>
                 // <div className='flex items-center justify-between' key={index}>
-                //     <div className='border px-[2px] py-[2px] w-1/3'>
+                //     <div className='border px-[5px] py-[2px] w-1/3'>
                 //         {item?.target?.quantity > 0 ?
                 //             <span className={classTrue}>
                 //                 {item?.target?.quantity} cái
                 //             </span> : <span>-</span>
                 //         }
                 //     </div>
-                //     <div className='border px-[2px] py-[2px] w-2/3'>
+                //     <div className='border px-[5px] py-[2px] w-2/3'>
                 //         {item?.target?.value > 0 ?
                 //             <span className={classTrue}>
                 //                 {formatNumber(item?.target?.value)} đ
@@ -130,10 +130,10 @@ class index extends Component {
         if (columnName === 'achievedMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
                 <div className='flex items-center justify-between' key={index}>
-                    <div className='border px-[2px] py-[2px] w-1/3'>
+                    <div className='border px-[5px] py-[2px] w-1/3'>
                         {displayValue(item?.sale?.quantity, 'cái')}
                     </div>
-                    <div className='border px-[2px] py-[2px] w-2/3 '>
+                    <div className='border px-[5px] py-[2px] w-2/3 '>
                         {displayValue(item?.sale?.revenue, 'đ')}
                     </div>
                 </div>
@@ -141,14 +141,14 @@ class index extends Component {
         }
         if (columnName === 'remainingMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[2px] py-[2px]' key={index}>
+                <div className='border px-[5px] py-[2px]' key={index}>
                     {displayValueProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity, 'cái')}
                 </div>
                 // <div className='flex items-center justify-between' key={index}>
-                //     <div className='border px-[2px] py-[2px] w-1/3'>
+                //     <div className='border px-[5px] py-[2px] w-1/3'>
                 //         {displayValueProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity, 'cái')}
                 //     </div>
-                //     <div className='border px-[2px] py-[2px] w-2/3'>
+                //     <div className='border px-[5px] py-[2px] w-2/3'>
                 //         {displayValueProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value, 'đ')}
                 //     </div>
                 // </div>
@@ -156,14 +156,14 @@ class index extends Component {
         }
         if (columnName === 'statusMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[2px] py-[2px]' key={index}>
+                <div className='border px-[5px] py-[2px]' key={index}>
                     {displayStatusProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity)}
                 </div>
                 // <div className='flex items-center justify-between' key={index}>
-                //     <div className='border px-[2px] py-[2px] w-1/2'>
+                //     <div className='border px-[5px] py-[2px] w-1/2'>
                 //         {displayStatusProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity)}
                 //     </div>
-                //     <div className='border px-[2px] py-[2px] w-1/2'>
+                //     <div className='border px-[5px] py-[2px] w-1/2'>
                 //         {displayStatusProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value)}
                 //     </div>
                 // </div>
@@ -171,7 +171,7 @@ class index extends Component {
         }
         if (columnName === 'rewardMonth') {
             return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[2px] py-[2px]' key={index}>
+                <div className='border px-[5px] py-[2px]' key={index}>
                     {item?.target?.quantity === 0 ? <span>-</span> :
                         <>
                             {(item?.sale?.quantity - item?.target?.quantity >= 0) &&
@@ -186,10 +186,10 @@ class index extends Component {
         if (columnName === 'dailyDate') {
             return newDataPCs && newDataPCs.map((item, index) => (
                 <div className='flex items-center justify-between' key={index}>
-                    <div className='border px-[2px] py-[2px] w-1/3'>
+                    <div className='border px-[5px] py-[2px] w-1/3'>
                         {displayValue(item?.daily?.quantity, 'cái')}
                     </div>
-                    <div className='border px-[2px] py-[2px] w-2/3'>
+                    <div className='border px-[5px] py-[2px] w-2/3'>
                         {displayValue(item?.daily?.revenue, 'đ')}
                     </div>
                 </div>
@@ -198,7 +198,7 @@ class index extends Component {
     }
     validationData = (typeActive) => {
         if (typeActive?.typeView === "individual" && typeActive?.listId.length === 0) {
-            return { mess: "Vui lòng chọn nhân viên", check: false };
+            return { mess: "Vui lòng chọn cửa hàng", check: false };
         }
         return { check: true };
     }
@@ -525,7 +525,7 @@ class index extends Component {
                                     return (
                                         <div className='space-y-[5px] bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                                             <Divider>
-                                                <Text strong >NHÂN VIÊN
+                                                <Text strong >CỬA HÀNG
                                                     : <Text className='text-[#0574b8] dark:text-white uppercase'>{item?.shop?.name}</Text>
                                                 </Text>
                                             </Divider>

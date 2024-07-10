@@ -10,24 +10,25 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            dataFilter: { page: 1, limit: 100 }
         }
     }
     async componentDidMount() {
+        const { getListStaffRole } = this.props;
+        const { dataFilter } = this.state;
+        await getListStaffRole(dataFilter);
     }
     validationData = (data) => {
-        if (!data.code) {
-            return { mess: "Không được bỏ trống 'Code' ", check: false };
-        }
-        if (!data.name) {
-            return { mess: "Không được bỏ trống 'Tên loại sản phẩm' ", check: false };
-        }
         return { check: true };
     }
     handleEdit = async () => {
         const { dataStaff, isResult, openModal, getListStaff, editStaff, dataFilter } = this.props;
         const result = this.validationData(dataStaff);
         if (result.check) {
-            await editStaff(dataStaff.id, dataStaff);
+            const newDataStaff = { ...dataStaff };
+            if (newDataStaff?.user?.id) { delete newDataStaff.user; }
+            if (newDataStaff?.role?.id) { delete newDataStaff.role; }
+            await editStaff(newDataStaff.id, newDataStaff);
             if (isResult) {
                 await getListStaff(dataFilter);
                 openModal("edit", false);
@@ -37,31 +38,45 @@ class index extends Component {
         }
     }
     render() {
-        const { dataStaff, isLoading, onChangeStaff, modalEdit, openModal } = this.props;
+        const { dataStaff, isLoadingStaff, isLoadingStaffRole, onChangeStaff, modalEdit, openModal, dataStaffRoles } = this.props;
         return (
             <Modal title="CHỈNH SỬA" open={modalEdit}
                 onCancel={() => openModal("edit", false)} width={400}
-                maskClosable={!isLoading}
+                maskClosable={!isLoadingStaff}
                 footer={[
                     <ModalFooter openModal={openModal} type={'edit'}
-                        isLoading={isLoading} selectFuncFooterModal={this.handleEdit} />
+                        isLoading={isLoadingStaff} selectFuncFooterModal={this.handleEdit} />
                 ]}>
-                <Spin spinning={isLoading}>
+                <Spin spinning={isLoadingStaff || isLoadingStaffRole}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Code'} variable={'code'} value={dataStaff.code}
-                            important={true}
+                        <FormInput name={'Tên'} variable={'name'} value={dataStaff.name}
+                            important={true} disabled={true}
                             onChangeInput={onChangeStaff} />
 
-                        <FormInput name={'Tên loại sản phẩm'} variable={'name'} value={dataStaff.name}
-                            important={true}
+                        <FormInput name={'Số điện thoại'} variable={'phone_number'} value={dataStaff.phone_number}
+                            important={true} disabled={true}
                             onChangeInput={onChangeStaff} />
 
-                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataStaff.is_active}
+                        <FormSelectSingle
+                            name={'Trạng thái'} variable={'status'} value={dataStaff.status}
                             important={false} width={'100%'}
                             options={[
-                                { value: true, label: 'Mở' },
-                                { value: false, label: 'Khóa' },
+                                { value: 'active', label: 'Mở' },
+                                { value: 'inactive', label: 'Khóa' },
+                            ]}
+                            onChangeInput={onChangeStaff} />
+
+                        <FormSelectSingle
+                            name={'Phân quyền'} variable={'role'} value={dataStaff.role}
+                            important={false} width={'100%'}
+                            options={[
+                                { label: 'Bỏ trống', value: '' },
+                                ...dataStaffRoles && dataStaffRoles
+                                    .map((item) => ({
+                                        label: item.name,
+                                        value: item.id,
+                                    })),
                             ]}
                             onChangeInput={onChangeStaff} />
                     </div>
@@ -74,8 +89,12 @@ class index extends Component {
 const mapStateToProps = state => {
     return {
         dataStaff: state.staff.dataStaff,
-        isLoading: state.staff.isLoading,
+        isLoadingStaff: state.staff.isLoading,
         isResult: state.staff.isResult,
+
+        dataStaffRoles: state.staffRole.dataStaffRoles,
+        isLoadingStaffRole: state.staffRole.isLoading,
+
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -83,6 +102,8 @@ const mapDispatchToProps = dispatch => {
         getListStaff: (dataFilter) => dispatch(actions.getListStaffRedux(dataFilter)),
         editStaff: (id, data) => dispatch(actions.editStaffRedux(id, data)),
         onChangeStaff: (id, value) => dispatch(actions.onChangeStaffRedux(id, value)),
+
+        getListStaffRole: (dataFilter) => dispatch(actions.getListStaffRoleRedux(dataFilter)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

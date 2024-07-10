@@ -93,9 +93,9 @@ class index extends Component {
                                 value={typeActive?.listId}
                                 filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
                                 onChange={(value) => this.onChangeTypeActive(value, 'listId')}
-                                options={dataStaffs && dataStaffs.map((item) => ({
-                                    label: item?.name,
-                                    value: item.id,
+                                options={dataStaffs && dataStaffs?.map((item) => ({
+                                    label: item?.staff?.name,
+                                    value: item?.staff?.id,
                                 }))}
                             />
                         </div>
