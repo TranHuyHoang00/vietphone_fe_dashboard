@@ -119,10 +119,12 @@ class index extends Component {
                                         Thời gian (tháng)
                                         <Typography.Text type="danger" strong> *</Typography.Text>
                                     </Typography.Text>
-                                    <input className='border w-full h-[35px] px-[5px]'
-                                        type="month" value={dayjs(dataFilter?.end).format('YYYY-MM')}
-                                        onChange={(event) => this.onChangeInputMonth(event.target.value)}
-                                        max={dayjs().format('YYYY-MM')} />
+                                    <div>
+                                        <input className='border w-full h-[35px] px-[5px]'
+                                            type="month" value={dayjs(dataFilter?.end).format('YYYY-MM')}
+                                            onChange={(event) => this.onChangeInputMonth(event.target.value)}
+                                            max={dayjs().format('YYYY-MM')} />
+                                    </div>
                                 </div>
                             }
                             {typeActive?.typeTime === 'date' && <>
@@ -131,18 +133,22 @@ class index extends Component {
                                         Ngày bắt đầu
                                         <Typography.Text type="danger" strong> * <small>(cùng tháng - năm)</small></Typography.Text>
                                     </Typography.Text>
-                                    <input type='date' className='border w-full h-[35px] px-[5px]' required
-                                        value={dayjs(dataFilter?.start).format('YYYY-MM-DD')}
-                                        onChange={(event) => this.onChangeDataFilter(dayjs(event.target.value).startOf('day').format('YYYY-MM-DD HH:mm:ss'), 'start')} />
+                                    <div>
+                                        <input type='date' className='border w-full h-[35px] px-[5px]' required
+                                            value={dayjs(dataFilter?.start).format('YYYY-MM-DD')}
+                                            onChange={(event) => this.onChangeDataFilter(dayjs(event.target.value).startOf('day').format('YYYY-MM-DD HH:mm:ss'), 'start')} />
+                                    </div>
                                 </div>
                                 <div className='space-y-[2px]'>
                                     <Typography.Text strong>
                                         Ngày kết thúc
                                         <Typography.Text type="danger" strong> * <small>(cùng tháng - năm)</small></Typography.Text>
                                     </Typography.Text>
-                                    <input type='date' className='border w-full h-[35px] px-[5px]' required
-                                        value={dayjs(dataFilter?.end).format('YYYY-MM-DD')}
-                                        onChange={(event) => this.onChangeDataFilter(dayjs(event.target.value).endOf('day').format('YYYY-MM-DD HH:mm:ss'), 'end')} />
+                                    <div>
+                                        <input type='date' className='border w-full h-[35px] px-[5px]' required
+                                            value={dayjs(dataFilter?.end).format('YYYY-MM-DD')}
+                                            onChange={(event) => this.onChangeDataFilter(dayjs(event.target.value).endOf('day').format('YYYY-MM-DD HH:mm:ss'), 'end')} />
+                                    </div>
                                 </div>
                             </>}
                             <Button onClick={() => handleFilter(dataFilter, typeActive)}
