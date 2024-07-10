@@ -552,7 +552,7 @@ class index extends Component {
                                             <Table rowKey="id"
                                                 columns={columnOverViewDetails} dataSource={[item]}
                                                 pagination={false}
-                                                size="small" bordered scroll={{ x: 1000 }} />
+                                                size="small" bordered scroll={{ x: 1200 }} />
                                             <Table rowKey="id"
                                                 columns={columnDetails} dataSource={[item]}
                                                 pagination={false}
@@ -568,7 +568,7 @@ class index extends Component {
                                 <Table rowKey="id"
                                     columns={columnOverViewDetails} dataSource={dataReportTargetStaffs}
                                     pagination={false}
-                                    size="small" bordered scroll={{ x: 1000 }}
+                                    size="small" bordered scroll={{ x: 1200 }}
                                     summary={calculateSummary} />
                             </div>
                         }
