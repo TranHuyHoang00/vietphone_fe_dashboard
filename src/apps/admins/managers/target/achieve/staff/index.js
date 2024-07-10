@@ -37,12 +37,11 @@ class index extends Component {
     }
     async componentDidMount() {
         const { dataFilter } = this.state;
-        const { getListProductCategory, getAllReportTargetStaff, dataReportTargetStaffs } = this.props;
+        const { getListProductCategory, getAllReportTargetStaff } = this.props;
         await getAllReportTargetStaff(dataFilter);
         //await getListReportTargetStaff(dataFilter, this.state.typeActive?.listId);
         await getListProductCategory({ page: 1, limit: 50 });
-
-        this.setState({ dataStaffs: dataReportTargetStaffs });
+        this.setState({ dataStaffs: this.props.dataReportTargetStaffs });
 
     }
     openDrawer = async (drawerName, drawerValue) => {
