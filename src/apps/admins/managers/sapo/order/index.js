@@ -33,6 +33,7 @@ class index extends Component {
                 source: '',
                 staff: '',
                 assignee: '',
+                shop: '',
             },
             dataCheckPermis: {},
         }

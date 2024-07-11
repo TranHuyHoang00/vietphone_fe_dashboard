@@ -63,6 +63,10 @@ const handleOnChangePage = async (pageValue, pageType, dataFilter) => {
             newDataFilter.role = pageValue;
             newDataFilter.page = 1;
             break;
+        case 'shop':
+            newDataFilter.shop = pageValue;
+            newDataFilter.page = 1;
+            break;
         default:
             break;
     }

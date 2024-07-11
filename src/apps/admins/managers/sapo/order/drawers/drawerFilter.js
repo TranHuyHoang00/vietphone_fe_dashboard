@@ -7,16 +7,15 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataFilter: { page: 1, limit: 100, search: '', status: 'active' },
         }
     }
     async componentDidMount() {
-        const { getListStaff } = this.props;
-        const { dataFilter } = this.state;
-        await getListStaff(dataFilter);
+        const { getListStaff, getListShop } = this.props;
+        await getListStaff({ page: 1, limit: 100, search: '', status: 'active' });
+        await getListShop({ page: 1, limit: 100 });
     }
     render() {
-        const { dataFilter, openDrawer, drawerFilter, onChangePage, dataStaffs } = this.props;
+        const { dataFilter, openDrawer, drawerFilter, onChangePage, dataStaffs, dataShops } = this.props;
         return (
             <Drawer title="Bộ lọc" onClose={() => openDrawer('filter', false)} open={drawerFilter}>
                 <Space direction='vertical'>
@@ -70,6 +69,23 @@ class index extends Component {
                                 ]} />
                         </div>
                     </div>
+                    <div className='space-y-[2px]'>
+                        <Typography.Text strong>Cửa hàng</Typography.Text>
+                        <div>
+                            <Select style={{ width: '100%' }} showSearch
+                                onSelect={(value) => onChangePage(value, 'shop')}
+                                value={dataFilter?.shop}
+                                filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+                                options={[
+                                    { label: 'Bỏ trống', value: '' },
+                                    ...dataShops && dataShops
+                                        .map((item) => ({
+                                            label: item?.name,
+                                            value: item.id,
+                                        })),
+                                ]} />
+                        </div>
+                    </div>
                 </Space>
             </Drawer>
         );
@@ -80,14 +96,16 @@ class index extends Component {
 const mapStateToProps = state => {
     return {
         dataStaffs: state.staff.dataStaffs,
-        dataMeta: state.staff.dataMeta,
-        isLoading: state.staff.isLoading,
-        isResult: state.staff.isResult,
+        isLoadingStaff: state.staff.isLoading,
+
+        dataShops: state.shop.dataShops,
+        isLoadingShop: state.shop.isLoading,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         getListStaff: (dataFilter) => dispatch(actions.getListStaffRedux(dataFilter)),
+        getListShop: (dataFilter) => dispatch(actions.getListShopRedux(dataFilter)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));
