@@ -227,3 +227,20 @@ export const setDataReportTargetRedux = (data) => ({
     type: actionTypes.SET_DATA_REPORT_TARGET,
     data,
 })
+
+export const setDataFilterReportTargetShopRedux = (data) => ({
+    type: actionTypes.SET_DATA_FILTER_REPORT_TARGET_SHOP,
+    data,
+})
+export const setTypeActiveReportTargetShopRedux = (data) => ({
+    type: actionTypes.SET_TYPE_ACTIVE_REPORT_TARGET_SHOP,
+    data,
+})
+export const setDataFilterReportTargetStaffRedux = (data) => ({
+    type: actionTypes.SET_DATA_FILTER_REPORT_TARGET_STAFF,
+    data,
+})
+export const setTypeActiveReportTargetStaffRedux = (data) => ({
+    type: actionTypes.SET_TYPE_ACTIVE_REPORT_TARGET_STAFF,
+    data,
+})

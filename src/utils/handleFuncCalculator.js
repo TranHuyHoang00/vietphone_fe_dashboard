@@ -47,6 +47,7 @@ const handleGetTarget = (dataSetTarget, dataAchieveTarget, itemShift) => {
     const dataRewardTArgets = itemShift?.reward.find(item => item?.typeReward === "TARGET");
     const itemTargetMonth = dataRewardTArgets?.children.find(item => item?.code === itemShift?.code);
     const percentAchieveTarget = parseFloat(dataAchieveTarget?.total_revenue) / parseFloat(dataSetTarget?.value) * 100;
+
     for (const item of itemTargetMonth?.detail) {
         switch (item?.typeCondition) {
             case 'percent-money':

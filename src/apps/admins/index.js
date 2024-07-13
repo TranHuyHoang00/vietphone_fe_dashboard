@@ -53,6 +53,8 @@ import SetTargetShop from './managers/target/set/shop/index';
 import SetTargetStaff from './managers/target/set/staff/index';
 import AchieveTargetShop from './managers/target/achieve/shop/index';
 import AchieveTargetStaff from './managers/target/achieve/staff/index';
+import DetailAchieveTargetShop from './managers/target/achieve/shop/detail/index';
+import DetailAchieveTargetStaff from './managers/target/achieve/staff/detail/index';
 // STATISTICAL
 import StatisticalViewWeb from './managers/statistical/viewWeb/index';
 import StatisticalViewProduct from './managers/statistical/viewProduct/index';
@@ -203,6 +205,11 @@ class index extends Component {
                                         <Route exact path={`${url}achieve/target/shop`}><AchieveTargetShop /></Route>}
                                     {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
                                         <Route exact path={`${url}achieve/target/staff`}><AchieveTargetStaff /></Route>}
+
+                                    {dataCheckPermis['analytic.view_shopmonthlytarget'] &&
+                                        <Route exact path={`${url}achieve/target/shop/detail/:id`}><DetailAchieveTargetShop /></Route>}
+                                    {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
+                                        <Route exact path={`${url}achieve/target/staff/detail/:id`}><DetailAchieveTargetStaff /></Route>}
                                     {/* SYSTEM */}
                                     {dataCheckPermis['account.view_user'] &&
                                         <Route Route exact path={`${url}manager/system/user`}><ManagerUser /></Route>}
