@@ -1,9 +1,9 @@
 import Index from './apps/index';
-import { inject } from '@vercel/analytics';
+// import { inject } from '@vercel/analytics';
 function App() {
   return (
     <div>
-      {inject()}
+      {/* {inject()} */}
       <Index />
     </div>
   );

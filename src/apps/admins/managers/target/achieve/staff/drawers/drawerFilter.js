@@ -56,7 +56,7 @@ class index extends Component {
         }
     }
     render() {
-        const { openDrawer, drawerFilter, handleFilter, dataStaffs } = this.props;
+        const { openDrawer, drawerFilter, dataStaffs, handleFilter } = this.props;
         const { dataFilter, typeActive } = this.state;
         return (
             <Drawer title="Bộ lọc" onClose={() => openDrawer('filter', false)} open={drawerFilter}>

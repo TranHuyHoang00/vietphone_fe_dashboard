@@ -17,15 +17,15 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { getListProductCategory, dataTargetShop } = this.props;
+        const { getListProductCategoryTarget, dataTargetShop } = this.props;
         const { dataFilter } = this.state;
-        await getListProductCategory(dataFilter);
-        this.handleDataProductCategorys(dataTargetShop, this.props.dataProductCategorys);
+        await getListProductCategoryTarget(dataFilter);
+        this.handleDataProductCategorys(dataTargetShop, this.props.dataProductCategoryTargets);
     }
-    handleDataProductCategorys = (dataTargetShop, dataProductCategorys) => {
+    handleDataProductCategorys = (dataTargetShop, dataProductCategoryTargets) => {
         const dataTPCs = dataTargetShop?.target_product_category;
-        const dataPCs = dataProductCategorys.map(category => {
-            const targetProduct = dataTPCs.find(product => product.product_category.id === category.id);
+        const dataPCs = dataProductCategoryTargets.map(category => {
+            const targetProduct = dataTPCs.find(product => product.target_product_category.id === category.id);
             return {
                 ...category,
                 data: targetProduct ? { id: targetProduct.id, quantity: targetProduct.quantity, value: targetProduct.value } : null
@@ -39,7 +39,7 @@ class index extends Component {
         newDataPcs.forEach(pc => {
             if (pc.id === item.id) {
                 if (pc.data === null) {
-                    pc.data = { product_category: item.id };
+                    pc.data = { target_product_category: item.id };
                     if (itemVariable === 'quantity') {
                         pc.data.quantity = itemValue;
                     } else if (itemVariable === 'value') {
@@ -123,7 +123,7 @@ class index extends Component {
     }
     render() {
         const { Text } = Typography;
-        const { isLoadingTargetShop, isLoadingProductCategory,
+        const { isLoadingTargetShop, isLoadingProductCategoryTarget,
             onChangeTargetShop, modalEdit, openModal, dataTargetShop } = this.props;
         const { dataPCs } = this.state;
         return (
@@ -134,7 +134,7 @@ class index extends Component {
                     <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoadingTargetShop} selectFuncFooterModal={this.handleEdit} />
                 ]}>
-                <Spin spinning={isLoadingTargetShop || isLoadingProductCategory}>
+                <Spin spinning={isLoadingTargetShop || isLoadingProductCategoryTarget}>
                     <div className="space-y-[10px]">
                         <FormInput name={'Tên cửa hàng'} variable={'name'}
                             value={dataTargetShop?.shop?.name}
@@ -203,9 +203,9 @@ const mapStateToProps = state => {
         isLoadingTargetShop: state.targetShop.isLoading,
         isResultTargetShop: state.targetShop.isResult,
 
-        dataProductCategorys: state.productCategory.dataProductCategorys,
-        isLoadingProductCategory: state.productCategory.isLoading,
-        isResultProductCategory: state.productCategory.isResult,
+        dataProductCategoryTargets: state.productCategoryTarget.dataProductCategoryTargets,
+        isLoadingProductCategoryTarget: state.productCategoryTarget.isLoading,
+        isResultProductCategoryTarget: state.productCategoryTarget.isResult,
 
         dataShops: state.shop.dataShops,
         isLoadingShop: state.shop.isLoading,
@@ -220,7 +220,7 @@ const mapDispatchToProps = dispatch => {
         onChangeTargetShop: (id, value) => dispatch(actions.onChangeTargetShopRedux(id, value)),
         setDataTargetShop: (data) => dispatch(actions.setDataTargetShopRedux(data)),
 
-        getListProductCategory: (dataFilter) => dispatch(actions.getListProductCategoryRedux(dataFilter)),
+        getListProductCategoryTarget: (dataFilter) => dispatch(actions.getListProductCategoryTargetRedux(dataFilter)),
         getListShop: (dataFilter) => dispatch(actions.getListShopRedux(dataFilter)),
 
     };

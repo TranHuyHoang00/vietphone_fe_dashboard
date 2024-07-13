@@ -50,81 +50,28 @@ class index extends Component {
                 return;
         }
     }
-    renderColumDetail = (datas, columnName) => {
+    getDataTableRevenueDetail = (datas, columnName) => {
         const { dataProductCategorys } = this.props;
         const { classTrue, classFalse } = this.state;
         const newDataPCs = dataProductCategorys.map((product) => {
             const saleProduct = datas?.revenue?.product_sales.find((sale) => sale.category_name === product.name);
-            const targetProduct = datas?.shop_monthly_target?.target_product_category.find((target) => target?.product_category?.name === product.name);
             const dailyProduct = datas?.daily?.product_sales.find((daily) => daily.category_name === product.name);
             return {
                 ...product,
                 sale: saleProduct ? saleProduct : { quantity: 0, revenue: 0 },
-                target: targetProduct ? targetProduct : { quantity: 0, value: 0 },
                 daily: dailyProduct ? dailyProduct : { quantity: 0, revenue: 0 },
             };
         });
         const displayValue = (value, unit) => {
-            if (value > 0) {
-                return <span className={classTrue}>{formatNumber(value)} {unit}</span>;
-            } else if (value < 0) {
-                return <span className={classFalse}>{formatNumber(value)} {unit}</span>;
-            } else {
-                return <span>-</span>;
-            }
+            if (value === 0) { return <span>-</span>; }
+            const className = value > 0 ? classTrue : classFalse;
+            return <span className={className}>{formatNumber(value)} {unit}</span>;
         };
-        const displayValueProviso = (proviso, value, unit) => {
-            if (proviso === 0 || proviso === "0.00" || proviso === "") {
-                return <span>-</span>;
-            } else {
-                if (value >= 0) {
-                    return <span className={classTrue}>{formatNumber(value)} {unit}</span>;
-                }
-                if (value < 0) { return <span className={classFalse}>{formatNumber(value)} {unit}</span>; }
-            }
-        };
-        const displayStatusProviso = (proviso, value) => {
-            if (proviso === 0 || proviso === "0.00" || proviso === "") {
-                return <span>-</span>;
-            } else {
-                if (value >= 0) {
-                    return <span className={classTrue}>Đạt</span>;
-                }
-                if (value < 0) { return <span className={classFalse}>Chưa</span>; }
-            }
-        };
-        if (columnName === 'namePC') {
+        if (columnName === 'nameProductCategory') {
             return newDataPCs && newDataPCs.map((item, index) => (
                 <div className='border px-[5px] py-[2px]' key={index}>
                     <span className='line-clamp-1'>{item?.name}</span>
                 </div>
-            ));
-        }
-        if (columnName === 'targetMonth') {
-            return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[5px] py-[2px]' key={index}>
-                    {item?.target?.quantity > 0 ?
-                        <span className={classTrue}>
-                            {item?.target?.quantity} cái
-                        </span> : <span>-</span>
-                    }
-                </div>
-                // <div className='flex items-center justify-between' key={index}>
-                //     <div className='border px-[5px] py-[2px] w-1/3'>
-                //         {item?.target?.quantity > 0 ?
-                //             <span className={classTrue}>
-                //                 {item?.target?.quantity} cái
-                //             </span> : <span>-</span>
-                //         }
-                //     </div>
-                //     <div className='border px-[5px] py-[2px] w-2/3'>
-                //         {item?.target?.value > 0 ?
-                //             <span className={classTrue}>
-                //                 {formatNumber(item?.target?.value)} đ
-                //             </span> : <span>-</span>
-                //         }
-                //     </div>
-                // </div>
             ));
         }
         if (columnName === 'achievedMonth') {
@@ -136,50 +83,6 @@ class index extends Component {
                     <div className='border px-[5px] py-[2px] w-2/3 '>
                         {displayValue(item?.sale?.revenue, 'đ')}
                     </div>
-                </div>
-            ));
-        }
-        if (columnName === 'remainingMonth') {
-            return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[5px] py-[2px]' key={index}>
-                    {displayValueProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity, 'cái')}
-                </div>
-                // <div className='flex items-center justify-between' key={index}>
-                //     <div className='border px-[5px] py-[2px] w-1/3'>
-                //         {displayValueProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity, 'cái')}
-                //     </div>
-                //     <div className='border px-[5px] py-[2px] w-2/3'>
-                //         {displayValueProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value, 'đ')}
-                //     </div>
-                // </div>
-            ));
-        }
-        if (columnName === 'statusMonth') {
-            return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[5px] py-[2px]' key={index}>
-                    {displayStatusProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity)}
-                </div>
-                // <div className='flex items-center justify-between' key={index}>
-                //     <div className='border px-[5px] py-[2px] w-1/2'>
-                //         {displayStatusProviso(item?.target?.quantity, item?.sale?.quantity - item?.target?.quantity)}
-                //     </div>
-                //     <div className='border px-[5px] py-[2px] w-1/2'>
-                //         {displayStatusProviso(item?.target?.value, item?.sale?.revenue - item?.target?.value)}
-                //     </div>
-                // </div>
-            ));
-        }
-        if (columnName === 'rewardMonth') {
-            return newDataPCs && newDataPCs.map((item, index) => (
-                <div className='border px-[5px] py-[2px]' key={index}>
-                    {item?.target?.quantity === 0 ? <span>-</span> :
-                        <>
-                            {(item?.sale?.quantity - item?.target?.quantity >= 0) &&
-                                <span className="text-green-600 font-medium line-clamp-1">+ 100,000 đ</span>}
-                            {(item?.sale?.quantity - item?.target?.quantity < 0) &&
-                                <span>-</span>}
-                        </>
-                    }
                 </div>
             ));
         }
@@ -232,7 +135,7 @@ class index extends Component {
         const { dataFilter, drawerFilter, typeActive } = this.state;
         const { Text } = Typography;
         const { isLoading, dataReportTargetShops, dataShops } = this.props;
-        const columnDetails = [
+        const columnRevenueDetails = [
             {
                 title: `${typeActive?.typeTime === 'month' ?
                     `CHI TIẾT DOANH THU THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
@@ -240,41 +143,25 @@ class index extends Component {
                 children: [
                     {
                         title: "TÊN LOẠI", width: 250,
-                        render: (datas) => <>{this.renderColumDetail(datas, 'namePC')}</>
+                        render: (datas) => <>{this.getDataTableRevenueDetail(datas, 'nameProductCategory')}</>
                     },
-                    // {
-                    //     title: "TARGET", width: 70,
-                    //     render: (datas) => <>{this.renderColumDetail(datas, 'targetMonth')}</>
-                    // },
                     {
                         title: "THỰC ĐẠT", width: 200,
-                        render: (datas) => <>{this.renderColumDetail(datas, 'achievedMonth')}</>
+                        render: (datas) => <>{this.getDataTableRevenueDetail(datas, 'achievedMonth')}</>
                     },
-                    // {
-                    //     title: "CÒN LẠI", width: 70,
-                    //     render: (datas) => <>{this.renderColumDetail(datas, 'remainingMonth')}</>
-                    // },
-                    // {
-                    //     title: "ĐẠT/CHƯA", width: 60,
-                    //     render: (datas) => <>{this.renderColumDetail(datas, 'statusMonth')}</>
-                    // },
-                    // {
-                    //     title: "THƯỞNG", width: 150,
-                    //     render: (datas) => <>{this.renderColumDetail(datas, 'rewardMonth')}</>
-                    // },
                 ]
             },
             {
                 title: `CTDT NGÀY ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`, children: [
                     {
                         title: "THỰC ĐẠT", width: 200,
-                        render: (datas) => <>{this.renderColumDetail(datas, 'dailyDate')}</>
+                        render: (datas) => <>{this.getDataTableRevenueDetail(datas, 'dailyDate')}</>
                     }
                 ]
             }
 
         ];
-        const columnOverViewDetails = [
+        const columnRevenueOverViews = [
 
             {
                 title: `${typeActive?.typeTime === 'month' ?
@@ -308,8 +195,8 @@ class index extends Component {
                     },
                     {
                         title: `CÒN LẠI`, dataIndex: ['revenue', 'total_revenue'],
-                        render: (value, item) => {
-                            const remainingRevenue = item?.shop_monthly_target?.value - value;
+                        render: (value, datas) => {
+                            const remainingRevenue = datas?.shop_monthly_target?.value - value;
                             if (remainingRevenue > 0) {
                                 return {
                                     children: <Text strong className='text-red-500'>{`-${formatNumber(remainingRevenue)}`}</Text>,
@@ -326,8 +213,8 @@ class index extends Component {
                     },
                     {
                         title: 'ĐẠT', dataIndex: ['revenue', 'total_revenue'],
-                        render: (value, item) => {
-                            const remainingRevenue = item?.shop_monthly_target?.value - value;
+                        render: (value, datas) => {
+                            const remainingRevenue = datas?.shop_monthly_target?.value - value;
                             if (remainingRevenue > 0) {
                                 return {
                                     children: <Text strong className='text-red-500'>{`CHƯA`}</Text>,
@@ -343,11 +230,11 @@ class index extends Component {
                     },
                     {
                         title: `TARGET NGÀY`, dataIndex: ['revenue', 'total_revenue'],
-                        render: (value, item) => {
-                            const remainingRevenue = item?.shop_monthly_target?.value - value;
+                        render: (value, datas) => {
+                            const remainingRevenue = datas?.shop_monthly_target?.value - value;
                             if (remainingRevenue > 0) {
                                 return {
-                                    children: <Text>{`${formatNumber(this.getTargetDate(dataFilter?.end, item?.shop_monthly_target?.value, item?.revenue?.total_revenue))}`}</Text>
+                                    children: <Text>{`${formatNumber(this.getTargetDate(dataFilter?.end, datas?.shop_monthly_target?.value, datas?.revenue?.total_revenue))}`}</Text>
                                 }
                             } else {
                                 return { children: <Text>0</Text> }
@@ -368,10 +255,10 @@ class index extends Component {
                     },
                     {
                         title: `CÒN LẠI`, dataIndex: ['daily', 'total_revenue'],
-                        render: (value, item) => {
-                            const remainingRevenue = item?.shop_monthly_target?.value - item?.revenue?.total_revenue;
+                        render: (value, datas) => {
+                            const remainingRevenue = datas?.shop_monthly_target?.value - value;
                             if (remainingRevenue > 0) {
-                                const remainingDaily = (this.getTargetDate(dataFilter?.end, item?.shop_monthly_target?.value, item?.revenue?.total_revenue) - item?.daily?.total_revenue);
+                                const remainingDaily = (this.getTargetDate(dataFilter?.end, datas?.shop_monthly_target?.value, value) - datas?.daily?.total_revenue);
                                 if (remainingDaily > 0) {
                                     return {
                                         children: <Text strong className='text-red-500'>{`-${formatNumber(remainingDaily)}`}</Text>,
@@ -391,10 +278,10 @@ class index extends Component {
                     },
                     {
                         title: 'ĐẠT', dataIndex: ['daily', 'total_revenue'],
-                        render: (value, item) => {
-                            const remainingRevenue = item?.shop_monthly_target?.value - item?.revenue?.total_revenue;
+                        render: (value, datas) => {
+                            const remainingRevenue = datas?.shop_monthly_target?.value - datas?.revenue?.total_revenue;
                             if (remainingRevenue > 0) {
-                                const remainingDaily = (this.getTargetDate(dataFilter?.end, item?.shop_monthly_target?.value, item?.revenue?.total_revenue) - item?.daily?.total_revenue);
+                                const remainingDaily = (this.getTargetDate(dataFilter?.end, datas?.shop_monthly_target?.value, datas?.revenue?.total_revenue) - value);
                                 if (remainingDaily > 0) {
                                     return {
                                         children: <Text strong className='text-red-500'>{`CHƯA`}</Text>,
@@ -481,7 +368,7 @@ class index extends Component {
                 key: '1',
                 label: (
                     // eslint-disable-next-line
-                    <a onClick={() => exportTableAntdToExcel(columnOverViewDetails, dataReportTargetShops, dayjs().format("HH-mm/DD-MM-YYYY"))}>
+                    <a onClick={() => exportTableAntdToExcel(columnRevenueOverViews, dataReportTargetShops, dayjs().format("HH-mm/DD-MM-YYYY"))}>
                         Excel
                     </a>
                 ),
@@ -530,11 +417,11 @@ class index extends Component {
                                                 </Text>
                                             </Divider>
                                             <Table rowKey="id"
-                                                columns={columnOverViewDetails} dataSource={[item]}
+                                                columns={columnRevenueOverViews} dataSource={[item]}
                                                 pagination={false}
-                                                size="small" bordered scroll={{ x: 1200 }} />
+                                                size="small" bordered scroll={{ x: 1000 }} />
                                             <Table rowKey="id"
-                                                columns={columnDetails} dataSource={[item]}
+                                                columns={columnRevenueDetails} dataSource={[item]}
                                                 pagination={false}
                                                 size="small" bordered scroll={{ x: 650 }} />
                                         </div>
@@ -546,9 +433,9 @@ class index extends Component {
                         {typeActive?.typeTable === 'overview' &&
                             <div id="tableReportTargetShop" className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                                 <Table rowKey="id"
-                                    columns={columnOverViewDetails} dataSource={dataReportTargetShops}
+                                    columns={columnRevenueOverViews} dataSource={dataReportTargetShops}
                                     pagination={false}
-                                    size="small" bordered scroll={{ x: 1200 }}
+                                    size="small" bordered scroll={{ x: 1000 }}
                                     summary={calculateSummary} />
                             </div>
                         }

@@ -1,9 +1,9 @@
 // VIEW ALL
 const dataPermiViews = [
+    // WEBSITE
     "statistical.view_web", "statistical.view_product",
-    "order.view_order",
     "product.view_product", "promotion.view_flashsaleitem",
-    "account.view_customer", "account.view_user", "group.view_group",
+    "account.view_customer",
     "product.view_comment",
     "product.view_promotioninfo", "promotion.view_flashsale",
     "product.view_warranty", "product.view_repair",
@@ -11,10 +11,18 @@ const dataPermiViews = [
     "product.view_attributevalue", "product.view_attribute", "product.view_groupattribute", "product.view_variantattributegroup",
     "product.view_tag", "product.view_brand", "product.view_category", "shop.view_shop",
     "post.view_post", "post.view_category",
-    "analytic.view_shopmonthlytarget", "product.view_sapoproductcategory",
-    "analytic.view_staffmonthlytarget", "account.view_staffrole",
+    // SAPO
+    "product.view_sapoproductcategory",
+    "account.view_staffrole",
+    "product.view_sapotargetproductcategory",
     "account.view_staff",
+    "order.view_order",
+    // TARGET
+    "analytic.view_shopmonthlytarget",
+    "analytic.view_staffmonthlytarget",
+    // SYSTEM
     "sync.view_sync", "task.view_task",
+    "account.view_user", "group.view_group",
 ];
 // WEBSITE
 const dataOrders = [
@@ -87,6 +95,9 @@ const dataCustomers = [
 const dataStaffRoles = [
     "account.view_staffrole", "account.change_staffrole", "account.delete_staffrole", "account.add_staffrole",
 ];
+const dataProductCategoryTargets = [
+    "product.view_sapotargetproductcategory", "product.delete_sapotargetproductcategory", "product.change_sapotargetproductcategory", "product.add_sapotargetproductcategory"
+]
 // TARGET
 const dataTargetShops = [
     "analytic.view_shopmonthlytarget", "analytic.change_shopmonthlytarget", "analytic.delete_shopmonthlytarget", "analytic.add_shopmonthlytarget",
@@ -122,7 +133,7 @@ export {
     dataPosts, dataCategoryPosts,
     // SAPO
     dataShops, dataProductCategorys, dataStaffs, dataCustomers,
-    dataStaffRoles,
+    dataStaffRoles, dataProductCategoryTargets,
     // TARGET
     dataTargetShops, dataTargetStaffs,
     // SYSTEM

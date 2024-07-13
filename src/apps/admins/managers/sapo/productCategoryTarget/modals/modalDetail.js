@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Modal, Button, Spin } from 'antd';
 import { textLine13 } from '@components/displays/line13';
-import { formatNumber } from '@utils/handleFuncFormat';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -13,7 +12,7 @@ class index extends Component {
     async componentDidMount() {
     }
     render() {
-        const { dataTargetStaff, isLoading, modalDetail, openModal } = this.props;
+        const { dataProductCategoryTarget, isLoading, modalDetail, openModal } = this.props;
         return (
             <Modal title="CHI TIẾT" open={modalDetail}
                 onCancel={() => openModal("detail", false)} width={400}
@@ -25,18 +24,9 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {textLine13('Nhân viên', dataTargetStaff?.staff?.name)}
-                        {textLine13('Target', `${formatNumber(dataTargetStaff.value)}đ`)}
-                        {textLine13('Thời gian', dataTargetStaff.month)}
-                        {dataTargetStaff && dataTargetStaff.target_product_category && dataTargetStaff.target_product_category.length !== 0 &&
-                            dataTargetStaff.target_product_category.map((item) => {
-                                return (
-                                    <div key={item?.id}>
-                                        {textLine13(`${item?.target_product_category?.name}`, `${item?.quantity} cái - ${formatNumber(item?.value)}đ`)}
-                                    </div>
-                                )
-                            })
-                        }
+                        {textLine13('Code', dataProductCategoryTarget.code)}
+                        {textLine13('Tên', dataProductCategoryTarget.name)}
+                        {textLine13('Trạng thái', (dataProductCategoryTarget?.is_active ? 'Mở' : 'Khóa'))}
                     </div>
                 </Spin>
             </Modal>
@@ -46,8 +36,8 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataTargetStaff: state.targetStaff.dataTargetStaff,
-        isLoading: state.targetStaff.isLoading,
+        dataProductCategoryTarget: state.productCategoryTarget.dataProductCategoryTarget,
+        isLoading: state.productCategoryTarget.isLoading,
     };
 };
 const mapDispatchToProps = dispatch => {

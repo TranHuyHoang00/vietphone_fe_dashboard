@@ -8,15 +8,46 @@ import {
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
 
-const combineDataStaff = (datasFirst, datasSecond) => {
-    const newDatas = datasFirst.map((itemFirst) => {
+
+const combineDataStaff = async (datasFirst, datasSecond, dataFilter) => {
+    const newDatas = await Promise.all(datasFirst.map(async (itemFirst) => {
         const itemSelected = datasSecond.find((itemSecond) => itemSecond?.staff?.id === itemFirst.staff?.id);
+        const userRole = itemFirst?.staff?.role?.code;
+        let shopID = null;
+        let dataAchieveTargetShopMonths = null;
+        let dataAchieveTargetShopDailys = null;
+        if (userRole === "officialHeadShops" || userRole === "probationHeadShops") {
+            shopID = itemFirst?.staff?.shop?.id;
+        }
+        if (shopID !== null) {
+            const dataFilterSecond = {
+                start: dayjs(dataFilter?.end).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+                end: dataFilter?.end
+            }
+            dataAchieveTargetShopMonths = await getReportTargetShopForStaff(dataFilter, [shopID]);
+            dataAchieveTargetShopDailys = await getReportTargetShopForStaff(dataFilterSecond, [shopID]);
+        }
+
         return {
             ...itemFirst,
             daily: itemSelected?.revenue ? itemSelected?.revenue : {},
+            revenueShopMonth: dataAchieveTargetShopMonths ? dataAchieveTargetShopMonths?.[0]?.revenue : null,
+            revenueShopDaily: dataAchieveTargetShopDailys ? dataAchieveTargetShopDailys?.[0]?.revenue : null,
         };
-    });
+    }));
     return newDatas;
+}
+const getReportTargetShopForStaff = async (dataFilter, listId) => {
+    try {
+        const data = await getListReportTargetShop(dataFilter, listId);
+        if (data && data.data) {
+            return data?.data?.data
+        } else {
+            return []
+        }
+    } catch (error) {
+        return []
+    }
 }
 const combineDataShop = (datasFirst, datasSecond) => {
     const newDatas = datasFirst.map((itemFirst) => {
@@ -104,8 +135,9 @@ export const getListReportTargetStaffRedux = (dataFilter, listId) => {
                 end: dataFilter?.end
             }
             const dataSecond = await getListReportTargetStaff(dataFilterSecond, listId);
+
             if (dataFirst && dataSecond && dataFirst.data && dataSecond.data) {
-                const newDatas = combineDataStaff(dataFirst?.data?.data, dataSecond?.data?.data);
+                const newDatas = await combineDataStaff(dataFirst?.data?.data, dataSecond?.data?.data, dataFilter);
                 dispatch(getListReportTargetStaffSuccess(newDatas));
             } else {
                 dispatch(reportTargetFaided());
@@ -128,7 +160,7 @@ export const getAllReportTargetStaffRedux = (dataFilter) => {
             }
             const dataSecond = await getAllReportTargetStaff(dataFilterSecond);
             if (dataFirst && dataSecond && dataFirst.data && dataSecond.data) {
-                const newDatas = combineDataStaff(dataFirst?.data?.data, dataSecond?.data?.data);
+                const newDatas = await combineDataStaff(dataFirst?.data?.data, dataSecond?.data?.data, dataFilter);
                 dispatch(getAllReportTargetStaffSuccess(newDatas));
             } else {
                 dispatch(reportTargetFaided());

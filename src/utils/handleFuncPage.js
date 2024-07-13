@@ -67,6 +67,10 @@ const handleOnChangePage = async (pageValue, pageType, dataFilter) => {
             newDataFilter.shop = pageValue;
             newDataFilter.page = 1;
             break;
+        case 'shift':
+            newDataFilter.shift = pageValue;
+            newDataFilter.page = 1;
+            break;
         default:
             break;
     }

@@ -7,7 +7,7 @@ import {
 } from "react-icons/ai";
 import { IoStatsChart, IoBarChartSharp } from "react-icons/io5";
 import { FaUserShield, FaDatabase } from "react-icons/fa6";
-import { FaCcDiscover, FaUserGraduate, FaUserTie } from "react-icons/fa";
+import { FaCcDiscover, FaUserGraduate, FaUserTie, FaBlender } from "react-icons/fa";
 import {
     BsFillBox2HeartFill, BsCalendar2PlusFill, BsAward, BsBox2HeartFill,
     BsApple,
@@ -81,6 +81,7 @@ const itemMenuLeftLayoutSider = [
                 key: 'sapo_manager', icon: <AiFillBug />, label: 'Quản lý', children: [
                     { key: 'manager/sapo/shop', icon: <AiFillShop />, label: 'Cửa hàng', title: 'shop.view_shop' },
                     { key: 'manager/sapo/product_category', icon: <BsApple />, label: 'Loại sản phẩm', title: 'product.view_sapoproductcategory' },
+                    { key: 'manager/sapo/product_category_target', icon: <FaBlender />, label: 'Loại sản phẩm TG', title: 'product.view_sapotargetproductcategory' },
                     { key: 'manager/sapo/staff', icon: <FaUserGraduate />, label: 'Nhân viên', title: 'account.view_staff' },
                     { key: 'manager/sapo/customer', icon: <AiOutlineUser />, label: 'Khách hàng', title: 'account.view_customer' },
                 ],

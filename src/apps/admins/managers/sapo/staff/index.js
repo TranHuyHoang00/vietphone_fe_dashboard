@@ -104,6 +104,19 @@ class index extends Component {
                 render: (role) => <Text >{role?.name}</Text>,
             },
             {
+                title: 'CỬA HÀNG', dataIndex: 'shop', responsive: ['lg'],
+                render: (shop) => <Text >{shop?.name}</Text>,
+                sorter: (a, b) => a?.shop?.name.localeCompare(b?.shop?.name),
+            },
+            {
+                title: 'CA LÀM', dataIndex: 'shift', responsive: ['lg'],
+                render: (shift) =>
+                    <>
+                        {shift === "ft" && <Text >Làm full</Text>}
+                        {shift === "pt" && <Text >Làm ca</Text>}
+                    </>
+            },
+            {
                 title: 'STATUS', dataIndex: 'status', width: 70, responsive: ['lg'],
                 render: (status) => <>{status === "active" ? <Tag color='green'>Mở</Tag> : <Tag color='red'>Khóa</Tag>}</>
             },

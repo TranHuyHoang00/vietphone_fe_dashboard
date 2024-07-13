@@ -67,7 +67,7 @@ class index extends Component {
                         <Select style={{ width: "100%" }} placement='topRight' value={dataEdit.is_active}
                             onChange={(value) => this.handleOnchangeInput(value, 'is_active')}
                             options={[
-                                { value: null, label: 'BỎ TRỐNG' },
+                                { value: null, label: 'Bỏ trống' },
                                 { value: true, label: 'Mở' },
                                 { value: false, label: 'Khóa' },
                             ]} />
@@ -77,7 +77,7 @@ class index extends Component {
                         <Select style={{ width: "100%" }} placement='topRight' value={dataEdit.product_brand}
                             onChange={(value) => this.handleOnchangeInput(value, 'product_brand')}
                             options={[
-                                { value: null, label: 'BỎ TRỐNG' },
+                                { value: null, label: 'Bỏ trống' },
                                 { value: "", label: 'XÓA BỎ' },
                                 ...dataBrands && dataBrands.map((item) => ({
                                     label: item.name,
@@ -89,7 +89,7 @@ class index extends Component {
                         <Select style={{ width: "100%" }} placement='topRight' value={dataEdit.promotion_info}
                             onChange={(value) => this.handleOnchangeInput(value, 'promotion_info')}
                             options={[
-                                { value: null, label: 'BỎ TRỐNG' },
+                                { value: null, label: 'Bỏ trống' },
                                 { value: "", label: 'XÓA BỎ' },
                                 ...dataPromotions && dataPromotions.map((item) => ({
                                     label: item.name,
@@ -101,7 +101,7 @@ class index extends Component {
                         <Select style={{ width: "100%" }} placement='topRight' value={dataEdit.repair_time}
                             onChange={(value) => this.handleOnchangeInput(value, 'repair_time')}
                             options={[
-                                { value: null, label: 'BỎ TRỐNG' },
+                                { value: null, label: 'Bỏ trống' },
                                 { value: "", label: 'XÓA BỎ' },
                                 ...dataRepairs && dataRepairs.map((item) => ({
                                     label: item.value,

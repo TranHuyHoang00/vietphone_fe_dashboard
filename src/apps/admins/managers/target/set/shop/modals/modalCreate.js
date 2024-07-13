@@ -19,9 +19,9 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { getListProductCategory, getListShop, setDataTargetShop } = this.props;
+        const { getListProductCategoryTarget, getListShop, setDataTargetShop } = this.props;
         const { dataFilter } = this.state;
-        await getListProductCategory(dataFilter);
+        await getListProductCategoryTarget(dataFilter);
         await getListShop(dataFilter);
         await setDataTargetShop({ month: this.props.dataFilter.month });
         await this.handleGetListTargetShop({ page: 1, limit: 100, month: this.props.dataFilter.month });
@@ -40,7 +40,7 @@ class index extends Component {
     }
     handleOnchangeInput = (itemValue, itemVariable, item) => {
         const { dataTPCs } = this.state;
-        const dataIndex = dataTPCs.findIndex(data => data.product_category === item.id);
+        const dataIndex = dataTPCs.findIndex(data => data.target_product_category === item.id);
         if (dataIndex !== -1) {
             const updatedDataTPCs = dataTPCs.map((data, index) => {
                 if (index === dataIndex) {
@@ -53,7 +53,7 @@ class index extends Component {
             });
             this.setState({ dataTPCs: updatedDataTPCs });
         } else {
-            const newDataTPC = { product_category: item.id, name: item.name, [itemVariable]: itemValue };
+            const newDataTPC = { target_product_category: item.id, name: item.name, [itemVariable]: itemValue };
             this.setState({ dataTPCs: [...dataTPCs, newDataTPC] });
         }
     }
@@ -114,7 +114,7 @@ class index extends Component {
     }
     getValue = (itemVariable, item) => {
         const { dataTPCs } = this.state;
-        const dataSelected = dataTPCs.find(data => data.product_category === item.id);
+        const dataSelected = dataTPCs.find(data => data.target_product_category === item.id);
         switch (itemVariable) {
             case 'value':
                 return dataSelected?.value;
@@ -140,9 +140,9 @@ class index extends Component {
     };
     render() {
         const { Text } = Typography;
-        const { isLoadingTargetShop, isLoadingProductCategory, isLoadingShop,
+        const { isLoadingTargetShop, isLoadingProductCategoryTarget, isLoadingShop,
             onChangeTargetShop, modalCreate, openModal,
-            dataTargetShop, dataProductCategorys, dataFilter
+            dataTargetShop, dataProductCategoryTargets, dataFilter
         } = this.props;
         const { newDataShops } = this.state;
         return (
@@ -154,7 +154,7 @@ class index extends Component {
                     <ModalFooter openModal={openModal} type={'create'}
                         isLoading={isLoadingTargetShop} selectFuncFooterModal={this.handleCreate} />
                 ]}>
-                <Spin spinning={isLoadingTargetShop || isLoadingProductCategory || isLoadingShop}>
+                <Spin spinning={isLoadingTargetShop || isLoadingProductCategoryTarget || isLoadingShop}>
                     <div className="space-y-[10px]">
                         <div className='space-y-[3px]'>
                             <Text italic strong>Cửa hàng<Text type="danger" strong> *</Text></Text>
@@ -193,7 +193,7 @@ class index extends Component {
                             <Collapse size='small'>
                                 <Collapse.Panel key={1} header="KPI SẢN PHẨM">
                                     <div className='space-y-[5px]'>
-                                        {dataProductCategorys && dataProductCategorys.reverse().map((item, index) => {
+                                        {dataProductCategoryTargets && dataProductCategoryTargets.reverse().map((item, index) => {
                                             return (
                                                 <Card key={item.id} title={`${item.name}`} size='small'>
                                                     <div className='flex items-center justify-center space-x-[5px]'>
@@ -234,9 +234,8 @@ const mapStateToProps = state => {
         isLoadingTargetShop: state.targetShop.isLoading,
         isResultTargetShop: state.targetShop.isResult,
 
-        dataProductCategorys: state.productCategory.dataProductCategorys,
-        isLoadingProductCategory: state.productCategory.isLoading,
-        isResultProductCategory: state.productCategory.isResult,
+        dataProductCategoryTargets: state.productCategoryTarget.dataProductCategoryTargets,
+        isLoadingProductCategoryTarget: state.productCategoryTarget.isLoading,
 
         dataShops: state.shop.dataShops,
         isLoadingShop: state.shop.isLoading,
@@ -250,7 +249,7 @@ const mapDispatchToProps = dispatch => {
         onChangeTargetShop: (id, value) => dispatch(actions.onChangeTargetShopRedux(id, value)),
         setDataTargetShop: (data) => dispatch(actions.setDataTargetShopRedux(data)),
 
-        getListProductCategory: (dataFilter) => dispatch(actions.getListProductCategoryRedux(dataFilter)),
+        getListProductCategoryTarget: (dataFilter) => dispatch(actions.getListProductCategoryTargetRedux(dataFilter)),
         getListShop: (dataFilter) => dispatch(actions.getListShopRedux(dataFilter)),
 
     };

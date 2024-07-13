@@ -26,6 +26,7 @@ export * from '@actions/sapo/staffTypes';
 export * from '@actions/sapo/orderTypes';
 export * from '@actions/sapo/customerTypes';
 export * from '@actions/sapo/staffRoleTypes';
+export * from '@actions/sapo/productCategoryTargetTypes';
 // SYSTEM
 export * from '@actions/system/taskTypes';
 export * from '@actions/system/groupTypes';

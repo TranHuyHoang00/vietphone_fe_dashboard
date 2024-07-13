@@ -14,9 +14,10 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { getListStaffRole } = this.props;
+        const { getListStaffRole, getListShop } = this.props;
         const { dataFilter } = this.state;
         await getListStaffRole(dataFilter);
+        await getListShop(dataFilter);
     }
     validationData = (data) => {
         return { check: true };
@@ -28,6 +29,7 @@ class index extends Component {
             const newDataStaff = { ...dataStaff };
             if (newDataStaff?.user?.id) { delete newDataStaff.user; }
             if (newDataStaff?.role?.id) { delete newDataStaff.role; }
+            if (newDataStaff?.shop?.id) { delete newDataStaff.shop; }
             await editStaff(newDataStaff.id, newDataStaff);
             if (isResult) {
                 await getListStaff(dataFilter);
@@ -38,7 +40,9 @@ class index extends Component {
         }
     }
     render() {
-        const { dataStaff, isLoadingStaff, isLoadingStaffRole, onChangeStaff, modalEdit, openModal, dataStaffRoles } = this.props;
+        const { dataStaff, isLoadingStaff, isLoadingStaffRole, onChangeStaff, modalEdit, openModal, dataStaffRoles,
+            dataShops, isLoadingShop
+        } = this.props;
         return (
             <Modal title="CHỈNH SỬA" open={modalEdit}
                 onCancel={() => openModal("edit", false)} width={400}
@@ -47,7 +51,7 @@ class index extends Component {
                     <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoadingStaff} selectFuncFooterModal={this.handleEdit} />
                 ]}>
-                <Spin spinning={isLoadingStaff || isLoadingStaffRole}>
+                <Spin spinning={isLoadingStaff || isLoadingStaffRole || isLoadingShop}>
                     <div className="space-y-[10px]">
 
                         <FormInput name={'Tên'} variable={'name'} value={dataStaff.name}
@@ -68,7 +72,7 @@ class index extends Component {
                             onChangeInput={onChangeStaff} />
 
                         <FormSelectSingle
-                            name={'Phân quyền'} variable={'role'} value={dataStaff.role}
+                            name={'Phân quyền'} variable={'role'} value={dataStaff?.role?.id ? dataStaff?.role?.id : dataStaff?.role}
                             important={false} width={'100%'}
                             options={[
                                 { label: 'Bỏ trống', value: '' },
@@ -77,6 +81,27 @@ class index extends Component {
                                         label: item.name,
                                         value: item.id,
                                     })),
+                            ]}
+                            onChangeInput={onChangeStaff} />
+                        <FormSelectSingle
+                            name={'Cửa hàng'} variable={'shop'} value={dataStaff?.shop?.id ? dataStaff?.shop?.id : dataStaff?.shop}
+                            important={false} width={'100%'}
+                            options={[
+                                { label: 'Bỏ trống', value: '' },
+                                ...dataShops && dataShops
+                                    .map((item) => ({
+                                        label: item.name,
+                                        value: item.id,
+                                    })),
+                            ]}
+                            onChangeInput={onChangeStaff} />
+                        <FormSelectSingle
+                            name={'Ca làm'} variable={'shift'} value={dataStaff?.shift}
+                            important={false} width={'100%'}
+                            options={[
+                                { label: 'Bỏ trống', value: '' },
+                                { label: 'LÀM FULL', value: 'ft' },
+                                { label: 'LÀM CA', value: 'pt' },
                             ]}
                             onChangeInput={onChangeStaff} />
                     </div>
@@ -95,6 +120,8 @@ const mapStateToProps = state => {
         dataStaffRoles: state.staffRole.dataStaffRoles,
         isLoadingStaffRole: state.staffRole.isLoading,
 
+        dataShops: state.shop.dataShops,
+        isLoadingShop: state.shop.isLoading,
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -104,6 +131,7 @@ const mapDispatchToProps = dispatch => {
         onChangeStaff: (id, value) => dispatch(actions.onChangeStaffRedux(id, value)),
 
         getListStaffRole: (dataFilter) => dispatch(actions.getListStaffRoleRedux(dataFilter)),
+        getListShop: (dataFilter) => dispatch(actions.getListShopRedux(dataFilter)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

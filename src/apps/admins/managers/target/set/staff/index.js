@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
-    Table, Space, Divider, Button, Popconfirm, Input,
+    Table, Space, Divider, Button, Popconfirm, Input, Tag,
     Spin, Pagination, Typography, Dropdown, Card, Collapse
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus, AiFillFilter } from "react-icons/ai";
@@ -100,12 +100,23 @@ class index extends Component {
                 sorter: (a, b) => a?.staff?.name.localeCompare(b?.staff?.name),
             },
             {
+                title: 'THÔNG TIN', dataIndex: 'staff', responsive: ['lg'],
+                render: (staff) =>
+                    <div className='space-y-[5px]'>
+                        <div><Tag color='blue' strong >{staff?.shop?.name}</Tag></div>
+                        <div><Tag color='green' strong>{staff?.role?.name}</Tag></div>
+                        <div><Tag color='red' strong>{staff?.shift === "ft" ? 'Làm full' : 'Làm ca'}</Tag></div>
+
+                    </div>,
+                sorter: (a, b) => a?.staff?.name.localeCompare(b?.staff?.name),
+            },
+            {
                 title: 'TARGET', dataIndex: 'value',
                 render: (value) => <Text >{formatNumber(value)}</Text>,
                 sorter: (a, b) => a?.value - b?.value,
             },
             {
-                title: 'KPI', dataIndex: 'target_product_category',
+                title: 'KPI', dataIndex: 'target_product_category', responsive: ['lg'],
                 render: (datas) => {
                     return <>
                         {datas && datas.length !== 0 && <Collapse size='small' accordion items={[
@@ -116,7 +127,7 @@ class index extends Component {
                                     <>
                                         {datas && datas.length !== 0 && datas.map((item) => {
                                             return (
-                                                <Card key={item.id} title={`${item?.product_category?.name}`} size='small'>
+                                                <Card key={item.id} title={`${item?.target_product_category?.name}`} size='small'>
                                                     <div className='flex items-center justify-between space-x-[5px]'>
                                                         {item?.quantity && <Text>Số lượng : {item?.quantity}</Text>}
                                                         {item?.value && <Text>Doanh thu : {formatNumber(item?.value)}</Text>}

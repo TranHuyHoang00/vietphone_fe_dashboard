@@ -32,7 +32,7 @@ class index extends Component {
                             dataTargetShop.target_product_category.map((item) => {
                                 return (
                                     <div key={item?.id}>
-                                        {textLine13(`${item?.product_category?.name}`, `${item?.quantity} cái - ${formatNumber(item?.value)}đ`)}
+                                        {textLine13(`${item?.target_product_category?.name}`, `${item?.quantity} cái - ${formatNumber(item?.value)}đ`)}
                                     </div>
                                 )
                             })

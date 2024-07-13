@@ -17,15 +17,15 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { getListProductCategory, dataTargetStaff } = this.props;
+        const { getListProductCategoryTarget, dataTargetStaff } = this.props;
         const { dataFilter } = this.state;
-        await getListProductCategory(dataFilter);
-        this.handleDataProductCategorys(dataTargetStaff, this.props.dataProductCategorys);
+        await getListProductCategoryTarget(dataFilter);
+        this.handleDataProductCategorys(dataTargetStaff, this.props.dataProductCategoryTargets);
     }
-    handleDataProductCategorys = (dataTargetStaff, dataProductCategorys) => {
+    handleDataProductCategorys = (dataTargetStaff, dataProductCategoryTargets) => {
         const dataTPCs = dataTargetStaff?.target_product_category;
-        const dataPCs = dataProductCategorys.map(category => {
-            const targetProduct = dataTPCs.find(product => product.product_category.id === category.id);
+        const dataPCs = dataProductCategoryTargets.map(category => {
+            const targetProduct = dataTPCs.find(product => product.target_product_category.id === category.id);
             return {
                 ...category,
                 data: targetProduct ? { id: targetProduct.id, quantity: targetProduct.quantity, value: targetProduct.value } : null
@@ -39,7 +39,7 @@ class index extends Component {
         newDataPcs.forEach(pc => {
             if (pc.id === item.id) {
                 if (pc.data === null) {
-                    pc.data = { product_category: item.id };
+                    pc.data = { target_product_category: item.id };
                     if (itemVariable === 'quantity') {
                         pc.data.quantity = itemValue;
                     } else if (itemVariable === 'value') {
@@ -123,7 +123,7 @@ class index extends Component {
     }
     render() {
         const { Text } = Typography;
-        const { isLoadingTargetStaff, isLoadingProductCategory,
+        const { isLoadingTargetStaff, isLoadingProductCategoryTarget,
             onChangeTargetStaff, modalEdit, openModal, dataTargetStaff } = this.props;
         const { dataPCs } = this.state;
         return (
@@ -134,7 +134,7 @@ class index extends Component {
                     <ModalFooter openModal={openModal} type={'edit'}
                         isLoading={isLoadingTargetStaff} selectFuncFooterModal={this.handleEdit} />
                 ]}>
-                <Spin spinning={isLoadingTargetStaff || isLoadingProductCategory}>
+                <Spin spinning={isLoadingTargetStaff || isLoadingProductCategoryTarget}>
                     <div className="space-y-[10px]">
                         <FormInput name={'Tên nhân viên'} variable={'name'}
                             value={dataTargetStaff?.staff?.name}
@@ -203,9 +203,9 @@ const mapStateToProps = state => {
         isLoadingTargetStaff: state.targetStaff.isLoading,
         isResultTargetStaff: state.targetStaff.isResult,
 
-        dataProductCategorys: state.productCategory.dataProductCategorys,
-        isLoadingProductCategory: state.productCategory.isLoading,
-        isResultProductCategory: state.productCategory.isResult,
+        dataProductCategoryTargets: state.productCategoryTarget.dataProductCategoryTargets,
+        isLoadingProductCategoryTarget: state.productCategoryTarget.isLoading,
+        isResultProductCategoryTarget: state.productCategoryTarget.isResult,
 
         dataStaffs: state.staff.dataStaffs,
         isLoadingStaff: state.staff.isLoading,
@@ -220,7 +220,7 @@ const mapDispatchToProps = dispatch => {
         onChangeTargetStaff: (id, value) => dispatch(actions.onChangeTargetStaffRedux(id, value)),
         setDataTargetStaff: (data) => dispatch(actions.setDataTargetStaffRedux(data)),
 
-        getListProductCategory: (dataFilter) => dispatch(actions.getListProductCategoryRedux(dataFilter)),
+        getListProductCategoryTarget: (dataFilter) => dispatch(actions.getListProductCategoryTargetRedux(dataFilter)),
         getListStaff: (dataFilter) => dispatch(actions.getListStaffRedux(dataFilter)),
 
     };

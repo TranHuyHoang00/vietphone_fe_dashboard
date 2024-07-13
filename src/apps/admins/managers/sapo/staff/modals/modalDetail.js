@@ -28,6 +28,8 @@ class index extends Component {
                         {textLine13('Số điện thoại', dataStaff?.phone_number)}
                         {textLine13('Quyền', dataStaff?.role?.name)}
                         {textLine13('Trạng thái', (dataStaff?.status === "active") ? "Mở" : "Khóa")}
+                        {textLine13('Cửa hàng', dataStaff?.shop?.name)}
+                        {textLine13('Ca làm', dataStaff?.shift === "ft" ? "Làm Full" : "Làm ca")}
                     </div>
                 </Spin>
             </Modal>

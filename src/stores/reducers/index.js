@@ -27,6 +27,7 @@ import staffReducers from '@reducers/sapo/staffReducers';
 import orderReducers from '@reducers/sapo/orderReducers';
 import customerReducers from '@reducers/sapo/customerReducers';
 import staffRoleReducers from '@reducers/sapo/staffRoleReducers';
+import productCategoryTargetReducers from '@reducers/sapo/productCategoryTargetReducers';
 
 // TARGET
 import targetProductCategoryReducers from '@reducers/target/targetProductCategoryReducers';
@@ -71,6 +72,7 @@ export default combineReducers({
     order: orderReducers,
     customer: customerReducers,
     staffRole: staffRoleReducers,
+    productCategoryTarget: productCategoryTargetReducers,
     // TARGET
     targetProductCategory: targetProductCategoryReducers,
     targetShop: targetShopReducers,
