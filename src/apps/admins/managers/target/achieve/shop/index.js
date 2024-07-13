@@ -256,9 +256,9 @@ class index extends Component {
                     {
                         title: `CÒN LẠI`, dataIndex: ['daily', 'total_revenue'],
                         render: (value, datas) => {
-                            const remainingRevenue = datas?.shop_monthly_target?.value - value;
+                            const remainingRevenue = datas?.shop_monthly_target?.value - datas?.revenue?.total_revenue;
                             if (remainingRevenue > 0) {
-                                const remainingDaily = (this.getTargetDate(dataFilter?.end, datas?.shop_monthly_target?.value, value) - datas?.daily?.total_revenue);
+                                const remainingDaily = (this.getTargetDate(dataFilter?.end, datas?.shop_monthly_target?.value, datas?.revenue?.total_revenue) - datas?.daily?.total_revenue);
                                 if (remainingDaily > 0) {
                                     return {
                                         children: <Text strong className='text-red-500'>{`-${formatNumber(remainingDaily)}`}</Text>,
