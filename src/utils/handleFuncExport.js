@@ -17,14 +17,17 @@ const exportTableAntdToExcel = (columns, dataSource, name) => {
 const exportTableAntdToImage = (divId, name) => {
     if (divId && name) {
         const divToCapture = document.getElementById(divId);
+        divToCapture.classList.add('w-[1100px]')
         html2canvas(divToCapture, { scale: 2 }).then((canvas) => {
             const imgData = canvas.toDataURL('image/jpeg', 1.0);
             const downloadLink = document.createElement('a');
             downloadLink.href = imgData;
             downloadLink.download = `${name}.jpeg`;
             downloadLink.click();
+            divToCapture.classList.remove('w-[1100px]');
         }).catch((error) => {
             message.error('Thất bại', error);
+            divToCapture.classList.remove('w-[1100px]');
         });
     }
 }

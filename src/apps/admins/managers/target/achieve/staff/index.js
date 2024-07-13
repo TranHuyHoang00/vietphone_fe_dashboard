@@ -115,7 +115,8 @@ class index extends Component {
                                 dataProductCategorys={dataProductCategorys} />
                         }
                         {typeActive?.typeTable === 'overview' &&
-                            <div id='tableReportTargetStaff' className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
+                            <div id='tableReportTargetStaff'
+                                className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                                 <TableRevenueOverView typeActive={typeActive} dataFilter={dataFilter}
                                     dataReportTargetStaffs={dataReportTargetStaffs} />
                             </div>
