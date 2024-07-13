@@ -25,8 +25,10 @@ const exportTableAntdToImage = (divId, name) => {
             downloadLink.download = `${name}.jpeg`;
             downloadLink.click();
             divToCapture.classList.remove('w-[1100px]');
+            message.success('Tải thành công');
+
         }).catch((error) => {
-            message.error('Thất bại', error);
+            message.error('Tải thất bại');
             divToCapture.classList.remove('w-[1100px]');
         });
     }
