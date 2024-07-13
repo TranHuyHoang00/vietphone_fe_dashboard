@@ -7,8 +7,8 @@ const dataRewards = [
             {
                 id: 1, code: 'ft', name: 'FULL TIME',
                 salary: [
-                    { id: 1, code: 'LCB', name: 'LƯƠNG CƠ BẢN', value: 7200000 },
-                    { id: 2, code: 'PC', name: 'PHỤ CẤP', value: 800000 },
+                    { id: 1, code: 'LCB', name: 'LƯƠNG CƠ BẢN', value: 5200000 },
+                    { id: 2, code: 'PC', name: 'PHỤ CẤP', value: 2800000 },
                 ],
                 reward: [
                     {
@@ -35,8 +35,8 @@ const dataRewards = [
             {
                 id: 1, code: 'ft', name: 'FULL TIME',
                 salary: [
-                    { id: 1, code: 'LCB', name: 'LƯƠNG CƠ BẢN', value: 9000000 },
-                    { id: 2, code: 'PC', name: 'PHỤ CẤP', value: 1000000 },
+                    { id: 1, code: 'LCB', name: 'LƯƠNG CƠ BẢN', value: 6500000 },
+                    { id: 2, code: 'PC', name: 'PHỤ CẤP', value: 3500000 },
                 ],
                 reward: [
                     {
@@ -63,8 +63,8 @@ const dataRewards = [
             {
                 id: 1, code: 'ft', name: 'FULL TIME',
                 salary: [
-                    { id: 1, code: 'LCB', name: 'LƯƠNG CƠ BẢN', value: 5600000 },
-                    { id: 2, code: 'PC', name: 'PHỤ CẤP', value: 800000 },
+                    { id: 1, code: 'LCB', name: 'LƯƠNG CƠ BẢN', value: 3600000 },
+                    { id: 2, code: 'PC', name: 'PHỤ CẤP', value: 2800000 },
                 ],
                 reward: [
                     {
@@ -140,8 +140,8 @@ const dataRewards = [
             {
                 id: 1, code: 'ft', name: 'FULL TIME',
                 salary: [
-                    { id: 1, code: 'LCB', name: 'LƯƠNG CƠ BẢN', value: 7000000 },
-                    { id: 2, code: 'PC', name: 'PHỤ CẤP', value: 1000000 },
+                    { id: 1, code: 'LCB', name: 'LƯƠNG CƠ BẢN', value: 4500000 },
+                    { id: 2, code: 'PC', name: 'PHỤ CẤP', value: 3500000 },
                 ],
                 reward: [
                     {
