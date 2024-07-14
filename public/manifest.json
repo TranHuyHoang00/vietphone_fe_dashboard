@@ -2,9 +2,14 @@
   "permissions": [
     "camera"
   ],
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Vietphone",
+  "name": "Vietphone",
   "icons": [
+    {
+      "src": "/favico.ico",
+      "type": "image/png",
+      "sizes": "64x64"
+    }
   ],
   "start_url": ".",
   "display": "standalone",
