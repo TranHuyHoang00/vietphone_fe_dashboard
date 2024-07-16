@@ -1,39 +1,39 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '@actions';
-import { Button, Spin } from 'antd';
+import { Button } from 'antd';
 import TableRevenueDetail from '../component/tableRevenueDetail';
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            dataReportTargetShops: [],
         }
     }
     async componentDidMount() {
-        const { match, getListReportTargetShop, dataFilter } = this.props;
+        const { match, dataReportTargetShops } = this.props;
         if (match && match.params) {
             const shopId = match.params.id;
-            if (shopId) { await getListReportTargetShop(dataFilter, [shopId]); }
+            if (shopId) {
+                // eslint-disable-next-line
+                const dataReportTargetShop = dataReportTargetShops.find(item => item?.shop?.id == shopId);
+                this.setState({ dataReportTargetShops: [dataReportTargetShop] });
+            }
         }
     }
     render() {
-        const { dataReportTargetShops, isLoadingReportTargetShop, dataFilter,
-            typeActive, dataProductCategorys, isLoadingProductCategory
-        } = this.props;
+        const { dataReportTargetShops } = this.state;
         return (
-            <Spin spinning={isLoadingProductCategory || isLoadingReportTargetShop}>
-                <div className="mx-[10px] space-y-[10px]">
-                    <Button onClick={() => this.props.history.push(`/admin/achieve/target/shop`)}
-                        className='bg-[#e94138] text-white'>
-                        Quay lại
-                    </Button>
-                    <TableRevenueDetail typeActive={typeActive} dataFilter={dataFilter}
-                        dataReportTargetShops={dataReportTargetShops}
-                        dataProductCategorys={dataProductCategorys} />
+            <div className="mx-[10px] space-y-[10px]">
+                <Button
+                    onClick={() => this.props.history.push(`/admin/achieve/target/shop`)}
+                    className='bg-[#e94138] text-white'>
+                    Quay lại
+                </Button>
+                <div id='tableReportTargetShop'>
+                    <TableRevenueDetail dataReportTargetShops={dataReportTargetShops} />
                 </div>
-            </Spin>
+            </div>
         );
     }
 
@@ -41,18 +41,10 @@ class index extends Component {
 const mapStateToProps = state => {
     return {
         dataReportTargetShops: state.reportTarget.dataReportTargetShops,
-        isLoadingReportTargetShop: state.reportTarget.isLoading,
-
-        dataFilter: state.reportTarget.dataFilterShop,
-        typeActive: state.reportTarget.typeActiveShop,
-
-        dataProductCategorys: state.productCategory.dataProductCategorys,
-        isLoadingProductCategory: state.productCategory.isLoading,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
-        getListReportTargetShop: (dataFilter, listId) => dispatch(actions.getListReportTargetShopRedux(dataFilter, listId)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

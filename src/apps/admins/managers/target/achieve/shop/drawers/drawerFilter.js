@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Drawer, Space, Typography, Radio, Button, Select } from 'antd';
 import dayjs from 'dayjs';
 import { AiOutlineCheck } from "react-icons/ai";
+import { FaSpinner } from "react-icons/fa6";
 class index extends Component {
     constructor(props) {
         super(props);
@@ -56,7 +57,7 @@ class index extends Component {
         }
     }
     render() {
-        const { openDrawer, drawerFilter, handleFilter, dataShops } = this.props;
+        const { openDrawer, drawerFilter, handleFilter, dataShops, disabledAcceptFilter } = this.props;
         const { dataFilter, typeActive } = this.state;
         return (
             <Drawer title="Bộ lọc" onClose={() => openDrawer('filter', false)} open={drawerFilter}>
@@ -151,11 +152,12 @@ class index extends Component {
                                     </div>
                                 </div>
                             </>}
-                            <Button onClick={() => handleFilter(dataFilter, typeActive)}
+                            <Button disabled={disabledAcceptFilter}
+                                onClick={() => handleFilter(dataFilter, typeActive)}
                                 className='bg-[#0e97ff] dark:bg-white'>
                                 <Space className='text-white dark:text-black'>
-                                    <AiOutlineCheck />
-                                    Áp dụng
+                                    {disabledAcceptFilter ? <FaSpinner className='animate-spin' /> : <AiOutlineCheck />}
+                                    {disabledAcceptFilter ? 'Đang tải' : 'Áp dụng'}
                                 </Space>
                             </Button>
                         </>}

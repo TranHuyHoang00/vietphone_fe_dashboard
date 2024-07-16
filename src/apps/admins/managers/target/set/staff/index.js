@@ -31,7 +31,7 @@ class index extends Component {
             drawerFilter: false,
             dataFilter: {
                 page: 1,
-                limit: 20,
+                limit: 50,
                 search: '',
                 month: dayjs().startOf('month').format("YYYY-MM-DD"),
             },

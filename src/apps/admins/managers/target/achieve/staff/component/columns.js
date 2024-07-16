@@ -100,7 +100,7 @@ const columnRevenueOverViews = (typeActive, dataFilter, history) => [
                         return { children: <Text>0</Text> }
                     }
                 },
-                sorter: (a, b) => (getTargetDate(dataFilter?.end, a?.staff_monthly_target?.value, getDataTableRevenueOverView(a, 'revenueMonth'))) - (getTargetDate(dataFilter?.end, b?.staff_monthly_target?.value, getDataTableRevenueOverView(a, 'revenueMonth'))),
+                sorter: (a, b) => (getTargetDate(dataFilter?.end, a?.staff_monthly_target?.value, getDataTableRevenueOverView(a, 'revenueMonth'))) - (getTargetDate(dataFilter?.end, b?.staff_monthly_target?.value, getDataTableRevenueOverView(b, 'revenueMonth'))),
             },
         ]
     },
@@ -181,17 +181,14 @@ const getTargetDate = (end, targetMonth, targetAchieved) => {
     }
 }
 
-const getDataTableRevenueDetail = (datas, columnName, dataProductCategorys) => {
+const columnRevenueDetails = (typeActive, dataFilter, dataProductCategorys, datas) => {
     const newDataPCs = dataProductCategorys.map((productCategory) => {
         const revenueMonth = datas?.revenueShopMonth?.product_sales ?? datas?.revenue?.product_sales;
         const revenueDaily = datas?.revenueShopDaily?.product_sales ?? datas?.daily?.product_sales;
-
         let dailyProduct = { quantity: 0, revenue: 0 };
         let saleProduct = { quantity: 0, revenue: 0 };
-
         if (revenueDaily) { dailyProduct = revenueDaily.find((daily) => daily.category_name === productCategory.name); }
         if (revenueMonth) { saleProduct = revenueMonth.find((sale) => sale.category_name === productCategory.name); }
-
         return {
             ...productCategory,
             sale: saleProduct ? saleProduct : { quantity: 0, revenue: 0 },
@@ -203,64 +200,67 @@ const getDataTableRevenueDetail = (datas, columnName, dataProductCategorys) => {
         const className = value > 0 ? classTrue : classFalse;
         return <span className={className}>{formatNumber(value)} {unit}</span>;
     };
-    if (columnName === 'nameProductCategory') {
-        return newDataPCs && newDataPCs.map((item, index) => (
-            <div className='border px-[5px] py-[2px]' key={index}>
-                <span className='line-clamp-1'>{item?.name}</span>
-            </div>
-        ));
-    }
-    if (columnName === 'revenueMonth') {
-        return newDataPCs && newDataPCs.map((item, index) => (
-            <div className='flex items-center justify-between' key={index}>
-                <div className='border px-[5px] py-[2px] w-1/3'>
-                    {displayValue(item?.sale?.quantity, 'cái')}
-                </div>
-                <div className='border px-[5px] py-[2px] w-2/3 '>
-                    {displayValue(item?.sale?.revenue, 'đ')}
-                </div>
-            </div>
-        ));
-    }
-    if (columnName === 'revenueDaily') {
-        return newDataPCs && newDataPCs.map((item, index) => (
-            <div className='flex items-center justify-between' key={index}>
-                <div className='border px-[5px] py-[2px] w-1/3'>
-                    {displayValue(item?.daily?.quantity, 'cái')}
-                </div>
-                <div className='border px-[5px] py-[2px] w-2/3'>
-                    {displayValue(item?.daily?.revenue, 'đ')}
-                </div>
-            </div>
-        ));
-    }
-}
-const columnRevenueDetails = (typeActive, dataFilter, dataProductCategorys) => [
-    {
-        title: `${typeActive?.typeTime === 'month' ?
-            `CHI TIẾT DOANH THU THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
-            `CHI TIẾT DT TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
-        children: [
-            {
-                title: "TÊN LOẠI", width: 250,
-                render: (datas) => <>{getDataTableRevenueDetail(datas, 'nameProductCategory', dataProductCategorys)}</>
-            },
-            {
-                title: "THỰC ĐẠT", width: 200,
-                render: (datas) => <>{getDataTableRevenueDetail(datas, 'revenueMonth', dataProductCategorys)}</>
-            },
-        ]
-    },
-    {
-        title: `CHI TIẾT DOANH THU NGÀY ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`, children: [
-            {
-                title: "THỰC ĐẠT", width: 200,
-                render: (datas) => <>{getDataTableRevenueDetail(datas, 'revenueDaily', dataProductCategorys)}</>
-            }
-        ]
-    }
+    return [
+        {
+            title: `${typeActive?.typeTime === 'month' ?
+                `CHI TIẾT DOANH THU THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
+                `CHI TIẾT DT TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
+            children: [
+                {
+                    title: "TÊN LOẠI", width: 250,
+                    render: () =>
+                        <div className='divide-y'>
+                            {(newDataPCs && newDataPCs.map((item) => (
+                                <div className='py-[2px]' key={item?.id}>
+                                    <Text>{item?.name}</Text>
+                                </div>
+                            ))
+                            )}
+                        </div>
+                },
+                {
+                    title: "THỰC ĐẠT", width: 200,
+                    render: () =>
+                        <div className='divide-y'>
+                            {(newDataPCs && newDataPCs.map((item) => (
+                                <div className='flex items-center justify-between divide-x' key={item?.id}>
+                                    <div className='py-[2px] w-1/3'>
+                                        {displayValue(item?.sale?.quantity, 'cái')}
+                                    </div>
+                                    <div className='pl-[5px] py-[2px] w-2/3 '>
+                                        {displayValue(item?.sale?.revenue, 'đ')}
+                                    </div>
+                                </div>
+                            ))
+                            )}
+                        </div>
+                },
+            ]
+        },
+        {
+            title: `CHI TIẾT DOANH THU NGÀY ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`, children: [
+                {
+                    title: "THỰC ĐẠT", width: 200,
+                    render: () =>
+                        <div className='divide-y'>
+                            {(newDataPCs && newDataPCs.map((item) => (
+                                <div className='flex items-center justify-between divide-x' key={item?.id}>
+                                    <div className='py-[2px] w-1/3'>
+                                        {displayValue(item?.daily?.quantity, 'cái')}
+                                    </div>
+                                    <div className='pl-[5px] py-[2px] w-2/3 '>
+                                        {displayValue(item?.daily?.revenue, 'đ')}
+                                    </div>
+                                </div>
+                            ))
+                            )}
+                        </div>
+                }
+            ]
+        }
 
-];
+    ]
+};
 
 const getDataTableKPIDetail = (datas, columnName) => {
     const newDataPCTs = datas?.staff_monthly_target?.target_product_category;
@@ -376,109 +376,92 @@ const getDataTableKPIDetail = (datas, columnName) => {
         }
     }
 }
-const columnKPIDetails = (typeActive, dataFilter) => [
-    {
-        title: `${typeActive?.typeTime === 'month' ?
-            `CHI TIẾT KPI THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
-            `CHI TIẾT KPI TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
-        children: [
-            {
-                title: 'TÊN LOẠI', width: 250,
-                render: (datas) => <>{getDataTableKPIDetail(datas, 'nameProductCategoryTarget')}</>
-            },
-            {
-                title: "TARGET THÁNG", width: 200,
-                render: (datas) => <>{getDataTableKPIDetail(datas, 'targetMonth')}</>
-            },
-            {
-                title: "THỰC ĐẠT", width: 200,
-                render: (datas) => <>{getDataTableKPIDetail(datas, 'revenueMonth')}</>
-            },
-            {
-                title: "CÒN LẠI", width: 200,
-                render: (datas) => <>{getDataTableKPIDetail(datas, 'remainingMonth')}</>
-            },
-            {
-                title: "ĐẠT", width: 200,
-                render: (datas) => <>{getDataTableKPIDetail(datas, 'statusMonth')}</>
-            },
-            {
-                title: "THƯỞNG", width: 200,
-                render: (datas) => <>{getDataTableKPIDetail(datas, 'rewardMonth')}</>
-            }
-        ]
-    }
-]
-
-const getDataTableSalaryOverView = (datas, columnName) => {
-    const dataRewards = calculateSalary(datas, 'all');
-    if (columnName === 'salaryBasic') {
-        const dataSalarys = dataRewards?.dataSalarys;
-        const salaryBasic = dataSalarys.find(item => item?.code === "LCB")
-        return `${salaryBasic ? formatNumber(salaryBasic?.value) : 0}`;
-    }
-    if (columnName === 'salarySubsidy') {
-        const dataSalarys = dataRewards?.dataSalarys;
-        const salarySubsidy = dataSalarys.find(item => item?.code === "PC")
-        return `${salarySubsidy ? formatNumber(salarySubsidy?.value) : 0}`;
-    }
-    if (columnName === 'rewardKPI') {
-        const dataRewardKPIs = dataRewards?.dataRewardKPIs ?? [];
-        const totalRewardKPI = dataRewardKPIs.reduce((a, b) => a + b.rewardKPI, 0);
-        return `${formatNumber(totalRewardKPI)}`;
-    }
-    if (columnName === 'rewardTarget') {
-        const dataRewardTarget = dataRewards?.dataRewardTarget;
-        return `${dataRewardTarget ? formatNumber(dataRewardTarget) : 0}`;
-    }
-    if (columnName === 'salaryTotal') {
-        const totalRewardKPI = dataRewards?.dataRewardKPIs?.reduce((a, b) => a + b.rewardKPI, 0) ?? 0;
-        const totalRewardSalary = dataRewards?.dataSalarys?.reduce((a, b) => a + b.value, 0) ?? 0;
-        const totalRewardTarget = dataRewards?.dataRewardTarget ?? 0;
-        const totalSalary = totalRewardKPI + totalRewardSalary + totalRewardTarget;
-        return `${formatNumber(totalSalary)}`;
-    }
-}
-const columnSalaryOverviews = (typeActive, dataFilter) => [
-    {
-        title: `${typeActive?.typeTime === 'month' ?
-            `TỔNG QUAN BẢNG LƯƠNG THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
-            `TỔNG QUAN BẢNG LƯƠNG TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
-        children: [
-            {
-                title: 'NHÂN VIÊN', dataIndex: ['staff', 'name'], width: 250,
-                render: (value) => {
-                    return {
-                        children: <Text strong className='text-[#0574b8] dark:text-white uppercase'>{value}</Text>,
-                        __style__: { color: '0574b8' }, bold: true,
-                    };
+const columnKPIDetails = (typeActive, dataFilter, datas) => {
+    return [
+        {
+            title: `${typeActive?.typeTime === 'month' ?
+                `CHI TIẾT KPI THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
+                `CHI TIẾT KPI TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
+            children: [
+                {
+                    title: 'TÊN LOẠI', width: 250,
+                    render: (datas) => <>{getDataTableKPIDetail(datas, 'nameProductCategoryTarget')}</>
                 },
-                sorter: (a, b) => a?.staff?.name.localeCompare(b?.staff?.name),
-            },
-            {
-                title: 'LƯƠNG CƠ BẢN', width: 150,
-                render: (datas) => <>{getDataTableSalaryOverView(datas, 'salaryBasic')}</>
-            },
-            {
-                title: 'PHỤ CẤP', width: 150,
-                render: (datas) => <>{getDataTableSalaryOverView(datas, 'salarySubsidy')}</>
-            },
-            {
-                title: 'THƯỞNG KPI', width: 150,
-                render: (datas) => <>{getDataTableSalaryOverView(datas, 'rewardKPI')}</>
-            },
-            {
-                title: 'THƯỞNG TARGET', width: 150,
-                render: (datas) => <>{getDataTableSalaryOverView(datas, 'rewardTarget')}</>
-            },
-            {
-                title: 'TỔNG', width: 150,
-                render: (datas) => <>{getDataTableSalaryOverView(datas, 'salaryTotal')}</>
-            },
+                {
+                    title: "TARGET THÁNG", width: 200,
+                    render: (datas) => <>{getDataTableKPIDetail(datas, 'targetMonth')}</>
+                },
+                {
+                    title: "THỰC ĐẠT", width: 200,
+                    render: (datas) => <>{getDataTableKPIDetail(datas, 'revenueMonth')}</>
+                },
+                {
+                    title: "CÒN LẠI", width: 200,
+                    render: (datas) => <>{getDataTableKPIDetail(datas, 'remainingMonth')}</>
+                },
+                {
+                    title: "ĐẠT", width: 200,
+                    render: (datas) => <>{getDataTableKPIDetail(datas, 'statusMonth')}</>
+                },
+                {
+                    title: "THƯỞNG", width: 200,
+                    render: (datas) => <>{getDataTableKPIDetail(datas, 'rewardMonth')}</>
+                }
+            ]
+        }
+    ]
+};
 
-        ]
-    }
-];
+const columnSalaryOverviews = (typeActive, dataFilter, datas) => {
+    const dataRewards = calculateSalary(datas, 'all');
+    const dataRewardTarget = dataRewards?.dataRewardTarget;
+    const salaryBasic = dataRewards?.dataSalarys.find(item => item?.code === "LCB")
+    const salarySubsidy = dataRewards?.dataSalarys.find(item => item?.code === "PC")
+    const totalRewardKPI = dataRewards?.dataRewardKPIs?.reduce((a, b) => a + b.rewardKPI, 0) ?? 0;
+    const totalRewardSalary = dataRewards?.dataSalarys?.reduce((a, b) => a + b.value, 0) ?? 0;
+    const totalRewardTarget = dataRewards?.dataRewardTarget ?? 0;
+    const totalSalary = totalRewardKPI + totalRewardSalary + totalRewardTarget;
+    return [
+        {
+            title: `${typeActive?.typeTime === 'month' ?
+                `TỔNG QUAN BẢNG LƯƠNG THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
+                `TỔNG QUAN BẢNG LƯƠNG TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
+            children: [
+                {
+                    title: 'NHÂN VIÊN', dataIndex: ['staff', 'name'], width: 250,
+                    render: (value) => {
+                        return {
+                            children: <Text strong className='text-[#0574b8] dark:text-white uppercase'>{value}</Text>,
+                            __style__: { color: '0574b8' }, bold: true,
+                        };
+                    },
+                    sorter: (a, b) => a?.staff?.name.localeCompare(b?.staff?.name),
+                },
+                {
+                    title: 'LƯƠNG CƠ BẢN', width: 150,
+                    render: () => <Text>{salaryBasic ? formatNumber(salaryBasic?.value) : 0}</Text>
+                },
+                {
+                    title: 'PHỤ CẤP', width: 150,
+                    render: () => <Text>{salarySubsidy ? formatNumber(salarySubsidy?.value) : 0}</Text>
+                },
+                {
+                    title: 'THƯỞNG KPI', width: 150,
+                    render: () => <Text>{formatNumber(totalRewardKPI)}</Text>
+                },
+                {
+                    title: 'THƯỞNG TARGET', width: 150,
+                    render: () => <Text>{dataRewardTarget ? formatNumber(dataRewardTarget) : 0}</Text>
+                },
+                {
+                    title: 'TỔNG', width: 150,
+                    render: () => <Text>{formatNumber(totalSalary)}</Text>
+                },
+
+            ]
+        }
+    ]
+};
 export {
     columnRevenueOverViews, columnRevenueDetails, columnKPIDetails, columnSalaryOverviews
 }

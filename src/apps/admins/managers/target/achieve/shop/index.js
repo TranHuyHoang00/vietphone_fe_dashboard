@@ -16,19 +16,23 @@ class index extends Component {
         super(props);
         this.state = {
             drawerFilter: false,
+            disabledAcceptFilter: false,
         }
     }
     async componentDidMount() {
-        const { getListProductCategory, dataFilter, typeActive } = this.props;
-        await this.handleFilter(dataFilter, typeActive);
-        await getListProductCategory({ page: 1, limit: 50 });
+        const { dataFilter, dataReportTargetShops, getAllReportTargetShop } = this.props;
+        if (dataReportTargetShops && dataReportTargetShops.length === 0) {
+            await getAllReportTargetShop(dataFilter);
+        }
     }
     openDrawer = async (drawerName, drawerValue) => {
-        const { getListShop } = this.props;
+        const { getListShop, dataShops } = this.props;
         switch (drawerName) {
             case 'filter':
                 this.setState({ drawerFilter: drawerValue });
-                await getListShop({ page: 1, limit: 100, status: 'active' });
+                if (drawerValue && drawerValue === true && dataShops && dataShops.length === 0) {
+                    await getListShop({ page: 1, limit: 100, status: 'active' });
+                }
                 break;
             default:
                 return;
@@ -40,29 +44,61 @@ class index extends Component {
         }
         return { check: true };
     }
-    handleFilter = async (dataFilter, typeActive) => {
-        const result = this.validationData(typeActive);
-        if (result.check) {
-            const { setDataFilterReportTarget, setTypeActiveReportTarget } = this.props;
-            setDataFilterReportTarget(dataFilter);
-            setTypeActiveReportTarget(typeActive);
-            if (typeActive?.typeView === "all") {
-                const { getAllReportTargetShop } = this.props;
-                await getAllReportTargetShop(dataFilter);
-            }
-            if (typeActive?.typeView === "individual") {
-                const { getListReportTargetShop } = this.props;
-                await getListReportTargetShop(dataFilter, typeActive?.listId);
-            }
-            this.openDrawer('filter', false);
-        } else {
-            message.error(result.mess);
+    handleEqualObj = (obj1, obj2) => {
+        return JSON.stringify(obj1) === JSON.stringify(obj2);
+    }
+    handleEqualArrays = (arr1, arr2) => {
+        if (arr1.length !== arr2.length) {
+            return false;
         }
+
+        const sortedArr1 = arr1.slice().sort();
+        const sortedArr2 = arr2.slice().sort();
+
+        for (let i = 0; i < sortedArr1.length; i++) {
+            if (sortedArr1[i] !== sortedArr2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    handleGetDataReport = async (dataFilter, typeActive) => {
+        const { getAllReportTargetShop, getListReportTargetShop } = this.props;
+        if (typeActive?.typeView === "all") {
+            await getAllReportTargetShop(dataFilter);
+        }
+        if (typeActive?.typeView === "individual") {
+            await getListReportTargetShop(dataFilter, typeActive?.listId);
+        }
+        this.openDrawer('filter', false);
+        this.setState({ disabledAcceptFilter: false });
+    }
+    handleFilter = async (dataFilterNew, typeActiveNew) => {
+        const { setDataFilterReportTarget, setTypeActiveReportTarget, dataFilter, typeActive } = this.props;
+        const result = this.validationData(typeActiveNew);
+        if (!result.check) {
+            return message.error(result.mess);
+        }
+        this.setState({ disabledAcceptFilter: true });
+
+        const equalFilter = this.handleEqualObj(dataFilterNew, dataFilter);
+        const equalTypeTime = typeActiveNew.typeTime === typeActive.typeTime;
+        const equalTypeView = typeActiveNew.typeView === typeActive.typeView;
+        const equalListId = this.handleEqualArrays(typeActiveNew.listId, typeActive.listId);
+
+        if (!equalFilter || !equalTypeTime || !equalTypeView || !equalListId) {
+            await this.handleGetDataReport(dataFilterNew, typeActiveNew);
+        } else {
+            this.openDrawer('filter', false);
+        }
+        this.setState({ disabledAcceptFilter: false });
+        setDataFilterReportTarget(dataFilterNew);
+        setTypeActiveReportTarget(typeActiveNew);
     }
     render() {
-        const { drawerFilter } = this.state;
-        const { isLoadingReportTargetShop, dataReportTargetShops, isLoadingShop, isLoadingProductCategory,
-            dataShops, dataFilter, typeActive, dataProductCategorys } = this.props;
+        const { drawerFilter, disabledAcceptFilter } = this.state;
+        const { isLoadingReportTargetShop, dataReportTargetShops, isLoadingShop,
+            dataShops, dataFilter, typeActive } = this.props;
 
         const items = [
             {
@@ -86,7 +122,7 @@ class index extends Component {
         ];
         return (
             <>
-                <Spin size='large' spinning={isLoadingReportTargetShop || isLoadingShop || isLoadingProductCategory}>
+                <Spin size='large' spinning={isLoadingReportTargetShop || isLoadingShop}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between space-x-[5px]'>
                             <Button
@@ -96,7 +132,7 @@ class index extends Component {
                                     Lọc
                                 </Space>
                             </Button>
-                            {typeActive?.typeTable === 'overview' &&
+                            {typeActive?.typeTable === "overview" &&
                                 <Dropdown menu={{ items }} placement="bottomLeft">
                                     <Button className='bg-[#0e97ff] dark:bg-white'>
                                         <Space className='text-white dark:text-black'>
@@ -108,9 +144,10 @@ class index extends Component {
                             }
                         </div>
                         {typeActive?.typeTable === 'detail' &&
-                            <TableRevenueDetail typeActive={typeActive} dataFilter={dataFilter}
-                                dataReportTargetShops={dataReportTargetShops}
-                                dataProductCategorys={dataProductCategorys} />
+                            <div id="tableReportTargetShop">
+                                <TableRevenueDetail typeActive={typeActive} dataFilter={dataFilter}
+                                    dataReportTargetShops={dataReportTargetShops} />
+                            </div>
                         }
                         {typeActive?.typeTable === 'overview' &&
                             <div id="tableReportTargetShop" className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
@@ -125,7 +162,8 @@ class index extends Component {
                         openDrawer={this.openDrawer} dataFilter={dataFilter}
                         handleFilter={this.handleFilter}
                         typeActive={typeActive}
-                        dataShops={dataShops} />}
+                        dataShops={dataShops}
+                        disabledAcceptFilter={disabledAcceptFilter} />}
             </>
         );
     }
@@ -138,9 +176,6 @@ const mapStateToProps = state => {
         dataFilter: state.reportTarget.dataFilterShop,
         typeActive: state.reportTarget.typeActiveShop,
 
-        dataProductCategorys: state.productCategory.dataProductCategorys,
-        isLoadingProductCategory: state.productCategory.isLoading,
-
         dataShops: state.shop.dataShops,
         isLoadingShop: state.shop.isLoading,
     };
@@ -152,7 +187,6 @@ const mapDispatchToProps = dispatch => {
         setDataFilterReportTarget: (data) => dispatch(actions.setDataFilterReportTargetShopRedux(data)),
         setTypeActiveReportTarget: (data) => dispatch(actions.setTypeActiveReportTargetShopRedux(data)),
 
-        getListProductCategory: (dataFilter) => dispatch(actions.getListProductCategoryRedux(dataFilter)),
         getListShop: (dataFilter) => dispatch(actions.getListShopRedux(dataFilter)),
 
     };

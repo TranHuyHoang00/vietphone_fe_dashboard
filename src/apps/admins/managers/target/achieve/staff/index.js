@@ -16,21 +16,23 @@ class index extends Component {
         super(props);
         this.state = {
             drawerFilter: false,
-            dataStaffs: [],
+            disabledAcceptFilter: false,
         }
     }
     async componentDidMount() {
-        const { getListProductCategory, dataFilter, typeActive } = this.props;
-        await this.handleFilter(dataFilter, typeActive);
-        await getListProductCategory({ page: 1, limit: 50 });
-        this.setState({ dataStaffs: this.props.dataReportTargetStaffs });
+        const { dataFilter, getAllReportTargetStaff, dataReportTargetStaffs } = this.props;
+        if (dataReportTargetStaffs && dataReportTargetStaffs.length === 0) {
+            await getAllReportTargetStaff(dataFilter);
+        }
     }
     openDrawer = async (drawerName, drawerValue) => {
-        const { getListStaff } = this.props;
+        const { getListTargetStaff, dataFilter, dataTargetStaffs } = this.props;
         switch (drawerName) {
             case 'filter':
                 this.setState({ drawerFilter: drawerValue });
-                await getListStaff({ page: 1, limit: 100, status: 'active' });
+                if (dataTargetStaffs && dataTargetStaffs.length === 0) {
+                    await getListTargetStaff({ page: 1, limit: 50, month: dayjs(dataFilter?.start).startOf('month').format("YYYY-MM-DD"), })
+                }
                 break;
             default:
                 return;
@@ -42,29 +44,61 @@ class index extends Component {
         }
         return { check: true };
     }
-    handleFilter = async (dataFilter, typeActive) => {
-        const result = this.validationData(typeActive);
-        if (result.check) {
-            const { setDataFilterReportTarget, setTypeActiveReportTarget } = this.props;
-            setDataFilterReportTarget(dataFilter);
-            setTypeActiveReportTarget(typeActive);
-            if (typeActive?.typeView === "all") {
-                const { getAllReportTargetStaff } = this.props;
-                await getAllReportTargetStaff(dataFilter);
-            }
-            if (typeActive?.typeView === "individual") {
-                const { getListReportTargetStaff } = this.props;
-                await getListReportTargetStaff(dataFilter, typeActive?.listId);
-            }
-            this.openDrawer('filter', false);
-        } else {
-            message.error(result.mess);
+    handleEqualObj = (obj1, obj2) => {
+        return JSON.stringify(obj1) === JSON.stringify(obj2);
+    }
+    handleEqualArrays = (arr1, arr2) => {
+        if (arr1.length !== arr2.length) {
+            return false;
         }
+
+        const sortedArr1 = arr1.slice().sort();
+        const sortedArr2 = arr2.slice().sort();
+
+        for (let i = 0; i < sortedArr1.length; i++) {
+            if (sortedArr1[i] !== sortedArr2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    handleGetDataReport = async (dataFilter, typeActive) => {
+        const { getAllReportTargetStaff, getListReportTargetStaff } = this.props;
+        if (typeActive?.typeView === "all") {
+            await getAllReportTargetStaff(dataFilter);
+        }
+        if (typeActive?.typeView === "individual") {
+            await getListReportTargetStaff(dataFilter, typeActive?.listId);
+        }
+        this.openDrawer('filter', false);
+        this.setState({ disabledAcceptFilter: false });
+    }
+    handleFilter = async (dataFilterNew, typeActiveNew) => {
+        const { setDataFilterReportTarget, setTypeActiveReportTarget, dataFilter, typeActive } = this.props;
+        const result = this.validationData(typeActiveNew);
+        if (!result.check) {
+            return message.error(result.mess);
+        }
+        this.setState({ disabledAcceptFilter: true });
+
+        const equalFilter = this.handleEqualObj(dataFilterNew, dataFilter);
+        const equalTypeTime = typeActiveNew.typeTime === typeActive.typeTime;
+        const equalTypeView = typeActiveNew.typeView === typeActive.typeView;
+        const equalListId = this.handleEqualArrays(typeActiveNew.listId, typeActive.listId);
+
+        if (!equalFilter || !equalTypeTime || !equalTypeView || !equalListId) {
+            await this.handleGetDataReport(dataFilterNew, typeActiveNew);
+        } else {
+            this.openDrawer('filter', false);
+        }
+        this.setState({ disabledAcceptFilter: false });
+        setDataFilterReportTarget(dataFilterNew);
+        setTypeActiveReportTarget(typeActiveNew);
     }
     render() {
-        const { drawerFilter, dataStaffs } = this.state;
-        const { isLoadingStaff, dataReportTargetStaffs, isLoadingReportTargetStaff,
-            isLoadingProductCategory, typeActive, dataFilter, dataProductCategorys,
+        const { drawerFilter, disabledAcceptFilter } = this.state;
+        const { dataReportTargetStaffs, isLoadingReportTargetStaff,
+            typeActive, dataFilter, dataTargetStaffs
         } = this.props;
         const items = [
             {
@@ -88,7 +122,7 @@ class index extends Component {
         ];
         return (
             <>
-                <Spin size='large' spinning={isLoadingReportTargetStaff || isLoadingStaff || isLoadingProductCategory}>
+                <Spin size='large' spinning={isLoadingReportTargetStaff}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between space-x-[5px]'>
                             <Button
@@ -111,8 +145,7 @@ class index extends Component {
                         </div>
                         {typeActive?.typeTable === 'detail' &&
                             <TableRevenueDetail typeActive={typeActive} dataFilter={dataFilter}
-                                dataReportTargetStaffs={dataReportTargetStaffs}
-                                dataProductCategorys={dataProductCategorys} />
+                                dataReportTargetStaffs={dataReportTargetStaffs} />
                         }
                         {typeActive?.typeTable === 'overview' &&
                             <div id='tableReportTargetStaff'
@@ -128,7 +161,8 @@ class index extends Component {
                         openDrawer={this.openDrawer} dataFilter={dataFilter}
                         handleFilter={this.handleFilter}
                         typeActive={typeActive}
-                        dataStaffs={dataStaffs} />}
+                        dataStaffs={dataTargetStaffs}
+                        disabledAcceptFilter={disabledAcceptFilter} />}
             </>
         );
     }
@@ -141,11 +175,8 @@ const mapStateToProps = state => {
         dataFilter: state.reportTarget.dataFilterStaff,
         typeActive: state.reportTarget.typeActiveStaff,
 
-        dataProductCategorys: state.productCategory.dataProductCategorys,
-        isLoadingProductCategory: state.productCategory.isLoading,
+        dataTargetStaffs: state.targetStaff.dataTargetStaffs,
 
-        dataStaffs: state.staff.dataStaffs,
-        isLoadingStaff: state.staff.isLoading,
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -155,8 +186,7 @@ const mapDispatchToProps = dispatch => {
         setDataFilterReportTarget: (data) => dispatch(actions.setDataFilterReportTargetStaffRedux(data)),
         setTypeActiveReportTarget: (data) => dispatch(actions.setTypeActiveReportTargetStaffRedux(data)),
 
-        getListStaff: (dataFilter) => dispatch(actions.getListStaffRedux(dataFilter)),
-        getListProductCategory: (dataFilter) => dispatch(actions.getListProductCategoryRedux(dataFilter)),
+        getListTargetStaff: (dataFilter) => dispatch(actions.getListTargetStaffRedux(dataFilter)),
 
     };
 };

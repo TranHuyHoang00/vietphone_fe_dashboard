@@ -127,7 +127,7 @@ const columnRevenueOverViews = (typeActive, dataFilter, history) => [
                         return { children: <Text>0</Text> }
                     }
                 },
-                sorter: (a, b) => (getTargetDate(dataFilter?.end, a?.value, a?.revenue?.total_revenue) - a?.daily?.total_revenue) - (getTargetDate(dataFilter?.end, b?.value, b?.revenue?.total_revenue) - b?.daily?.total_revenue),
+                sorter: (a, b) => (getTargetDate(dataFilter?.end, a?.shop_monthly_target?.value, a?.revenue?.total_revenue) - a?.daily?.total_revenue) - (getTargetDate(dataFilter?.end, b?.shop_monthly_target?.value, b?.revenue?.total_revenue) - b?.daily?.total_revenue),
             },
             {
                 title: 'ĐẠT', dataIndex: ['daily', 'total_revenue'],
@@ -218,7 +218,7 @@ const calculateSummary = (datas, dataFilter) => {
         );
     };
 }
-const getDataTableRevenueDetail = (datas, columnName, dataProductCategorys) => {
+const columnRevenueDetails = (typeActive, dataFilter, dataProductCategorys, datas) => {
     const newDataPCs = dataProductCategorys.map((product) => {
         const saleProduct = datas?.revenue?.product_sales.find((sale) => sale.category_name === product.name);
         const dailyProduct = datas?.daily?.product_sales.find((daily) => daily.category_name === product.name);
@@ -231,66 +231,69 @@ const getDataTableRevenueDetail = (datas, columnName, dataProductCategorys) => {
     const displayValue = (value, unit) => {
         if (value === 0) { return <span>-</span>; }
         const className = value > 0 ? classTrue : classFalse;
-        return <span className={className}>{formatNumber(value)} {unit}</span>;
+        return <Text className={className}>{formatNumber(value)} {unit}</Text>;
     };
-    if (columnName === 'nameProductCategory') {
-        return newDataPCs && newDataPCs.map((item, index) => (
-            <div className='border px-[5px] py-[2px]' key={index}>
-                <span className='line-clamp-1'>{item?.name}</span>
-            </div>
-        ));
-    }
-    if (columnName === 'achievedMonth') {
-        return newDataPCs && newDataPCs.map((item, index) => (
-            <div className='flex items-center justify-between' key={index}>
-                <div className='border px-[5px] py-[2px] w-1/3'>
-                    {displayValue(item?.sale?.quantity, 'cái')}
-                </div>
-                <div className='border px-[5px] py-[2px] w-2/3 '>
-                    {displayValue(item?.sale?.revenue, 'đ')}
-                </div>
-            </div>
-        ));
-    }
-    if (columnName === 'dailyDate') {
-        return newDataPCs && newDataPCs.map((item, index) => (
-            <div className='flex items-center justify-between' key={index}>
-                <div className='border px-[5px] py-[2px] w-1/3'>
-                    {displayValue(item?.daily?.quantity, 'cái')}
-                </div>
-                <div className='border px-[5px] py-[2px] w-2/3'>
-                    {displayValue(item?.daily?.revenue, 'đ')}
-                </div>
-            </div>
-        ));
-    }
-}
-const columnRevenueDetails = (typeActive, dataFilter, dataProductCategorys) => [
-    {
-        title: `${typeActive?.typeTime === 'month' ?
-            `CHI TIẾT DOANH THU THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
-            `CHI TIẾT DT TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
-        children: [
-            {
-                title: "TÊN LOẠI", width: 250,
-                render: (datas) => <>{getDataTableRevenueDetail(datas, 'nameProductCategory', dataProductCategorys)}</>
-            },
-            {
-                title: "THỰC ĐẠT", width: 200,
-                render: (datas) => <>{getDataTableRevenueDetail(datas, 'achievedMonth', dataProductCategorys)}</>
-            },
-        ]
-    },
-    {
-        title: `CTDT NGÀY ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`, children: [
-            {
-                title: "THỰC ĐẠT", width: 200,
-                render: (datas) => <>{getDataTableRevenueDetail(datas, 'dailyDate', dataProductCategorys)}</>
-            }
-        ]
-    }
+    return [
+        {
+            title: `${typeActive?.typeTime === 'month' ?
+                `CHI TIẾT DOANH THU THÁNG ${dayjs(dataFilter?.start).format('MM-YYYY')}` :
+                `CHI TIẾT DT TỪ ${dayjs(dataFilter?.start).format('DD-MM-YYYY')} TỚI ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`}`,
+            children: [
+                {
+                    title: "TÊN LOẠI", width: 250,
+                    render: () =>
+                        <div className='divide-y'>
+                            {(newDataPCs && newDataPCs.map((item) => (
+                                <div className='py-[2px]' key={item?.id}>
+                                    <Text>{item?.name}</Text>
+                                </div>
+                            ))
+                            )}
+                        </div>
+                },
+                {
+                    title: "THỰC ĐẠT", width: 200,
+                    render: () =>
+                        <div className='divide-y'>
+                            {(newDataPCs && newDataPCs.map((item) => (
+                                <div className='flex items-center justify-between divide-x' key={item?.id}>
+                                    <div className='py-[2px] w-1/3'>
+                                        {displayValue(item?.sale?.quantity, 'cái')}
+                                    </div>
+                                    <div className='pl-[5px] py-[2px] w-2/3 '>
+                                        {displayValue(item?.sale?.revenue, 'đ')}
+                                    </div>
+                                </div>
+                            ))
+                            )}
+                        </div>
+                },
+            ]
+        },
+        {
+            title: `CTDT NGÀY ${dayjs(dataFilter?.end).format('DD-MM-YYYY')}`, children: [
+                {
+                    title: "THỰC ĐẠT", width: 200,
+                    render: () =>
+                        <div className='divide-y'>
+                            {(newDataPCs && newDataPCs.map((item) => (
+                                <div className='flex items-center justify-between divide-x' key={item?.id}>
+                                    <div className='py-[2px] w-1/3'>
+                                        {displayValue(item?.daily?.quantity, 'cái')}
+                                    </div>
+                                    <div className='pl-[5px] py-[2px] w-2/3 '>
+                                        {displayValue(item?.daily?.revenue, 'đ')}
+                                    </div>
+                                </div>
+                            ))
+                            )}
+                        </div>
+                }
+            ]
+        }
 
-];
+    ]
+};
 export {
     columnRevenueOverViews, columnRevenueDetails, calculateSummary
 }

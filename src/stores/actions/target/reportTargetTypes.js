@@ -10,31 +10,44 @@ import { showNotification } from '@utils/handleFuncNotification';
 
 
 const combineDataStaff = async (datasFirst, datasSecond, dataFilter) => {
-    const newDatas = await Promise.all(datasFirst.map(async (itemFirst) => {
-        const itemSelected = datasSecond.find((itemSecond) => itemSecond?.staff?.id === itemFirst.staff?.id);
+    const listShopId = datasFirst
+        .filter(item => ['officialHeadShops', 'probationHeadShops'].includes(item?.staff?.role?.code))
+        .map(item => item?.staff?.shop?.id)
+        .filter(Boolean);
+    let dataAchieveTargetShopMonths = [];
+    let dataAchieveTargetShopDailys = [];
+    let shopMonthMap = new Map();
+    let shopDailyMap = new Map();
+
+    if (listShopId.length > 0) {
+        const dataFilterSecond = {
+            start: dayjs(dataFilter?.end).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
+            end: dataFilter?.end
+        };
+
+        [dataAchieveTargetShopMonths, dataAchieveTargetShopDailys] = await Promise.all([
+            getReportTargetShopForStaff(dataFilter, listShopId),
+            getReportTargetShopForStaff(dataFilterSecond, listShopId)
+        ]);
+
+        shopMonthMap = new Map(dataAchieveTargetShopMonths.map(item => [item.shop.id, item.revenue]));
+        shopDailyMap = new Map(dataAchieveTargetShopDailys.map(item => [item.shop.id, item.revenue]));
+    }
+    const datasSecondMap = new Map(datasSecond.map(item => [item?.staff?.id, item]));
+    const newDatas = datasFirst.map(itemFirst => {
+        const itemSelected = datasSecondMap.get(itemFirst.staff?.id);
         const userRole = itemFirst?.staff?.role?.code;
         let shopID = null;
-        let dataAchieveTargetShopMonths = null;
-        let dataAchieveTargetShopDailys = null;
         if (userRole === "officialHeadShops" || userRole === "probationHeadShops") {
             shopID = itemFirst?.staff?.shop?.id;
         }
-        if (shopID !== null) {
-            const dataFilterSecond = {
-                start: dayjs(dataFilter?.end).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
-                end: dataFilter?.end
-            }
-            dataAchieveTargetShopMonths = await getReportTargetShopForStaff(dataFilter, [shopID]);
-            dataAchieveTargetShopDailys = await getReportTargetShopForStaff(dataFilterSecond, [shopID]);
-        }
-
         return {
             ...itemFirst,
-            daily: itemSelected?.revenue ? itemSelected?.revenue : {},
-            revenueShopMonth: dataAchieveTargetShopMonths ? dataAchieveTargetShopMonths?.[0]?.revenue : null,
-            revenueShopDaily: dataAchieveTargetShopDailys ? dataAchieveTargetShopDailys?.[0]?.revenue : null,
+            daily: itemSelected?.revenue || {},
+            revenueShopMonth: shopID ? shopMonthMap.get(shopID) || null : null,
+            revenueShopDaily: shopID ? shopDailyMap.get(shopID) || null : null,
         };
-    }));
+    });
     return newDatas;
 }
 const getReportTargetShopForStaff = async (dataFilter, listId) => {
