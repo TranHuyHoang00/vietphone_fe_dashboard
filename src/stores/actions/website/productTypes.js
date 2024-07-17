@@ -149,3 +149,11 @@ export const setDataFilterProductRepairRedux = (data) => ({
     type: actionTypes.SET_DATA_FILTER_PRODUCT_REPAIR,
     data,
 })
+export const onChangeProductDescriptionRedux = (value) => ({
+    type: actionTypes.ON_CHANGE_PRODUCT_DESCRIPTION,
+    value,
+})
+export const onChangeProductShortDescriptionRedux = (value) => ({
+    type: actionTypes.ON_CHANGE_PRODUCT_SHORT_DESCRIPTION,
+    value,
+})

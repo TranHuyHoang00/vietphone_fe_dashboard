@@ -30,6 +30,7 @@ const initialState = {
         source: 'repair',
     },
     description: '',
+    shortDescription: '',
     isEditProduct: false,
 
 }
@@ -70,6 +71,7 @@ const productReducers = (state = initialState, action) => {
                 isResult: true,
                 dataProduct: action.data,
                 description: action.data.description,
+                shortDescription: action.data.short_description,
             }
         case actionTypes.CREATE_PRODUCT_SUCCESS:
             return {
@@ -115,6 +117,12 @@ const productReducers = (state = initialState, action) => {
             return {
                 ...state,
                 description: action.value,
+                isEditProduct: true,
+            }
+        case actionTypes.ON_CHANGE_PRODUCT_SHORT_DESCRIPTION:
+            return {
+                ...state,
+                shortDescription: action.value,
                 isEditProduct: true,
             }
         case actionTypes.CLICK_EDIT_PRODUCT:

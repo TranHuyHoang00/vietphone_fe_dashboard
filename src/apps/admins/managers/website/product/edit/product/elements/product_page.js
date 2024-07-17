@@ -29,10 +29,11 @@ class product_page extends Component {
     }
     render() {
         const { dataProductPage, isLoading, onChangeProductPage, isEdit } = this.props;
-        return (
-            <Collapse defaultActiveKey={[1]}>
-                <Collapse.Panel header="Sản phẩm trên Website" key="1"
-                    extra={<Button onClick={() => this.handleDelete()} className='bg-[#e94138] text-white' disabled={(isEdit && dataProductPage?.id) ? false : true}>Xóa bài</Button>}>
+        const items = [
+            {
+                key: '1',
+                label: 'Sản phẩm trên Website',
+                children:
                     <Spin spinning={isLoading}>
                         <div className='space-y-[5px]'>
                             <div className='flex items-center gap-[5px]'>
@@ -76,9 +77,12 @@ class product_page extends Component {
                                 </div>
                             </div>
                         </div>
-                    </Spin>
-                </Collapse.Panel>
-            </Collapse>
+                    </Spin>,
+                extra: <Button onClick={() => this.handleDelete()} className='bg-[#e94138] text-white' disabled={(isEdit && dataProductPage?.id) ? false : true}>Xóa bài</Button>,
+            },
+        ]
+        return (
+            <Collapse defaultActiveKey={[1]} items={items}></Collapse>
         );
     }
 

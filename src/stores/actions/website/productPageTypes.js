@@ -127,10 +127,6 @@ export const onChangeProductPageRedux = (value, id) => ({
     value,
     id,
 })
-export const onChangeProductDescriptionRedux = (value) => ({
-    type: actionTypes.ON_CHANGE_PRODUCT_DESCRIPTION,
-    value,
-})
 export const setDataProductPageRedux = (data) => ({
     type: actionTypes.SET_DATA_PRODUCT_PAGE,
     data,

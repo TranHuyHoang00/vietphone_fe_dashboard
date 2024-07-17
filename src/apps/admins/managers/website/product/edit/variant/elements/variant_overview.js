@@ -27,8 +27,8 @@ class variant_overview extends Component {
                         <div className='space-y-[10px] '>
                             {dataVariants && dataVariants.map((item, index) => {
                                 return (
-                                    <div className='flex items-center justify-between'>
-                                        <div key={index} onClick={() => selectVariant(index)}
+                                    <div key={index} className='flex items-center justify-between'>
+                                        <div onClick={() => selectVariant(index)}
                                             className='flex gap-[10px] cursor-pointer'>
                                             <Radio value={index}></Radio>
                                             <div>

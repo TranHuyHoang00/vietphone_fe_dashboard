@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Button, Typography, Space, message } from 'antd';
 import ProductIntroduce from './elements/product_introduce';
-import ProductAttributeValue from './elements/product_attribute_value';
+//import ProductAttributeValue from './elements/product_attribute_value';
 import ProductPage from './elements/product_page';
 import ProductContent from './elements/product_content';
 import ProductMedia from './elements/product_media';
+import ProductAtbvlQuillTable from './elements/productAtbvlQuillTable';
 import { createMedia } from '@services/website/mediaServices';
 import { showNotification } from '@utils/handleFuncNotification';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
@@ -71,7 +72,8 @@ class index extends Component {
         return newDataAtbvlIds;
     }
     handleEditProduct = async () => {
-        const { dataProduct, isEdit, clickEditProduct, description, editProduct, getDataProduct, isEditProductPage, isEditProduct } = this.props;
+        const { dataProduct, isEdit, clickEditProduct, description, shortDescription,
+            editProduct, getDataProduct, isEditProductPage, isEditProduct } = this.props;
         if (dataProduct?.id) {
             if (isEdit) {
                 if (isEditProduct) {
@@ -80,6 +82,7 @@ class index extends Component {
                     let newDataProduct = {
                         ...dataProduct,
                         description: description,
+                        short_description: shortDescription,
                     }
                     if (newDataProduct?.variant_attribute_group?.id) { delete newDataProduct.variant_attribute_group; }
                     if (newDataProduct?.promotion_info?.id) { delete newDataProduct.promotion_info; }
@@ -134,7 +137,8 @@ class index extends Component {
                             <ProductMedia />
                         </div>
                         <div>
-                            <ProductAttributeValue />
+                            <ProductAtbvlQuillTable />
+                            {/* <ProductAttributeValue /> */}
                         </div>
                     </div>
                     <ProductContent />
@@ -150,6 +154,7 @@ const mapStateToProps = state => {
         dataProduct: state.product.dataProduct,
         isEdit: state.product.isEdit,
         description: state.product.description,
+        shortDescription: state.product.shortDescription,
         dataProductPage: state.productPage.dataProductPage,
 
         dataUserPermis: state.user.dataUserPermis,
