@@ -29,10 +29,10 @@ class index extends Component {
         const { getListTargetStaff, dataFilter, dataTargetStaffs } = this.props;
         switch (drawerName) {
             case 'filter':
-                this.setState({ drawerFilter: drawerValue });
                 if (dataTargetStaffs && dataTargetStaffs.length === 0) {
                     await getListTargetStaff({ page: 1, limit: 50, month: dayjs(dataFilter?.start).startOf('month').format("YYYY-MM-DD"), })
                 }
+                this.setState({ drawerFilter: drawerValue });
                 break;
             default:
                 return;
@@ -51,10 +51,8 @@ class index extends Component {
         if (arr1.length !== arr2.length) {
             return false;
         }
-
         const sortedArr1 = arr1.slice().sort();
         const sortedArr2 = arr2.slice().sort();
-
         for (let i = 0; i < sortedArr1.length; i++) {
             if (sortedArr1[i] !== sortedArr2[i]) {
                 return false;
@@ -67,7 +65,7 @@ class index extends Component {
         if (typeActive?.typeView === "all") {
             await getAllReportTargetStaff(dataFilter);
         }
-        if (typeActive?.typeView === "individual") {
+        if (typeActive?.typeView === "individual" || typeActive?.typeView === "shop") {
             await getListReportTargetStaff(dataFilter, typeActive?.listId);
         }
         this.openDrawer('filter', false);

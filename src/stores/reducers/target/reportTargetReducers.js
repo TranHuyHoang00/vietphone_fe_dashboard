@@ -28,6 +28,7 @@ const initialState = {
         typeTime: 'month',
         typeView: 'all',
         listId: [],
+        listShopId: [],
     },
 
 }

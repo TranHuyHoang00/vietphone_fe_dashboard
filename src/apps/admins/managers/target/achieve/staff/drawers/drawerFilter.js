@@ -11,6 +11,7 @@ class index extends Component {
             dataFilter: {
             },
             typeActive: {},
+            dataShops: [],
         }
     }
     async componentDidMount() {
@@ -26,6 +27,8 @@ class index extends Component {
             dataFilter: newDataFilter,
             typeActive: newTypeActive,
         });
+        const dataShops = this.getDataShop(this.props.dataStaffs);
+        this.setState({ dataShops: dataShops });
     }
     onChangeDataFilter = async (value, id) => {
         const { dataFilter } = this.state;
@@ -63,9 +66,28 @@ class index extends Component {
         }
         this.onChangeTypeActive(value, 'typeTime')
     }
+    getDataShop = (dataInput) => {
+        const uniqueShops = new Map();
+        dataInput.forEach((item) => {
+            const shop = item?.staff?.shop;
+            if (shop && !uniqueShops.has(shop.id)) {
+                uniqueShops.set(shop.id, shop);
+            }
+        });
+        return Array.from(uniqueShops.values());
+    };
+    onChangeListShopId = async (listShopId) => {
+        await this.onChangeTypeActive(listShopId, 'listShopId');
+        const { dataStaffs } = this.props;
+        const listStaffId = dataStaffs
+            .filter(item => listShopId.includes(item?.staff?.shop?.id))
+            .map(item => item?.staff?.id);
+        await this.onChangeTypeActive(listStaffId, 'listId');
+
+    }
     render() {
         const { openDrawer, drawerFilter, dataStaffs, handleFilter, disabledAcceptFilter } = this.props;
-        const { dataFilter, typeActive } = this.state;
+        const { dataFilter, typeActive, dataShops } = this.state;
         return (
             <Drawer title="Bộ lọc" onClose={() => openDrawer('filter', false)} open={drawerFilter}>
                 <Space direction='vertical'>
@@ -89,6 +111,7 @@ class index extends Component {
                             value={typeActive?.typeView} onChange={(event) => this.onChangeTypeActive(event.target.value, 'typeView')} className='flex'>
                             <Radio.Button value="all">Tất cả</Radio.Button>
                             <Radio.Button value="individual">Riêng</Radio.Button>
+                            <Radio.Button value="shop">Cửa hàng</Radio.Button>
                         </Radio.Group>
                     </div>
                     {typeActive?.typeView === "individual" &&
@@ -104,6 +127,23 @@ class index extends Component {
                                 options={dataStaffs && dataStaffs?.map((item) => ({
                                     label: item?.staff?.name,
                                     value: item?.staff?.id,
+                                }))}
+                            />
+                        </div>
+                    }
+                    {typeActive?.typeView === "shop" &&
+                        <div className='space-y-[2px]'>
+                            <Typography.Text strong>
+                                Danh sách cửa hàng
+                                <Typography.Text type="danger" strong> *</Typography.Text>
+                            </Typography.Text>
+                            <Select mode="multiple" allowClear style={{ width: '100%' }} showSearch
+                                value={typeActive?.listShopId}
+                                filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+                                onChange={(value) => this.onChangeListShopId(value)}
+                                options={dataShops && dataShops?.map((item) => ({
+                                    label: item?.name,
+                                    value: item?.id,
                                 }))}
                             />
                         </div>
