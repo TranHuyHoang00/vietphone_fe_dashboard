@@ -16,7 +16,6 @@ class index extends Component {
     }
     render() {
         const { shortDescription, onChangeProductShortDescription, isEdit } = this.props;
-        console.log('shortDescription', shortDescription);
         const items = [
             {
                 key: '1',

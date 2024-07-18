@@ -16,7 +16,7 @@ class group extends Component {
                 if (value < 1 && value >= -1) {
                     return formatNumber(value * 1000, 0, 1) + " ngàn";
                 }
-                return formatNumber(value, 0, 1) + " triệu";
+                return formatNumber(value, 0, 2) + " triệu";
             }
             return value;
         }

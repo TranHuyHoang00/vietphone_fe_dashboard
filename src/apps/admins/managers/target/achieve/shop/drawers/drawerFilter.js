@@ -8,8 +8,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataFilter: {
-            },
+            dataFilter: {},
             typeActive: {},
         }
     }
@@ -48,6 +47,7 @@ class index extends Component {
         });
     }
     onChangeInputMonth = async (date) => {
+        console.log('date', date);
         if (dayjs(date).isSame(dayjs(), 'month')) {
             await this.onChangeDataFilter(dayjs(date).startOf('month').format('YYYY-MM-DD HH:mm:ss'), 'start');
             await this.onChangeDataFilter(dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss'), 'end');
@@ -55,6 +55,13 @@ class index extends Component {
             await this.onChangeDataFilter(dayjs(date).startOf('month').format('YYYY-MM-DD HH:mm:ss'), 'start');
             await this.onChangeDataFilter(dayjs(date).endOf('month').format('YYYY-MM-DD HH:mm:ss'), 'end');
         }
+    }
+    onChangeTypeTime = (value) => {
+        const { dataFilter } = this.state;
+        if (value === 'month') {
+            this.onChangeInputMonth(dataFilter?.start);
+        }
+        this.onChangeTypeActive(value, 'typeTime')
     }
     render() {
         const { openDrawer, drawerFilter, handleFilter, dataShops, disabledAcceptFilter } = this.props;
@@ -108,7 +115,7 @@ class index extends Component {
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
                             <Radio.Group buttonStyle="solid"
-                                value={typeActive?.typeTime} onChange={(event) => this.onChangeTypeActive(event.target.value, 'typeTime')} className='flex'>
+                                value={typeActive?.typeTime} onChange={(event) => this.onChangeTypeTime(event.target.value)} className='flex'>
                                 <Radio.Button value="month">Tháng</Radio.Button>
                                 <Radio.Button value="date">Ngày</Radio.Button>
                             </Radio.Group>

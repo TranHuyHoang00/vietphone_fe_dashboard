@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
@@ -7,15 +7,20 @@ import { AiFillFilter } from "react-icons/ai";
 import { FaFileExport } from "react-icons/fa";
 import dayjs from 'dayjs';
 import DrawerFilter from './drawers/drawerFilter';
+import ChartTarget from './component/chartTarget';
 import { exportTableAntdToExcel, exportTableAntdToImage } from '@utils/handleFuncExport'
 import TableRevenueDetail from './component/tableRevenueDetail';
 import TableRevenueOverView from './component/tableRevenueOverView';
 import { columnRevenueOverViews } from './component/columns';
+import { FaChartSimple } from "react-icons/fa6";
+
 class index extends Component {
     constructor(props) {
         super(props);
+        this.chartTargetRef = createRef();
         this.state = {
             drawerFilter: false,
+            openChart: false,
             disabledAcceptFilter: false,
         }
     }
@@ -23,6 +28,8 @@ class index extends Component {
         const { dataFilter, dataReportTargetShops, getAllReportTargetShop } = this.props;
         if (dataReportTargetShops && dataReportTargetShops.length === 0) {
             await getAllReportTargetShop(dataFilter);
+        } else {
+            this.setState({ openChart: true, })
         }
     }
     openDrawer = async (drawerName, drawerValue) => {
@@ -79,8 +86,6 @@ class index extends Component {
         if (!result.check) {
             return message.error(result.mess);
         }
-        this.setState({ disabledAcceptFilter: true });
-
         const equalFilter = this.handleEqualObj(dataFilterNew, dataFilter);
         const equalTypeTime = typeActiveNew.typeTime === typeActive.typeTime;
         const equalTypeView = typeActiveNew.typeView === typeActive.typeView;
@@ -95,8 +100,23 @@ class index extends Component {
         setDataFilterReportTarget(dataFilterNew);
         setTypeActiveReportTarget(typeActiveNew);
     }
+    // HIDE AND SCROLL TO CHART
+    handleScrollChart = () => {
+        if (!this.state.openChart) {
+            this.setState({ openChart: true }, this.scrollToChart);
+        } else {
+            this.scrollToChart();
+        }
+    };
+    scrollToChart = () => {
+        setTimeout(() => {
+            if (this.chartTargetRef.current) {
+                this.chartTargetRef.current.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 0);
+    };
     render() {
-        const { drawerFilter, disabledAcceptFilter } = this.state;
+        const { drawerFilter, disabledAcceptFilter, openChart } = this.state;
         const { isLoadingReportTargetShop, dataReportTargetShops, isLoadingShop,
             dataShops, dataFilter, typeActive } = this.props;
 
@@ -125,13 +145,22 @@ class index extends Component {
                 <Spin size='large' spinning={isLoadingReportTargetShop || isLoadingShop}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between space-x-[5px]'>
-                            <Button
-                                onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
-                                <Space className='text-white dark:text-black'>
-                                    <AiFillFilter />
-                                    Lọc
-                                </Space>
-                            </Button>
+                            <Space>
+                                <Button
+                                    onClick={() => this.openDrawer("filter", true)} className='bg-[#0e97ff] dark:bg-white'>
+                                    <Space className='text-white dark:text-black'>
+                                        <AiFillFilter />
+                                        Lọc
+                                    </Space>
+                                </Button>
+                                <Button onClick={() => this.handleScrollChart()}
+                                    className='bg-[#0e97ff] dark:bg-white'>
+                                    <Space className='text-white dark:text-black'>
+                                        <FaChartSimple />
+                                        Biểu đồ
+                                    </Space>
+                                </Button>
+                            </Space>
                             {typeActive?.typeTable === "overview" &&
                                 <Dropdown menu={{ items }} placement="bottomLeft">
                                     <Button className='bg-[#0e97ff] dark:bg-white'>
@@ -154,6 +183,9 @@ class index extends Component {
                                 <TableRevenueOverView typeActive={typeActive} dataFilter={dataFilter}
                                     dataReportTargetShops={dataReportTargetShops} />
                             </div>
+                        }
+                        {openChart &&
+                            <div id='chartTarget' ref={this.chartTargetRef}><ChartTarget /></div>
                         }
                     </div>
                 </Spin>
