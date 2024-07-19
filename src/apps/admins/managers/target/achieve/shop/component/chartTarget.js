@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Spin } from 'antd';
 import BarGroup from '../../../component/bar/group';
+//import MixedAll from '../../../component/mixed/all';
 import dayjs from 'dayjs';
 class index extends Component {
     constructor(props) {
@@ -11,6 +12,7 @@ class index extends Component {
             dataChartTargetMonthShop: {},
             dataChartTargetDateShop: {},
             dataFilter: {},
+            dataTest: {},
         }
     }
     async componentDidMount() {
@@ -51,6 +53,8 @@ class index extends Component {
             height: 120 * (dataInput.length < 5 ? dataInput.length + 1 : dataInput.length),
         }
 
+
+
         const dataTargetDates = dataInput.map(item => {
             const targetDate = this.getTargetDate(dataFilter?.end, item?.shop_monthly_target?.value, item?.revenue?.total_revenue) / 1000000;
             if (targetDate <= 0) {
@@ -74,9 +78,20 @@ class index extends Component {
             labels: dataNameShops,
             height: 120 * (dataInput.length < 5 ? dataInput.length + 1 : dataInput.length),
         }
+        // const dataTest = {
+        //     datas: [
+        //         { name: 'Target tháng', type: 'line', data: dataTargetMonths },
+        //         { name: 'Thực đạt', type: 'area', data: dataTargetAchievedMonths },
+        //         { name: 'Target ngày', type: 'line', data: dataTargetDates },
+
+        //     ],
+        //     labels: dataNameShops,
+        //     height: 500,
+        // }
         this.setState({
             dataChartTargetMonthShop: dataChartTargetMonthShop,
             dataChartTargetDateShop: dataChartTargetDateShop,
+            // dataTest: dataTest,
         })
     }
     render() {
@@ -84,16 +99,23 @@ class index extends Component {
         return (
             <Spin spinning={false}>
                 <div className='space-y-[5px] bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
+                    {/* <div>
+                        {dataChartTargetMonthShop && dataChartTargetMonthShop?.labels && dataChartTargetMonthShop?.datas &&
+                            <MixedAll dataSeries={dataTest?.datas} labels={dataTest?.labels}
+                                height={dataTest?.height} unit={'money'}
+                                title={"Tổng quan"} colors={['#56b2f9', '#60cd37', '#f94c4c',]} />
+                        }
+                    </div> */}
                     <div className='md:grid grid-cols-2 gap-[20px]'>
                         {dataChartTargetMonthShop && dataChartTargetMonthShop?.labels && dataChartTargetMonthShop?.datas &&
                             <BarGroup dataSeries={dataChartTargetMonthShop?.datas} dataCategories={dataChartTargetMonthShop?.labels}
                                 height={dataChartTargetMonthShop?.height} unit={'money'}
-                                title={"Target tháng (triệu vnđ)"} colors={['#4fc821', '#f60000', '#0e92f7']} />
+                                title={"Target tháng (triệu vnđ)"} colors={['#60cd37', '#f94c4c', '#56b2f9']} />
                         }
                         {dataChartTargetDateShop && dataChartTargetDateShop?.labels && dataChartTargetDateShop?.datas &&
                             <BarGroup dataSeries={dataChartTargetDateShop?.datas} dataCategories={dataChartTargetDateShop?.labels}
                                 height={dataChartTargetDateShop?.height} unit={'money'}
-                                title={"Target ngày (triệu vnđ)"} colors={['#4fc821', '#f60000', '#0e92f7']} />
+                                title={"Target ngày (triệu vnđ)"} colors={['#60cd37', '#f94c4c', '#56b2f9']} />
                         }
                     </div>
                 </div>

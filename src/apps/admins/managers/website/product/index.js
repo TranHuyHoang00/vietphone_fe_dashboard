@@ -170,7 +170,7 @@ class index extends Component {
                         </div>
                         <div className='flex items-center justify-between'>
                             <span>Website : </span>
-                            {item.has_page ? <Tag color='green'>Yes</Tag> : <Tag color='red'>No</Tag>}
+                            {item.has_page ? <Tag color='green'>Có</Tag> : <Tag color='red'>Chưa</Tag>}
                         </div>
                         <div className='flex items-center justify-between'>
                             <span>Nguồn :</span>
