@@ -14,7 +14,7 @@ class index extends Component {
             <Result
                 status="404"
                 title="404"
-                subTitle="Xin lỗi, không tìm thấy trang này!!"
+                subTitle="Xin lỗi, không tìm thấy trang này !"
                 extra={<Button onClick={() => { this.props.history.push('/admin') }} type="default">Quay lại</Button>}
             />
         );

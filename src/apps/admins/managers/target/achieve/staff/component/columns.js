@@ -17,6 +17,15 @@ const getDataTableRevenueOverView = (datas, columnName) => {
         return revenueShopDaily?.total_revenue ?? datas?.daily?.total_revenue;
     }
 }
+const getTargetDate = (end, targetMonth, targetAchieved) => {
+    const targetRemaining = targetMonth - targetAchieved;
+    const remainingDays = dayjs(end).daysInMonth() - dayjs(end).date();
+    if (remainingDays === 0) {
+        return targetRemaining / 1;
+    } else {
+        return targetRemaining / remainingDays;
+    }
+}
 const columnRevenueOverViews = (typeActive, dataFilter, history) => [
     {
         title: `${typeActive?.typeTime === 'month' ?
@@ -171,15 +180,7 @@ const columnRevenueOverViews = (typeActive, dataFilter, history) => [
         ]
     }
 ];
-const getTargetDate = (end, targetMonth, targetAchieved) => {
-    const targetRemaining = targetMonth - targetAchieved;
-    const remainingDays = dayjs(end).daysInMonth() - dayjs(end).date();
-    if (remainingDays === 0) {
-        return targetRemaining / 1;
-    } else {
-        return targetRemaining / remainingDays;
-    }
-}
+
 
 const columnRevenueDetails = (typeActive, dataFilter, dataProductCategorys, datas) => {
     const newDataPCs = dataProductCategorys.map((productCategory) => {
@@ -298,14 +299,14 @@ const getDataTableKPIDetail = (datas, columnName) => {
             <div className='flex items-center justify-between' key={index}>
                 <div className='border px-[5px] py-[2px] w-1/3'>
                     {item?.quantity > 0 ?
-                        <span className={classTrue}>
+                        <span >
                             {item?.quantity} cái
                         </span> : <span>-</span>
                     }
                 </div>
                 <div className='border px-[5px] py-[2px] w-2/3'>
                     {item?.value > 0 ?
-                        <span className={classTrue}>
+                        <span>
                             {formatNumber(item?.value)} đ
                         </span> : <span>-</span>
                     }

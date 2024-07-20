@@ -54,12 +54,11 @@ class login extends Component {
         const { setLogin } = this.props;
         if (result.check) {
             try {
-                let data = await Login(phone, password);
+                const data = await Login(phone, password);
                 if (data && data.data && data.data.success === 1) {
                     const dataUser = data.data.data;
                     await setDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB, dataUser);
                     setLogin(true);
-                    this.props.history.push(`/admin`);
                     window.location.href = '/admin';
                 }
                 else {
@@ -102,7 +101,6 @@ class login extends Component {
                                         <AiFillEyeInvisible className='text-gray-700' />
                                         :
                                         <AiFillEye className='text-gray-700' />
-
                                     }
                                 </div>
                             </div>

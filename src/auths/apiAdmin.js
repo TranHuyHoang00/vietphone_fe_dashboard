@@ -6,7 +6,7 @@ const apiAdmin = axios.create({
 apiAdmin.interceptors.request.use(
     async (request) => {
         const dataAccount = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
-        const token = dataAccount.data.access;
+        const token = dataAccount?.data?.access;
         if (token) { request.headers.Authorization = `Bearer ${token}`; }
         return request;
     },
@@ -17,10 +17,10 @@ apiAdmin.interceptors.request.use(
 apiAdmin.interceptors.response.use(
     (response) => { return response; },
     async (error) => {
-        const originalConfig = error.config;
+        const originalConfig = error?.config;
         if (error?.response?.status === 401 && error?.response?.data?.error?.code === 'token_not_valid') {
-            let dataAccount = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
-            const refresh = dataAccount.data.refresh;
+            const dataAccount = await getDataLocal(process.env.REACT_APP_LOCALHOST_ACOUNT_DB);
+            const refresh = dataAccount?.data?.refresh;
             let token;
             if (!refresh) {
                 return Promise.reject(error);

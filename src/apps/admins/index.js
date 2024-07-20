@@ -8,11 +8,14 @@ import { getDataLocal } from '@auths/localStorage';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataPermiViews } from '@datas/dataPermissionsOrigin';
 import { itemMenuLeftLayoutSider } from '@datas/dataMenu';
+// COMPONENT
 import HeaderDB from './layouts/header';
+// PAGE
 import LoginDB from './pages/login';
-import NotLogged from './pages_error/not_logged';
-import NotFound from './pages_error/not_found';
 import Empty from './pages/empty';
+// PAGE ERROR
+import NotLogged from './pageErrors/notLogged';
+import NotFound from './pageErrors/notFound';
 // WEBSITE
 import ManagerBrand from './managers/website/brand/index';
 import ManagerTag from './managers/website/tag/index';

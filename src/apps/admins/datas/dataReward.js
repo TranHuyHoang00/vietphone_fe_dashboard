@@ -197,7 +197,7 @@ const dataRewards = [
                             {
                                 id: 3, code: 'TPK', name: 'TỔNG PHỤ KIỆN', detail: [
                                     { id: 5, typeCondition: 'money-percent', start: 0, end: 9999999, value: 0 },
-                                    { id: 6, typeCondition: 'money-percent', start: 10000000, end: 19000000, value: 2 },
+                                    { id: 6, typeCondition: 'money-percent', start: 10000000, end: 19999999, value: 2 },
                                     { id: 7, typeCondition: 'money-percent', start: 20000000, end: 39999999, value: 3 },
                                     { id: 8, typeCondition: 'money-percent', start: 40000000, end: 999999999, value: 4 },
                                 ]

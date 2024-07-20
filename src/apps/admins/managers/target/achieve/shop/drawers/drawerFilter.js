@@ -47,7 +47,6 @@ class index extends Component {
         });
     }
     onChangeInputMonth = async (date) => {
-        console.log('date', date);
         if (dayjs(date).isSame(dayjs(), 'month')) {
             await this.onChangeDataFilter(dayjs(date).startOf('month').format('YYYY-MM-DD HH:mm:ss'), 'start');
             await this.onChangeDataFilter(dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss'), 'end');

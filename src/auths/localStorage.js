@@ -1,6 +1,6 @@
 
 const getDataLocal = (name) => {
-    let data = JSON.parse(window.localStorage.getItem(`${name}`));
+    const data = JSON.parse(window.localStorage.getItem(`${name}`));
     return data
 }
 const setDataLocal = (name, data) => {

@@ -103,9 +103,9 @@ const handleGetKPI = (dataSetKPI, itemShift) => {
                 achieveQuantity: handleAchieve(set?.quantity, set?.actual_achieved?.quantity),
             }
         }).filter(item => item !== undefined);
-
         const newDataRewardKPI = dataRewardKPIs?.children.map((rewardKPI) => {
             const itemRemainingKPI = dataRemainingKPI.find((remaining) => remaining?.code === rewardKPI.code);
+
             if (itemRemainingKPI !== undefined) {
                 return {
                     id: rewardKPI?.id,
