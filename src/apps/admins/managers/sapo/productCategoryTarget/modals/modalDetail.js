@@ -24,8 +24,8 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {textLine13('Code', dataProductCategoryTarget.code)}
-                        {textLine13('Tên', dataProductCategoryTarget.name)}
+                        {textLine13('Code', dataProductCategoryTarget?.code)}
+                        {textLine13('Tên', dataProductCategoryTarget?.name)}
                         {textLine13('Trạng thái', (dataProductCategoryTarget?.is_active ? 'Mở' : 'Khóa'))}
                     </div>
                 </Spin>

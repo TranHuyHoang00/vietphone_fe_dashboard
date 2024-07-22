@@ -2,14 +2,17 @@ import actionTypes from './actionTypes';
 import { getListProductCategory, getDataProductCategory, createProductCategory, deleteProductCategory, editProductCategory } from '@services/sapo/productCategoryServices';
 import { message } from 'antd';
 import { showNotification } from '@utils/handleFuncNotification';
-
 export const getListProductCategoryRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { productCategory } = getState();
+            if (productCategory?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(productCategoryStart());
             const data = await getListProductCategory(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListProductCategorySuccess(data.data.data));
+                dispatch(getListProductCategorySuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(productCategoryFaided());
                 message.error('Lỗi');
@@ -23,6 +26,11 @@ export const getListProductCategoryRedux = (dataFilter) => {
 export const getDataProductCategoryRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { productCategory } = getState();
+            const { dataProductCategory } = productCategory || {};
+            if (dataProductCategory?.id === id) {
+                return;
+            }
             dispatch(productCategoryStart());
             const data = await getDataProductCategory(id);
             if (data && data.data && data.data.success === 1) {
@@ -119,9 +127,10 @@ export const productCategoryFaided = () => ({
     type: actionTypes.PRODUCT_CATEGORY_FAIDED,
 })
 
-export const getListProductCategorySuccess = (data) => ({
+export const getListProductCategorySuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_PRODUCT_CATEGORY_SUCCESS,
-    data
+    data,
+    isRepeat,
 })
 export const getProductCategorySuccess = (data) => ({
     type: actionTypes.GET_PRODUCT_CATEGORY_SUCCESS,

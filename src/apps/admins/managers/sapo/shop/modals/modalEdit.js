@@ -67,16 +67,16 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormImage name={'Ảnh'} variable={'image'} value={dataShop.image}
+                        <FormImage name={'Ảnh'} variable={'image'} value={dataShop?.image}
                             important={true}
                             htmlFor={'loadImageEdit'} width={100} height={100}
                             onChangeImage={this.onChangeImage} />
 
-                        <FormInput name={'Tên cửa hàng'} variable={'name'} value={dataShop.name}
+                        <FormInput name={'Tên cửa hàng'} variable={'name'} value={dataShop?.name}
                             important={true}
                             onChangeInput={onChangeShop} />
 
-                        <FormInput name={'Địa chỉ'} variable={'address'} value={dataShop.address}
+                        <FormInput name={'Địa chỉ'} variable={'address'} value={dataShop?.address}
                             important={true}
                             onChangeInput={onChangeShop} />
 
@@ -84,11 +84,11 @@ class index extends Component {
                             important={true}
                             onChangeInput={onChangeShop} />
 
-                        <FormTextare name={'Google Map'} variable={'google_map_url'} value={dataShop.google_map_url}
+                        <FormTextare name={'Google Map'} variable={'google_map_url'} value={dataShop?.google_map_url}
                             important={true}
                             onChangeInput={onChangeShop} />
 
-                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataShop.is_active}
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataShop?.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },
@@ -96,7 +96,7 @@ class index extends Component {
                             ]}
                             onChangeInput={onChangeShop} />
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={dataShop.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataShop?.description}
                             important={false}
                             onChangeInput={onChangeShop} />
 

@@ -7,7 +7,7 @@ export const getListCustomerRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(customerStart());
-            let data = await getListCustomer(dataFilter);
+            const data = await getListCustomer(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getListCustomerSuccess(data.data.data));
             } else {
@@ -23,8 +23,13 @@ export const getListCustomerRedux = (dataFilter) => {
 export const getDataCustomerRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { customer } = getState();
+            const { dataCustomer } = customer || {};
+            if (dataCustomer?.id === id) {
+                return;
+            }
             dispatch(customerStart());
-            let data = await getDataCustomer(id);
+            const data = await getDataCustomer(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getCustomerSuccess(data.data.data));
             } else {
@@ -41,7 +46,7 @@ export const createCustomerRedux = (dataCustomer) => {
     return async (dispatch, getState) => {
         try {
             dispatch(customerStart());
-            let data = await createCustomer(dataCustomer);
+            const data = await createCustomer(dataCustomer);
             if (data && data.data && data.data.success === 1) {
                 dispatch(customerSuccess());
                 message.success('Thành công');
@@ -60,7 +65,7 @@ export const deleteListCustomerRedux = (list_id) => {
         dispatch(customerStart());
         for (const id of list_id) {
             try {
-                let data = await deleteCustomer(id);
+                const data = await deleteCustomer(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +83,7 @@ export const editListCustomerRedux = (list_id, dataCustomer) => {
         dispatch(customerStart());
         for (const id of list_id) {
             try {
-                let data = await editCustomer(id, dataCustomer);
+                const data = await editCustomer(id, dataCustomer);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +100,7 @@ export const editCustomerRedux = (id, dataCustomer) => {
     return async (dispatch, getState) => {
         try {
             dispatch(customerStart());
-            let data = await editCustomer(id, dataCustomer);
+            const data = await editCustomer(id, dataCustomer);
             if (data && data.data && data.data.success === 1) {
                 dispatch(customerSuccess());
                 message.success('Thành công');

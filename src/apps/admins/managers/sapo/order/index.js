@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Input,
-    Spin, Pagination, Typography, Avatar,
+    Spin, Pagination, Typography,
 } from 'antd';
 import { AiFillEye, AiFillFilter } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
@@ -12,10 +12,9 @@ import { formatMoney, formatDay } from '@utils/handleFuncFormat';
 import { textLine13 } from '@components/displays/line13';
 import ModalDetail from './modals/modalDetail';
 import DrawerFilter from './drawers/drawerFilter';
-import AvatarNone from '@assets/images/avatarNone.jpg';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataOrders } from '@datas/dataPermissionsOrigin';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
@@ -50,8 +49,9 @@ class index extends Component {
     openModal = async (modalName, modalValue, itemId,) => {
         const { setDataOrder, getDataOrder } = this.props;
         const actions = {
-            setData: setDataOrder,
             getData: getDataOrder,
+            setData: setDataOrder,
+
         };
         const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
         this.setState(newStateModal);
@@ -71,10 +71,12 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListOrder } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListOrder(newDataFilter);
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListOrder(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
-
     openDrawer = async (drawerName, drawerValue) => {
         switch (drawerName) {
             case 'filter':
@@ -89,22 +91,19 @@ class index extends Component {
             {
                 title: 'NGÀY TẠO', dataIndex: 'created_at', width: 140, responsive: ['sm'],
                 render: (created_at) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{formatDay(created_at)}</Typography.Text>,
-                sorter: (a, b) => a.created_at - b.created_at,
+                sorter: (a, b) => a?.created_at - b?.created_at,
             },
             {
                 title: 'THÔNG TIN KH', dataIndex: 'user',
                 render: (user, item) =>
-                    <div className='flex items-center justify-start gap-x-[5px]'>
-                        <Avatar size={60} src={AvatarNone} />
-                        <div>
-                            <Typography.Text strong className='text-[#0574b8] dark:text-white'>{user.full_name}</Typography.Text><br />
-                            <Typography.Text italic strong>{user.phone}</Typography.Text><br />
-                            {item.email ?
-                                <Typography.Text italic>none@gmail.com</Typography.Text>
-                                :
-                                <Typography.Text italic>{item.email}</Typography.Text>
-                            }
-                        </div>
+                    <div>
+                        <Typography.Text strong className='text-[#0574b8] dark:text-white'>{user?.full_name}</Typography.Text><br />
+                        <Typography.Text italic strong>{user?.phone}</Typography.Text><br />
+                        {item?.email ?
+                            <Typography.Text italic>none@gmail.com</Typography.Text>
+                            :
+                            <Typography.Text italic>{item?.email}</Typography.Text>
+                        }
                     </div>
             },
             {
@@ -112,10 +111,10 @@ class index extends Component {
                 render: (id, item) =>
                     <div >
                         {textLine13('Mã ĐH', item.code, 'font-medium')}
-                        {textLine13('Khấu trừ', formatMoney(item.total_discount), 'font-medium text-red-500')}
-                        {textLine13('Tổng tiền', formatMoney(item.total), 'font-medium text-red-500')}
-                        {textLine13('Nguồn', item.source)}
-                        {textLine13('Trạng thái', item.status,)}
+                        {textLine13('Khấu trừ', formatMoney(item?.total_discount), 'font-medium text-red-500')}
+                        {textLine13('Tổng tiền', formatMoney(item?.total), 'font-medium text-red-500')}
+                        {textLine13('Nguồn', item?.source)}
+                        {textLine13('Trạng thái', item?.status,)}
                     </div>
 
             },
@@ -153,15 +152,15 @@ class index extends Component {
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
+                                <FormSelectPage limit={dataFilter?.limit} onChangePage={this.onChangePage} />
                             </div>
                             <Divider >ĐƠN HÀNG</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={dataOrders} pagination={false}
                                     size="middle" bordered scroll={{ x: 600 }} />
-                                <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
+                                <Pagination responsive current={dataFilter?.page}
+                                    showQuickJumper total={dataMeta?.total * dataMeta?.limit} pageSize={dataFilter?.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>

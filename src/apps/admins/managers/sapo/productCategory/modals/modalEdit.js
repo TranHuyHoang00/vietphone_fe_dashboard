@@ -49,15 +49,15 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Code'} variable={'code'} value={dataProductCategory.code}
+                        <FormInput name={'Code'} variable={'code'} value={dataProductCategory?.code}
                             important={true}
                             onChangeInput={onChangeProductCategory} />
 
-                        <FormInput name={'Tên loại sản phẩm'} variable={'name'} value={dataProductCategory.name}
+                        <FormInput name={'Tên loại sản phẩm'} variable={'name'} value={dataProductCategory?.name}
                             important={true}
                             onChangeInput={onChangeProductCategory} />
 
-                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataProductCategory.is_active}
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataProductCategory?.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },

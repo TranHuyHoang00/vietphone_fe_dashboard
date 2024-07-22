@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListStaffRoleRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { staffRole } = getState();
+            if (staffRole?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(staffRoleStart());
             let data = await getListStaffRole(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListStaffRoleSuccess(data.data.data));
+                dispatch(getListStaffRoleSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(staffRoleFaided());
                 message.error('Lỗi');
@@ -23,6 +27,11 @@ export const getListStaffRoleRedux = (dataFilter) => {
 export const getDataStaffRoleRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { staffRole } = getState();
+            const { dataStaffRole } = staffRole || {};
+            if (dataStaffRole?.id === id) {
+                return;
+            }
             dispatch(staffRoleStart());
             let data = await getDataStaffRole(id);
             if (data && data.data && data.data.success === 1) {
@@ -119,9 +128,10 @@ export const staffRoleFaided = () => ({
     type: actionTypes.STAFF_ROLE_FAIDED,
 })
 
-export const getListStaffRoleSuccess = (data) => ({
+export const getListStaffRoleSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_STAFF_ROLE_SUCCESS,
-    data
+    data,
+    isRepeat,
 })
 export const getStaffRoleSuccess = (data) => ({
     type: actionTypes.GET_STAFF_ROLE_SUCCESS,

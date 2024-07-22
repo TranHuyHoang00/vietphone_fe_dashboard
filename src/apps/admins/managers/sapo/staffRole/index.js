@@ -12,7 +12,7 @@ import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataStaffRoles } from '@datas/dataPermissionsOrigin';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
@@ -64,8 +64,11 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListStaffRole } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListStaffRole(newDataFilter);
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListStaffRole(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
     render() {
         const columns = [
@@ -120,7 +123,7 @@ class index extends Component {
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
+                                <FormSelectPage limit={dataFilter?.limit} onChangePage={this.onChangePage} />
                                 <div>
                                     <Popconfirm disabled={(listItemSelected && listItemSelected.length === 0 ? true : false)}
                                         title={`Thực hiện tác vụ với ${listItemSelected && listItemSelected.length} dòng này?`}
@@ -140,8 +143,8 @@ class index extends Component {
                                 <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={dataStaffRoles} pagination={false}
                                     size="middle" bordered scroll={{}} />
-                                <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
+                                <Pagination responsive current={dataFilter?.page}
+                                    showQuickJumper total={dataMeta?.total * dataMeta?.limit} pageSize={dataFilter?.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>

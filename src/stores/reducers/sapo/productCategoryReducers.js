@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const productCategoryReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const productCategoryReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataProductCategorys: action.data.sapo_product_categories,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_PRODUCT_CATEGORY_SUCCESS:
             return {

@@ -11,8 +11,8 @@ class index extends Component {
     }
     async componentDidMount() {
         const { getListStaff, getListShop } = this.props;
-        await getListStaff({ page: 1, limit: 100, search: '', status: 'active' });
-        await getListShop({ page: 1, limit: 100 });
+        await getListStaff({ page: 1, limit: process.env.REACT_APP_API_LIMIT, search: '', status: 'active' });
+        await getListShop({ page: 1, limit: process.env.REACT_APP_API_LIMIT });
     }
     render() {
         const { dataFilter, openDrawer, drawerFilter, onChangePage, dataStaffs, dataShops } = this.props;
@@ -21,7 +21,7 @@ class index extends Component {
                 <Space direction='vertical'>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Trạng thái</Typography.Text>
-                        <Radio.Group value={dataFilter.status} onChange={(event) => onChangePage(event.target.value, 'status')} className='flex'>
+                        <Radio.Group value={dataFilter?.status} onChange={(event) => onChangePage(event.target.value, 'status')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value="success">Thành công</Radio.Button>
                             <Radio.Button value="unconfirmed">Chưa xác nhận</Radio.Button>
@@ -29,7 +29,7 @@ class index extends Component {
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Nguồn</Typography.Text>
-                        <Radio.Group value={dataFilter.source} onChange={(event) => onChangePage(event.target.value, 'source')} className='flex'>
+                        <Radio.Group value={dataFilter?.source} onChange={(event) => onChangePage(event.target.value, 'source')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value="sapo">Sapo</Radio.Button>
                             <Radio.Button value="web">Web</Radio.Button>
@@ -47,7 +47,7 @@ class index extends Component {
                                     ...dataStaffs && dataStaffs
                                         .map((item) => ({
                                             label: item?.name,
-                                            value: item.id,
+                                            value: item?.id,
                                         })),
                                 ]} />
                         </div>
@@ -64,7 +64,7 @@ class index extends Component {
                                     ...dataStaffs && dataStaffs
                                         .map((item) => ({
                                             label: item?.name,
-                                            value: item.id,
+                                            value: item?.id,
                                         })),
                                 ]} />
                         </div>
@@ -81,7 +81,7 @@ class index extends Component {
                                     ...dataShops && dataShops
                                         .map((item) => ({
                                             label: item?.name,
-                                            value: item.id,
+                                            value: item?.id,
                                         })),
                                 ]} />
                         </div>

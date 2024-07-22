@@ -10,7 +10,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataFilter: { page: 1, limit: 100 }
+            dataFilter: { page: 1, limit: process.env.REACT_APP_API_LIMIT }
         }
     }
     async componentDidMount() {
@@ -54,16 +54,16 @@ class index extends Component {
                 <Spin spinning={isLoadingStaff || isLoadingStaffRole || isLoadingShop}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Tên'} variable={'name'} value={dataStaff.name}
+                        <FormInput name={'Tên'} variable={'name'} value={dataStaff?.name}
                             important={true} disabled={true}
                             onChangeInput={onChangeStaff} />
 
-                        <FormInput name={'Số điện thoại'} variable={'phone_number'} value={dataStaff.phone_number}
+                        <FormInput name={'Số điện thoại'} variable={'phone_number'} value={dataStaff?.phone_number}
                             important={true} disabled={true}
                             onChangeInput={onChangeStaff} />
 
                         <FormSelectSingle
-                            name={'Trạng thái'} variable={'status'} value={dataStaff.status}
+                            name={'Trạng thái'} variable={'status'} value={dataStaff?.status}
                             important={false} width={'100%'}
                             options={[
                                 { value: 'active', label: 'Mở' },
@@ -78,8 +78,8 @@ class index extends Component {
                                 { label: 'Bỏ trống', value: '' },
                                 ...dataStaffRoles && dataStaffRoles
                                     .map((item) => ({
-                                        label: item.name,
-                                        value: item.id,
+                                        label: item?.name,
+                                        value: item?.id,
                                     })),
                             ]}
                             onChangeInput={onChangeStaff} />
@@ -90,8 +90,8 @@ class index extends Component {
                                 { label: 'Bỏ trống', value: '' },
                                 ...dataShops && dataShops
                                     .map((item) => ({
-                                        label: item.name,
-                                        value: item.id,
+                                        label: item?.name,
+                                        value: item?.id,
                                     })),
                             ]}
                             onChangeInput={onChangeStaff} />

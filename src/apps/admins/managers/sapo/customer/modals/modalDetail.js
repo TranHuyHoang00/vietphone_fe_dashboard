@@ -25,16 +25,16 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {textLine13('Mã KH', dataCustomer.code)}
-                        {textLine13('Họ và tên', (dataCustomer.user?.full_name))}
-                        {textLine13('Số điện thoại', (dataCustomer.user?.phone))}
-                        {textLine13('Email', dataCustomer.email)}
-                        {textLine13('Giới tính', dataCustomer.gender)}
-                        {textLine13('Vai trò', (dataCustomer.user?.user_type))}
-                        {textLine13('Địa chỉ', dataCustomer.address)}
-                        {textLine13('Ngày sinh', dataCustomer.date_of_birth)}
-                        {textLine13('Ngày tạo', formatDay(dataCustomer.created_at))}
-                        {textLine13('Ngày sửa', formatDay(dataCustomer.updated_at))}
+                        {textLine13('Mã KH', dataCustomer?.code)}
+                        {textLine13('Họ và tên', (dataCustomer?.user?.full_name))}
+                        {textLine13('Số điện thoại', (dataCustomer?.user?.phone))}
+                        {textLine13('Email', dataCustomer?.email)}
+                        {textLine13('Giới tính', dataCustomer?.gender)}
+                        {textLine13('Vai trò', (dataCustomer?.user?.user_type))}
+                        {textLine13('Địa chỉ', dataCustomer?.address)}
+                        {textLine13('Ngày sinh', dataCustomer?.date_of_birth)}
+                        {textLine13('Ngày tạo', formatDay(dataCustomer?.created_at))}
+                        {textLine13('Ngày sửa', formatDay(dataCustomer?.updated_at))}
                     </div>
                 </Spin>
             </Modal>

@@ -8,7 +8,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataFilter: { page: 1, limit: 100 }
+            dataFilter: { page: 1, limit: process.env.REACT_APP_API_LIMIT }
 
         }
     }
@@ -28,7 +28,7 @@ class index extends Component {
                     <Space direction='vertical'>
                         <div className='space-y-[2px]'>
                             <Typography.Text strong>Trạng thái</Typography.Text>
-                            <Radio.Group value={dataFilter.status} buttonStyle="solid"
+                            <Radio.Group value={dataFilter?.status} buttonStyle="solid"
                                 onChange={(event) => onChangePage(event.target.value, 'status')} className='flex'>
                                 <Radio.Button value="">Tất cả</Radio.Button>
                                 <Radio.Button value="active">Mở</Radio.Button>
@@ -36,31 +36,31 @@ class index extends Component {
                             </Radio.Group>
                         </div>
                         <FormSelectSingle
-                            name={'Phân quyền'} variable={'role'} value={dataFilter.role}
+                            name={'Phân quyền'} variable={'role'} value={dataFilter?.role}
                             important={false} width={'100%'}
                             options={[
                                 { label: 'Tất cả', value: '' },
                                 ...dataStaffRoles && dataStaffRoles
                                     .map((item) => ({
-                                        label: item.name,
-                                        value: item.id,
+                                        label: item?.name,
+                                        value: item?.id,
                                     })),
                             ]}
                             onChangeInput={onChangePage} />
                         <FormSelectSingle
-                            name={'Cửa hàng'} variable={'shop'} value={dataFilter.shop}
+                            name={'Cửa hàng'} variable={'shop'} value={dataFilter?.shop}
                             important={false} width={'100%'}
                             options={[
                                 { label: 'Tất cả', value: '' },
                                 ...dataShops && dataShops
                                     .map((item) => ({
-                                        label: item.name,
-                                        value: item.id,
+                                        label: item?.name,
+                                        value: item?.id,
                                     })),
                             ]}
                             onChangeInput={onChangePage} />
                         <FormSelectSingle
-                            name={'Ca làm'} variable={'shift'} value={dataFilter.shift}
+                            name={'Ca làm'} variable={'shift'} value={dataFilter?.shift}
                             important={false} width={'100%'}
                             options={[
                                 { label: 'Tất cả', value: '' },

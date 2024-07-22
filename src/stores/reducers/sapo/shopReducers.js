@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const shopReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const shopReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataShops: action.data.shops,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_SHOP_SUCCESS:
             return {

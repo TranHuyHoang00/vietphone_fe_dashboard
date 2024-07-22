@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const staffRoleReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const staffRoleReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataStaffRoles: action.data.staff_roles,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_STAFF_ROLE_SUCCESS:
             return {

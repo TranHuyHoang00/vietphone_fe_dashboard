@@ -12,7 +12,7 @@ class index extends Component {
         this.state = {
             dataFilter: {
                 page: 1,
-                limit: 100,
+                limit: process.env.REACT_APP_API_LIMIT,
                 is_active: true,
             },
 
@@ -61,15 +61,15 @@ class index extends Component {
                 <Spin spinning={isLoadingProductCategoryTarget || isLoadingProductCategory}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Code'} variable={'code'} value={dataProductCategoryTarget.code}
+                        <FormInput name={'Code'} variable={'code'} value={dataProductCategoryTarget?.code}
                             important={true}
                             onChangeInput={onChangeProductCategoryTarget} />
 
-                        <FormInput name={'Tên'} variable={'name'} value={dataProductCategoryTarget.name}
+                        <FormInput name={'Tên'} variable={'name'} value={dataProductCategoryTarget?.name}
                             important={true}
                             onChangeInput={onChangeProductCategoryTarget} />
 
-                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataProductCategoryTarget.is_active}
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataProductCategoryTarget?.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },
@@ -86,7 +86,7 @@ class index extends Component {
                                     dataProductCategoryTarget?.sapo_product_category && dataProductCategoryTarget?.sapo_product_category.length !== 0
                                         ? dataProductCategoryTarget?.sapo_product_category.map(item => {
                                             if (typeof item === 'object') {
-                                                return item.id;
+                                                return item?.id;
                                             }
                                             return item;
                                         })
@@ -96,7 +96,7 @@ class index extends Component {
                                 onChange={(value) => onChangeProductCategoryTarget(value, 'sapo_product_category')}
                                 options={dataProductCategorys && dataProductCategorys.map((item) => ({
                                     label: item?.name,
-                                    value: item.id,
+                                    value: item?.id,
                                 }))}
                             />
                         </div>

@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListStaffRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { staff } = getState();
+            if (staff?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(staffStart());
-            let data = await getListStaff(dataFilter);
+            const data = await getListStaff(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListStaffSuccess(data.data.data));
+                dispatch(getListStaffSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(staffFaided());
                 message.error('Lỗi');
@@ -23,8 +27,13 @@ export const getListStaffRedux = (dataFilter) => {
 export const getDataStaffRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { staff } = getState();
+            const { dataStaff } = staff || {};
+            if (dataStaff?.id === id) {
+                return;
+            }
             dispatch(staffStart());
-            let data = await getDataStaff(id);
+            const data = await getDataStaff(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getStaffSuccess(data.data.data));
             } else {
@@ -41,7 +50,7 @@ export const createStaffRedux = (dataStaff) => {
     return async (dispatch, getState) => {
         try {
             dispatch(staffStart());
-            let data = await createStaff(dataStaff);
+            const data = await createStaff(dataStaff);
             if (data && data.data && data.data.success === 1) {
                 dispatch(staffSuccess());
                 message.success('Thành công');
@@ -60,7 +69,7 @@ export const deleteListStaffRedux = (list_id) => {
         dispatch(staffStart());
         for (const id of list_id) {
             try {
-                let data = await deleteStaff(id);
+                const data = await deleteStaff(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +87,7 @@ export const editListStaffRedux = (list_id, dataStaff) => {
         dispatch(staffStart());
         for (const id of list_id) {
             try {
-                let data = await editStaff(id, dataStaff);
+                const data = await editStaff(id, dataStaff);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +104,7 @@ export const editStaffRedux = (id, dataStaff) => {
     return async (dispatch, getState) => {
         try {
             dispatch(staffStart());
-            let data = await editStaff(id, dataStaff);
+            const data = await editStaff(id, dataStaff);
             if (data && data.data && data.data.success === 1) {
                 dispatch(staffSuccess());
                 message.success('Thành công');
@@ -119,9 +128,10 @@ export const staffFaided = () => ({
     type: actionTypes.STAFF_FAIDED,
 })
 
-export const getListStaffSuccess = (data) => ({
+export const getListStaffSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_STAFF_SUCCESS,
-    data
+    data,
+    isRepeat,
 })
 export const getStaffSuccess = (data) => ({
     type: actionTypes.GET_STAFF_SUCCESS,

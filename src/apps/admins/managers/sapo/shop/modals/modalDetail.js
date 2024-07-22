@@ -24,18 +24,17 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {imageLine13('Ảnh', dataShop.image, 100, 100)}
+                        {imageLine13('Ảnh', dataShop?.image, 100, 100)}
                         {textLine13('Tên cửa hàng', dataShop.name)}
                         {textLine13('Địa chỉ', `${dataShop?.address},${dataShop?.ward?.name},${dataShop?.ward?.district_code?.name},${dataShop?.ward?.district_code?.province_code?.name}`)}
-                        {textLine13('Mô tả', dataShop.description)}
+                        {textLine13('Mô tả', dataShop?.description)}
                         {textLine13('Trạng thái', (dataShop?.is_active ? 'Mở' : 'Khóa'))}
                         {textLine13('Google Map', ``)}
-                        <iframe title='map'
-                            class="w-full h-full"
+                        <iframe title="shopMap"
+                            name="shopMap"
+                            className="w-full h-full"
                             src={`${dataShop?.google_map_url}`}
-                            allowfullscreen=""
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade">
+                            loading="lazy">
                         </iframe>
                     </div>
                 </Spin>

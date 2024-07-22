@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListShopRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { shop } = getState();
+            if (shop?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(shopStart());
-            let data = await getListShop(dataFilter);
+            const data = await getListShop(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListShopSuccess(data.data.data));
+                dispatch(getListShopSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(shopFaided());
                 message.error('Lỗi');
@@ -23,8 +27,13 @@ export const getListShopRedux = (dataFilter) => {
 export const getDataShopRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { shop } = getState();
+            const { dataShop } = shop || {};
+            if (dataShop?.id === id) {
+                return;
+            }
             dispatch(shopStart());
-            let data = await getDataShop(id);
+            const data = await getDataShop(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getShopSuccess(data.data.data));
             } else {
@@ -41,7 +50,7 @@ export const createShopRedux = (dataShop) => {
     return async (dispatch, getState) => {
         try {
             dispatch(shopStart());
-            let data = await createShop(dataShop);
+            const data = await createShop(dataShop);
             if (data && data.data && data.data.success === 1) {
                 dispatch(shopSuccess());
                 message.success('Thành công');
@@ -60,7 +69,7 @@ export const deleteListShopRedux = (list_id) => {
         dispatch(shopStart());
         for (const id of list_id) {
             try {
-                let data = await deleteShop(id);
+                const data = await deleteShop(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +87,7 @@ export const editListShopRedux = (list_id, dataShop) => {
         dispatch(shopStart());
         for (const id of list_id) {
             try {
-                let data = await editShop(id, dataShop);
+                const data = await editShop(id, dataShop);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +104,7 @@ export const editShopRedux = (id, dataShop) => {
     return async (dispatch, getState) => {
         try {
             dispatch(shopStart());
-            let data = await editShop(id, dataShop);
+            const data = await editShop(id, dataShop);
             if (data && data.data && data.data.success === 1) {
                 dispatch(shopSuccess());
                 message.success('Thành công');
@@ -119,9 +128,10 @@ export const shopFaided = () => ({
     type: actionTypes.SHOP_FAIDED,
 })
 
-export const getListShopSuccess = (data) => ({
+export const getListShopSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_SHOP_SUCCESS,
-    data
+    data,
+    isRepeat,
 })
 export const getShopSuccess = (data) => ({
     type: actionTypes.GET_SHOP_SUCCESS,

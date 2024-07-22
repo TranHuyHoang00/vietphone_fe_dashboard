@@ -23,6 +23,11 @@ export const getListProductCategoryTargetRedux = (dataFilter) => {
 export const getDataProductCategoryTargetRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { productCategoryTarget } = getState();
+            const { dataProductCategoryTarget } = productCategoryTarget || {};
+            if (dataProductCategoryTarget?.id === id) {
+                return;
+            }
             dispatch(productCategoryTargetStart());
             const data = await getDataProductCategoryTarget(id);
             if (data && data.data && data.data.success === 1) {

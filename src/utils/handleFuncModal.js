@@ -1,23 +1,24 @@
 const handleOpenModal = async (modalName, modalValue, itemId, actions) => {
     const { setData, getData } = actions;
-    await setData({});
-    let newStateModal;
-    switch (modalName) {
-        case 'create':
-            newStateModal = { modalCreate: modalValue };
-            break;
-        case 'detail':
+    const modalActions = {
+        create: async () => {
+            await setData({});
+            return { modalCreate: modalValue };
+        },
+        detail: async () => {
             if (itemId !== undefined) { await getData(itemId); }
-            newStateModal = { modalDetail: modalValue };
-            break;
-        case 'edit':
+            return { modalDetail: modalValue };
+        },
+        edit: async () => {
             if (itemId !== undefined) { await getData(itemId); }
-            newStateModal = { modalEdit: modalValue };
-            break;
-        default:
-            return;
+            return { modalEdit: modalValue };
+        },
+    };
+    const handleAction = modalActions[modalName];
+    if (!handleAction) {
+        return;
     }
-    return newStateModal;
+    return await handleAction();
 };
 export {
     handleOpenModal

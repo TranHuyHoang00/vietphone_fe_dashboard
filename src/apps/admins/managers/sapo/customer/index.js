@@ -11,7 +11,7 @@ import FormSelectPage from '@components/selects/formSelectPage';
 import ModalDetail from './modals/modalDetail';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataCustomers } from '@datas/dataPermissionsOrigin';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
@@ -37,11 +37,11 @@ class index extends Component {
             dataCheckPermis: dataCheckPermis,
         });
     }
-    openModal = async (modalName, modalValue, itemId,) => {
+    openModal = async (modalName, modalValue, itemId) => {
         const { setDataCustomer, getDataCustomer } = this.props;
         const actions = {
-            setData: setDataCustomer,
             getData: getDataCustomer,
+            setData: setDataCustomer,
         };
         const newStateModal = await handleOpenModal(modalName, modalValue, itemId, actions);
         this.setState(newStateModal);
@@ -61,8 +61,11 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListCustomer } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListCustomer(newDataFilter);
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListCustomer(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
     render() {
         const { Text } = Typography;
@@ -70,7 +73,7 @@ class index extends Component {
             {
                 title: 'Mã KH', dataIndex: 'code', width: 120, responsive: ['sm'],
                 render: (code) => <Text strong className='text-[#0574b8] dark:text-white'>{code}</Text>,
-                sorter: (a, b) => a.code - b.code,
+                sorter: (a, b) => a?.code - b?.code,
             },
             {
                 title: 'TÊN', dataIndex: 'user',
@@ -109,15 +112,15 @@ class index extends Component {
                         </div>
                         <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[10px] shadow-sm bcustomer'>
                             <div className='flex items-center justify-between gap-[10px]'>
-                                <FormSelectPage limit={dataFilter.limit} onChangePage={this.onChangePage} />
+                                <FormSelectPage limit={dataFilter?.limit} onChangePage={this.onChangePage} />
                             </div>
                             <Divider>KHÁCH HÀNG</Divider>
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={dataCustomers} pagination={false}
                                     size="middle" bcustomered scroll={{}} />
-                                <Pagination responsive current={dataFilter.page}
-                                    showQuickJumper total={dataMeta.total * dataMeta.limit} pageSize={dataFilter.limit}
+                                <Pagination responsive current={dataFilter?.page}
+                                    showQuickJumper total={dataMeta?.total * dataMeta?.limit} pageSize={dataFilter?.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
                             </div>
                         </div>
