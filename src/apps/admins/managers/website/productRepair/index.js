@@ -108,7 +108,7 @@ class index extends Component {
             {
                 title: 'TÊN', dataIndex: 'name',
                 render: (name, item) =>
-                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/website/product/edit/${item.id}`, { address: 'product' })}>
+                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/website/product/edit/${item.id}`, { address: 'product_repair' })}>
                         <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{name}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),

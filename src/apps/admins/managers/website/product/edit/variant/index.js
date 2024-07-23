@@ -47,6 +47,9 @@ class index extends Component {
             }
         }
     }
+    handleSetIndexActiveVariant = (index) => {
+        this.setState({ indexActiveVariant: index })
+    }
     arraysEqual = (arr1, arr2) => {
         if (arr1 && arr1) {
             if (arr1.length !== arr2.length) return false;
@@ -200,7 +203,8 @@ class index extends Component {
                         <div className='lg:grid grid-cols-3 gap-[10px] space-y-[10px] lg:space-y-0 '>
                             <div>
                                 <VariantOverview selectVariant={this.selectVariant}
-                                    indexActiveVariant={indexActiveVariant} />
+                                    indexActiveVariant={indexActiveVariant}
+                                    handleSetIndexActiveVariant={this.handleSetIndexActiveVariant} />
                             </div>
                             <div className='col-span-2 space-y-[10px]'>
                                 <div className='md:grid grid-cols-3 gap-[10px] space-y-[10px] md:space-y-0'>
@@ -217,7 +221,7 @@ class index extends Component {
                     </div>
                 </Spin>
                 {modalCreate && dataCheckPermis['product.change_product'] &&
-                    <ModalCreate modalCreate={modalCreate}
+                    <ModalCreate handleSetIndexActiveVariant={this.handleSetIndexActiveVariant} modalCreate={modalCreate}
                         openModal={this.openModal} />}
             </>
         );

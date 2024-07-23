@@ -76,10 +76,10 @@ class index extends Component {
     }
     handleEditProduct = async () => {
         const { dataProduct, isEdit, clickEditProduct, description, shortDescription,
-            editProduct, getDataProduct, isEditProductPage, isEditProduct } = this.props;
+            editProduct, getDataProduct, isEditProductPage } = this.props;
         if (dataProduct?.id) {
             if (isEdit) {
-                if (isEditProduct) {
+                if (this.props.isEditProduct) {
                     const dataMedias = dataProduct.media;
                     // const dataAtbvls = dataProduct.attribute_values;
                     let newDataProduct = {

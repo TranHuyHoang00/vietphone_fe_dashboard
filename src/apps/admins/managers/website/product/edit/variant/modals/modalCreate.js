@@ -44,7 +44,7 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        const { openModal, dataVariants, setDataVariants } = this.props;
+        const { openModal, dataVariants, setDataVariants, handleSetIndexActiveVariant, setDataVariant } = this.props;
         const { dataVariant } = this.state;
         const result = this.validationData(dataVariant);
         if (result.check) {
@@ -55,6 +55,8 @@ class index extends Component {
                     let newDataVariants = [...dataVariants];
                     newDataVariants.unshift(newDataVariant);
                     await setDataVariants(newDataVariants);
+                    await setDataVariant(newDataVariants[0]);
+                    handleSetIndexActiveVariant(0);
                     message.success('Thành công');
                 } else {
                     message.error('Lỗi');
@@ -110,6 +112,7 @@ const mapDispatchToProps = dispatch => {
         createVariant: (data) => dispatch(actions.createVariantRedux(data)),
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
         setDataVariants: (data) => dispatch(actions.setDataVariantsRedux(data)),
+        setDataVariant: (data) => dispatch(actions.setDataVariantRedux(data)),
 
     };
 };
