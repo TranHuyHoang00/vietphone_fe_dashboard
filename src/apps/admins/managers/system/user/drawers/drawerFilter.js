@@ -12,7 +12,7 @@ class index extends Component {
     }
     async componentDidMount() {
         const { getListGroup } = this.props;
-        await getListGroup({ page: 1, limit: 50, search: '' });
+        await getListGroup({ page: 1, limit: process.env.REACT_APP_API_LIMIT });
     }
     render() {
         const { dataFilter, dataGroups, onChangePage, openDrawer, drawerFilter } = this.props;
@@ -21,7 +21,7 @@ class index extends Component {
                 <div className='space-y-[10px]'>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Trạng thái</Typography.Text>
-                        <Radio.Group value={dataFilter.is_active} onChange={(event) => onChangePage(event.target.value, 'is_active')} className='flex'>
+                        <Radio.Group value={dataFilter?.is_active} onChange={(event) => onChangePage(event.target.value, 'is_active')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value={true}>Mở</Radio.Button>
                             <Radio.Button value={false}>Khóa</Radio.Button>
@@ -29,19 +29,19 @@ class index extends Component {
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Toàn quyền</Typography.Text>
-                        <Radio.Group value={dataFilter.is_superuser} onChange={(event) => onChangePage(event.target.value, 'is_superuser')} className='flex'>
+                        <Radio.Group value={dataFilter?.is_superuser} onChange={(event) => onChangePage(event.target.value, 'is_superuser')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value={true}>Có</Radio.Button>
                             <Radio.Button value={false}>Không</Radio.Button>
                         </Radio.Group>
                     </div>
-                    <FormSelectSingle name={'Phân quyền'} variable={'groups'} value={dataFilter.groups}
+                    <FormSelectSingle name={'Phân quyền'} variable={'groups'} value={dataFilter?.groups}
                         important={false} width={'100%'}
                         options={[
                             { value: "", label: 'Tất cả' },
                             ...dataGroups.map((item) => ({
-                                label: item.name,
-                                value: item.id,
+                                label: item?.name,
+                                value: item?.id,
                             }))]}
                         onChangeInput={onChangePage} />
                 </div>

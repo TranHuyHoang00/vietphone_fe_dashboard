@@ -5,6 +5,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const permissionReducers = (state = initialState, action) => {
@@ -33,7 +34,8 @@ const permissionReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataPermissions: action.data.permissions,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_PERMISSION_SUCCESS:
             return {

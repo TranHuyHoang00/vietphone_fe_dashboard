@@ -6,7 +6,7 @@ export const getListUserRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(userStart());
-            let data = await getListUser(dataFilter);
+            const data = await getListUser(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getListUserSuccess(data.data.data));
             } else {
@@ -22,8 +22,14 @@ export const getListUserRedux = (dataFilter) => {
 export const getDataUserRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { user } = getState();
+            const { dataUser } = user || {};
+
+            if (dataUser?.id === id) {
+                return;
+            }
             dispatch(userStart());
-            let data = await getDataUser(id);
+            const data = await getDataUser(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getUserSuccess(data.data.data));
             } else {
@@ -40,7 +46,7 @@ export const createUserRedux = (dataUser) => {
     return async (dispatch, getState) => {
         try {
             dispatch(userStart());
-            let data = await createUser(dataUser);
+            const data = await createUser(dataUser);
             if (data && data.data && data.data.success === 1) {
                 dispatch(userSuccess());
                 message.success('Thành công');
@@ -59,7 +65,7 @@ export const deleteListUserRedux = (list_id) => {
         dispatch(userStart());
         for (const id of list_id) {
             try {
-                let data = await deleteUser(id);
+                const data = await deleteUser(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -77,7 +83,7 @@ export const editListUserRedux = (list_id, dataUser) => {
         dispatch(userStart());
         for (const id of list_id) {
             try {
-                let data = await editUser(id, dataUser);
+                const data = await editUser(id, dataUser);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -94,7 +100,7 @@ export const editUserRedux = (id, dataUser) => {
     return async (dispatch, getState) => {
         try {
             dispatch(userStart());
-            let data = await editUser(id, dataUser);
+            const data = await editUser(id, dataUser);
             if (data && data.data && data.data.success === 1) {
                 dispatch(userSuccess());
                 message.success('Thành công');
@@ -112,9 +118,9 @@ export const getListUserPermissionRedux = () => {
     return async (dispatch, getState) => {
         try {
             dispatch(userStart());
-            let data = await getListUserPermission();
+            const data = await getListUserPermission();
             if (data && data.data && data.data.success === 1) {
-                let data_raw = data.data.data;
+                const data_raw = data.data.data;
                 if (data_raw?.is_superuser === true) {
                     dispatch(getListUserPermissionSuccess([]));
                     dispatch(setSuperUserRedux(true));

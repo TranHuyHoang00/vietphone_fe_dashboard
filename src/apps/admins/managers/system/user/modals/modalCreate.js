@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Modal, message, Spin, Typography } from 'antd';
+import { Modal, message, Spin, Typography, Select } from 'antd';
 import FormInput from '@components/inputs/formInput';
-import FormSelectMultiple from '@components/selects/formSelectMultiple';
 import ModalFooter from '@components/modals/modalFooter';
 import FormSelectSingle from '@components/selects/formSelectSingle';
 class index extends Component {
@@ -15,7 +14,7 @@ class index extends Component {
     }
     async componentDidMount() {
         const { getListGroup } = this.props;
-        getListGroup({ page: 1, limit: 100, search: '' });
+        await getListGroup({ page: 1, limit: process.env.REACT_APP_API_LIMIT });
     }
     validationPhone = (phone_number) => {
         const re = /^(?:\+84|0)(?:3[2-9]|5[2689]|7[06-9]|8[1-9]|9[0-46-9])(?:\d{7}|\d{7})$/;
@@ -76,22 +75,22 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Họ và tên'} variable={'full_name'} value={dataUser.full_name}
+                        <FormInput name={'Họ và tên'} variable={'full_name'} value={dataUser?.full_name}
                             important={true}
                             onChangeInput={onChangeUser} />
 
-                        <FormInput name={'Số điện thoại'} variable={'phone'} value={dataUser.phone}
+                        <FormInput name={'Số điện thoại'} variable={'phone'} value={dataUser?.phone}
                             important={true}
                             onChangeInput={onChangeUser} />
 
-                        <FormInput name={'Mật khẩu'} variable={'password'} value={dataUser.password}
+                        <FormInput name={'Mật khẩu'} variable={'password'} value={dataUser?.password}
                             important={true}
                             onChangeInput={onChangeUser} />
 
-                        <FormInput name={'Nhập lại mật khẩu'} variable={'password2'} value={dataUser.password2}
+                        <FormInput name={'Nhập lại mật khẩu'} variable={'password2'} value={dataUser?.password2}
                             important={true}
                             onChangeInput={onChangeUser} />
-                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataUser.is_active}
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataUser?.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },
@@ -104,18 +103,14 @@ class index extends Component {
                                 Phân quyền
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
-                            <FormSelectMultiple width={'100%'} placeholder={'Phân quyền'}
-                                mode={'multiple'}
+                            <Select allowClear style={{ width: '100%' }} showSearch
                                 value={dataUser.groups}
-                                options={dataGroups.map((item) => ({
-                                    label: item.name,
-                                    value: item.id,
+                                filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+                                onChange={(value) => this.onChangeUser(value, 'groups')}
+                                options={dataGroups && dataGroups.map((item) => ({
+                                    label: item?.name,
+                                    value: item?.id,
                                 }))}
-                                disabledSelect={false}
-                                disabledButtonCreate={true}
-                                disabledInput={true}
-                                variableSelect={'groups'}
-                                onChangeSelect={onChangeUser}
                             />
                         </div>
 

@@ -46,7 +46,7 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Tên quyền'} variable={'name'} value={dataGroup.name}
+                        <FormInput name={'Tên quyền'} variable={'name'} value={dataGroup?.name}
                             important={true}
                             onChangeInput={onChangeGroup} />
 

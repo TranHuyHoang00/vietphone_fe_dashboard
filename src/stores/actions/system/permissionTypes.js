@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListPermissionRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { permission } = getState();
+            if (permission?.isRepeat === '1000' && dataFilter?.limit === '1000') {
+                return;
+            }
             dispatch(permissionStart());
-            let data = await getListPermission(dataFilter);
+            const data = await getListPermission(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListPermissionSuccess(data.data.data));
+                dispatch(getListPermissionSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(permissionFaided());
                 message.error('Lỗi');
@@ -30,7 +34,8 @@ export const permissionFaided = () => ({
     type: actionTypes.PERMISSION_FAIDED,
 })
 
-export const getListPermissionSuccess = (data) => ({
+export const getListPermissionSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_PERMISSION_SUCCESS,
-    data
+    data,
+    isRepeat
 })

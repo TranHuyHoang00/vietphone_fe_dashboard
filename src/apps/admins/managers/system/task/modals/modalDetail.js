@@ -24,11 +24,11 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {textLine13('Id', dataTask.task_id)}
-                        {textLine13('Tên', dataTask.task_name)}
-                        {textLine13('Ngày tạo', dataTask.date_done)}
-                        {textLine13('Trạng thái', dataTask.status)}
-                        {textLine13('Kết quả', dataTask.result)}
+                        {textLine13('Id', dataTask?.task_id)}
+                        {textLine13('Tên', dataTask?.task_name)}
+                        {textLine13('Ngày tạo', dataTask?.date_done)}
+                        {textLine13('Trạng thái', dataTask?.status)}
+                        {textLine13('Kết quả', dataTask?.result)}
                     </div>
                 </Spin>
             </Modal>

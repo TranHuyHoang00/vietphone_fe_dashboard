@@ -7,7 +7,7 @@ export const getListTaskRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(taskStart());
-            let data = await getListTask(dataFilter);
+            const data = await getListTask(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getListTaskSuccess(data.data.data));
             } else {
@@ -23,8 +23,14 @@ export const getListTaskRedux = (dataFilter) => {
 export const getDataTaskRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { task } = getState();
+            const { dataTask } = task || {};
+
+            if (dataTask?.task_id === id) {
+                return;
+            }
             dispatch(taskStart());
-            let data = await getDataTask(id);
+            const data = await getDataTask(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getTaskSuccess(data.data.data));
             } else {
@@ -41,7 +47,7 @@ export const createTaskRedux = (dataTask) => {
     return async (dispatch, getState) => {
         try {
             dispatch(taskStart());
-            let data = await createTask(dataTask);
+            const data = await createTask(dataTask);
             if (data && data.data && data.data.success === 1) {
                 dispatch(taskSuccess());
                 message.success('Thành công');
@@ -60,7 +66,7 @@ export const deleteListTaskRedux = (list_id) => {
         dispatch(taskStart());
         for (const id of list_id) {
             try {
-                let data = await deleteTask(id);
+                const data = await deleteTask(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +84,7 @@ export const editListRaskRedux = (list_id, dataTask) => {
         dispatch(taskStart());
         for (const id of list_id) {
             try {
-                let data = await editTask(id, dataTask);
+                const data = await editTask(id, dataTask);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +101,7 @@ export const editTaskRedux = (id, dataTask) => {
     return async (dispatch, getState) => {
         try {
             dispatch(taskStart());
-            let data = await editTask(id, dataTask);
+            const data = await editTask(id, dataTask);
             if (data && data.data && data.data.success === 1) {
                 dispatch(taskSuccess());
                 message.success('Thành công');
