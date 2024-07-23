@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListProductCategoryTargetRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { productCategoryTarget } = getState();
+            if (productCategoryTarget?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(productCategoryTargetStart());
             const data = await getListProductCategoryTarget(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListProductCategoryTargetSuccess(data.data.data));
+                dispatch(getListProductCategoryTargetSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(productCategoryTargetFaided());
                 message.error('Lỗi');
@@ -124,9 +128,10 @@ export const productCategoryTargetFaided = () => ({
     type: actionTypes.PRODUCT_CATEGORY_TARGET_FAIDED,
 })
 
-export const getListProductCategoryTargetSuccess = (data) => ({
+export const getListProductCategoryTargetSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_PRODUCT_CATEGORY_TARGET_SUCCESS,
-    data
+    data,
+    isRepeat
 })
 export const getProductCategoryTargetSuccess = (data) => ({
     type: actionTypes.GET_PRODUCT_CATEGORY_TARGET_SUCCESS,

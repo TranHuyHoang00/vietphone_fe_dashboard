@@ -3,8 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Modal, Spin, Typography, Card, message, Collapse, Select } from 'antd';
-import { AiFillDelete } from "react-icons/ai";
-
 import ModalFooter from '@components/modals/modalFooter';
 import dayjs from 'dayjs';
 import { createTargetProductCategory } from '@services/target/targetProductCategoryServices';
@@ -17,7 +15,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataFilterStaff: { page: 1, limit: 100, search: '', role: '', shift: '', shop: '', status: 'active' },
+            dataFilterStaff: { page: 1, limit: process.env.REACT_APP_API_LIMIT, search: '', role: '', shift: '', shop: '', status: 'active' },
             dataTPCs: [
                 {
                     target_product_category: 2,
@@ -41,17 +39,19 @@ class index extends Component {
             newDataStaffs: [],
             dataTargetStaffs: [],
             listSelectedStaffId: [],
+            dataFilter: { page: 1, limit: process.env.REACT_APP_API_LIMIT },
+
         }
     }
     async componentDidMount() {
         const { getListProductCategoryTarget, getListStaff, setDataTargetStaff, getListStaffRole, getListShop } = this.props;
-        const { dataFilterStaff } = this.state;
-        await getListProductCategoryTarget({ page: 1, limit: 100 });
+        const { dataFilterStaff, dataFilter } = this.state;
+        await getListProductCategoryTarget(dataFilter);
         await getListStaff(dataFilterStaff);
-        await getListShop({ page: 1, limit: 100 });
-        await getListStaffRole({ page: 1, limit: 100, });
+        await getListShop(dataFilter);
+        await getListStaffRole(dataFilter);
         await setDataTargetStaff({ month: this.props.dataFilter.month });
-        await this.handleGetListTargetStaff({ page: 1, limit: 100, month: this.props.dataFilter.month });
+        await this.handleGetListTargetStaff({ page: 1, limit: process.env.REACT_APP_API_LIMIT, month: this.props.dataFilter.month });
     }
     handleGetListTargetStaff = async (dataFilter) => {
         try {
@@ -151,6 +151,7 @@ class index extends Component {
             default:
                 break;
         }
+
     }
     getDataStaffs = (dataStaffs, dataTargetStaffs) => {
         let targetStaffIds = dataTargetStaffs.map(item => item?.staff?.id);
@@ -193,31 +194,31 @@ class index extends Component {
                 <Spin spinning={isLoadingTargetStaff || isLoadingProductCategoryTarget || isLoadingStaff || isLoadingStaffRole || isLoadingShop}>
                     <div className="space-y-[10px]">
                         <FormSelectSingle
-                            name={'Cửa hàng'} variable={'shop'} value={dataFilterStaff.shop}
+                            name={'Cửa hàng'} variable={'shop'} value={dataFilterStaff?.shop}
                             important={false} width={'100%'}
                             options={[
                                 { label: 'Tất cả', value: '' },
                                 ...dataShops && dataShops
                                     .map((item) => ({
-                                        label: item.name,
-                                        value: item.id,
+                                        label: item?.name,
+                                        value: item?.id,
                                     })),
                             ]}
                             onChangeInput={this.onChangePageForDataStaffs} />
                         <FormSelectSingle
-                            name={'Phân quyền'} variable={'role'} value={dataFilterStaff.role}
+                            name={'Phân quyền'} variable={'role'} value={dataFilterStaff?.role}
                             important={false} width={'100%'}
                             options={[
                                 { label: 'Tất cả', value: '' },
                                 ...dataStaffRoles && dataStaffRoles
                                     .map((item) => ({
-                                        label: item.name,
-                                        value: item.id,
+                                        label: item?.name,
+                                        value: item?.id,
                                     })),
                             ]}
                             onChangeInput={this.onChangePageForDataStaffs} />
                         <FormSelectSingle
-                            name={'Ca làm'} variable={'shift'} value={dataFilterStaff.shift}
+                            name={'Ca làm'} variable={'shift'} value={dataFilterStaff?.shift}
                             important={false} width={'100%'}
                             options={[
                                 { label: 'Tất cả', value: '' },
@@ -233,7 +234,7 @@ class index extends Component {
                                 onChange={(value) => this.handleOnChangeSelect(value)}
                                 options={newDataStaffs && newDataStaffs.map((item) => ({
                                     label: item?.name,
-                                    value: item.id,
+                                    value: item?.id,
                                 }))}
                             />
                         </div>
@@ -261,12 +262,7 @@ class index extends Component {
                                 </div>
                             </div>
                             <Collapse size='small' >
-                                <Collapse.Panel key={1} header="KPI SẢN PHẨM"
-                                    extra={<AiFillDelete
-                                        onClick={(event) => {
-                                            this.setState({ dataTPCs: [] })
-                                            event.stopPropagation();
-                                        }} />}>
+                                <Collapse.Panel key={1} header="KPI SẢN PHẨM">
                                     <div className='space-y-[5px]'>
                                         {dataProductCategoryTargets && dataProductCategoryTargets.reverse().map((item, index) => {
                                             return (

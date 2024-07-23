@@ -23,6 +23,11 @@ export const getListTargetStaffRedux = (dataFilter) => {
 export const getDataTargetStaffRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { targetStaff } = getState();
+            const { dataTargetStaff } = targetStaff || {};
+            if (dataTargetStaff?.id === id) {
+                return;
+            }
             dispatch(targetStaffStart());
             const data = await getDataTargetStaff(id);
             if (data && data.data && data.data.success === 1) {

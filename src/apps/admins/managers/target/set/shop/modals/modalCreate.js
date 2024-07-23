@@ -12,7 +12,7 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataFilter: { page: 1, limit: 100, search: '' },
+            dataFilter: { page: 1, limit: process.env.REACT_APP_API_LIMIT },
             dataTPCs: [],
             newDataShops: [],
             listSelectedShopId: [],
@@ -24,7 +24,7 @@ class index extends Component {
         await getListProductCategoryTarget(dataFilter);
         await getListShop(dataFilter);
         await setDataTargetShop({ month: this.props.dataFilter.month });
-        await this.handleGetListTargetShop({ page: 1, limit: 100, month: this.props.dataFilter.month });
+        await this.handleGetListTargetShop({ page: 1, limit: process.env.REACT_APP_API_LIMIT, month: this.props.dataFilter.month });
     }
     handleGetListTargetShop = async (dataFilter) => {
         try {

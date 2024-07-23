@@ -26,12 +26,12 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
                         {textLine13('Nhân viên', dataTargetStaff?.staff?.name)}
-                        {textLine13('Target', `${formatNumber(dataTargetStaff.value)}đ`)}
-                        {textLine13('Thời gian', dataTargetStaff.month)}
+                        {textLine13('Target', `${formatNumber(dataTargetStaff?.value)}đ`)}
+                        {textLine13('Thời gian', dataTargetStaff?.month)}
                         {dataTargetStaff && dataTargetStaff.target_product_category && dataTargetStaff.target_product_category.length !== 0 &&
-                            dataTargetStaff.target_product_category.map((item) => {
+                            dataTargetStaff.target_product_category.map((item, index) => {
                                 return (
-                                    <div key={item?.id}>
+                                    <div key={index}>
                                         {textLine13(`${item?.target_product_category?.name}`, `${item?.quantity} cái - ${formatNumber(item?.value)}đ`)}
                                     </div>
                                 )

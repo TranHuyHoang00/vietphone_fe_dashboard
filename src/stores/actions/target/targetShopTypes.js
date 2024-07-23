@@ -23,6 +23,11 @@ export const getListTargetShopRedux = (dataFilter) => {
 export const getDataTargetShopRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { targetShop } = getState();
+            const { dataTargetShop } = targetShop || {};
+            if (dataTargetShop?.id === id) {
+                return;
+            }
             dispatch(targetShopStart());
             const data = await getDataTargetShop(id);
             if (data && data.data && data.data.success === 1) {
