@@ -71,17 +71,17 @@ class index extends Component {
                 render: (product_variant) =>
                     <>
                         {(product_variant && product_variant.media && product_variant.media.length !== 0) &&
-                            <Image width={80} height={80} src={product_variant.media[0].image} className='object-cover' />
+                            <Image width={80} height={80} src={product_variant?.media?.[0]?.image} className='object-cover' />
                         }
                     </>
             },
             {
                 title: 'TÊN ', dataIndex: 'product_variant',
-                render: (product_variant) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{product_variant && product_variant.name}</Typography.Text>,
+                render: (product_variant) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{product_variant?.name}</Typography.Text>,
             },
             {
                 title: 'GÍA GỐC ', dataIndex: 'product_variant', responsive: ['md'],
-                render: (product_variant) => <Typography.Text >{formatMoney(product_variant && product_variant.regular_price)}</Typography.Text>,
+                render: (product_variant) => <Typography.Text >{formatMoney(product_variant?.regular_price)}</Typography.Text>,
             },
             {
                 title: 'GÍA SALE', dataIndex: 'discount_price', responsive: ['md'],
@@ -125,8 +125,8 @@ class index extends Component {
                                 <div className='w-[200px] sm:w-[300px] md:w-[400px]'>
                                     <FormSelectSingle name={'Flash sale'}
                                         important={true} width={'100%'}
-                                        variable={'id'} value={dataFlashSale.id}
-                                        options={dataFlashSales.map((item) => ({
+                                        variable={'id'} value={dataFlashSale?.id}
+                                        options={dataFlashSales && dataFlashSales.map((item) => ({
                                             label: item.name,
                                             value: item.id,
                                         }))}

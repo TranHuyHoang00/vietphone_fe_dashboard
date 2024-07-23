@@ -29,7 +29,6 @@ class index extends Component {
             drawerEditBatch: false,
 
             dataFilter: {},
-
             dataCheckPermis: {},
         }
     }
@@ -78,9 +77,19 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListProduct, setDataFilterProduct } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
+
         this.setState({ dataFilter: newDataFilter });
         await getListProduct(newDataFilter);
         setDataFilterProduct(newDataFilter);
+
+        // console.log('dataFilter', dataFilter);
+        // console.log('newDataFilter', newDataFilter);
+        // const result = await compareObjects(newDataFilter, dataFilter);
+        // if (!result) {
+        //     await getListProduct(newDataFilter);
+        //     this.setState({ dataFilter: newDataFilter });
+
+        // }
     }
     onChangeSearch = (value) => {
         this.setState(prevState => ({
@@ -103,7 +112,7 @@ class index extends Component {
                 title: 'ẢNH', dataIndex: 'media', width: 90, responsive: ['sm'],
                 render: (media) =>
                     <>
-                        {(media && media.length !== 0) && <Image width={80} height={80} src={media[0].image} className='object-cover' />}
+                        {(media && media.length !== 0) && <Image width={80} height={80} src={media?.[0]?.image} className='object-cover' />}
                     </>
             },
             {
@@ -121,14 +130,14 @@ class index extends Component {
                         {(product_brand && product_brand.name) &&
                             <div className='flex items-center flex-wrap gap-[5px]'>
                                 <span>Hãng :</span>
-                                <Tag key={index} color='green'>{product_brand && product_brand.name}</Tag>
+                                <Tag key={index} color='green'>{product_brand?.name}</Tag>
                             </div>
                         }
                         {item && item.tags && item.tags.length !== 0 &&
                             <div className='flex items-center flex-wrap  gap-[5px]'>
                                 <span>Tag :</span>
                                 {item.tags && item.tags.map((tag, index) => {
-                                    return (<Tag key={index} color='orange'>{tag.name}</Tag>)
+                                    return (<Tag key={index} color='orange'>{tag?.name}</Tag>)
                                 })}
                             </div>
                         }
@@ -136,7 +145,7 @@ class index extends Component {
                             <div className='flex items-center flex-wrap  gap-[5px]'>
                                 <span>Danh mục :</span>
                                 {item.categories && item.categories.map((category, index) => {
-                                    return (<Tag key={index} color='blue'>{category.name}</Tag>)
+                                    return (<Tag key={index} color='blue'>{category?.name}</Tag>)
                                 })}
                             </div>
                         }
@@ -149,13 +158,13 @@ class index extends Component {
                         {(repair_time && repair_time.value) &&
                             <div>
                                 <p>Sửa chữa :</p>
-                                <Tag key={index} color='green'>{repair_time && repair_time.value}</Tag>
+                                <Tag key={index} color='green'>{repair_time?.value}</Tag>
                             </div>
                         }
                         {(item.promotion_info && item.promotion_info.name) &&
                             <div>
                                 <p>Khuyến mãi :</p>
-                                <Tag key={index} color='green'>{item.promotion_info && item.promotion_info.name}</Tag>
+                                <Tag key={index} color='green'>{item.promotion_info?.name}</Tag>
                             </div>
                         }
                     </div>,
@@ -174,7 +183,7 @@ class index extends Component {
                         </div>
                         <div className='flex items-center justify-between'>
                             <span>Nguồn :</span>
-                            <Tag color='blue'>{item.source}</Tag>
+                            <Tag color='blue'>{item?.source}</Tag>
                         </div>
                     </div>,
             },

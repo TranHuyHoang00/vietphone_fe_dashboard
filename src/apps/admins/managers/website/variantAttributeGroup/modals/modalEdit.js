@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Modal, message, Spin, Typography } from 'antd';
+import { Modal, message, Spin, Typography, Select } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import ModalFooter from '@components/modals/modalFooter';
-import FormSelectMultiple from '@components/selects/formSelectMultiple';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -14,7 +13,7 @@ class index extends Component {
     }
     async componentDidMount() {
         const { getListAttribute } = this.props;
-        getListAttribute({ page: 1, limit: 100, search: '' });
+        getListAttribute({ page: 1, limit: process.env.REACT_APP_API_LIMIT });
     }
     validationData = (data) => {
         if (!data.name) {
@@ -51,36 +50,26 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
-                        <FormInput name={'Tên TS-SP'} variable={'name'} value={dataVariantAttributeGroup.name}
+                        <FormInput name={'Tên TS-SP'} variable={'name'} value={dataVariantAttributeGroup?.name}
                             important={true}
                             onChangeInput={onChangeVariantAttributeGroup} />
-
-                        <div className='space-y-[3px]'>
-                            <Typography.Text italic strong>Thông số
+                        <div className='space-y-[2px]'>
+                            <Typography.Text strong>
+                                Thông số
                                 <Typography.Text type="danger" strong> *</Typography.Text>
                             </Typography.Text>
-
-                            <FormSelectMultiple width={'100%'} mode={'multiple'}
-                                variableSelect={'attribute'}
-                                value={dataVariantAttributeGroup?.attribute?.[0]?.id ?
-                                    (dataVariantAttributeGroup.attribute && dataVariantAttributeGroup.attribute.map((item) => ({
-                                        value: item.id,
-                                    }))) :
-                                    (dataVariantAttributeGroup.attribute && dataVariantAttributeGroup.attribute.map((item) => ({
-                                        value: item,
-                                    })))
-                                }
-                                onChangeSelect={onChangeVariantAttributeGroup}
-                                options={dataAttributes.map((item) => ({
-                                    label: item.name,
+                            <Select mode="multiple" allowClear style={{ width: '100%' }} showSearch
+                                value={dataVariantAttributeGroup?.attribute.map((item) => ({
+                                    value: dataVariantAttributeGroup?.attribute?.[0]?.id ? item.id : item
+                                }))}
+                                filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+                                onChange={(value) => onChangeVariantAttributeGroup(value, 'attribute')}
+                                options={dataAttributes && dataAttributes.map((item) => ({
+                                    label: item?.name,
                                     value: item.id,
                                 }))}
-                                disabledSelect={false}
-                                disabledButtonCreate={true}
-                                disabledSearch={true}
                             />
                         </div>
-
                     </div>
                 </Spin>
             </Modal>

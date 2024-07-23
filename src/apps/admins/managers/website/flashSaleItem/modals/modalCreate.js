@@ -5,7 +5,7 @@ import * as actions from '@actions';
 import { Modal, Input, Table, Divider, Spin, Pagination, Typography, } from 'antd';
 import ModalFooter from '@components/modals/modalFooter';
 import FormSelectPage from '@components/selects/formSelectPage';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -34,8 +34,11 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListVariant } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListVariant(newDataFilter);
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListVariant(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
     render() {
         const columns = [

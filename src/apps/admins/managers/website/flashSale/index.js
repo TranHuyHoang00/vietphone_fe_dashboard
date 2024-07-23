@@ -14,7 +14,7 @@ import ModalEdit from './modals/modalEdit';
 import moment from 'moment';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataFlashSales } from '@datas/dataPermissionsOrigin';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
@@ -67,8 +67,11 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListFlashSale } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListFlashSale(newDataFilter);
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListFlashSale(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
     render() {
         const columns = [

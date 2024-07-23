@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListBrandRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { brand } = getState();
+            if (brand?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(brandStart());
-            let data = await getListBrand(dataFilter);
+            const data = await getListBrand(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListBrandSuccess(data.data.data));
+                dispatch(getListBrandSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(brandFaided());
                 message.error('Lỗi');
@@ -23,8 +27,13 @@ export const getListBrandRedux = (dataFilter) => {
 export const getDataBrandRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { brand } = getState();
+            const { dataBrand } = brand || {};
+            if (dataBrand?.id === id) {
+                return;
+            }
             dispatch(brandStart());
-            let data = await getDataBrand(id);
+            const data = await getDataBrand(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getBrandSuccess(data.data.data));
             } else {
@@ -41,7 +50,7 @@ export const createBrandRedux = (dataBrand) => {
     return async (dispatch, getState) => {
         try {
             dispatch(brandStart());
-            let data = await createBrand(dataBrand);
+            const data = await createBrand(dataBrand);
             if (data && data.data && data.data.success === 1) {
                 dispatch(brandSuccess());
                 message.success('Thành công');
@@ -60,7 +69,7 @@ export const deleteListBrandRedux = (list_id) => {
         dispatch(brandStart());
         for (const id of list_id) {
             try {
-                let data = await deleteBrand(id);
+                const data = await deleteBrand(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +87,7 @@ export const editListBrandRedux = (list_id, dataBrand) => {
         dispatch(brandStart());
         for (const id of list_id) {
             try {
-                let data = await editBrand(id, dataBrand);
+                const data = await editBrand(id, dataBrand);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +104,7 @@ export const editBrandRedux = (id, dataBrand) => {
     return async (dispatch, getState) => {
         try {
             dispatch(brandStart());
-            let data = await editBrand(id, dataBrand);
+            const data = await editBrand(id, dataBrand);
             if (data && data.data && data.data.success === 1) {
                 dispatch(brandSuccess());
                 message.success('Thành công');
@@ -119,9 +128,10 @@ export const brandFaided = () => ({
     type: actionTypes.BRAND_FAIDED,
 })
 
-export const getListBrandSuccess = (data) => ({
+export const getListBrandSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_BRAND_SUCCESS,
-    data
+    data,
+    isRepeat,
 })
 export const getBrandSuccess = (data) => ({
     type: actionTypes.GET_BRAND_SUCCESS,

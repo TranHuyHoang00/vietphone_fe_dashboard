@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const tagReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const tagReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataTags: action.data.tags,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_TAG_SUCCESS:
             return {

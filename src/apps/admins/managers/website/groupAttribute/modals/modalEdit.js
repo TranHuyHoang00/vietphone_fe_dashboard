@@ -47,15 +47,15 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Tên loại thông số'} variable={'name'} value={dataGroupAttribute.name}
+                        <FormInput name={'Tên loại thông số'} variable={'name'} value={dataGroupAttribute?.name}
                             important={true}
                             onChangeInput={onChangeGroupAttribute} />
 
-                        <FormInput name={'Thứ tự'} variable={'priority'} value={dataGroupAttribute.priority}
+                        <FormInput name={'Thứ tự'} variable={'priority'} value={dataGroupAttribute?.priority}
                             important={false}
                             onChangeInput={onChangeGroupAttribute} />
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={dataGroupAttribute.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataGroupAttribute?.description}
                             important={false}
                             onChangeInput={onChangeGroupAttribute} />
                     </div>

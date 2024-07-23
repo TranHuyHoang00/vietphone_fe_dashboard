@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import { Collapse, Input, Typography, Select } from 'antd';
 import { formatMoney } from '@utils/handleFuncFormat';
-import FormSelectMultiple from '@components/selects/formSelectMultiple';
 class variant_introduce extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataFilter: { page: 1, limit: 100, search: '' },
+            dataFilter: { page: 1, limit: process.env.REACT_APP_API_LIMIT },
         }
     }
     async componentDidMount() {
@@ -33,7 +32,7 @@ class variant_introduce extends Component {
         }
     }
     render() {
-        const { dataVariant, onChangeVariant, isEdit, dataWarrantys, onChangeWarranty } = this.props;
+        const { dataVariant, onChangeVariant, isEdit, dataWarrantys } = this.props;
         return (
             <Collapse defaultActiveKey={['1']}>
                 <Collapse.Panel header="Phiên bản" key="1">
@@ -94,9 +93,10 @@ class variant_introduce extends Component {
                                 <span>:</span>
                             </div>
                             <div className='w-2/3'>
-                                <FormSelectMultiple width={'100%'} placeholder={'Tên bảo hành'}
-                                    nameFormSelect={'warranty'}
+                                <Select allowClear style={{ width: '100%' }} showSearch disabled={!isEdit}
                                     value={dataVariant?.warranty?.id ? dataVariant?.warranty?.id : dataVariant?.warranty}
+                                    filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
+                                    onChange={(value) => onChangeVariant(value, 'warranty')}
                                     options={[
                                         { label: 'Bỏ trống', value: '' },
                                         ...dataWarrantys && dataWarrantys
@@ -105,18 +105,7 @@ class variant_introduce extends Component {
                                                 value: item.id,
                                             })),
                                     ]}
-                                    disabledSelect={!isEdit}
-                                    disabledButtonCreate={true}
-                                    disabledSearch={false}
-
-                                    onSearch={this.onSearch}
-                                    variableSelect={'warranty'}
-                                    onChangeSelect={onChangeVariant}
-                                    variableInputSearch={'name'}
-                                    onChangeInput={onChangeWarranty}
-                                // handleCreate={this.handleCreate}
                                 />
-
                             </div>
                         </div>
                         <div className='flex gap-[5px]'>

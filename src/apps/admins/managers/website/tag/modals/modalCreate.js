@@ -49,24 +49,24 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormImage name={'Ảnh'} variable={'image'} value={dataTag.image}
+                        <FormImage name={'Ảnh'} variable={'image'} value={dataTag?.image}
                             important={true}
                             htmlFor={'loadImageCreate'} width={100} height={100}
                             onChangeInput={onChangeTag} />
 
-                        <FormInput name={'Tên tag'} variable={'name'} value={dataTag.name}
+                        <FormInput name={'Tên tag'} variable={'name'} value={dataTag?.name}
                             important={true}
                             onChangeInput={onChangeTag} />
 
-                        <FormInput name={'Icon'} variable={'icon'} value={dataTag.icon}
+                        <FormInput name={'Icon'} variable={'icon'} value={dataTag?.icon}
                             important={false}
                             onChangeInput={onChangeTag} />
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={dataTag.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataTag?.description}
                             important={false}
                             onChangeInput={onChangeTag} />
 
-                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataTag.is_active}
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataTag?.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },

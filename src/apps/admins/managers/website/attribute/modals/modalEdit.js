@@ -15,7 +15,7 @@ class index extends Component {
     }
     async componentDidMount() {
         const { getListGroupAttribute } = this.props;
-        getListGroupAttribute({ page: 1, limit: 100, search: '' });
+        getListGroupAttribute({ page: 1, limit: process.env.REACT_APP_API_LIMIT });
     }
     validationData = (data) => {
         if (!data.name) {
@@ -49,19 +49,19 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Tên thông số'} variable={'name'} value={dataAttribute.name}
+                        <FormInput name={'Tên thông số'} variable={'name'} value={dataAttribute?.name}
                             important={true}
                             onChangeInput={onChangeAttribute} />
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={dataAttribute.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataAttribute?.description}
                             important={false}
                             onChangeInput={onChangeAttribute} />
 
-                        <FormSelectSingle name={'Loại thông số'} variable={'group_attribute'} value={dataAttribute.group_attribute}
+                        <FormSelectSingle name={'Loại thông số'} variable={'group_attribute'} value={dataAttribute?.group_attribute}
                             important={true} width={'100%'}
                             options={dataGroupAttributes.map((item) => ({
-                                label: item.name,
-                                value: item.id,
+                                label: item?.name,
+                                value: item?.id,
                             }))}
                             onChangeInput={onChangeAttribute} />
                     </div>

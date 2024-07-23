@@ -33,13 +33,16 @@ class index extends Component {
             ...dataProductPage,
             product: dataProduct.id
         };
-        if (!newDataProductPage.id) {
-            await createProductPage(newDataProductPage);
+        if (newDataProductPage.title) {
+            if (!newDataProductPage.id) {
+                await createProductPage(newDataProductPage);
+            } else {
+                await editProductPage(newDataProductPage.id, newDataProductPage);
+            }
+            await getDataProductPage(dataProduct.id);
         } else {
-            await editProductPage(newDataProductPage.id, newDataProductPage);
+            return;
         }
-        await getDataProductPage(dataProduct.id);
-
     }
     handleCreateMedia = async (media) => {
         try {
@@ -78,7 +81,7 @@ class index extends Component {
             if (isEdit) {
                 if (isEditProduct) {
                     const dataMedias = dataProduct.media;
-                    const dataAtbvls = dataProduct.attribute_values;
+                    // const dataAtbvls = dataProduct.attribute_values;
                     let newDataProduct = {
                         ...dataProduct,
                         description: description,
@@ -92,10 +95,10 @@ class index extends Component {
                         const newDataMedias = await this.handleDataMedias(dataMedias);
                         newDataProduct.media = newDataMedias;
                     }
-                    if (dataAtbvls.length !== 0) {
-                        const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
-                        newDataProduct.attribute_values = newDataAtbvls;
-                    }
+                    // if (dataAtbvls.length !== 0) {
+                    //     const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
+                    //     newDataProduct.attribute_values = newDataAtbvls;
+                    // }
                     if (isEditProductPage) { await this.handleProductPage(); }
                     await editProduct(newDataProduct.id, newDataProduct);
                     await getDataProduct(newDataProduct.id);
@@ -133,7 +136,7 @@ class index extends Component {
                     <div className='lg:grid grid-cols-2 gap-[10px] space-y-[10px] lg:space-y-0'>
                         <div className='space-y-[10px]'>
                             <ProductIntroduce />
-                            <ProductPage />
+                            <ProductPage dataProduct={dataProduct} />
                             <ProductMedia />
                         </div>
                         <div>

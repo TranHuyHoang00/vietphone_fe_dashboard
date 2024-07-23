@@ -66,17 +66,17 @@ class index extends Component {
                             </Button>
                         </div>
                         <div className="space-y-[10px]">
-                            <FormImage name={'Ảnh'} variable={'image'} value={dataPromotion.image}
+                            <FormImage name={'Ảnh'} variable={'image'} value={dataPromotion?.image}
                                 important={true}
                                 htmlFor={'loadImageEdit'} width={250} height={50}
                                 onChangeImage={this.onChangeImage} />
 
                             <div className='flex flex-wrap gap-[10px]'>
-                                <FormInput name={'Trả góp'} variable={'instalment'} value={dataPromotion.instalment}
+                                <FormInput name={'Trả góp'} variable={'instalment'} value={dataPromotion?.instalment}
                                     important={true}
                                     onChangeInput={onChangePromotion} />
 
-                                <FormInput name={'Tên'} variable={'name'} value={dataPromotion.name}
+                                <FormInput name={'Tên'} variable={'name'} value={dataPromotion?.name}
                                     important={true}
                                     onChangeInput={onChangePromotion} />
                             </div>
@@ -89,7 +89,7 @@ class index extends Component {
                                     modules={moduleQuills}
                                     formats={formatQuills}
                                     bounds={'.app'}
-                                    value={dataPromotion.content}
+                                    value={dataPromotion?.content}
                                     onChange={(value) => onChangePromotion(value, 'content')}
                                 />
                             </div>

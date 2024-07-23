@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const flashSaleReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const flashSaleReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataFlashSales: action.data.flash_sales,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_FLASH_SALE_SUCCESS:
             return {

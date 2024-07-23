@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListFlashSaleRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { flashSale } = getState();
+            if (flashSale?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(flashSaleStart());
-            let data = await getListFlashSale(dataFilter);
+            const data = await getListFlashSale(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListFlashSaleSuccess(data.data.data));
+                dispatch(getListFlashSaleSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(flashSaleFaided());
                 message.error('Lỗi');
@@ -23,8 +27,13 @@ export const getListFlashSaleRedux = (dataFilter) => {
 export const getDataFlashSaleRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { flashSale } = getState();
+            const { dataFlashSale } = flashSale || {};
+            if (dataFlashSale?.id === id) {
+                return;
+            }
             dispatch(flashSaleStart());
-            let data = await getDataFlashSale(id);
+            const data = await getDataFlashSale(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getFlashSaleSuccess(data.data.data));
             } else {
@@ -41,7 +50,7 @@ export const createFlashSaleRedux = (dataFlashSale) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flashSaleStart());
-            let data = await createFlashSale(dataFlashSale);
+            const data = await createFlashSale(dataFlashSale);
             if (data && data.data && data.data.success === 1) {
                 dispatch(flashSaleSuccess());
                 message.success('Thành công');
@@ -64,7 +73,7 @@ export const deleteListFlashSaleRedux = (list_id) => {
         dispatch(flashSaleStart());
         for (const id of list_id) {
             try {
-                let data = await deleteFlashSale(id);
+                const data = await deleteFlashSale(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -82,7 +91,7 @@ export const editListFlashSaleRedux = (list_id, dataFlashSale) => {
         dispatch(flashSaleStart());
         for (const id of list_id) {
             try {
-                let data = await editFlashSale(id, dataFlashSale);
+                const data = await editFlashSale(id, dataFlashSale);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -99,7 +108,7 @@ export const editFlashSaleRedux = (id, dataFlashSale) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flashSaleStart());
-            let data = await editFlashSale(id, dataFlashSale);
+            const data = await editFlashSale(id, dataFlashSale);
             if (data && data.data && data.data.success === 1) {
                 dispatch(flashSaleSuccess());
                 message.success('Thành công');
@@ -123,9 +132,10 @@ export const flashSaleFaided = () => ({
     type: actionTypes.FLASH_SALE_FAIDED,
 })
 
-export const getListFlashSaleSuccess = (data) => ({
+export const getListFlashSaleSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_FLASH_SALE_SUCCESS,
-    data
+    data,
+    isRepeat,
 })
 export const getFlashSaleSuccess = (data) => ({
     type: actionTypes.GET_FLASH_SALE_SUCCESS,

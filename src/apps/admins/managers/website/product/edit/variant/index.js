@@ -17,10 +17,8 @@ class index extends Component {
         super(props);
         this.state = {
             modalCreate: false,
-            dataVariants: [],
 
-            dataVariant: {},
-            indexActiveVariant: '',
+            indexActiveVariant: 0,
 
             dataAttributes: [],
 
@@ -30,10 +28,13 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { dataUserPermis, isSuperUser } = this.props;
+        const { dataUserPermis, isSuperUser, dataVariants, setDataVariant } = this.props;
         const dataCheckPermis = await handleCheckPermis(dataProducts, dataUserPermis, isSuperUser);
+        const indexActiveVariant = dataVariants && dataVariants.length > 0 ? dataVariants.length - 1 : null;
+        if (indexActiveVariant) { await setDataVariant(dataVariants[indexActiveVariant]); }
         this.setState({
-            dataCheckPermis: dataCheckPermis,
+            dataCheckPermis,
+            indexActiveVariant,
         });
     }
     async componentDidUpdate(prevProps) {
@@ -60,17 +61,18 @@ class index extends Component {
         }
     }
     getListVariant = async (dataVariantIds) => {
-        const { getDataVariant } = this.props;
-        let dataVariants = [];
-        for (const id of dataVariantIds) {
-            await getDataVariant(id);
-            dataVariants.push(this.props.dataVariant);
-        }
-        this.setState({ dataVariants: dataVariants, indexActiveVariant: (dataVariants.length) - 1 });
+        const { getDataVariant, setDataVariants } = this.props;
+        const dataVariants = await Promise.all(
+            dataVariantIds.map(async (id) => {
+                await getDataVariant(id);
+                return this.props.dataVariant;
+            })
+        );
+        setDataVariants(dataVariants);
+        this.setState({ indexActiveVariant: dataVariants.length - 1 });
     }
     selectVariant = async (index) => {
-        const { isEdit } = this.props;
-        const { dataVariants } = this.state;
+        const { isEdit, dataVariants } = this.props;
         if (isEdit) {
             message.error('Bạn vui lòng lưu lại thay đổi');
             return;
@@ -80,21 +82,24 @@ class index extends Component {
         }
     }
     handleGetDataVariant = async (variantId) => {
-        const { getDataVariant } = this.props;
-        await getDataVariant(variantId);
-        const { dataVariants } = this.state;
+        const { dataVariants, setDataVariant } = this.props;
+        const variantSelected = dataVariants.find(item => item?.id === variantId);
+        if (variantSelected) { await setDataVariant(variantSelected); }
+    }
+    handleSetDataVariants = async (variantId) => {
+        const { dataVariants, setDataVariants } = this.props;
         const dataVariant = this.props.dataVariant;
         const newDataVariants = dataVariants.map(item =>
-            item.id === dataVariant.id ? dataVariant : item
+            item.id === variantId ? dataVariant : item
         );
-        this.setState({ dataVariants: newDataVariants });
+        await setDataVariants(newDataVariants);
     }
     handleEditVariant = async () => {
-        const { dataVariant, isEdit, clicEditVariant, editVariant, isResultVariant, isEditVariant } = this.props;
+        const { dataVariant, isEdit, clicEditVariant, editVariant, isResultVariant } = this.props;
         const { dataAttributes } = this.state;
         if (dataVariant?.id) {
             if (isEdit) {
-                if (isEditVariant) {
+                if (this.props.isEditVariant) {
                     const dataMedias = dataVariant.media;
                     const dataAtbvls = dataVariant.attribute_values;
                     let newDataVariant = { ...dataVariant };
@@ -118,7 +123,9 @@ class index extends Component {
                         }
                     }
                     await editVariant(newDataVariant.id, newDataVariant);
-                    if (isResultVariant) { await this.handleGetDataVariant(newDataVariant.id) }
+                    if (isResultVariant) {
+                        await this.handleSetDataVariants(newDataVariant.id)
+                    }
                 } else {
                     message.success('Success');
                 }
@@ -148,29 +155,27 @@ class index extends Component {
         }
     }
     handleDataMedias = async (dataMedias) => {
-        let newDataMediaIds = [];
-        for (const media of dataMedias) {
-            if (media.id) { newDataMediaIds.push(media.id) }
-            else {
-                const newMediaId = await this.handleCreateMedia(media);
-                if (newMediaId) { newDataMediaIds.push(newMediaId); }
+        const promises = dataMedias.map(async (media) => {
+            if (media.id) {
+                return media.id;
+            } else {
+                return await this.handleCreateMedia(media);
             }
-        }
+        });
+        const results = await Promise.all(promises);
+        const newDataMediaIds = results.filter(id => id != null);
         return newDataMediaIds;
     }
+
     openModal = () => {
         this.setState({ modalCreate: !this.state.modalCreate });
     }
-
-    // hanleOpen=async()=>{
-    //    await this.props.editListVariant(this.state.dataVariantIds,{is_active:true});
-    // }
     render() {
-        const { dataProduct, isEdit, clicEditVariant } = this.props;
-        const { dataCheckPermis, dataVariants, indexActiveVariant, modalCreate } = this.state;
+        const { dataProduct, isEdit, clicEditVariant, isLoading } = this.props;
+        const { dataCheckPermis, indexActiveVariant, modalCreate } = this.state;
         return (
             <>
-                <Spin size='large' spinning={this.props.isLoading}>
+                <Spin size='large' spinning={isLoading}>
                     <div className=" space-y-[10px]">
                         <div className='flex items-center justify-between'>
                             <Button disabled={!dataCheckPermis['product.change_product']}
@@ -179,12 +184,6 @@ class index extends Component {
                                     Tạo
                                 </Space>
                             </Button>
-                            {/* <Button disabled={!dataCheckPermis['product.change_product']}
-                                onClick={() => this.hanleOpen()} className='bg-[#0e97ff] dark:bg-white'>
-                                <Space className='text-white dark:text-black'>
-                                    Mở
-                                </Space>
-                            </Button> */}
                             <Space>
                                 {isEdit &&
                                     <Button onClick={() => clicEditVariant()}
@@ -200,8 +199,7 @@ class index extends Component {
                         </div>
                         <div className='lg:grid grid-cols-3 gap-[10px] space-y-[10px] lg:space-y-0 '>
                             <div>
-                                <VariantOverview dataVariants={dataVariants}
-                                    selectVariant={this.selectVariant}
+                                <VariantOverview selectVariant={this.selectVariant}
                                     indexActiveVariant={indexActiveVariant} />
                             </div>
                             <div className='col-span-2 space-y-[10px]'>
@@ -230,6 +228,8 @@ const mapStateToProps = state => {
         isLoading: state.variant.isLoading,
         dataProduct: state.product.dataProduct,
         dataVariant: state.variant.dataVariant,
+        dataVariants: state.variant.dataVariants,
+
         isResultVariant: state.variant.isResult,
 
         isEdit: state.variant.isEdit,
@@ -246,6 +246,8 @@ const mapDispatchToProps = dispatch => {
         clicEditVariant: (value) => dispatch(actions.clickEditVariantRedux(value)),
         editVariant: (id, data) => dispatch(actions.editVariantRedux(id, data)),
         setDataVariant: (data) => dispatch(actions.setDataVariantRedux(data)),
+        setDataVariants: (data) => dispatch(actions.setDataVariantsRedux(data)),
+
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
         editListVariant: (id, data) => dispatch(actions.editListVariantRedux(id, data)),
     };

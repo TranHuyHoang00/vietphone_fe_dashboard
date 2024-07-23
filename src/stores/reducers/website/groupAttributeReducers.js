@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const groupAttributeReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const groupAttributeReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataGroupAttributes: action.data.group_attributes,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_GROUP_ATTRIBUTE_SUCCESS:
             return {

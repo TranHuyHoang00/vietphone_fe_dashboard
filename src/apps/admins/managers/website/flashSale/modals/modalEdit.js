@@ -68,20 +68,20 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormImage name={'Ảnh nền'} variable={'background'} value={dataFlashSale.background}
+                        <FormImage name={'Ảnh nền'} variable={'background'} value={dataFlashSale?.background}
                             important={true}
                             htmlFor={'loadImageEditBg'} width={300} height={100}
                             onChangeImage={this.onChangeImage} />
 
-                        <FormDate name={'Ngày bắt đầu'} variable={'start_time'} value={dayjs(dataFlashSale.start_time).format('YYYY-MM-DDTHH:mm')}
+                        <FormDate name={'Ngày bắt đầu'} variable={'start_time'} value={dayjs(dataFlashSale?.start_time).format('YYYY-MM-DDTHH:mm')}
                             important={true}
                             onChangeInput={onChangeFlashSale} />
 
-                        <FormDate name={'Ngày kết thúc'} variable={'end_time'} value={dayjs(dataFlashSale.end_time).format('YYYY-MM-DDTHH:mm')}
+                        <FormDate name={'Ngày kết thúc'} variable={'end_time'} value={dayjs(dataFlashSale?.end_time).format('YYYY-MM-DDTHH:mm')}
                             important={true}
                             onChangeInput={onChangeFlashSale} />
 
-                        <FormInput name={'Tên flash sale'} variable={'name'} value={dataFlashSale.name}
+                        <FormInput name={'Tên flash sale'} variable={'name'} value={dataFlashSale?.name}
                             important={true}
                             onChangeInput={onChangeFlashSale} />
 
@@ -92,15 +92,15 @@ class index extends Component {
                             </Typography.Text>
                             <div>
                                 <input onChange={(event) => { onChangeFlashSale(event.target.value, 'color'); }}
-                                    value={dataFlashSale.color} type='color' className='w-full' />
+                                    value={dataFlashSale?.color} type='color' className='w-full' />
                             </div>
                         </div>
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={dataFlashSale.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataFlashSale?.description}
                             important={false}
                             onChangeInput={onChangeFlashSale} />
 
-                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataFlashSale.is_active}
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataFlashSale?.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },

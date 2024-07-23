@@ -12,7 +12,7 @@ import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataAttributeValues } from '@datas/dataPermissionsOrigin';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
@@ -64,8 +64,11 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListAttributeValue } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListAttributeValue(newDataFilter);
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListAttributeValue(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
     render() {
         const columns = [
@@ -80,11 +83,11 @@ class index extends Component {
             },
             {
                 title: 'THÔNG SỐ', dataIndex: 'attribute', responsive: ['md'],
-                render: (attribute) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{attribute && attribute.name}</Typography.Text>,
+                render: (attribute) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{attribute?.name}</Typography.Text>,
             },
             {
                 title: 'LOẠI THÔNG SỐ', dataIndex: 'attribute', responsive: ['md'],
-                render: (attribute) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{attribute && attribute.group_attribute && attribute.group_attribute.name}</Typography.Text>,
+                render: (attribute) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{attribute?.group_attribute?.name}</Typography.Text>,
             },
             {
                 title: 'HĐ', width: 80,

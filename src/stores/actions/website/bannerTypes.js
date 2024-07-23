@@ -23,6 +23,11 @@ export const getListBannerRedux = (dataFilter) => {
 export const getDataBannerRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { banner } = getState();
+            const { dataBanner } = banner || {};
+            if (dataBanner?.id === id) {
+                return;
+            }
             dispatch(bannerStart());
             const data = await getDataBanner(id);
             if (data && data.data && data.data.success === 1) {

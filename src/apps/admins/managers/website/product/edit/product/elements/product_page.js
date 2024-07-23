@@ -8,14 +8,21 @@ class product_page extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            dataProduct: {
+                has_page: '',
+            }
         }
     }
     async componentDidMount() {
-        const { setDataProductPage, match, getDataProductPage } = this.props;
-        setDataProductPage({});
-        if (match && match.params) {
-            const productId = match.params.id;
-            if (productId) { getDataProductPage(productId); }
+    }
+    async componentDidUpdate(prevProps) {
+        const { dataProduct, getDataProductPage, setDataProductPage } = this.props;
+        if (prevProps.dataProduct !== dataProduct) {
+            if (dataProduct?.has_page) {
+                await getDataProductPage(dataProduct.id);
+            } else {
+                await setDataProductPage({});
+            }
         }
     }
     handleDelete = () => {
@@ -42,7 +49,7 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={dataProductPage.title} width={'100%'} disabled={!isEdit}
+                                    <Input value={dataProductPage?.title} width={'100%'} disabled={!isEdit}
                                         onChange={(event) => onChangeProductPage(event.target.value, 'title')} />
                                 </div>
                             </div>
@@ -52,7 +59,7 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={dataProductPage.slug} width={'100%'} disabled={!isEdit}
+                                    <Input value={dataProductPage?.slug} width={'100%'} disabled={!isEdit}
                                         onChange={(event) => onChangeProductPage(event.target.value, 'slug')} />
                                 </div>
                             </div>
@@ -62,7 +69,7 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <textarea className='w-full border p-[5px]' rows={4} value={dataProductPage.search_description} width={'100%'} disabled={!isEdit}
+                                    <Input.TextArea className='w-full border p-[5px]' rows={4} value={dataProductPage?.search_description} width={'100%'} disabled={!isEdit}
                                         onChange={(event) => onChangeProductPage(event.target.value, 'search_description')} />
                                 </div>
                             </div>
@@ -72,7 +79,7 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={dataProductPage.keywords} width={'100%'} disabled={!isEdit}
+                                    <Input value={dataProductPage?.keywords} width={'100%'} disabled={!isEdit}
                                         onChange={(event) => onChangeProductPage(event.target.value, 'keywords')} />
                                 </div>
                             </div>
@@ -89,6 +96,8 @@ class product_page extends Component {
 }
 const mapStateToProps = state => {
     return {
+        dataProduct: state.product.dataProduct,
+
         dataProductPage: state.productPage.dataProductPage,
         isLoading: state.productPage.isLoading,
         isEdit: state.product.isEdit,

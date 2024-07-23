@@ -22,7 +22,7 @@ class index extends Component {
             const postId = match.params.id;
             if (postId) { await getDataPost(postId); }
         }
-        await getListCategoryPost({ page: 1, limit: 100, search: '' });
+        await getListCategoryPost({ page: 1, limit: process.env.REACT_APP_API_LIMIT });
     }
     goBackHome = () => { this.props.history.push(`/admin/manager/website/post`) };
     validationData = (data) => {
@@ -71,24 +71,24 @@ class index extends Component {
                             </Button>
                         </div>
                         <div className="space-y-[10px]">
-                            <FormImage name={'Ảnh'} variable={'image'} value={dataPost.image}
+                            <FormImage name={'Ảnh'} variable={'image'} value={dataPost?.image}
                                 important={true}
                                 htmlFor={'loadImageEdit'} width={100} height={100}
                                 onChangeImage={this.onChangeImage} />
                             <div className='flex flex-wrap gap-[10px]'>
-                                <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost.title}
+                                <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost?.title}
                                     important={true}
                                     onChangeInput={onChangePost} />
 
-                                <FormInput name={'Slug'} variable={'slug'} value={dataPost.slug}
+                                <FormInput name={'Slug'} variable={'slug'} value={dataPost?.slug}
                                     important={true}
                                     onChangeInput={onChangePost} />
 
-                                <FormSelectSingle name={'Loại bài viết'} variable={'category'} value={dataPost.category}
+                                <FormSelectSingle name={'Loại bài viết'} variable={'category'} value={dataPost?.category}
                                     important={true} width={200}
                                     options={dataCategoryPosts.map((item) => ({
-                                        label: item.title,
-                                        value: item.id,
+                                        label: item?.title,
+                                        value: item?.id,
                                     }))}
                                     onChangeInput={onChangePost} />
 
@@ -102,7 +102,7 @@ class index extends Component {
                                     modules={moduleQuills}
                                     formats={formatQuills}
                                     bounds={'.app'}
-                                    value={dataPost.body}
+                                    value={dataPost?.body}
                                     onChange={(value) => onChangePost(value, 'body')}
                                 />
                             </div>

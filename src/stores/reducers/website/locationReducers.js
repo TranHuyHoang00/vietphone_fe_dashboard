@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const locationReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const locationReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataLocations: action.data.locations,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_LOCATION_SUCCESS:
             return {

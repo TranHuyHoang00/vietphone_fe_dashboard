@@ -49,11 +49,11 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormInput name={'Code'} variable={'code'} value={dataLocation.code}
+                        <FormInput name={'Code'} variable={'code'} value={dataLocation?.code}
                             important={false}
                             onChangeInput={onChangeLocation} />
 
-                        <FormInput name={'Tên vị trí'} variable={'name'} value={dataLocation.name}
+                        <FormInput name={'Tên vị trí'} variable={'name'} value={dataLocation?.name}
                             important={true}
                             onChangeInput={onChangeLocation} />
                     </div>

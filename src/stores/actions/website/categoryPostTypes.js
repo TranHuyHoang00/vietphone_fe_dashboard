@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListCategoryPostRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { categoryPost } = getState();
+            if (categoryPost?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(categoryPostStart());
-            let data = await getListCategoryPost(dataFilter);
+            const data = await getListCategoryPost(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListCategoryPostSuccess(data.data.data));
+                dispatch(getListCategoryPostSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(categoryPostFaided());
                 message.error('Lỗi');
@@ -23,8 +27,13 @@ export const getListCategoryPostRedux = (dataFilter) => {
 export const getDataCategoryPostRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { categoryPost } = getState();
+            const { dataCategoryPost } = categoryPost || {};
+            if (dataCategoryPost?.id === id) {
+                return;
+            }
             dispatch(categoryPostStart());
-            let data = await getDataCategoryPost(id);
+            const data = await getDataCategoryPost(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getCategoryPostSuccess(data.data.data));
             } else {
@@ -41,7 +50,7 @@ export const createCategoryPostRedux = (dataCategoryPost) => {
     return async (dispatch, getState) => {
         try {
             dispatch(categoryPostStart());
-            let data = await createCategoryPost(dataCategoryPost);
+            const data = await createCategoryPost(dataCategoryPost);
             if (data && data.data && data.data.success === 1) {
                 dispatch(categoryPostSuccess());
                 message.success('Thành công');
@@ -60,7 +69,7 @@ export const deleteListCategoryPostRedux = (list_id) => {
         dispatch(categoryPostStart());
         for (const id of list_id) {
             try {
-                let data = await deleteCategoryPost(id);
+                const data = await deleteCategoryPost(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +87,7 @@ export const editListCategoryPostRedux = (list_id, dataCategoryPost) => {
         dispatch(categoryPostStart());
         for (const id of list_id) {
             try {
-                let data = await editCategoryPost(id, dataCategoryPost);
+                const data = await editCategoryPost(id, dataCategoryPost);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +104,7 @@ export const editCategoryPostRedux = (id, dataCategoryPost) => {
     return async (dispatch, getState) => {
         try {
             dispatch(categoryPostStart());
-            let data = await editCategoryPost(id, dataCategoryPost);
+            const data = await editCategoryPost(id, dataCategoryPost);
             if (data && data.data && data.data.success === 1) {
                 dispatch(categoryPostSuccess());
                 message.success('Thành công');
@@ -119,9 +128,10 @@ export const categoryPostFaided = () => ({
     type: actionTypes.CATEGORY_POST_FAIDED,
 })
 
-export const getListCategoryPostSuccess = (data) => ({
+export const getListCategoryPostSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_CATEGORY_POST_SUCCESS,
-    data
+    data,
+    isRepeat
 })
 export const getCategoryPostSuccess = (data) => ({
     type: actionTypes.GET_CATEGORY_POST_SUCCESS,

@@ -48,11 +48,11 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
-                        <FormInput name={'Tên'} variable={'name'} value={dataWarranty.name}
+                        <FormInput name={'Tên'} variable={'name'} value={dataWarranty?.name}
                             important={true}
                             onChangeInput={onChangeWarranty} />
 
-                        <FormTextare name={'Nội dung'} variable={'content'} value={dataWarranty.content}
+                        <FormTextare name={'Nội dung'} variable={'content'} value={dataWarranty?.content}
                             important={true}
                             onChangeInput={onChangeWarranty} />
                     </div>

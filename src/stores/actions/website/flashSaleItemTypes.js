@@ -7,7 +7,7 @@ export const getListFlashSaleItemRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flashSaleItemStart());
-            let data = await getListFlashSaleItem(dataFilter);
+            const data = await getListFlashSaleItem(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getListFlashSaleItemSuccess(data.data.data));
             } else {
@@ -23,8 +23,13 @@ export const getListFlashSaleItemRedux = (dataFilter) => {
 export const getDataFlashSaleItemRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { flashSaleItem } = getState();
+            const { dataFlashSaleItem } = flashSaleItem || {};
+            if (dataFlashSaleItem?.id === id) {
+                return;
+            }
             dispatch(flashSaleItemStart());
-            let data = await getDataFlashSaleItem(id);
+            const data = await getDataFlashSaleItem(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getFlashSaleItemSuccess(data.data.data));
             } else {
@@ -41,7 +46,7 @@ export const createFlashSaleItemRedux = (dataFlashSaleItem) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flashSaleItemStart());
-            let data = await createFlashSaleItem(dataFlashSaleItem);
+            const data = await createFlashSaleItem(dataFlashSaleItem);
             if (data && data.data && data.data.success === 1) {
                 dispatch(flashSaleItemSuccess());
                 message.success('Thành công');
@@ -60,7 +65,7 @@ export const createListFlashSaleItemRedux = (flash_sale_id, list_variant_id) => 
         dispatch(flashSaleItemStart());
         for (const id of list_variant_id) {
             try {
-                let data = await createFlashSaleItem({ flash_sale: flash_sale_id, product_variant: id });
+                const data = await createFlashSaleItem({ flash_sale: flash_sale_id, product_variant: id });
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi tạo ID=${id}`);
                 }
@@ -77,7 +82,7 @@ export const deleteListFlashSaleItemRedux = (list_id) => {
         dispatch(flashSaleItemStart());
         for (const id of list_id) {
             try {
-                let data = await deleteFlashSaleItem(id);
+                const data = await deleteFlashSaleItem(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -95,7 +100,7 @@ export const editListFlashSaleItemRedux = (list_id, dataFlashSaleItem) => {
         dispatch(flashSaleItemStart());
         for (const id of list_id) {
             try {
-                let data = await editFlashSaleItem(id, dataFlashSaleItem);
+                const data = await editFlashSaleItem(id, dataFlashSaleItem);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -112,7 +117,7 @@ export const editFlashSaleItemRedux = (id, dataFlashSaleItem) => {
     return async (dispatch, getState) => {
         try {
             dispatch(flashSaleItemStart());
-            let data = await editFlashSaleItem(id, dataFlashSaleItem);
+            const data = await editFlashSaleItem(id, dataFlashSaleItem);
             if (data && data.data && data.data.success === 1) {
                 dispatch(flashSaleItemSuccess());
                 message.success('Thành công');

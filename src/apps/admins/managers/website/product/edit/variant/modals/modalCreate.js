@@ -5,6 +5,9 @@ import * as actions from '@actions';
 import { Modal, message, Spin } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import ModalFooter from '@components/modals/modalFooter';
+import { createVariant } from '@services/website/variantServices';
+import { showNotification } from '@utils/handleFuncNotification';
+
 class index extends Component {
     constructor(props) {
         super(props);
@@ -41,12 +44,24 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        const { createVariant, getDataProduct, dataProduct, openModal } = this.props;
+        const { openModal, dataVariants, setDataVariants } = this.props;
         const { dataVariant } = this.state;
         const result = this.validationData(dataVariant);
         if (result.check) {
-            await createVariant(dataVariant);
-            await getDataProduct(dataProduct.id);
+            try {
+                const data = await createVariant(dataVariant);
+                if (data && data.data && data.data.success === 1) {
+                    const newDataVariant = data.data.data;
+                    let newDataVariants = [...dataVariants];
+                    newDataVariants.unshift(newDataVariant);
+                    await setDataVariants(newDataVariants);
+                    message.success('Thành công');
+                } else {
+                    message.error('Lỗi');
+                }
+            } catch (error) {
+                showNotification(error);
+            }
             openModal();
         } else {
             message.error(result.mess);
@@ -85,12 +100,16 @@ const mapStateToProps = state => {
         dataProduct: state.product.dataProduct,
         isLoading: state.variant.isLoading,
         isResult: state.variant.isResult,
+
+        dataVariants: state.variant.dataVariants,
+
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         createVariant: (data) => dispatch(actions.createVariantRedux(data)),
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
+        setDataVariants: (data) => dispatch(actions.setDataVariantsRedux(data)),
 
     };
 };

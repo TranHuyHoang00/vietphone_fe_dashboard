@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListRepairRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { repair } = getState();
+            if (repair?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(repairStart());
-            let data = await getListRepair(dataFilter);
+            const data = await getListRepair(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListRepairSuccess(data.data.data));
+                dispatch(getListRepairSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(repairFaided());
                 message.error('Lỗi');
@@ -23,8 +27,13 @@ export const getListRepairRedux = (dataFilter) => {
 export const getDataRepairRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { repair } = getState();
+            const { dataRepair } = repair || {};
+            if (dataRepair?.id === id) {
+                return;
+            }
             dispatch(repairStart());
-            let data = await getDataRepair(id);
+            const data = await getDataRepair(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getRepairSuccess(data.data.data));
             } else {
@@ -41,7 +50,7 @@ export const createRepairRedux = (dataRepair) => {
     return async (dispatch, getState) => {
         try {
             dispatch(repairStart());
-            let data = await createRepair(dataRepair);
+            const data = await createRepair(dataRepair);
             if (data && data.data && data.data.success === 1) {
                 dispatch(repairSuccess());
                 message.success('Thành công');
@@ -60,7 +69,7 @@ export const deleteListRepairRedux = (list_id) => {
         dispatch(repairStart());
         for (const id of list_id) {
             try {
-                let data = await deleteRepair(id);
+                const data = await deleteRepair(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +87,7 @@ export const editListRepairRedux = (list_id, dataRepair) => {
         dispatch(repairStart());
         for (const id of list_id) {
             try {
-                let data = await editRepair(id, dataRepair);
+                const data = await editRepair(id, dataRepair);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +104,7 @@ export const editRepairRedux = (id, dataRepair) => {
     return async (dispatch, getState) => {
         try {
             dispatch(repairStart());
-            let data = await editRepair(id, dataRepair);
+            const data = await editRepair(id, dataRepair);
             if (data && data.data && data.data.success === 1) {
                 dispatch(repairSuccess());
                 message.success('Thành công');
@@ -119,9 +128,10 @@ export const repairFaided = () => ({
     type: actionTypes.REPAIR_FAIDED,
 })
 
-export const getListRepairSuccess = (data) => ({
+export const getListRepairSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_REPAIR_SUCCESS,
-    data
+    data,
+    isRepeat,
 })
 export const getRepairSuccess = (data) => ({
     type: actionTypes.GET_REPAIR_SUCCESS,

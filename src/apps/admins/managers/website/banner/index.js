@@ -14,7 +14,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataBanners } from '@datas/dataPermissionsOrigin';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
@@ -66,8 +66,11 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListBanner } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListBanner(newDataFilter);
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListBanner(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
     render() {
         const columns = [
@@ -88,12 +91,12 @@ class index extends Component {
                 title: 'ẢNH', dataIndex: 'media', responsive: ['md'], width: 200,
                 render: (media) => (
                     <>
-                        {media.length !== 0 ?
+                        {media && media.length !== 0 ?
                             <Carousel autoPlay showArrows={false} showThumbs={false}>
-                                {media && media.map((item, index) => {
+                                {media && media.map((item) => {
                                     return (
-                                        <div key={item.id}>
-                                            <Image width={'100%'} height={80} className='object-cover' src={item.image} />
+                                        <div key={item?.id}>
+                                            <Image width={'100%'} height={80} className='object-cover' src={item?.image} />
                                         </div>
                                     )
                                 })}

@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListGroupAttributeRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { groupAttribute } = getState();
+            if (groupAttribute?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(groupAttributeStart());
-            let data = await getListGroupAttribute(dataFilter);
+            const data = await getListGroupAttribute(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListGroupAttributeSuccess(data.data.data));
+                dispatch(getListGroupAttributeSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(groupAttributeFaided());
                 message.error('Lỗi');
@@ -23,8 +27,13 @@ export const getListGroupAttributeRedux = (dataFilter) => {
 export const getDataGroupAttributeRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { groupAttribute } = getState();
+            const { dataGroupAttribute } = groupAttribute || {};
+            if (dataGroupAttribute?.id === id) {
+                return;
+            }
             dispatch(groupAttributeStart());
-            let data = await getDataGroupAttribute(id);
+            const data = await getDataGroupAttribute(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getGroupAttributeSuccess(data.data.data));
             } else {
@@ -41,7 +50,7 @@ export const createGroupAttributeRedux = (dataGroupAttribute) => {
     return async (dispatch, getState) => {
         try {
             dispatch(groupAttributeStart());
-            let data = await createGroupAttribute(dataGroupAttribute);
+            const data = await createGroupAttribute(dataGroupAttribute);
             if (data && data.data && data.data.success === 1) {
                 dispatch(groupAttributeSuccess());
                 message.success('Thành công');
@@ -60,7 +69,7 @@ export const deleteListGroupAttributeRedux = (list_id) => {
         dispatch(groupAttributeStart());
         for (const id of list_id) {
             try {
-                let data = await deleteGroupAttribute(id);
+                const data = await deleteGroupAttribute(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +87,7 @@ export const editListGroupAttributeRedux = (list_id, dataGroupAttribute) => {
         dispatch(groupAttributeStart());
         for (const id of list_id) {
             try {
-                let data = await editGroupAttribute(id, dataGroupAttribute);
+                const data = await editGroupAttribute(id, dataGroupAttribute);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +104,7 @@ export const editGroupAttributeRedux = (id, dataGroupAttribute) => {
     return async (dispatch, getState) => {
         try {
             dispatch(groupAttributeStart());
-            let data = await editGroupAttribute(id, dataGroupAttribute);
+            const data = await editGroupAttribute(id, dataGroupAttribute);
             if (data && data.data && data.data.success === 1) {
                 dispatch(groupAttributeSuccess());
                 message.success('Thành công');
@@ -119,9 +128,10 @@ export const groupAttributeFaided = () => ({
     type: actionTypes.GROUP_ATTRIBUTE_FAIDED,
 })
 
-export const getListGroupAttributeSuccess = (data) => ({
+export const getListGroupAttributeSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_GROUP_ATTRIBUTE_SUCCESS,
-    data
+    data,
+    isRepeat
 })
 export const getGroupAttributeSuccess = (data) => ({
     type: actionTypes.GET_GROUP_ATTRIBUTE_SUCCESS,

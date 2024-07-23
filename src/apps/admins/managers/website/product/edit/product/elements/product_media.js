@@ -63,53 +63,57 @@ class product_media extends Component {
         ];
         const { dropButtonType, modalVideo } = this.state;
         const { dataProduct, isEdit } = this.props;
+        const itemCollapses = [
+            {
+                key: '1',
+                label: 'Hình ảnh sản phẩm',
+                children:
+                    <div className='space-y-[10px]'>
+                        <input id="mediaProduct" type="file" accept="image/*" hidden multiple
+                            onChange={(event) => this.onChangeImage(event, 'create')} />
+                        <Dropdown.Button disabled={!isEdit} menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
+                            <div>
+                                {dropButtonType === 1 && <label htmlFor="mediaProduct">Thêm ảnh</label>}
+                                {dropButtonType === 2 && <label onClick={() => this.setState({ modalVideo: true })}>Thêm video</label>}
+                            </div>
+                        </Dropdown.Button>
+                        {dataProduct && dataProduct.media && dataProduct.media.length !== 0 &&
+                            <Carousel responsive={responsive} swipeable={true} draggable={true}
+                                infinite={true} partialVisible={false} dotListClass="custom-dot-list-style">
+                                {dataProduct.media.map((item, index) => {
+                                    return (
+                                        <div key={index} className="slider" >
+                                            <div className='space-y-[5px]'>
+                                                <div className='w-[140px] h-[140px] flex items-center justify-center'>
+                                                    {item.media_type === 'image' &&
+                                                        <Image width={140} height={140} className='object-cover' src={item?.image} />
+                                                    }
+                                                    {item.media_type === 'video' &&
+                                                        <iframe title='product_media'
+                                                            width="140"
+                                                            height="140"
+                                                            src={item.external_url}
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                            allowFullScreen
+                                                        >
+                                                        </iframe>
+                                                    }
+                                                </div>
+                                                <Button disabled={!isEdit} onClick={() => this.onChangeImage(null, 'delete', index)}
+                                                    className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
+
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </Carousel>
+                        }
+                    </div>
+            }
+        ];
         return (
             <>
-                <Collapse defaultActiveKey={[1]}>
-                    <Collapse.Panel header="Hình ảnh sản phẩm" key="1">
-                        <div className='space-y-[10px]'>
-                            <input id="mediaProduct" type="file" accept="image/*" hidden multiple
-                                onChange={(event) => this.onChangeImage(event, 'create')} />
-                            <Dropdown.Button disabled={!isEdit} menu={{ items, onClick: (value) => { this.setState({ dropButtonType: parseInt(value.key) }) } }}  >
-                                <div>
-                                    {dropButtonType === 1 && <label htmlFor="mediaProduct">Thêm ảnh</label>}
-                                    {dropButtonType === 2 && <label onClick={() => this.setState({ modalVideo: true })}>Thêm video</label>}
-                                </div>
-                            </Dropdown.Button>
-                            {dataProduct && dataProduct.media && dataProduct.media.length !== 0 &&
-                                <Carousel responsive={responsive} swipeable={true} draggable={true}
-                                    infinite={true} partialVisible={false} dotListClass="custom-dot-list-style">
-                                    {dataProduct.media.map((item, index) => {
-                                        return (
-                                            <div key={index} className="slider" >
-                                                <div className='space-y-[5px]'>
-                                                    <div className='w-[140px] h-[140px] flex items-center justify-center'>
-                                                        {item.media_type === 'image' &&
-                                                            <Image width={140} height={140} className='object-cover' src={item.image} />
-                                                        }
-                                                        {item.media_type === 'video' &&
-                                                            <iframe title='product_media'
-                                                                width="140"
-                                                                height="140"
-                                                                src={item.external_url}
-                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                allowFullScreen
-                                                            >
-                                                            </iframe>
-                                                        }
-                                                    </div>
-                                                    <Button disabled={!isEdit} onClick={() => this.onChangeImage(null, 'delete', index)}
-                                                        className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
-
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </Carousel>
-                            }
-                        </div>
-                    </Collapse.Panel>
-                </Collapse>
+                <Collapse defaultActiveKey={[1]} items={itemCollapses}></Collapse>
                 {modalVideo &&
                     <ModalVideo modalVideo={modalVideo} openModal={this.openModal}
                         onChangeVideo={this.onChangeVideo} />}

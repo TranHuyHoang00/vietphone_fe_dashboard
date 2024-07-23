@@ -11,7 +11,7 @@ import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataPromotions } from '@datas/dataPermissionsOrigin';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
@@ -64,8 +64,11 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListPromotion } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListPromotion(newDataFilter);
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListPromotion(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
     render() {
         const columns = [
@@ -76,7 +79,7 @@ class index extends Component {
             {
                 title: 'TÊN', dataIndex: 'name',
                 render: (name, item) =>
-                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/website/promotion/edit/${item.id}`)}>
+                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/website/promotion/edit/${item?.id}`)}>
                         <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{name}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.name.localeCompare(b.name),

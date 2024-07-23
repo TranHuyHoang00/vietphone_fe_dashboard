@@ -37,28 +37,28 @@ class index extends Component {
     render() {
         const { isEdit, description, onChangeProductDescription } = this.props;
         const { isToolbarFixed } = this.state;
+        const itemCollapses = [
+            {
+                key: '1',
+                label: 'Thông tin sản phẩm',
+                extra:
+                    <Button className='bg-[#0e97ff] dark:bg-white'
+                        onClick={(event) => this.toggleToolbarFixed(event)}>
+                        <span className=' text-white dark:text-black'>{isToolbarFixed ? 'Bỏ Gim' : 'Gim'}</span>
+                    </Button>,
+                children: <div className={`editor-container ${isToolbarFixed ? 'toolbar-fixed' : ''}`}>
+                    <ReactQuill theme="snow" readOnly={!isEdit}
+                        modules={moduleQuills}
+                        formats={formatQuills}
+                        bounds={'.editor-container'}
+                        value={description}
+                        onChange={(value) => onChangeProductDescription(value)}
+                    />
+                </div>
+            }
+        ]
         return (
-            <Collapse defaultActiveKey={[1]}>
-                <Collapse.Panel header="Mô tả sản phẩm" key="1" extra={
-                    <>
-                        <Button className='bg-[#0e97ff] dark:bg-white'
-                            onClick={(event) => this.toggleToolbarFixed(event)}>
-                            <span className=' text-white dark:text-black'>{isToolbarFixed ? 'Bỏ Gim' : 'Gim'}</span>
-                        </Button>
-                    </>
-                }>
-
-                    <div className={`editor-container ${isToolbarFixed ? 'toolbar-fixed' : ''}`}>
-                        <ReactQuill theme="snow" readOnly={!isEdit}
-                            modules={moduleQuills}
-                            formats={formatQuills}
-                            bounds={'.editor-container'}
-                            value={description}
-                            onChange={(value) => onChangeProductDescription(value)}
-                        />
-                    </div>
-                </Collapse.Panel>
-            </Collapse>
+            <Collapse defaultActiveKey={[1]} items={itemCollapses}></Collapse>
         );
     }
 

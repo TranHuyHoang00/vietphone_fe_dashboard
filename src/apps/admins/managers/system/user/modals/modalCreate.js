@@ -113,7 +113,7 @@ class index extends Component {
                                 }))}
                                 disabledSelect={false}
                                 disabledButtonCreate={true}
-                                disabledSearch={true}
+                                disabledInput={true}
                                 variableSelect={'groups'}
                                 onChangeSelect={onChangeUser}
                             />

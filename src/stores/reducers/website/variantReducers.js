@@ -101,6 +101,11 @@ const variantReducers = (state = initialState, action) => {
                 ...state,
                 dataFilter: action.data,
             }
+        case actionTypes.SET_DATA_VARIANTS:
+            return {
+                ...state,
+                dataVariants: action.data,
+            }
         default:
             return state;
     }

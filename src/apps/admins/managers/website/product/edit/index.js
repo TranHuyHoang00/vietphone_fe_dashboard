@@ -41,7 +41,7 @@ class index extends Component {
                         Quay lại
                     </Button>
                     <Product />
-                    <Variant dataVariantIds={dataProduct.variants} />
+                    <Variant dataVariantIds={dataProduct?.variants} />
                 </div>
             </Spin>
         );

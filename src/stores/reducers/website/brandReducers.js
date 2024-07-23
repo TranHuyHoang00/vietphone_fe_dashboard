@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const brandReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const brandReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataBrands: action.data.brands,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_BRAND_SUCCESS:
             return {

@@ -47,10 +47,10 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
-                        <FormInput name={'Tiêu đề'} variable={'title'} value={dataCategoryPost.title}
+                        <FormInput name={'Tiêu đề'} variable={'title'} value={dataCategoryPost?.title}
                             important={true}
                             onChangeInput={onChangeCategoryPost} />
-                        <FormInput name={'Slug'} variable={'slug'} value={dataCategoryPost.slug}
+                        <FormInput name={'Slug'} variable={'slug'} value={dataCategoryPost?.slug}
                             important={true}
                             onChangeInput={onChangeCategoryPost} />
                     </div>

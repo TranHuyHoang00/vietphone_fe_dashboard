@@ -24,11 +24,11 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {imageLine13('Ảnh', dataBrand.image, 150, 50)}
-                        {textLine13('Tên danh mục', dataBrand.name)}
-                        {textLine13('Icon', dataBrand.icon)}
-                        {textLine13('Mô tả', dataBrand.description)}
-                        {textLine13('Trạng thái', (dataBrand && dataBrand.is_active ? 'Mở' : 'Khóa'))}
+                        {imageLine13('Ảnh', dataBrand?.image, 150, 50)}
+                        {textLine13('Tên danh mục', dataBrand?.name)}
+                        {textLine13('Icon', dataBrand?.icon)}
+                        {textLine13('Mô tả', dataBrand?.description)}
+                        {textLine13('Trạng thái', (dataBrand?.is_active ? 'Mở' : 'Khóa'))}
                     </div>
                 </Spin>
             </Modal>

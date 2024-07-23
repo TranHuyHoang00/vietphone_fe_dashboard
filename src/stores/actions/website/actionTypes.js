@@ -287,6 +287,7 @@ const actionTypes = Object.freeze({
     SET_DATA_VARIANT: 'SET_DATA_VARIANT',
     CLICK_EDIT_VARIANT: 'CLICK_EDIT_VARIANT',
     SET_DATA_FILTER_VARIANT: 'SET_DATA_FILTER_VARIANT',
+    SET_DATA_VARIANTS: 'SET_DATA_VARIANTS',
 })
 
 export default actionTypes;

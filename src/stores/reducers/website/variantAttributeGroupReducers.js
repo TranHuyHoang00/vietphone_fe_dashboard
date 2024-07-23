@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const variantAttributeGroupReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const variantAttributeGroupReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataVariantAttributeGroups: action.data.varriant_attribute_groups,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_VARIANT_ATTRIBUTE_GROUP_SUCCESS:
             return {

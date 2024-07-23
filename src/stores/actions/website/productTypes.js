@@ -7,7 +7,7 @@ export const getListProductRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(productStart());
-            let data = await getListProduct(dataFilter);
+            const data = await getListProduct(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getListProductSuccess(data.data.data));
             } else {
@@ -23,8 +23,13 @@ export const getListProductRedux = (dataFilter) => {
 export const getDataProductRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { product } = getState();
+            const { dataProduct } = product || {};
+            if (String(dataProduct?.id) === String(id)) {
+                return;
+            }
             dispatch(productStart());
-            let data = await getDataProduct(id);
+            const data = await getDataProduct(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getProductSuccess(data.data.data));
             } else {
@@ -41,7 +46,7 @@ export const createProductRedux = (dataProduct) => {
     return async (dispatch, getState) => {
         try {
             dispatch(productStart());
-            let data = await createProduct(dataProduct);
+            const data = await createProduct(dataProduct);
             if (data && data.data && data.data.success === 1) {
                 dispatch(productSuccess());
                 message.success('Thành công');
@@ -60,7 +65,7 @@ export const deleteListProductRedux = (list_id) => {
         dispatch(productStart());
         for (const id of list_id) {
             try {
-                let data = await deleteProduct(id);
+                const data = await deleteProduct(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +83,7 @@ export const editListProductRedux = (list_id, dataProduct) => {
         dispatch(productStart());
         for (const id of list_id) {
             try {
-                let data = await editProduct(id, dataProduct);
+                const data = await editProduct(id, dataProduct);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +100,7 @@ export const editProductRedux = (id, dataProduct) => {
     return async (dispatch, getState) => {
         try {
             dispatch(productStart());
-            let data = await editProduct(id, dataProduct);
+            const data = await editProduct(id, dataProduct);
             if (data && data.data && data.data.success === 1) {
                 dispatch(productSuccess());
                 message.success('Thành công');

@@ -16,7 +16,7 @@ class index extends Component {
                 promotion_info: null,
                 repair_time: null,
             },
-            dataFilter: { page: 1, limit: 100, search: '' }
+            dataFilter: { page: 1, limit: process.env.REACT_APP_API_LIMIT }
         }
     }
     async componentDidMount() {
@@ -64,7 +64,7 @@ class index extends Component {
                 <div className='space-y-[10px]'>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Trạng thái</Typography.Text>
-                        <Select style={{ width: "100%" }} placement='topRight' value={dataEdit.is_active}
+                        <Select style={{ width: "100%" }} placement='topRight' value={dataEdit?.is_active}
                             onChange={(value) => this.handleOnchangeInput(value, 'is_active')}
                             options={[
                                 { value: null, label: 'Bỏ trống' },
@@ -74,58 +74,58 @@ class index extends Component {
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Thương hiệu</Typography.Text>
-                        <Select style={{ width: "100%" }} placement='topRight' value={dataEdit.product_brand}
+                        <Select style={{ width: "100%" }} placement='topRight' value={dataEdit?.product_brand}
                             onChange={(value) => this.handleOnchangeInput(value, 'product_brand')}
                             options={[
                                 { value: null, label: 'Bỏ trống' },
                                 { value: "", label: 'XÓA BỎ' },
                                 ...dataBrands && dataBrands.map((item) => ({
-                                    label: item.name,
-                                    value: item.id,
+                                    label: item?.name,
+                                    value: item?.id,
                                 }))]} />
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Khuyến mãi</Typography.Text>
-                        <Select style={{ width: "100%" }} placement='topRight' value={dataEdit.promotion_info}
+                        <Select style={{ width: "100%" }} placement='topRight' value={dataEdit?.promotion_info}
                             onChange={(value) => this.handleOnchangeInput(value, 'promotion_info')}
                             options={[
                                 { value: null, label: 'Bỏ trống' },
                                 { value: "", label: 'XÓA BỎ' },
                                 ...dataPromotions && dataPromotions.map((item) => ({
-                                    label: item.name,
-                                    value: item.id,
+                                    label: item?.name,
+                                    value: item?.id,
                                 }))]} />
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Sửa chữa</Typography.Text>
-                        <Select style={{ width: "100%" }} placement='topRight' value={dataEdit.repair_time}
+                        <Select style={{ width: "100%" }} placement='topRight' value={dataEdit?.repair_time}
                             onChange={(value) => this.handleOnchangeInput(value, 'repair_time')}
                             options={[
                                 { value: null, label: 'Bỏ trống' },
                                 { value: "", label: 'XÓA BỎ' },
                                 ...dataRepairs && dataRepairs.map((item) => ({
-                                    label: item.value,
-                                    value: item.id,
+                                    label: item?.value,
+                                    value: item?.id,
                                 }))]} />
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Tag</Typography.Text>
-                        <Select style={{ width: "100%" }} placement='topRight' mode="multiple" value={dataEdit.tags}
+                        <Select style={{ width: "100%" }} placement='topRight' mode="multiple" value={dataEdit?.tags}
                             onChange={(value) => this.handleOnchangeInput(value, 'tags')}
                             options={[
                                 ...dataTags && dataTags.map((item) => ({
-                                    label: item.name,
-                                    value: item.id,
+                                    label: item?.name,
+                                    value: item?.id,
                                 }))]} />
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Danh mục</Typography.Text>
-                        <Select style={{ width: "100%" }} placement='topRight' mode="multiple" value={dataEdit.categories}
+                        <Select style={{ width: "100%" }} placement='topRight' mode="multiple" value={dataEdit?.categories}
                             onChange={(value) => this.handleOnchangeInput(value, 'categories')}
                             options={[
                                 ...dataCategorys && dataCategorys.map((item) => ({
-                                    label: item.name,
-                                    value: item.id,
+                                    label: item?.name,
+                                    value: item?.id,
                                 }))]} />
                     </div>
                     <div>

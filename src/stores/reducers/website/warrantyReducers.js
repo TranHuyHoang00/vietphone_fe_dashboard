@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const warrantyReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const warrantyReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataWarrantys: action.data.warranties,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_WARRANTY_SUCCESS:
             return {

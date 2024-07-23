@@ -12,7 +12,7 @@ import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataAttributes } from '@datas/dataPermissionsOrigin';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
@@ -64,8 +64,11 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListAttribute } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListAttribute(newDataFilter);
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListAttribute(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
     render() {
         const columns = [
@@ -80,7 +83,7 @@ class index extends Component {
             },
             {
                 title: 'LOẠI THÔNG SỐ', dataIndex: 'group_attribute', responsive: ['md'],
-                render: (group_attribute) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{group_attribute && group_attribute.name}</Typography.Text>,
+                render: (group_attribute) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{group_attribute?.name}</Typography.Text>,
             },
             {
                 title: 'HĐ', width: 80,

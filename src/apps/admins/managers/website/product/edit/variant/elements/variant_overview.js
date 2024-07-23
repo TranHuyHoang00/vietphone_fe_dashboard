@@ -13,9 +13,10 @@ class variant_overview extends Component {
     async componentDidMount() {
     }
     handleDelete = async (id) => {
-        const { deleteListVariant, getDataProduct, dataProduct } = this.props;
+        const { deleteListVariant, dataVariants, setDataVariants } = this.props;
         await deleteListVariant([id]);
-        await getDataProduct(dataProduct.id);
+        const newDataVariants = dataVariants.filter(obj => obj.id !== id);
+        await setDataVariants(newDataVariants);
     }
     render() {
         const { dataVariants, indexActiveVariant, selectVariant } = this.props;
@@ -56,15 +57,14 @@ class variant_overview extends Component {
 }
 const mapStateToProps = state => {
     return {
-        dataProduct: state.product.dataProduct,
         isResult: state.variant.isResult,
+        dataVariants: state.variant.dataVariants,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         deleteListVariant: (id) => dispatch(actions.deleteListVariantRedux(id)),
-        getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
-
+        setDataVariants: (data) => dispatch(actions.setDataVariantsRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(variant_overview));

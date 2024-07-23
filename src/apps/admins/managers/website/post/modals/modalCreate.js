@@ -18,7 +18,7 @@ class index extends Component {
     }
     async componentDidMount() {
         const { getListCategoryPost } = this.props;
-        getListCategoryPost({ page: 1, limit: 100, search: '' });
+        getListCategoryPost({ page: 1, limit: process.env.REACT_APP_API_LIMIT, });
     }
     validationData = (data) => {
         if (!data.title) {
@@ -57,24 +57,24 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
-                        <FormImage name={'Ảnh'} variable={'image'} value={dataPost.image}
+                        <FormImage name={'Ảnh'} variable={'image'} value={dataPost?.image}
                             important={true}
                             htmlFor={'loadImageCreate'} width={100} height={100}
                             onChangeInput={onChangePost} />
-                        <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost.title}
+                        <FormInput name={'Tiêu đề'} variable={'title'} value={dataPost?.title}
                             important={true}
                             onChangeInput={onChangePost} />
-                        <FormInput name={'Slug'} variable={'slug'} value={dataPost.slug}
+                        <FormInput name={'Slug'} variable={'slug'} value={dataPost?.slug}
                             important={true}
                             onChangeInput={onChangePost} />
-                        <FormSelectSingle name={'Loại bài viết'} variable={'category'} value={dataPost.category}
+                        <FormSelectSingle name={'Loại bài viết'} variable={'category'} value={dataPost?.category}
                             important={true} width={'100%'}
                             options={dataCategoryPosts.map((item) => ({
-                                label: item.title,
-                                value: item.id,
+                                label: item?.title,
+                                value: item?.id,
                             }))}
                             onChangeInput={onChangePost} />
-                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataPost.is_active}
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataPost?.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },
@@ -90,7 +90,7 @@ class index extends Component {
                                 modules={moduleQuills}
                                 formats={formatQuills}
                                 bounds={'.app'}
-                                value={dataPost.body}
+                                value={dataPost?.body}
                                 onChange={(value) => onChangePost(value, 'body')}
                             />
                         </div>

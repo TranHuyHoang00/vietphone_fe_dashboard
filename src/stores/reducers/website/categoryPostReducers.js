@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const categoryPostReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const categoryPostReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataCategoryPosts: action.data.categories,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_CATEGORY_POST_SUCCESS:
             return {

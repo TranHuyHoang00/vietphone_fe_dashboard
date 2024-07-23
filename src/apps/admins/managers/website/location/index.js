@@ -12,7 +12,7 @@ import ModalCreate from './modals/modalCreate';
 import ModalEdit from './modals/modalEdit';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataLocations } from '@datas/dataPermissionsOrigin';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
@@ -63,9 +63,12 @@ class index extends Component {
     onChangePage = async (pageValue, pageType,) => {
         const { dataFilter } = this.state;
         const { getListLocation } = this.props;
-        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListLocation(newDataFilter);
+        const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);;
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListLocation(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
     render() {
         const columns = [

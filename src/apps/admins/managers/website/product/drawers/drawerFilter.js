@@ -8,13 +8,18 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            dataFilter: {
+                page: 1,
+                limit: process.env.REACT_APP_API_LIMIT
+            }
         }
     }
     async componentDidMount() {
         const { getListBrand, getListTag, getListCategory } = this.props;
-        await getListBrand({ page: 1, limit: 100, search: '' });
-        await getListTag({ page: 1, limit: 100, search: '' });
-        await getListCategory({ page: 1, limit: 100, search: '' });
+        const { dataFilter } = this.state;
+        await getListBrand(dataFilter);
+        await getListTag(dataFilter);
+        await getListCategory(dataFilter);
     }
     render() {
 
@@ -24,7 +29,7 @@ class index extends Component {
                 <div className='space-y-[10px]'>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Trạng thái</Typography.Text>
-                        <Radio.Group value={dataFilter.is_active} onChange={(event) => onChangePage(event.target.value, 'is_active')} className='flex'>
+                        <Radio.Group value={dataFilter?.is_active} onChange={(event) => onChangePage(event.target.value, 'is_active')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value={true}>Mở</Radio.Button>
                             <Radio.Button value={false}>Khóa</Radio.Button>
@@ -32,7 +37,7 @@ class index extends Component {
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Website</Typography.Text>
-                        <Radio.Group value={dataFilter.has_page} onChange={(event) => onChangePage(event.target.value, 'has_page')} className='flex'>
+                        <Radio.Group value={dataFilter?.has_page} onChange={(event) => onChangePage(event.target.value, 'has_page')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value={true}>Đã đăng</Radio.Button>
                             <Radio.Button value={false}>Chưa đăng</Radio.Button>
@@ -40,38 +45,38 @@ class index extends Component {
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Nguồn</Typography.Text>
-                        <Radio.Group value={dataFilter.source} onChange={(event) => onChangePage(event.target.value, 'source')} className='flex'>
+                        <Radio.Group value={dataFilter?.source} onChange={(event) => onChangePage(event.target.value, 'source')} className='flex'>
                             <Radio.Button value="">Tất cả</Radio.Button>
                             <Radio.Button value="sapo">Sapo</Radio.Button>
                             <Radio.Button value="web">Web</Radio.Button>
                             <Radio.Button value="repair">Sửa chữa</Radio.Button>
                         </Radio.Group>
                     </div>
-                    <FormSelectSingle name={'Loại sản phẩm'} variable={'category'} value={dataFilter.category}
+                    <FormSelectSingle name={'Loại sản phẩm'} variable={'category'} value={dataFilter?.category}
                         important={false} width={'100%'}
                         options={[
                             { value: "", label: 'Tất cả' },
                             ...dataCategorys.map((item) => ({
-                                label: item.name,
-                                value: item.id,
+                                label: item?.name,
+                                value: item?.id,
                             }))]}
                         onChangeInput={onChangePage} />
-                    <FormSelectSingle name={'Thương hiệu'} variable={'product_brand'} value={dataFilter.product_brand}
+                    <FormSelectSingle name={'Thương hiệu'} variable={'product_brand'} value={dataFilter?.product_brand}
                         important={false} width={'100%'}
                         options={[
                             { value: "", label: 'Tất cả' },
                             ...dataBrands.map((item) => ({
-                                label: item.name,
-                                value: item.id,
+                                label: item?.name,
+                                value: item?.id,
                             }))]}
                         onChangeInput={onChangePage} />
-                    <FormSelectSingle name={'Tag'} variable={'tag'} value={dataFilter.tag}
+                    <FormSelectSingle name={'Tag'} variable={'tag'} value={dataFilter?.tag}
                         important={false} width={'100%'}
                         options={[
                             { value: "", label: 'Tất cả' },
                             ...dataTags.map((item) => ({
-                                label: item.name,
-                                value: item.id,
+                                label: item?.name,
+                                value: item?.id,
                             }))]}
                         onChangeInput={onChangePage} />
                 </div>

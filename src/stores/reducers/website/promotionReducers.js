@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const promotionReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const promotionReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataPromotions: action.data.promotion_info,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_PROMOTION_SUCCESS:
             return {

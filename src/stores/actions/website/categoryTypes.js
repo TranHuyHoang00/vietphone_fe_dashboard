@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListCategoryRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { category } = getState();
+            if (category?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(categoryStart());
-            let data = await getListCategory(dataFilter);
+            const data = await getListCategory(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListCategorySuccess(data.data.data));
+                dispatch(getListCategorySuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(categoryFaided());
                 message.error('Lỗi');
@@ -23,8 +27,13 @@ export const getListCategoryRedux = (dataFilter) => {
 export const getDataCategoryRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { category } = getState();
+            const { dataCategory } = category || {};
+            if (dataCategory?.id === id) {
+                return;
+            }
             dispatch(categoryStart());
-            let data = await getDataCategory(id);
+            const data = await getDataCategory(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getCategorySuccess(data.data.data));
             } else {
@@ -41,7 +50,7 @@ export const createCategoryRedux = (dataCategory) => {
     return async (dispatch, getState) => {
         try {
             dispatch(categoryStart());
-            let data = await createCategory(dataCategory);
+            const data = await createCategory(dataCategory);
             if (data && data.data && data.data.success === 1) {
                 dispatch(categorySuccess());
                 message.success('Thành công');
@@ -60,7 +69,7 @@ export const deleteListCategoryRedux = (list_id) => {
         dispatch(categoryStart());
         for (const id of list_id) {
             try {
-                let data = await deleteCategory(id);
+                const data = await deleteCategory(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +87,7 @@ export const editListCategoryRedux = (list_id, dataCategory) => {
         dispatch(categoryStart());
         for (const id of list_id) {
             try {
-                let data = await editCategory(id, dataCategory);
+                const data = await editCategory(id, dataCategory);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +104,7 @@ export const editCategoryRedux = (id, dataCategory) => {
     return async (dispatch, getState) => {
         try {
             dispatch(categoryStart());
-            let data = await editCategory(id, dataCategory);
+            const data = await editCategory(id, dataCategory);
             if (data && data.data && data.data.success === 1) {
                 dispatch(categorySuccess());
                 message.success('Thành công');
@@ -119,9 +128,10 @@ export const categoryFaided = () => ({
     type: actionTypes.CATEGORY_FAIDED,
 })
 
-export const getListCategorySuccess = (data) => ({
+export const getListCategorySuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_CATEGORY_SUCCESS,
-    data
+    data,
+    isRepeat,
 })
 export const getCategorySuccess = (data) => ({
     type: actionTypes.GET_CATEGORY_SUCCESS,

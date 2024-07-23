@@ -6,6 +6,7 @@ const initialState = {
     dataMeta: {},
     isLoading: false,
     isResult: false,
+    isRepeat: '',
 }
 
 const attributeReducers = (state = initialState, action) => {
@@ -34,7 +35,8 @@ const attributeReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataAttributes: action.data.attributes,
-                dataMeta: action.data.metadata
+                dataMeta: action.data.metadata,
+                isRepeat: action.isRepeat,
             }
         case actionTypes.GET_ATTRIBUTE_SUCCESS:
             return {

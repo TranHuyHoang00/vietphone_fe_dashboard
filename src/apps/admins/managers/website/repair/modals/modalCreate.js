@@ -44,7 +44,7 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
-                        <FormInput name={'Giá trị'} variable={'value'} value={dataRepair.value}
+                        <FormInput name={'Giá trị'} variable={'value'} value={dataRepair?.value}
                             important={true}
                             onChangeInput={onChangeRepair} />
                     </div>

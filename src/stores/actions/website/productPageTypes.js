@@ -7,7 +7,7 @@ export const getListProductPageRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(productPageStart());
-            let data = await getListProductPage(dataFilter);
+            const data = await getListProductPage(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getListProductPageSuccess(data.data.data));
             } else {
@@ -23,8 +23,13 @@ export const getListProductPageRedux = (dataFilter) => {
 export const getDataProductPageRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { productPage } = getState();
+            const { dataProductPage } = productPage || {};
+            if (String(dataProductPage?.product?.id) === String(id)) {
+                return;
+            }
             dispatch(productPageStart());
-            let data = await getDataProductPage(id);
+            const data = await getDataProductPage(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getProductPageSuccess(data.data.data));
             } else {
@@ -40,7 +45,7 @@ export const createProductPageRedux = (dataProductPage) => {
     return async (dispatch, getState) => {
         try {
             dispatch(productPageStart());
-            let data = await createProductPage(dataProductPage);
+            const data = await createProductPage(dataProductPage);
             if (data && data.data && data.data.success === 1) {
                 dispatch(productPageSuccess());
             } else {
@@ -57,7 +62,7 @@ export const deleteListProductPageRedux = (list_id) => {
         dispatch(productPageStart());
         for (const id of list_id) {
             try {
-                let data = await deleteProductPage(id);
+                const data = await deleteProductPage(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -75,7 +80,7 @@ export const editListProductPageRedux = (list_id, dataProductPage) => {
         dispatch(productPageStart());
         for (const id of list_id) {
             try {
-                let data = await editProductPage(id, dataProductPage);
+                const data = await editProductPage(id, dataProductPage);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -92,7 +97,7 @@ export const editProductPageRedux = (id, dataProductPage) => {
     return async (dispatch, getState) => {
         try {
             dispatch(productPageStart());
-            let data = await editProductPage(id, dataProductPage);
+            const data = await editProductPage(id, dataProductPage);
             if (data && data.data && data.data.success === 1) {
                 dispatch(productPageSuccess());
             } else {

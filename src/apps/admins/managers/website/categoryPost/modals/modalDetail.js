@@ -24,8 +24,8 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
-                        {textLine13('Tiêu đề', dataCategoryPost.title)}
-                        {textLine13('Slug', dataCategoryPost.slug)}
+                        {textLine13('Tiêu đề', dataCategoryPost?.title)}
+                        {textLine13('Slug', dataCategoryPost?.slug)}
                     </div>
                 </Spin>
             </Modal>

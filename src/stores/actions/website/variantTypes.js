@@ -7,7 +7,7 @@ export const getListVariantRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variantStart());
-            let data = await getListVariant(dataFilter);
+            const data = await getListVariant(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getListVariantSuccess(data.data.data));
             } else {
@@ -24,7 +24,7 @@ export const getDataVariantRedux = (id) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variantStart());
-            let data = await getDataVariant(id);
+            const data = await getDataVariant(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getVariantSuccess(data.data.data));
             } else {
@@ -41,7 +41,7 @@ export const createVariantRedux = (dataVariant) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variantStart());
-            let data = await createVariant(dataVariant);
+            const data = await createVariant(dataVariant);
             if (data && data.data && data.data.success === 1) {
                 dispatch(variantSuccess());
                 message.success('Thành công');
@@ -60,7 +60,7 @@ export const deleteListVariantRedux = (list_id) => {
         dispatch(variantStart());
         for (const id of list_id) {
             try {
-                let data = await deleteVariant(id);
+                const data = await deleteVariant(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +78,7 @@ export const editListVariantRedux = (list_id, dataVariant) => {
         dispatch(variantStart());
         for (const id of list_id) {
             try {
-                let data = await editVariant(id, dataVariant);
+                const data = await editVariant(id, dataVariant);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +95,7 @@ export const editVariantRedux = (id, dataVariant) => {
     return async (dispatch, getState) => {
         try {
             dispatch(variantStart());
-            let data = await editVariant(id, dataVariant);
+            const data = await editVariant(id, dataVariant);
             if (data && data.data && data.data.success === 1) {
                 dispatch(variantSuccess());
                 message.success('Thành công');
@@ -143,5 +143,10 @@ export const clickEditVariantRedux = (data) => ({
 })
 export const setDataFilterVariantRedux = (data) => ({
     type: actionTypes.SET_DATA_FILTER_VARIANT,
+    data,
+})
+
+export const setDataVariantsRedux = (data) => ({
+    type: actionTypes.SET_DATA_VARIANTS,
     data,
 })

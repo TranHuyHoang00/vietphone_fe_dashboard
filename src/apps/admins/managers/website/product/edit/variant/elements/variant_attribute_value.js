@@ -129,7 +129,7 @@ class variant_attribute_value extends Component {
                                         value={dataAttribute.id}
                                         disabledSelect={!isEdit}
                                         disabledButtonCreate={true}
-                                        disabledSearch={true}
+                                        disabledInput={true}
                                         onSearch={this.onSearch}
                                         variableSelect={'attribute'}
                                         onChangeSelect={this.onSelect}

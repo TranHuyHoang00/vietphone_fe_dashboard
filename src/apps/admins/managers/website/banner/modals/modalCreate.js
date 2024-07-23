@@ -20,7 +20,7 @@ class index extends Component {
     }
     async componentDidMount() {
         const { getListLocation } = this.props;
-        getListLocation({ page: 1, limit: 100, search: '' });
+        getListLocation({ page: 1, limit: process.env.REACT_APP_API_LIMIT });
     }
     validationData = (data) => {
         if (data.media && data.media.length === 0) {
@@ -121,7 +121,7 @@ class index extends Component {
                                             {dataBanner.media && dataBanner.media.map((item, index) => {
                                                 return (
                                                     <div id={index} className='relative'>
-                                                        <Image height={'100px'} width={'100%'} src={item.image} className='object-cover' />
+                                                        <Image height={'100px'} width={'100%'} src={item?.image} className='object-cover' />
                                                         <div className='absolute top-0 left-0'>
                                                             <Button onClick={() => this.onChangeImage(undefined, 'delete', index)}
                                                                 className='bg-[#e94138] text-white' icon={<DeleteOutlined />}></Button>
@@ -143,15 +143,15 @@ class index extends Component {
                             </div>
                         </div>
 
-                        <FormInput name={'Tên băng rôn'} variable={'name'} value={dataBanner.name}
+                        <FormInput name={'Tên băng rôn'} variable={'name'} value={dataBanner?.name}
                             important={true}
                             onChangeInput={onChangeBanner} />
 
-                        <FormSelectSingle name={'Vị trí'} variable={'location'} value={dataBanner.location}
+                        <FormSelectSingle name={'Vị trí'} variable={'location'} value={dataBanner?.location}
                             important={true} width={'100%'}
-                            options={dataLocations.map((item) => ({
-                                label: item.name,
-                                value: item.id,
+                            options={dataLocations && dataLocations.map((item) => ({
+                                label: item?.name,
+                                value: item?.id,
                             }))}
                             onChangeInput={onChangeBanner} />
                     </div>

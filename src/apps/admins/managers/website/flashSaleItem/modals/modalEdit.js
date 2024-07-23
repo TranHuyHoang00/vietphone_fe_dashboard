@@ -41,7 +41,7 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
-                        <FormInput name={'Giá khuyến mãi'} variable={'discount_price'} value={dataFlashSaleItem.discount_price}
+                        <FormInput name={'Giá khuyến mãi'} variable={'discount_price'} value={dataFlashSaleItem?.discount_price}
                             important={true}
                             onChangeInput={onChangeFlashSaleItem} />
                     </div>

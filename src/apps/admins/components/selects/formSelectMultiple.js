@@ -12,7 +12,7 @@ class index extends Component {
     async componentDidMount() {
     }
     render() {
-        const { width, mode, variableSelect, value, disabledSelect, placeholder, disabledSearch, onChangeInput, onSearch
+        const { width, mode, variableSelect, value, disabledSelect, placeholder, disabledInput, onChangeInput
             , variableInputSearch, nameFormSelect, disabledButtonCreate, options, handleCreate, onChangeSelect
         } = this.props;
         return (
@@ -26,12 +26,10 @@ class index extends Component {
                         {menu}
                         <Divider />
                         <Space>
-                            <Input.Search onKeyDown={(e) => e.stopPropagation()}
+                            <Input onKeyDown={(e) => e.stopPropagation()}
                                 placeholder={placeholder}
-                                disabled={disabledSearch}
-                                onChange={(event) => onChangeInput(event.target.value, variableInputSearch)}
-                                onSearch={(value) => onSearch(value, nameFormSelect)} />
-
+                                disabled={disabledInput}
+                                onChange={(event) => onChangeInput(event.target.value, variableInputSearch)} />
                             <Button disabled={disabledButtonCreate}
                                 onClick={() => handleCreate(nameFormSelect)}
                                 className='bg-[#0e97ff] text-white' icon={<PlusOutlined />}></Button>

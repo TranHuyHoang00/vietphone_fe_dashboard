@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Modal, message, Spin,Typography } from 'antd';
+import { Modal, message, Spin, Typography } from 'antd';
 import FormInput from '@components/inputs/formInput';
 import FormTextare from '@components/inputs/formTextare';
 import FormImage from '@components/inputs/formImage';
@@ -64,17 +64,17 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
 
-                        <FormImage name={'Ảnh'} variable={'image'} value={dataCategory.image}
+                        <FormImage name={'Ảnh'} variable={'image'} value={dataCategory?.image}
                             important={true}
                             htmlFor={'loadImageEdit'} width={240} height={80}
                             onChangeImage={this.onChangeImage} />
 
-                        <FormImage name={'Ảnh nền'} variable={'background'} value={dataCategory.background}
+                        <FormImage name={'Ảnh nền'} variable={'background'} value={dataCategory?.background}
                             important={true}
                             htmlFor={'loadImageEditBg'} width={240} height={80}
                             onChangeImage={this.onChangeImageBg} />
 
-                        <FormInput name={'Tên danh mục'} variable={'name'} value={dataCategory.name}
+                        <FormInput name={'Tên danh mục'} variable={'name'} value={dataCategory?.name}
                             important={true}
                             onChangeInput={onChangeCategory} />
 
@@ -82,19 +82,19 @@ class index extends Component {
                             <Typography.Text italic strong>Màu nền</Typography.Text>
                             <div>
                                 <input onChange={(event) => { onChangeCategory(event.target.value, 'color'); }}
-                                    value={dataCategory.color} type='color' className='w-full' />
+                                    value={dataCategory?.color} type='color' className='w-full' />
                             </div>
                         </div>
 
-                        <FormInput name={'Icon'} variable={'icon'} value={dataCategory.icon}
+                        <FormInput name={'Icon'} variable={'icon'} value={dataCategory?.icon}
                             important={false}
                             onChangeInput={onChangeCategory} />
 
-                        <FormTextare name={'Mô tả'} variable={'description'} value={dataCategory.description}
+                        <FormTextare name={'Mô tả'} variable={'description'} value={dataCategory?.description}
                             important={false}
                             onChangeInput={onChangeCategory} />
 
-                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataCategory.is_active}
+                        <FormSelectSingle name={'Trạng thái'} variable={'is_active'} value={dataCategory?.is_active}
                             important={false} width={'100%'}
                             options={[
                                 { value: true, label: 'Mở' },

@@ -11,7 +11,7 @@ import FormSelectPage from '@components/selects/formSelectPage';
 import ModalCreate from './modals/modalCreate';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataPosts } from '@datas/dataPermissionsOrigin';
-import { handleOnChangePage } from '@utils/handleFuncPage';
+import { handleOnChangePage, compareObjects } from '@utils/handleFuncPage';
 import { handleFuncDropButtonHeaderOfTable } from '@utils/handleFuncDropButton';
 import { handleOpenModal } from '@utils/handleFuncModal';
 class index extends Component {
@@ -64,8 +64,11 @@ class index extends Component {
         const { dataFilter } = this.state;
         const { getListPost } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilter);
-        this.setState({ dataFilter: newDataFilter });
-        await getListPost(newDataFilter);
+        const result = await compareObjects(newDataFilter, dataFilter);
+        if (!result) {
+            await getListPost(newDataFilter);
+            this.setState({ dataFilter: newDataFilter });
+        }
     }
     render() {
         const columns = [
@@ -76,7 +79,7 @@ class index extends Component {
             {
                 title: 'TIÊU ĐỀ', dataIndex: 'title',
                 render: (title, item) =>
-                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/website/post/edit/${item.id}`)}>
+                    <span className='hover:underline' onClick={() => this.props.history.push(`/admin/manager/website/post/edit/${item?.id}`)}>
                         <Typography.Text className='text-[#0574b8] dark:text-white cursor-pointer'>{title}</Typography.Text>
                     </span>,
                 sorter: (a, b) => a.title.localeCompare(b.title),
@@ -87,7 +90,7 @@ class index extends Component {
             },
             {
                 title: 'LOẠI BÀI VIẾT', dataIndex: 'category', responsive: ['sm'],
-                render: (category) => <Typography.Text >{category.title}</Typography.Text>,
+                render: (category) => <Typography.Text >{category?.title}</Typography.Text>,
             },
             {
                 title: 'ẢNH', dataIndex: 'image', responsive: ['md'], width: 100,

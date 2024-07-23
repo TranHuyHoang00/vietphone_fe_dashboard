@@ -7,7 +7,7 @@ export const getListPostRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
             dispatch(postStart());
-            let data = await getListPost(dataFilter);
+            const data = await getListPost(dataFilter);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getListPostSuccess(data.data.data));
             } else {
@@ -23,8 +23,13 @@ export const getListPostRedux = (dataFilter) => {
 export const getDataPostRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { post } = getState();
+            const { dataPost } = post || {};
+            if (String(dataPost?.id) === id) {
+                return;
+            }
             dispatch(postStart());
-            let data = await getDataPost(id);
+            const data = await getDataPost(id);
             if (data && data.data && data.data.success === 1) {
                 dispatch(getPostSuccess(data.data.data));
             } else {
@@ -41,7 +46,7 @@ export const createPostRedux = (dataPost) => {
     return async (dispatch, getState) => {
         try {
             dispatch(postStart());
-            let data = await createPost(dataPost);
+            const data = await createPost(dataPost);
             if (data && data.data && data.data.success === 1) {
                 dispatch(postSuccess());
                 message.success('Thành công');
@@ -60,7 +65,7 @@ export const deleteListPostRedux = (list_id) => {
         dispatch(postStart());
         for (const id of list_id) {
             try {
-                let data = await deletePost(id);
+                const data = await deletePost(id);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi xóa ID=${id}`);
                 }
@@ -78,7 +83,7 @@ export const editListPostRedux = (list_id, dataPost) => {
         dispatch(postStart());
         for (const id of list_id) {
             try {
-                let data = await editPost(id, dataPost);
+                const data = await editPost(id, dataPost);
                 if (data && data.data && data.data.success !== 1) {
                     message.error(`Lỗi sửa ID=${id}`);
                 }
@@ -95,7 +100,7 @@ export const editPostRedux = (id, dataPost) => {
     return async (dispatch, getState) => {
         try {
             dispatch(postStart());
-            let data = await editPost(id, dataPost);
+            const data = await editPost(id, dataPost);
             if (data && data.data && data.data.success === 1) {
                 dispatch(postSuccess());
                 message.success('Thành công');

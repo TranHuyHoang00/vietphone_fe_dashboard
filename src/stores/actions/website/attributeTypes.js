@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListAttributeRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { attribute } = getState();
+            if (attribute?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(attributeStart());
             const data = await getListAttribute(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListAttributeSuccess(data.data.data));
+                dispatch(getListAttributeSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(attributeFaided());
                 message.error('Lỗi');
@@ -23,6 +27,11 @@ export const getListAttributeRedux = (dataFilter) => {
 export const getDataAttributeRedux = (id) => {
     return async (dispatch, getState) => {
         try {
+            const { attribute } = getState();
+            const { dataAttribute } = attribute || {};
+            if (dataAttribute?.id === id) {
+                return;
+            }
             dispatch(attributeStart());
             const data = await getDataAttribute(id);
             if (data && data.data && data.data.success === 1) {
@@ -119,9 +128,10 @@ export const attributeFaided = () => ({
     type: actionTypes.ATTRIBUTE_FAIDED,
 })
 
-export const getListAttributeSuccess = (data) => ({
+export const getListAttributeSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_ATTRIBUTE_SUCCESS,
-    data
+    data,
+    isRepeat
 })
 export const getAttributeSuccess = (data) => ({
     type: actionTypes.GET_ATTRIBUTE_SUCCESS,

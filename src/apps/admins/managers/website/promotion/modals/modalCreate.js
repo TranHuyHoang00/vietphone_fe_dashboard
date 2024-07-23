@@ -52,16 +52,16 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoading}>
                     <div className="space-y-[10px]">
-                        <FormImage name={'Ảnh'} variable={'image'} value={dataPromotion.image}
+                        <FormImage name={'Ảnh'} variable={'image'} value={dataPromotion?.image}
                             important={true}
                             htmlFor={'loadImageCreate'} width={250} height={50}
                             onChangeInput={onChangePromotion} />
 
-                        <FormInput name={'Tên'} variable={'name'} value={dataPromotion.name}
+                        <FormInput name={'Tên'} variable={'name'} value={dataPromotion?.name}
                             important={true}
                             onChangeInput={onChangePromotion} />
 
-                        <FormInput name={'Trả góp'} variable={'instalment'} value={dataPromotion.instalment}
+                        <FormInput name={'Trả góp'} variable={'instalment'} value={dataPromotion?.instalment}
                             important={true}
                             onChangeInput={onChangePromotion} />
 
@@ -74,7 +74,7 @@ class index extends Component {
                                 modules={moduleQuills}
                                 formats={formatQuills}
                                 bounds={'.app'}
-                                value={dataPromotion.content}
+                                value={dataPromotion?.content}
                                 onChange={(value) => onChangePromotion(value, 'content')}
                             />
                         </div>
