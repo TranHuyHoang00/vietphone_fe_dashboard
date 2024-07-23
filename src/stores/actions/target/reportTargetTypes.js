@@ -100,6 +100,7 @@ export const getListReportTargetShopRedux = (dataFilter, listId) => {
 export const getAllReportTargetShopRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+
             dispatch(reportTargetStart());
             const dataFirst = await getAllReportTargetShop(dataFilter);
             const dataFilterSecond = {

@@ -7,7 +7,6 @@ import ModalFooter from '@components/modals/modalFooter';
 import dayjs from 'dayjs';
 import { createTargetProductCategory } from '@services/target/targetProductCategoryServices';
 import { showNotification } from '@utils/handleFuncNotification';
-import { getListTargetStaff } from '@services/target/targetStaffServices';
 import FormSelectSingle from '@components/selects/formSelectSingle';
 import { handleOnChangePage } from '@utils/handleFuncPage';
 
@@ -37,7 +36,6 @@ class index extends Component {
                 }
             ],
             newDataStaffs: [],
-            dataTargetStaffs: [],
             listSelectedStaffId: [],
             dataFilter: { page: 1, limit: process.env.REACT_APP_API_LIMIT },
 
@@ -51,24 +49,12 @@ class index extends Component {
         await getListShop(dataFilter);
         await getListStaffRole(dataFilter);
         await setDataTargetStaff({ month: this.props.dataFilter.month });
-        await this.handleGetListTargetStaff({ page: 1, limit: process.env.REACT_APP_API_LIMIT, month: this.props.dataFilter.month });
+        await this.getDataStaffRemaings(this.props.dataStaffs, this.props.dataTargetStaffs);
     }
-    handleGetListTargetStaff = async (dataFilter) => {
-        try {
-            const data = await getListTargetStaff(dataFilter);
-            const { dataStaffs } = this.props;
-            if (data && data.data && data.data.success === 1) {
-                const dataTargetStaffs = data.data.data.staff_monthly_target;
-                this.getDataStaffs(dataStaffs, dataTargetStaffs);
-                this.setState({ dataTargetStaffs: dataTargetStaffs })
-            }
-        } catch (error) {
-            console.warn(error);
-        }
-    }
+
     handleOnchangeInput = (itemValue, itemVariable, item) => {
         const { dataTPCs } = this.state;
-        const dataIndex = dataTPCs.findIndex(data => data.target_product_category === item.id);
+        const dataIndex = dataTPCs.findIndex(data => data?.target_product_category === item?.id);
         if (dataIndex !== -1) {
             const updatedDataTPCs = dataTPCs.map((data, index) => {
                 if (index === dataIndex) {
@@ -109,16 +95,16 @@ class index extends Component {
         }
     }
     handleDataTPCs = async (dataTPCs) => {
-        let newDataTPCs = [];
-        for (const item of dataTPCs) {
+        const promises = dataTPCs.map(async (item) => {
             const newTPCId = await this.handleCreateTPC(item);
-            if (newTPCId) { newDataTPCs.push(newTPCId); }
-        }
+            return newTPCId;
+        });
+        const results = await Promise.all(promises);
+        const newDataTPCs = results.filter(id => id != null);
         return newDataTPCs;
     }
     handleCreate = async () => {
-        const { dataTargetStaff, createTargetStaff, openModal, getListTargetStaff, dataFilter
-        } = this.props;
+        const { dataTargetStaff, createTargetStaff, openModal, getListTargetStaff, dataFilter } = this.props;
         const { dataTPCs } = this.state;
         const result = this.validationData(dataTargetStaff);
         if (result.check) {
@@ -153,27 +139,26 @@ class index extends Component {
         }
 
     }
-    getDataStaffs = (dataStaffs, dataTargetStaffs) => {
-        let targetStaffIds = dataTargetStaffs.map(item => item?.staff?.id);
+
+    getDataStaffRemaings = async (dataStaffs, dataTargetStaffs) => {
+        const targetStaffIds = dataTargetStaffs.map(item => item?.staff?.id);
         const newDataStaffs = dataStaffs.filter(staff => !targetStaffIds.includes(staff?.id));
-        this.setState({ newDataStaffs: newDataStaffs })
+        this.setState({ newDataStaffs: newDataStaffs });
     }
     onChangeTime = async (value) => {
         const { onChangeTargetStaff, onChangePage } = this.props;
         await onChangePage(value, 'month');
         await onChangeTargetStaff(value, 'month');
-        await this.handleGetListTargetStaff({ page: 1, limit: 100, month: value });
+        await this.getDataStaffRemaings(this.props.dataStaffs, this.props.dataTargetStaffs);
     }
-    handleOnChangeSelect = (value) => {
-        this.setState({ listSelectedStaffId: value });
-    };
     onChangePageForDataStaffs = async (pageValue, pageType) => {
         const { dataFilterStaff } = this.state;
         const { getListStaff } = this.props;
         const newDataFilter = await handleOnChangePage(pageValue, pageType, dataFilterStaff);
-        this.setState({ dataFilterStaff: newDataFilter });
-        await getListStaff(newDataFilter);
-        this.getDataStaffs(this.props.dataStaffs, this.state.dataTargetStaffs);
+        const dataFilter = { ...newDataFilter, limit: 101 }
+        this.setState({ dataFilterStaff: dataFilter });
+        await getListStaff(dataFilter);
+        await this.getDataStaffRemaings(this.props.dataStaffs, this.props.dataTargetStaffs);
     }
     render() {
         const { Text } = Typography;
@@ -181,11 +166,11 @@ class index extends Component {
             onChangeTargetStaff, modalCreate, openModal, dataStaffRoles, isLoadingStaffRole,
             dataTargetStaff, dataProductCategoryTargets, dataFilter, dataShops, isLoadingShop
         } = this.props;
-        const { newDataStaffs, dataFilterStaff } = this.state;
+        const { newDataStaffs, dataFilterStaff, listSelectedStaffId } = this.state;
         return (
 
             <Modal title="TẠO MỚI" open={modalCreate}
-                onCancel={() => openModal("create", false)} width={500}
+                onCancel={() => openModal("create", false)} width={400}
                 maskClosable={!isLoadingTargetStaff}
                 footer={[
                     <ModalFooter openModal={openModal} type={'create'}
@@ -193,8 +178,7 @@ class index extends Component {
                 ]}>
                 <Spin spinning={isLoadingTargetStaff || isLoadingProductCategoryTarget || isLoadingStaff || isLoadingStaffRole || isLoadingShop}>
                     <div className="space-y-[10px]">
-                        <FormSelectSingle
-                            name={'Cửa hàng'} variable={'shop'} value={dataFilterStaff?.shop}
+                        <FormSelectSingle name={'Cửa hàng'} variable={'shop'} value={dataFilterStaff?.shop}
                             important={false} width={'100%'}
                             options={[
                                 { label: 'Tất cả', value: '' },
@@ -205,8 +189,7 @@ class index extends Component {
                                     })),
                             ]}
                             onChangeInput={this.onChangePageForDataStaffs} />
-                        <FormSelectSingle
-                            name={'Phân quyền'} variable={'role'} value={dataFilterStaff?.role}
+                        <FormSelectSingle name={'Phân quyền'} variable={'role'} value={dataFilterStaff?.role}
                             important={false} width={'100%'}
                             options={[
                                 { label: 'Tất cả', value: '' },
@@ -217,8 +200,7 @@ class index extends Component {
                                     })),
                             ]}
                             onChangeInput={this.onChangePageForDataStaffs} />
-                        <FormSelectSingle
-                            name={'Ca làm'} variable={'shift'} value={dataFilterStaff?.shift}
+                        <FormSelectSingle name={'Ca làm'} variable={'shift'} value={dataFilterStaff?.shift}
                             important={false} width={'100%'}
                             options={[
                                 { label: 'Tất cả', value: '' },
@@ -226,12 +208,12 @@ class index extends Component {
                                 { label: 'LÀM CA', value: 'pt' },
                             ]}
                             onChangeInput={this.onChangePageForDataStaffs} />
-
                         <div className='space-y-[3px]'>
                             <Text italic strong>Nhân viên<Text type="danger" strong> *</Text></Text>
                             <Select mode="multiple" allowClear style={{ width: '100%' }} showSearch
                                 filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
-                                onChange={(value) => this.handleOnChangeSelect(value)}
+                                value={listSelectedStaffId}
+                                onChange={(value) => this.setState({ listSelectedStaffId: value })}
                                 options={newDataStaffs && newDataStaffs.map((item) => ({
                                     label: item?.name,
                                     value: item?.id,
@@ -241,45 +223,39 @@ class index extends Component {
                         <div className='space-y-[10px]'>
                             <div className='flex items-center justify-center space-x-[5px]'>
                                 <div className='space-y-[3px]'>
-                                    <Text italic strong>
-                                        Thời gian
-                                        <Text type="danger" strong> *</Text>
-                                    </Text>
+                                    <Text italic strong>Thời gian<Text type="danger" strong> *</Text></Text>
                                     <input className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                         type="month" value={dayjs(dataFilter?.month).format('YYYY-MM')}
                                         onChange={(event) => this.onChangeTime(dayjs(event.target.value).startOf('month').format('YYYY-MM-DD'))} />
                                 </div>
                                 <div className='space-y-[3px]'>
-                                    <Text italic strong>
-                                        Target
-                                        <Text type="danger" strong> *</Text>
-                                    </Text>
+                                    <Text italic strong>Target<Text type="danger" strong> *</Text></Text>
                                     <input onKeyPress={(event) => { if (!/[0-9]/.test(event.key)) { event.preventDefault(); } }}
                                         className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                         type="number" min="0"
-                                        value={dataTargetStaff?.value}
+                                        value={dataTargetStaff?.value || ''}
                                         onChange={(event) => onChangeTargetStaff(event.target.value, 'value')} />
                                 </div>
                             </div>
-                            <Collapse size='small' >
+                            <Collapse defaultActiveKey={[1]} size='small' >
                                 <Collapse.Panel key={1} header="KPI SẢN PHẨM">
                                     <div className='space-y-[5px]'>
                                         {dataProductCategoryTargets && dataProductCategoryTargets.reverse().map((item, index) => {
                                             return (
-                                                <Card key={item.id} title={`${item.name}`} size='small'>
+                                                <Card key={index} title={`${item.name}`} size='small'>
                                                     <div className='flex items-center justify-center space-x-[5px]'>
                                                         <div className='space-y-[3px]'>
                                                             <Text italic strong>Doanh thu</Text>
                                                             <input className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                                                 type="number" min="0"
-                                                                value={this.getValue('value', item)}
+                                                                value={this.getValue('value', item) || ''}
                                                                 onChange={(event) => this.handleOnchangeInput(event.target.value, 'value', item)} />
                                                         </div>
                                                         <div className='space-y-[3px]'>
                                                             <Text italic strong>Số lượng</Text>
                                                             <input className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                                                 type="number" min="0"
-                                                                value={this.getValue('quantity', item)}
+                                                                value={this.getValue('quantity', item) || ''}
                                                                 onChange={(event) => this.handleOnchangeInput(event.target.value, 'quantity', item)} />
                                                         </div>
                                                     </div>
@@ -301,20 +277,17 @@ const mapStateToProps = state => {
     return {
         dataTargetStaff: state.targetStaff.dataTargetStaff,
         dataTargetStaffs: state.targetStaff.dataTargetStaffs,
-
         isLoadingTargetStaff: state.targetStaff.isLoading,
-        isResultTargetStaff: state.targetStaff.isResult,
 
         dataProductCategoryTargets: state.productCategoryTarget.dataProductCategoryTargets,
         isLoadingProductCategoryTarget: state.productCategoryTarget.isLoading,
-        isResultProductCategoryTarget: state.productCategoryTarget.isResult,
 
         dataStaffs: state.staff.dataStaffs,
         isLoadingStaff: state.staff.isLoading,
-        isResultStaff: state.staff.isResult,
 
         dataStaffRoles: state.staffRole.dataStaffRoles,
         isLoadingStaffRole: state.staffRole.isLoading,
+
         dataShops: state.shop.dataShops,
         isLoadingShop: state.shop.isLoading,
     };

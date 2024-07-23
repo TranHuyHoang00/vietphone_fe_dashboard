@@ -123,8 +123,7 @@ class index extends Component {
     }
     render() {
         const { Text } = Typography;
-        const { isLoadingTargetStaff, isLoadingProductCategoryTarget,
-            onChangeTargetStaff, modalEdit, openModal, dataTargetStaff } = this.props;
+        const { isLoadingTargetStaff, isLoadingProductCategoryTarget, onChangeTargetStaff, modalEdit, openModal, dataTargetStaff } = this.props;
         const { dataPCs } = this.state;
         return (
             <Modal title="CHỈNH SỬA" open={modalEdit}
@@ -138,8 +137,8 @@ class index extends Component {
                     <div className="space-y-[10px]">
                         <FormInput name={'Tên nhân viên'} variable={'name'}
                             value={dataTargetStaff?.staff?.name}
-                            important={true} disabled={true} onChangeInput={onChangeTargetStaff} />
-
+                            important={true} disabled={true} onChangeInput={onChangeTargetStaff}
+                        />
                         <div className='space-y-[10px]'>
                             <div className='flex items-center justify-center space-x-[5px]'>
                                 <div className='space-y-[3px]'>
@@ -154,17 +153,17 @@ class index extends Component {
                                     </Text>
                                     <input className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                         type="number" min="0"
-                                        value={dataTargetStaff?.value}
+                                        value={dataTargetStaff?.value || ''}
                                         onChange={(event) => onChangeTargetStaff(event.target.value, 'value')} />
                                 </div>
                             </div>
 
-                            <Collapse size='small'>
+                            <Collapse defaultActiveKey={[1]} size='small'>
                                 <Collapse.Panel key={1} header="KPI SẢN PHẨM">
                                     <div className='space-y-[5px]'>
                                         {dataPCs && dataPCs.reverse().map((item, index) => {
                                             return (
-                                                <Card key={item.id} title={`${item.name}`} size='small'>
+                                                <Card key={index} title={`${item.name}`} size='small'>
                                                     <div className='flex items-center justify-center space-x-[5px]'>
                                                         <div className='space-y-[3px]'>
                                                             <Text italic strong>Doanh thu</Text>

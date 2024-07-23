@@ -33,13 +33,9 @@ class index extends Component {
         }
     }
     openDrawer = async (drawerName, drawerValue) => {
-        const { getListShop, dataShops } = this.props;
         switch (drawerName) {
             case 'filter':
                 this.setState({ drawerFilter: drawerValue });
-                if (drawerValue && drawerValue === true && dataShops && dataShops.length === 0) {
-                    await getListShop({ page: 1, limit: 100, status: 'active' });
-                }
                 break;
             default:
                 return;
@@ -117,8 +113,7 @@ class index extends Component {
     };
     render() {
         const { drawerFilter, disabledAcceptFilter, openChart } = this.state;
-        const { isLoadingReportTargetShop, dataReportTargetShops, isLoadingShop,
-            dataShops, dataFilter, typeActive } = this.props;
+        const { isLoadingReportTargetShop, dataReportTargetShops, dataFilter, typeActive } = this.props;
 
         const items = [
             {
@@ -142,7 +137,7 @@ class index extends Component {
         ];
         return (
             <>
-                <Spin size='large' spinning={isLoadingReportTargetShop || isLoadingShop}>
+                <Spin size='large' spinning={isLoadingReportTargetShop}>
                     <div className="mx-[10px] space-y-[10px]">
                         <div className='flex items-center justify-between space-x-[5px]'>
                             <Space>
@@ -194,7 +189,7 @@ class index extends Component {
                         openDrawer={this.openDrawer} dataFilter={dataFilter}
                         handleFilter={this.handleFilter}
                         typeActive={typeActive}
-                        dataShops={dataShops}
+                        dataShops={dataReportTargetShops.map(item => item?.shop)}
                         disabledAcceptFilter={disabledAcceptFilter} />}
             </>
         );
@@ -207,9 +202,6 @@ const mapStateToProps = state => {
         isLoadingReportTargetShop: state.reportTarget.isLoading,
         dataFilter: state.reportTarget.dataFilterShop,
         typeActive: state.reportTarget.typeActiveShop,
-
-        dataShops: state.shop.dataShops,
-        isLoadingShop: state.shop.isLoading,
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -219,7 +211,6 @@ const mapDispatchToProps = dispatch => {
         setDataFilterReportTarget: (data) => dispatch(actions.setDataFilterReportTargetShopRedux(data)),
         setTypeActiveReportTarget: (data) => dispatch(actions.setTypeActiveReportTargetShopRedux(data)),
 
-        getListShop: (dataFilter) => dispatch(actions.getListShopRedux(dataFilter)),
 
     };
 };

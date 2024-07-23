@@ -14,10 +14,8 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { getListProductCategory, dataProductCategorys } = this.props;
-        if (dataProductCategorys && dataProductCategorys.length === 0) {
-            await getListProductCategory({ page: 1, limit: 50 });
-        }
+        const { getListProductCategory } = this.props;
+        await getListProductCategory({ page: 1, limit: process.env.REACT_APP_API_LIMIT });
     }
     render() {
         const { Text } = Typography;

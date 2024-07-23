@@ -26,17 +26,8 @@ class index extends Component {
                 <Spin spinning={isLoading}>
                     <div className='border-t py-[10px] space-y-[5px]'>
                         {textLine13('Cửa hàng', dataTargetShop?.shop?.name)}
-                        {textLine13('Target', `${formatNumber(dataTargetShop.value)}đ`)}
+                        {textLine13('Target', `${formatNumber(dataTargetShop?.value)}đ`)}
                         {textLine13('Thời gian', dataTargetShop?.month)}
-                        {dataTargetShop && dataTargetShop.target_product_category && dataTargetShop.target_product_category.length !== 0 &&
-                            dataTargetShop.target_product_category.map((item) => {
-                                return (
-                                    <div key={item?.id}>
-                                        {textLine13(`${item?.target_product_category?.name}`, `${item?.quantity} cái - ${formatNumber(item?.value)}đ`)}
-                                    </div>
-                                )
-                            })
-                        }
                     </div>
                 </Spin>
             </Modal>

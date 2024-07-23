@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '@actions';
 import {
     Table, Space, Divider, Button, Popconfirm, Input,
-    Spin, Pagination, Typography, Dropdown, Card
+    Spin, Pagination, Typography, Dropdown,
 } from 'antd';
 import { AiFillEdit, AiFillEye, AiOutlinePlus, AiFillFilter } from "react-icons/ai";
 import FormSelectPage from '@components/selects/formSelectPage';
@@ -102,23 +102,6 @@ class index extends Component {
                 title: 'TARGET', dataIndex: 'value',
                 render: (value) => <Text >{formatNumber(value)}</Text>,
                 sorter: (a, b) => a?.value - b?.value,
-            },
-            {
-                title: 'KPI', dataIndex: 'target_product_category',
-                render: (datas) => {
-                    return <>
-                        {datas && datas.length !== 0 && datas.map((item) => {
-                            return (
-                                <Card key={item.id} title={`${item?.target_product_category?.name}`} size='small'>
-                                    <div className='flex items-center justify-between space-x-[5px]'>
-                                        {item?.quantity && <Text>Số lượng : {item?.quantity}</Text>}
-                                        {item?.value && <Text>Doanh thu : {formatNumber(item?.value)}</Text>}
-                                    </div>
-                                </Card>
-                            )
-                        })}
-                    </>
-                },
             },
             {
                 title: 'HĐ', width: 80,

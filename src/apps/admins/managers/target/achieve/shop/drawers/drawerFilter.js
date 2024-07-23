@@ -102,7 +102,7 @@ class index extends Component {
                                 onChange={(value) => this.onChangeTypeActive(value, 'listId')}
                                 options={dataShops && dataShops.map((item) => ({
                                     label: item?.name,
-                                    value: item.id,
+                                    value: item?.id,
                                 }))}
                             />
                         </div>

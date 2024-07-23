@@ -26,11 +26,11 @@ class index extends Component {
         }
     }
     openDrawer = async (drawerName, drawerValue) => {
-        const { getListTargetStaff, dataFilter, dataTargetStaffs } = this.props;
+        const { getListTargetStaff, dataFilter } = this.props;
         switch (drawerName) {
             case 'filter':
-                if (dataTargetStaffs && dataTargetStaffs.length === 0) {
-                    await getListTargetStaff({ page: 1, limit: 50, month: dayjs(dataFilter?.start).startOf('month').format("YYYY-MM-DD"), })
+                if (drawerValue) {
+                    await getListTargetStaff({ page: 1, limit: process.env.REACT_APP_API_LIMIT, month: dayjs(dataFilter?.start).startOf('month').format("YYYY-MM-DD"), })
                 }
                 this.setState({ drawerFilter: drawerValue });
                 break;

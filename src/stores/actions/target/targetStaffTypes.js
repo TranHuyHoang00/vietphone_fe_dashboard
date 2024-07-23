@@ -6,10 +6,14 @@ import { showNotification } from '@utils/handleFuncNotification';
 export const getListTargetStaffRedux = (dataFilter) => {
     return async (dispatch, getState) => {
         try {
+            const { targetStaff } = getState();
+            if (targetStaff?.isRepeat === process.env.REACT_APP_API_LIMIT && dataFilter?.limit === process.env.REACT_APP_API_LIMIT) {
+                return;
+            }
             dispatch(targetStaffStart());
             const data = await getListTargetStaff(dataFilter);
             if (data && data.data && data.data.success === 1) {
-                dispatch(getListTargetStaffSuccess(data.data.data));
+                dispatch(getListTargetStaffSuccess(data.data.data, dataFilter?.limit));
             } else {
                 dispatch(targetStaffFaided());
                 message.error('Lỗi');
@@ -23,11 +27,11 @@ export const getListTargetStaffRedux = (dataFilter) => {
 export const getDataTargetStaffRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            const { targetStaff } = getState();
-            const { dataTargetStaff } = targetStaff || {};
-            if (dataTargetStaff?.id === id) {
-                return;
-            }
+            // const { targetStaff } = getState();
+            // const { dataTargetStaff } = targetStaff || {};
+            // if (dataTargetStaff?.id === id) {
+            //     return;
+            // }
             dispatch(targetStaffStart());
             const data = await getDataTargetStaff(id);
             if (data && data.data && data.data.success === 1) {
@@ -123,9 +127,10 @@ export const targetStaffFaided = () => ({
     type: actionTypes.TARGET_STAFF_FAIDED,
 })
 
-export const getListTargetStaffSuccess = (data) => ({
+export const getListTargetStaffSuccess = (data, isRepeat) => ({
     type: actionTypes.GET_LIST_TARGET_STAFF_SUCCESS,
-    data
+    data,
+    isRepeat
 })
 export const getTargetStaffSuccess = (data) => ({
     type: actionTypes.GET_TARGET_STAFF_SUCCESS,
