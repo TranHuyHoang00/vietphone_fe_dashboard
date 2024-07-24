@@ -97,9 +97,10 @@ class index extends Component {
                     </div>
             },
             {
-                title: 'TRẠNG THÁI ĐH', dataIndex: 'created_at', responsive: ['md'],
+                title: 'TRẠNG THÁI ĐH', dataIndex: 'created_at',
                 render: (created_at, item) =>
                     <div >
+                        {textLine13('Mã đơn hàng', item?.code)}
                         {textLine13('Ngày tạo', formatDay(created_at))}
                         {textLine13('Nguồn', item?.source)}
                         {textLine13('Trạng thái', item?.status,)}
@@ -155,7 +156,7 @@ class index extends Component {
                             <div className='space-y-[20px]'>
                                 <Table rowSelection={rowSelection} rowKey="id"
                                     columns={columns} dataSource={dataOrders} pagination={false}
-                                    size="middle" bordered scroll={{ x: 600 }} />
+                                    size="middle" bordered scroll={{ x: 900 }} />
                                 <Pagination responsive current={dataFilter?.page}
                                     showQuickJumper total={dataMeta?.total * dataMeta?.limit} pageSize={dataFilter?.limit}
                                     onChange={(value) => this.onChangePage(value, 'page')} />
