@@ -17,6 +17,15 @@ class variant_attribute_value extends Component {
         }
     }
     async componentDidMount() {
+        const { dataVariant, setDataAttribute, setDataAttributeValue } = this.props;
+        const dataAtbvl = dataVariant.attribute_values;
+        await this.handleDataAtbvlUnique(dataAtbvl);
+        setDataAttribute({});
+        setDataAttributeValue({});
+        this.setState({
+            disableAtbvl: true,
+            disabledButtonCreate: true,
+        })
     }
     async componentDidUpdate(prevProps) {
         const { isEdit, dataAttributes, dataVariant, setDataAttribute, setDataAttributeValue } = this.props;

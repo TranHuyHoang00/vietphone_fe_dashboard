@@ -13,7 +13,7 @@ class variant_overview extends Component {
     async componentDidMount() {
     }
     handleDelete = async (id) => {
-        const { deleteListVariant, dataVariants, setDataVariants, setDataVariant, handleSetIndexActiveVariant } = this.props;
+        const { deleteListVariant, dataVariants, setDataVariants, setDataVariant, handleSetIndexActiveVariant, setIsEditVariant } = this.props;
         await deleteListVariant([id]);
         const newDataVariants = dataVariants.filter(obj => obj.id !== id);
         await setDataVariants(newDataVariants);
@@ -23,6 +23,7 @@ class variant_overview extends Component {
         } else {
             await setDataVariant({});
         }
+        await setIsEditVariant(false);
     }
     render() {
         const { dataVariants, indexActiveVariant, selectVariant } = this.props;
@@ -72,6 +73,7 @@ const mapDispatchToProps = dispatch => {
         deleteListVariant: (id) => dispatch(actions.deleteListVariantRedux(id)),
         setDataVariants: (data) => dispatch(actions.setDataVariantsRedux(data)),
         setDataVariant: (data) => dispatch(actions.setDataVariantRedux(data)),
+        setIsEditVariant: (data) => dispatch(actions.setIsEditVariantRedux(data)),
 
     };
 };

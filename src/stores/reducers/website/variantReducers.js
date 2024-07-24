@@ -3,6 +3,7 @@ import actionTypes from '@actions/website/actionTypes';
 const initialState = {
     dataVariants: [],
     dataVariant: {},
+    dataVariantOriginal: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -49,7 +50,8 @@ const variantReducers = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isResult: true,
-                dataVariant: action.data
+                dataVariant: action.data,
+                dataVariantOriginal: action.data,
             }
         case actionTypes.CREATE_VARIANT_SUCCESS:
             return {
@@ -81,6 +83,11 @@ const variantReducers = (state = initialState, action) => {
                 dataVariant: action.data,
                 isEditVariant: true,
             }
+        case actionTypes.SET_DATA_VARIANT_ORIGINAL:
+            return {
+                ...state,
+                dataVariantOriginal: action.data,
+            }
         case actionTypes.ON_CHANGE_VARIANT:
             let copyState = { ...state.dataVariant };
             copyState[action.id] = action.value;
@@ -105,6 +112,11 @@ const variantReducers = (state = initialState, action) => {
             return {
                 ...state,
                 dataVariants: action.data,
+            }
+        case actionTypes.SET_IS_EDIT_VARIANT:
+            return {
+                ...state,
+                isEditVariant: action.data,
             }
         default:
             return state;

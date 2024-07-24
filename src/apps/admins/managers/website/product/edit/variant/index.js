@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Button, Space, message, Spin } from 'antd';
+import { Button, Space, message, Spin, Modal, notification } from 'antd';
 import VariantOverview from './elements/variant_overview';
 import VariantIntroduce from './elements/variant_introduce';
 import VariantMedia from './elements/variant_media';
@@ -11,25 +11,22 @@ import { createMedia } from '@services/website/mediaServices';
 import { showNotification } from '@utils/handleFuncNotification';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataProducts } from '@datas/dataPermissionsOrigin';
+import { ExclamationCircleFilled } from '@ant-design/icons';
 import ModalCreate from './modals/modalCreate';
+const { confirm } = Modal;
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
             modalCreate: false,
-
             indexActiveVariant: 0,
-
-            dataAttributes: [],
-
             dataCheckPermis: {},
-            dataVariantIds: [],
-
         }
     }
     async componentDidMount() {
         const { dataUserPermis, isSuperUser, dataVariants, setDataVariant } = this.props;
         const dataCheckPermis = await handleCheckPermis(dataProducts, dataUserPermis, isSuperUser);
+
         const indexActiveVariant = dataVariants && dataVariants.length > 0 ? dataVariants.length - 1 : null;
         if (indexActiveVariant) { await setDataVariant(dataVariants[indexActiveVariant]); }
         this.setState({
@@ -38,12 +35,14 @@ class index extends Component {
         });
     }
     async componentDidUpdate(prevProps) {
-        const { dataVariantIds, dataProduct } = this.props;
+        const { dataVariantIds, setDataVariants, setDataVariant } = this.props;
         if (!this.arraysEqual(prevProps.dataVariantIds, dataVariantIds)) {
-            const dataAttributes = dataProduct?.variant_attribute_group?.attribute ? dataProduct?.variant_attribute_group?.attribute : []
             if (dataVariantIds && dataVariantIds.length !== 0) {
-                this.setState({ dataVariantIds: dataVariantIds, dataAttributes: dataAttributes });
                 await this.getListVariant(dataVariantIds);
+            }
+            if (dataVariantIds && dataVariantIds.length === 0) {
+                await setDataVariants([]);
+                await setDataVariant({});
             }
         }
     }
@@ -85,9 +84,13 @@ class index extends Component {
         }
     }
     handleGetDataVariant = async (variantId) => {
-        const { dataVariants, setDataVariant } = this.props;
+        const { dataVariants, setDataVariant, setIsEditVariant } = this.props;
         const variantSelected = dataVariants.find(item => item?.id === variantId);
-        if (variantSelected) { await setDataVariant(variantSelected); }
+        if (variantSelected) {
+            await setDataVariant(variantSelected);
+            await setIsEditVariant(false);
+
+        }
     }
     handleSetDataVariants = async (variantId) => {
         const { dataVariants, setDataVariants } = this.props;
@@ -98,8 +101,8 @@ class index extends Component {
         await setDataVariants(newDataVariants);
     }
     handleEditVariant = async () => {
-        const { dataVariant, isEdit, clicEditVariant, editVariant, isResultVariant } = this.props;
-        const { dataAttributes } = this.state;
+        const { dataVariant, isEdit, clicEditVariant, editVariant, isResultVariant, dataProduct } = this.props;
+        const dataAttributes = dataProduct?.variant_attribute_group?.attribute ? dataProduct?.variant_attribute_group?.attribute : [];
         if (dataVariant?.id) {
             if (isEdit) {
                 if (this.props.isEditVariant) {
@@ -169,12 +172,44 @@ class index extends Component {
         const newDataMediaIds = results.filter(id => id != null);
         return newDataMediaIds;
     }
-
     openModal = () => {
         this.setState({ modalCreate: !this.state.modalCreate });
     }
+    handleCancel = async () => {
+        const { clicEditVariant } = this.props;
+        if (this.props.isEditVariant) {
+            confirm({
+                title: 'Cảnh báo.Tác vụ chưa được lưu !!!',
+                icon: <ExclamationCircleFilled />,
+                content: 'Vui lòng lưu lại tác vụ',
+                okText: 'Lưu lại',
+                okType: 'default',
+                onOk: () => {
+                    this.handleEditVariant();
+                },
+                onCancel: async () => {
+                },
+            });
+        } else {
+            clicEditVariant();
+        }
+    }
+    handleEdit = async () => {
+        const { isEditPRD } = this.props;
+        if (isEditPRD) {
+            notification.open({
+                message: 'CẢNH BÁO RỦI RO !!!',
+                description: 'Vui lòng lưu lại các tác vụ phía trên của bạn',
+                onClick: () => {
+                    return;
+                },
+            });
+        } else {
+            this.handleEditVariant()
+        }
+    }
     render() {
-        const { dataProduct, isEdit, clicEditVariant, isLoading } = this.props;
+        const { dataProduct, isEdit, isLoading } = this.props;
         const { dataCheckPermis, indexActiveVariant, modalCreate } = this.state;
         return (
             <>
@@ -189,13 +224,13 @@ class index extends Component {
                             </Button>
                             <Space>
                                 {isEdit &&
-                                    <Button onClick={() => clicEditVariant()}
+                                    <Button onClick={() => this.handleCancel()}
                                         className='bg-[#e94138] text-white'>
                                         Hủy
                                     </Button>
                                 }
                                 <Button disabled={!dataCheckPermis['product.change_product']}
-                                    onClick={() => this.handleEditVariant()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
+                                    onClick={() => this.handleEdit()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
                                     {isEdit ? 'Lưu' : 'Chỉnh sửa'}
                                 </Button>
                             </Space>
@@ -233,10 +268,13 @@ const mapStateToProps = state => {
         dataProduct: state.product.dataProduct,
         dataVariant: state.variant.dataVariant,
         dataVariants: state.variant.dataVariants,
+        dataVariantOriginal: state.variant.dataVariantOriginal,
 
         isResultVariant: state.variant.isResult,
 
         isEdit: state.variant.isEdit,
+        isEditPRD: state.product.isEdit,
+
         isEditVariant: state.variant.isEditVariant,
 
         dataUserPermis: state.user.dataUserPermis,
@@ -247,13 +285,18 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getDataVariant: (id) => dispatch(actions.getDataVariantRedux(id)),
-        clicEditVariant: (value) => dispatch(actions.clickEditVariantRedux(value)),
         editVariant: (id, data) => dispatch(actions.editVariantRedux(id, data)),
+        editListVariant: (id, data) => dispatch(actions.editListVariantRedux(id, data)),
+
+        clicEditVariant: (value) => dispatch(actions.clickEditVariantRedux(value)),
+
         setDataVariant: (data) => dispatch(actions.setDataVariantRedux(data)),
+        setDataVariantOriginal: (data) => dispatch(actions.setDataVariantOriginalRedux(data)),
+
         setDataVariants: (data) => dispatch(actions.setDataVariantsRedux(data)),
+        setIsEditVariant: (data) => dispatch(actions.setIsEditVariantRedux(data)),
 
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
-        editListVariant: (id, data) => dispatch(actions.editListVariantRedux(id, data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

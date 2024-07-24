@@ -136,7 +136,14 @@ export const setDataVariantRedux = (data) => ({
     type: actionTypes.SET_DATA_VARIANT,
     data,
 })
-
+export const setDataVariantOriginalRedux = (data) => ({
+    type: actionTypes.SET_DATA_VARIANT_ORIGINAL,
+    data,
+})
+export const setIsEditVariantRedux = (data) => ({
+    type: actionTypes.SET_IS_EDIT_VARIANT,
+    data,
+})
 export const clickEditVariantRedux = (data) => ({
     type: actionTypes.CLICK_EDIT_VARIANT,
     data: data

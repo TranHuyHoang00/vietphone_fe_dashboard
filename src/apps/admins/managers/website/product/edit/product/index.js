@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Button, Typography, Space, message } from 'antd';
+import { Button, Typography, Space, message, Modal, notification } from 'antd';
 import ProductIntroduce from './elements/product_introduce';
 //import ProductAttributeValue from './elements/product_attribute_value';
 import ProductPage from './elements/product_page';
@@ -13,6 +13,8 @@ import { createMedia } from '@services/website/mediaServices';
 import { showNotification } from '@utils/handleFuncNotification';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataProducts } from '@datas/dataPermissionsOrigin';
+import { ExclamationCircleFilled } from '@ant-design/icons';
+const { confirm } = Modal;
 class index extends Component {
     constructor(props) {
         super(props);
@@ -87,7 +89,7 @@ class index extends Component {
                         description: description,
                         short_description: shortDescription,
                     }
-                    if (newDataProduct?.variant_attribute_group?.id) { delete newDataProduct.variant_attribute_group; }
+                    if (newDataProduct?.variant_attribute_group?.id) { newDataProduct.variant_attribute_group = newDataProduct?.variant_attribute_group?.id; }
                     if (newDataProduct?.promotion_info?.id) { delete newDataProduct.promotion_info; }
                     if (newDataProduct?.repair_time?.id) { delete newDataProduct.repair_time; }
 
@@ -112,8 +114,41 @@ class index extends Component {
             }
         }
     }
+    handleCancel = async () => {
+        const { clickEditProduct } = this.props;
+        if (this.props.isEditProduct) {
+            confirm({
+                title: 'Cảnh báo.Tác vụ chưa được lưu !!!',
+                icon: <ExclamationCircleFilled />,
+                content: 'Vui lòng lưu lại tác vụ',
+                okText: 'Lưu lại',
+                okType: 'default',
+                onOk: () => {
+                    this.handleEditProduct();
+                },
+                onCancel: async () => {
+                },
+            });
+        } else {
+            clickEditProduct();
+        }
+    }
+    handleEdit = async () => {
+        const { isEditVRA } = this.props;
+        if (isEditVRA) {
+            notification.open({
+                message: 'CẢNH BÁO RỦI RO !!!',
+                description: 'Vui lòng lưu lại các tác vụ phía dưới của bạn',
+                onClick: () => {
+                    return;
+                },
+            });
+        } else {
+            this.handleEditProduct()
+        }
+    }
     render() {
-        const { dataProduct, isEdit, clickEditProduct } = this.props;
+        const { dataProduct, isEdit } = this.props;
         const { dataCheckPermis } = this.state;
         return (
             <div className='space-y-[10px]'>
@@ -121,13 +156,13 @@ class index extends Component {
                     <Typography.Title level={4}>{dataProduct.name}</Typography.Title>
                     <Space>
                         {isEdit &&
-                            <Button onClick={() => clickEditProduct()}
+                            <Button onClick={() => this.handleCancel()}
                                 className='bg-[#e94138] text-white'>
                                 Hủy
                             </Button>
                         }
                         <Button disabled={!dataCheckPermis['product.change_product']}
-                            onClick={() => this.handleEditProduct()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
+                            onClick={() => this.handleEdit()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
                             {isEdit ? 'Lưu' : 'Chỉnh sửa'}
                         </Button>
                     </Space>
@@ -137,10 +172,10 @@ class index extends Component {
                         <div className='space-y-[10px]'>
                             <ProductIntroduce />
                             <ProductPage dataProduct={dataProduct} />
-                            <ProductMedia />
                         </div>
-                        <div>
+                        <div className='space-y-[10px]'>
                             <ProductAtbvlQuillTable />
+                            <ProductMedia />
                             {/* <ProductAttributeValue /> */}
                         </div>
                     </div>
@@ -155,6 +190,7 @@ class index extends Component {
 const mapStateToProps = state => {
     return {
         dataProduct: state.product.dataProduct,
+        dataProductOriginal: state.product.dataProductOriginal,
         isEdit: state.product.isEdit,
         description: state.product.description,
         shortDescription: state.product.shortDescription,
@@ -165,17 +201,25 @@ const mapStateToProps = state => {
 
         isEditProductPage: state.productPage.isEditProductPage,
         isEditProduct: state.product.isEditProduct,
+        isEditVRA: state.variant.isEdit,
+
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
-        clickEditProduct: (value) => dispatch(actions.clickEditProductRedux(value)),
         editProduct: (id, data) => dispatch(actions.editProductRedux(id, data)),
 
+        clickEditProduct: (value) => dispatch(actions.clickEditProductRedux(value)),
+        setIsEditProduct: (data) => dispatch(actions.setIsEditProductRedux(data)),
+
+        setDataProduct: (data) => dispatch(actions.setDataProductRedux(data)),
+        setDataProductOriginal: (data) => dispatch(actions.setDataProductOriginalRedux(data)),
+
+        getDataProductPage: (id) => dispatch(actions.getDataProductPageRedux(id)),
         createProductPage: (data) => dispatch(actions.createProductPageRedux(data)),
         editProductPage: (id, data) => dispatch(actions.editProductPageRedux(id, data)),
-        getDataProductPage: (id) => dispatch(actions.getDataProductPageRedux(id)),
+
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

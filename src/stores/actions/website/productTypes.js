@@ -141,13 +141,20 @@ export const setDataProductRedux = (data) => ({
     type: actionTypes.SET_DATA_PRODUCT,
     data,
 })
-
+export const setDataProductOriginalRedux = (data) => ({
+    type: actionTypes.SET_DATA_PRODUCT_ORIGINAL,
+    data,
+})
 export const clickEditProductRedux = (data) => ({
     type: actionTypes.CLICK_EDIT_PRODUCT,
     data: data
 })
 export const setDataFilterProductRedux = (data) => ({
     type: actionTypes.SET_DATA_FILTER_PRODUCT,
+    data,
+})
+export const setIsEditProductRedux = (data) => ({
+    type: actionTypes.SET_IS_EDIT_PRODUCT,
     data,
 })
 export const setDataFilterProductRepairRedux = (data) => ({

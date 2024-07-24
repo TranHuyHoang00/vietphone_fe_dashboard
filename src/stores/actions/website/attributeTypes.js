@@ -27,11 +27,11 @@ export const getListAttributeRedux = (dataFilter) => {
 export const getDataAttributeRedux = (id) => {
     return async (dispatch, getState) => {
         try {
-            const { attribute } = getState();
-            const { dataAttribute } = attribute || {};
-            if (dataAttribute?.id === id) {
-                return;
-            }
+            // const { attribute } = getState();
+            // const { dataAttribute } = attribute || {};
+            // if (dataAttribute?.id === id) {
+            //     return;
+            // }
             dispatch(attributeStart());
             const data = await getDataAttribute(id);
             if (data && data.data && data.data.success === 1) {

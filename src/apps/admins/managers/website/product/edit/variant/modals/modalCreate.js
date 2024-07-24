@@ -44,7 +44,7 @@ class index extends Component {
         return { check: true };
     }
     handleCreate = async () => {
-        const { openModal, dataVariants, setDataVariants, handleSetIndexActiveVariant, setDataVariant } = this.props;
+        const { openModal, dataVariants, setDataVariants, handleSetIndexActiveVariant, setDataVariant, setIsEditVariant } = this.props;
         const { dataVariant } = this.state;
         const result = this.validationData(dataVariant);
         if (result.check) {
@@ -61,6 +61,7 @@ class index extends Component {
                 } else {
                     message.error('Lỗi');
                 }
+                await setIsEditVariant(false);
             } catch (error) {
                 showNotification(error);
             }
@@ -113,7 +114,7 @@ const mapDispatchToProps = dispatch => {
         getDataProduct: (id) => dispatch(actions.getDataProductRedux(id)),
         setDataVariants: (data) => dispatch(actions.setDataVariantsRedux(data)),
         setDataVariant: (data) => dispatch(actions.setDataVariantRedux(data)),
-
+        setIsEditVariant: (data) => dispatch(actions.setIsEditVariantRedux(data)),
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(index));

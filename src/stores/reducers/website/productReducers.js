@@ -3,6 +3,7 @@ import actionTypes from '@actions/website/actionTypes';
 const initialState = {
     dataProducts: [],
     dataProduct: {},
+    dataProductOriginal: {},
     dataMeta: {},
     isLoading: false,
     isResult: false,
@@ -70,6 +71,7 @@ const productReducers = (state = initialState, action) => {
                 isLoading: false,
                 isResult: true,
                 dataProduct: action.data,
+                dataProductOriginal: action.data,
                 description: action.data.description,
                 shortDescription: action.data.short_description,
             }
@@ -102,6 +104,11 @@ const productReducers = (state = initialState, action) => {
                 ...state,
                 dataProduct: action.data,
                 isEditProduct: true,
+            }
+        case actionTypes.SET_DATA_PRODUCT_ORIGINAL:
+            return {
+                ...state,
+                dataProductOriginal: action.data,
             }
         case actionTypes.ON_CHANGE_PRODUCT:
             let copyState = { ...state.dataProduct };
@@ -139,6 +146,11 @@ const productReducers = (state = initialState, action) => {
             return {
                 ...state,
                 dataFilterProductRepair: action.data,
+            }
+        case actionTypes.SET_IS_EDIT_PRODUCT:
+            return {
+                ...state,
+                isEditProduct: action.data,
             }
         default:
             return state;

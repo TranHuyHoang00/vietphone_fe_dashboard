@@ -55,6 +55,44 @@ class product_introduce extends Component {
                 break;
         }
     }
+    onSearch = (valueSearch, nameFormSelect) => {
+        const { getListBrand, getListTag, getListCategory, getListVariantAttributeGroup, getListPromotion,
+            getListRepair,
+        } = this.props;
+        const { dataFilter } = this.state;
+        let newDataFilter = {
+            ...dataFilter,
+            search: valueSearch,
+            limit: 101,
+        }
+        switch (nameFormSelect) {
+            case 'brand':
+                getListBrand(newDataFilter)
+                break;
+            case 'tag':
+                getListTag(newDataFilter)
+                break;
+            case 'category':
+                getListCategory(newDataFilter)
+                break;
+            case 'variant_attribute_group':
+                getListVariantAttributeGroup(newDataFilter)
+                break;
+            case 'promotion':
+                getListPromotion(newDataFilter)
+                break;
+            case 'repair':
+                getListRepair(newDataFilter)
+                break;
+            default:
+                break;
+        }
+    }
+    onchangeVAG = (value) => {
+        const { onChangeProduct, dataVariantAttributeGroups } = this.props;
+        const itemSelected = dataVariantAttributeGroups.find(item => item?.id === value);
+        if (itemSelected) { onChangeProduct(itemSelected, 'variant_attribute_group'); }
+    }
     render() {
         const { dataProduct, dataBrands, dataTags, dataCategorys, dataVariantAttributeGroups,
             isEdit, onChangeProduct, onChangeBrand, onChangeTag, onChangeCategory,
@@ -116,7 +154,7 @@ class product_introduce extends Component {
                                 disabledSelect={!isEdit}
                                 disabledButtonCreate={false}
                                 disabledInput={false}
-
+                                onSearch={this.onSearch}
                                 variableSelect={'repair_time'}
                                 onChangeSelect={onChangeProduct}
 
@@ -146,6 +184,7 @@ class product_introduce extends Component {
 
                                 variableSelect={'product_brand'}
                                 onChangeSelect={onChangeProduct}
+                                onSearch={this.onSearch}
 
                                 variableInputSearch={'name'}
                                 onChangeInput={onChangeBrand}
@@ -173,6 +212,7 @@ class product_introduce extends Component {
 
                                 variableSelect={'tags'}
                                 onChangeSelect={onChangeProduct}
+                                onSearch={this.onSearch}
 
                                 variableInputSearch={'name'}
                                 onChangeInput={onChangeTag}
@@ -198,6 +238,8 @@ class product_introduce extends Component {
                                 disabledButtonCreate={false}
                                 disabledInput={false}
                                 variableSelect={'categories'}
+                                onSearch={this.onSearch}
+
                                 onChangeSelect={onChangeProduct}
                                 variableInputSearch={'name'}
                                 onChangeInput={onChangeCategory}
@@ -215,7 +257,7 @@ class product_introduce extends Component {
                             <Select allowClear style={{ width: '100%' }} showSearch disabled={!isEdit}
                                 value={(dataProduct?.variant_attribute_group?.id) ? (dataProduct.variant_attribute_group.id) : dataProduct.variant_attribute_group}
                                 filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())}
-                                onChange={(value) => onChangeProduct(value, 'variant_attribute_group')}
+                                onChange={(value) => this.onchangeVAG(value)}
                                 options={dataVariantAttributeGroups && dataVariantAttributeGroups.map((item) => ({
                                     label: item?.name,
                                     value: item?.id,

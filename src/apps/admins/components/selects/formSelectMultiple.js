@@ -13,7 +13,7 @@ class index extends Component {
     }
     render() {
         const { width, mode, variableSelect, value, disabledSelect, placeholder, disabledInput, onChangeInput
-            , variableInputSearch, nameFormSelect, disabledButtonCreate, options, handleCreate, onChangeSelect
+            , variableInputSearch, nameFormSelect, disabledButtonCreate, options, handleCreate, onChangeSelect, onSearch
         } = this.props;
         return (
             <Select style={{ width: width }} placement='topRight' mode={mode}
@@ -26,10 +26,11 @@ class index extends Component {
                         {menu}
                         <Divider />
                         <Space>
-                            <Input onKeyDown={(e) => e.stopPropagation()}
+                            <Input.Search onKeyDown={(e) => e.stopPropagation()}
                                 placeholder={placeholder}
                                 disabled={disabledInput}
-                                onChange={(event) => onChangeInput(event.target.value, variableInputSearch)} />
+                                onChange={(event) => onChangeInput(event.target.value, variableInputSearch)}
+                                onSearch={(value) => onSearch(value, nameFormSelect)} />
                             <Button disabled={disabledButtonCreate}
                                 onClick={() => handleCreate(nameFormSelect)}
                                 className='bg-[#0e97ff] text-white' icon={<PlusOutlined />}></Button>

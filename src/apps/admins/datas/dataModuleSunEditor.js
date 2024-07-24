@@ -1,7 +1,7 @@
 import katex from "katex";
 import "katex/dist/katex.min.css";
 const moduleSunEditor = {
-    height: 400,
+    height: 225,
     buttonList: [
         ["bold", "underline", "italic", "formatBlock"],
         ["fontColor", "hiliteColor"],
