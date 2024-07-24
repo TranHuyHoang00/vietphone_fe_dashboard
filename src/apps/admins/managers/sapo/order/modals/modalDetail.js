@@ -36,11 +36,15 @@ class index extends Component {
                             <div className='space-y-[5px]'>
                                 {textLine13('Mã đơn hàng', (dataOrder?.code))}
                                 {textLine13('Trạng thái', (dataOrder?.status))}
-                                {textLine13('Tổng tiền', formatMoney(dataOrder?.total))}
-                                {textLine13('Khấu trừ', formatMoney(dataOrder?.total_discount))}
+                                {textLine13('Khấu trừ', formatMoney(dataOrder?.total_discount), 'font-medium')}
+                                {textLine13('Tổng tiền', formatMoney(dataOrder?.total), 'font-medium')}
+                                {textLine13('Lợi nhuận', formatMoney(dataOrder?.profit), 'font-medium')}
                                 {textLine13('Địa chỉ giao', (dataOrder?.shipping_address))}
                                 {textLine13('Ngày tạo', formatDay(dataOrder?.created_at))}
                                 {textLine13('Nguồn', (dataOrder?.source))}
+                                {textLine13('Cửa hàng bán', (dataOrder?.shop?.name))}
+                                {textLine13('Người bán', (dataOrder?.assignee?.name))}
+
                                 {dataOrder.order_lines && dataOrder.order_lines.map((item, index) => {
                                     return (
                                         <Collapse key={item.id}>

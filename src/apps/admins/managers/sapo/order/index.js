@@ -89,37 +89,34 @@ class index extends Component {
     render() {
         const columns = [
             {
-                title: 'NGÀY TẠO', dataIndex: 'created_at', width: 140, responsive: ['sm'],
-                render: (created_at) => <Typography.Text strong className='text-[#0574b8] dark:text-white'>{formatDay(created_at)}</Typography.Text>,
-                sorter: (a, b) => a?.created_at - b?.created_at,
-            },
-            {
-                title: 'THÔNG TIN KH', dataIndex: 'user',
-                render: (user, item) =>
+                title: 'KHÁCH HÀNG', dataIndex: 'user',
+                render: (user) =>
                     <div>
                         <Typography.Text strong className='text-[#0574b8] dark:text-white'>{user?.full_name}</Typography.Text><br />
                         <Typography.Text italic strong>{user?.phone}</Typography.Text><br />
-                        {item?.email ?
-                            <Typography.Text italic>none@gmail.com</Typography.Text>
-                            :
-                            <Typography.Text italic>{item?.email}</Typography.Text>
-                        }
                     </div>
             },
             {
-                title: 'THÔNG TIN ĐH', dataIndex: 'id',
-                render: (id, item) =>
+                title: 'TRẠNG THÁI ĐH', dataIndex: 'created_at', responsive: ['md'],
+                render: (created_at, item) =>
                     <div >
-                        {textLine13('Mã ĐH', item.code, 'font-medium')}
-                        {textLine13('Khấu trừ', formatMoney(item?.total_discount), 'font-medium text-red-500')}
-                        {textLine13('Tổng tiền', formatMoney(item?.total), 'font-medium text-red-500')}
+                        {textLine13('Ngày tạo', formatDay(created_at))}
                         {textLine13('Nguồn', item?.source)}
                         {textLine13('Trạng thái', item?.status,)}
+                    </div>
+            },
+            {
+                title: 'GIÁ TRỊ ĐH', dataIndex: 'total_discount',
+                render: (total_discount, item) =>
+                    <div >
+                        {textLine13('Khấu trừ', formatMoney(total_discount), 'font-medium')}
+                        {textLine13('Tổng tiền', formatMoney(item?.total), 'font-medium')}
+                        {textLine13('Lợi nhuận', formatMoney(item?.profit), 'font-medium')}
                     </div>
 
             },
             {
-                title: 'HĐ', width: 80,
+                title: 'HĐ', width: 40,
                 render: (_, item) => (
                     <Space size="middle" >
                         <button disabled={!dataCheckPermis['order.view_order']} onClick={() => this.openModal('detail', true, item.id)}><AiFillEye /></button>
