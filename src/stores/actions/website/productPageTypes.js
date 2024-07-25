@@ -33,6 +33,7 @@ export const getDataProductPageRedux = (id) => {
             if (data && data.data && data.data.success === 1) {
                 dispatch(getProductPageSuccess(data.data.data));
             } else {
+                dispatch(getProductPageSuccess());
                 dispatch(productPageFaided());
             }
         } catch (error) {

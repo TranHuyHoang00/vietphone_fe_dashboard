@@ -11,11 +11,12 @@ class product_page extends Component {
         }
     }
     async componentDidMount() {
-        const { setDataProductPage, match, getDataProductPage } = this.props;
-        setDataProductPage({});
+        const { match, getDataProductPage } = this.props;
         if (match && match.params) {
             const productId = match.params.id;
-            if (productId) { getDataProductPage(productId); }
+            if (productId) {
+                await getDataProductPage(productId);
+            }
         }
     }
     // async componentDidUpdate(prevProps) {
@@ -39,7 +40,6 @@ class product_page extends Component {
     }
     render() {
         const { dataProductPage, isLoading, onChangeProductPage, isEdit } = this.props;
-        console.log('dataProductPage', dataProductPage);
         const items = [
             {
                 key: '1',
