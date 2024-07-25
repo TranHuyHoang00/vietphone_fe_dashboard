@@ -8,23 +8,26 @@ class product_page extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataProduct: {
-                has_page: '',
-            }
         }
     }
     async componentDidMount() {
-    }
-    async componentDidUpdate(prevProps) {
-        const { dataProduct, getDataProductPage, setDataProductPage } = this.props;
-        if (prevProps.dataProduct !== dataProduct) {
-            if (dataProduct?.has_page) {
-                await getDataProductPage(dataProduct.id);
-            } else {
-                await setDataProductPage({});
-            }
+        const { setDataProductPage, match, getDataProductPage } = this.props;
+        setDataProductPage({});
+        if (match && match.params) {
+            const productId = match.params.id;
+            if (productId) { getDataProductPage(productId); }
         }
     }
+    // async componentDidUpdate(prevProps) {
+    //     const { dataProduct, getDataProductPage, setDataProductPage } = this.props;
+    //     if (prevProps.dataProduct.id !== dataProduct.id) {
+    //         if (dataProduct?.has_page) {
+    //             await getDataProductPage(dataProduct.id);
+    //         } else {
+    //             await setDataProductPage({});
+    //         }
+    //     }
+    // }
     handleDelete = () => {
         const { dataProductPage, deleteListProductPage, isResult, setDataProductPage } = this.props;
         if (dataProductPage && dataProductPage.id) {
@@ -36,6 +39,7 @@ class product_page extends Component {
     }
     render() {
         const { dataProductPage, isLoading, onChangeProductPage, isEdit } = this.props;
+        console.log('dataProductPage', dataProductPage);
         const items = [
             {
                 key: '1',
