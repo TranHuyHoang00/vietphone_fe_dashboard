@@ -61,7 +61,8 @@ import DetailAchieveTargetStaff from './managers/target/achieve/staff/detail/ind
 // STATISTICAL
 import StatisticalViewWeb from './managers/statistical/viewWeb/index';
 import StatisticalViewProduct from './managers/statistical/viewProduct/index';
-
+// TIMEKEEPING
+import ManagerWorkSchedule from './managers/timekeeping/workSchedule/index';
 class index extends Component {
     constructor(props) {
         super(props);
@@ -138,12 +139,13 @@ class index extends Component {
                             <HeaderDB openDrawerMenu={this.openDrawerMenu} />
                             <Layout.Content className='py-[10px]'>
                                 <Switch>
-                                    {/* WEBSITE */}
+                                    {/* STATISTICAL */}
                                     <Route exact path={`${url}manager/statistical/view_web`}><StatisticalViewWeb /></Route>
                                     <Route exact path={`${url}manager/statistical/view_product`}><StatisticalViewProduct /></Route>
+
+                                    {/* WEBSITE */}
                                     {dataCheckPermis['account.view_customer'] &&
                                         <Route exact path={`${url}manager/sapo/customer`}><ManagerCustomer /></Route>}
-
                                     {dataCheckPermis['product.view_product'] &&
                                         <Route exact path={`${url}manager/website/product`}><ManagerProduct /></Route>}
                                     {dataCheckPermis['product.view_product'] &&
@@ -186,6 +188,7 @@ class index extends Component {
                                         <Route exact path={`${url}manager/website/post/edit/:id`}><EditPost /></Route>}
                                     {dataCheckPermis['post.view_category'] &&
                                         <Route exact path={`${url}manager/website/category_post`}><ManagerCategoryPost /></Route>}
+
                                     {/* SAPO */}
                                     {dataCheckPermis['product.view_sapoproductcategory'] &&
                                         <Route exact path={`${url}manager/sapo/product_category`}><ManagerProductCategory /></Route>}
@@ -199,6 +202,7 @@ class index extends Component {
                                         <Route exact path={`${url}role/sapo/staff`}><ManagerStaffRole /></Route>}
                                     {dataCheckPermis['order.view_order'] &&
                                         <Route exact path={`${url}`}><ManagerOrder /></Route>}
+
                                     {/* TARGET */}
                                     {dataCheckPermis['analytic.view_shopmonthlytarget'] &&
                                         <Route exact path={`${url}set/target/shop`}><SetTargetShop /></Route>}
@@ -208,11 +212,11 @@ class index extends Component {
                                         <Route exact path={`${url}achieve/target/shop`}><AchieveTargetShop /></Route>}
                                     {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
                                         <Route exact path={`${url}achieve/target/staff`}><AchieveTargetStaff /></Route>}
-
                                     {dataCheckPermis['analytic.view_shopmonthlytarget'] &&
                                         <Route exact path={`${url}achieve/target/shop/detail/:id`}><DetailAchieveTargetShop /></Route>}
                                     {dataCheckPermis['analytic.view_staffmonthlytarget'] &&
                                         <Route exact path={`${url}achieve/target/staff/detail/:id`}><DetailAchieveTargetStaff /></Route>}
+
                                     {/* SYSTEM */}
                                     {dataCheckPermis['account.view_user'] &&
                                         <Route Route exact path={`${url}manager/system/user`}><ManagerUser /></Route>}
@@ -222,6 +226,11 @@ class index extends Component {
                                         <Route exact path={`${url}manager/system/sync_data`}><ManagerSyncData /></Route>}
                                     {dataCheckPermis['task.view_task'] &&
                                         <Route exact path={`${url}manager/system/task`}><ManagerTask /></Route>}
+
+                                    {/* TIMEKEEPING */}
+                                    {dataCheckPermis['account.view_user'] &&
+                                        <Route Route exact path={`${url}manager/timekeeping/work_schedule`}><ManagerWorkSchedule /></Route>}
+
                                     <Route exact path={`${url}login`}><Empty /></Route>
                                     <Route ><NotFound /></Route>
                                 </Switch>
