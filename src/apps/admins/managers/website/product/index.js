@@ -164,7 +164,7 @@ class index extends Component {
                         {(item.promotion_info && item.promotion_info.name) &&
                             <div>
                                 <p>Khuyến mãi :</p>
-                                <Tag key={index} color='green'>{item.promotion_info?.name}</Tag>
+                                <Tag key={index} color='green'>{item.promotion_info?.description}</Tag>
                             </div>
                         }
                     </div>,

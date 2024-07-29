@@ -127,7 +127,7 @@ class product_introduce extends Component {
                                     { label: 'Bỏ trống', value: '' },
                                     ...dataPromotions && dataPromotions
                                         .map((item) => ({
-                                            label: item.name,
+                                            label: item.description,
                                             value: item.id,
                                         })),
                                 ]}

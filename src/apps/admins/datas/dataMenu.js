@@ -7,7 +7,10 @@ import {
 } from "react-icons/ai";
 import { IoStatsChart, IoBarChartSharp } from "react-icons/io5";
 import { FaUserShield, FaDatabase } from "react-icons/fa6";
-import { FaCcDiscover, FaUserGraduate, FaUserTie, FaBlender, Fa500Px, FaCalendarAlt, FaAndroid } from "react-icons/fa";
+import {
+    FaCcDiscover, FaUserGraduate, FaUserTie, FaBlender,
+    // Fa500Px, FaCalendarAlt, FaAndroid 
+} from "react-icons/fa";
 import {
     BsFillBox2HeartFill, BsCalendar2PlusFill, BsAward, BsBox2HeartFill,
     BsApple,
@@ -111,17 +114,17 @@ const itemMenuLeftLayoutSider = [
         ]
 
     },
-    {
-        key: 'timekeeping', icon: <Fa500Px />, label: 'Chấm công', children: [
+    // {
+    //     key: 'timekeeping', icon: <Fa500Px />, label: 'Chấm công', children: [
 
-            {
-                key: 'manager_timekeeping', icon: <FaAndroid />, label: 'Quản lý', children: [
-                    { key: 'manager/timekeeping/work_schedule', icon: <FaCalendarAlt />, label: 'Lịch làm việc', title: 'account.view_user' },
-                ],
-            },
-        ]
+    //         {
+    //             key: 'manager_timekeeping', icon: <FaAndroid />, label: 'Quản lý', children: [
+    //                 { key: 'manager/timekeeping/work_schedule', icon: <FaCalendarAlt />, label: 'Lịch làm việc', title: 'account.view_user' },
+    //             ],
+    //         },
+    //     ]
 
-    },
+    // },
     {
         key: 'sytem', icon: <AiFillAndroid />, label: 'Hệ thống', children: [
             {

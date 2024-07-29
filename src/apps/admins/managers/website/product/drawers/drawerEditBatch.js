@@ -75,6 +75,7 @@ class index extends Component {
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Thương hiệu</Typography.Text>
                         <Select style={{ width: "100%" }} placement='topRight' value={dataEdit?.product_brand}
+                            filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())} showSearch
                             onChange={(value) => this.handleOnchangeInput(value, 'product_brand')}
                             options={[
                                 { value: null, label: 'Bỏ trống' },
@@ -87,18 +88,20 @@ class index extends Component {
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Khuyến mãi</Typography.Text>
                         <Select style={{ width: "100%" }} placement='topRight' value={dataEdit?.promotion_info}
+                            filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())} showSearch
                             onChange={(value) => this.handleOnchangeInput(value, 'promotion_info')}
                             options={[
                                 { value: null, label: 'Bỏ trống' },
                                 { value: "", label: 'XÓA BỎ' },
                                 ...dataPromotions && dataPromotions.map((item) => ({
-                                    label: item?.name,
+                                    label: item?.description,
                                     value: item?.id,
                                 }))]} />
                     </div>
                     <div className='space-y-[2px]'>
                         <Typography.Text strong>Sửa chữa</Typography.Text>
                         <Select style={{ width: "100%" }} placement='topRight' value={dataEdit?.repair_time}
+                            filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())} showSearch
                             onChange={(value) => this.handleOnchangeInput(value, 'repair_time')}
                             options={[
                                 { value: null, label: 'Bỏ trống' },
@@ -112,6 +115,7 @@ class index extends Component {
                         <Typography.Text strong>Tag</Typography.Text>
                         <Select style={{ width: "100%" }} placement='topRight' mode="multiple" value={dataEdit?.tags}
                             onChange={(value) => this.handleOnchangeInput(value, 'tags')}
+                            filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())} showSearch
                             options={[
                                 ...dataTags && dataTags.map((item) => ({
                                     label: item?.name,
@@ -122,6 +126,7 @@ class index extends Component {
                         <Typography.Text strong>Danh mục</Typography.Text>
                         <Select style={{ width: "100%" }} placement='topRight' mode="multiple" value={dataEdit?.categories}
                             onChange={(value) => this.handleOnchangeInput(value, 'categories')}
+                            filterOption={(input, option) => option.label.toLowerCase().includes(input.toLowerCase())} showSearch
                             options={[
                                 ...dataCategorys && dataCategorys.map((item) => ({
                                     label: item?.name,

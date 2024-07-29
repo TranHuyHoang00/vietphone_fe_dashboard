@@ -85,11 +85,15 @@ class index extends Component {
                 sorter: (a, b) => a.name.localeCompare(b.name),
 
             },
-
             {
                 title: 'TRẢ GÓP', dataIndex: 'instalment',
                 render: (instalment) => <Typography.Text className='text-[#0574b8] dark:text-white'>{instalment}</Typography.Text>,
                 sorter: (a, b) => a.instalment.localeCompare(b.instalment),
+            },
+            {
+                title: 'Mô tả', dataIndex: 'description', responsive: ['lg'],
+                sorter: (a, b) => a.description.localeCompare(b.description),
+
             },
             {
                 title: 'ẢNH', dataIndex: 'image', responsive: ['lg'], width: 210,

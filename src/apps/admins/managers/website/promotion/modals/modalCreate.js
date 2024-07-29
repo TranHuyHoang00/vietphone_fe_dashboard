@@ -65,6 +65,10 @@ class index extends Component {
                             important={true}
                             onChangeInput={onChangePromotion} />
 
+                        <FormInput name={'Mô tả'} variable={'description'} value={dataPromotion?.description}
+                            important={true}
+                            onChangeInput={onChangePromotion} />
+
                         <div className='space-y-[3px]'>
                             <Typography.Text italic strong>
                                 Nội dung

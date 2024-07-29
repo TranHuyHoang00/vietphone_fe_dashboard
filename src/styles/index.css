@@ -802,10 +802,6 @@ video {
   align-items: center;
 }
 
-.justify-start {
-  justify-content: flex-start;
-}
-
 .justify-end {
   justify-content: flex-end;
 }
@@ -833,11 +829,6 @@ video {
 .gap-x-\[10px\] {
   -webkit-column-gap: 10px;
           column-gap: 10px;
-}
-
-.gap-x-\[5px\] {
-  -webkit-column-gap: 5px;
-          column-gap: 5px;
 }
 
 .space-x-\[10px\] > :not([hidden]) ~ :not([hidden]) {
@@ -1243,6 +1234,11 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-orange-500 {
+  --tw-text-opacity: 1;
+  color: rgb(249 115 22 / var(--tw-text-opacity));
 }
 
 .underline {
