@@ -83,8 +83,11 @@ class product_page extends Component {
                                     <span>:</span>
                                 </div>
                                 <div className='w-2/3'>
-                                    <Input value={dataProductPage?.keywords} width={'100%'} disabled={!isEdit}
+                                    <textarea className='w-full border p-[5px]' rows={10} value={dataProductPage?.keywords} disabled={!isEdit}
                                         onChange={(event) => onChangeProductPage(event.target.value, 'keywords')} />
+
+                                    {/* <Input value={dataProductPage?.keywords} width={'100%'} disabled={!isEdit}
+                                        onChange={(event) => onChangeProductPage(event.target.value, 'keywords')} /> */}
                                 </div>
                             </div>
                         </div>
