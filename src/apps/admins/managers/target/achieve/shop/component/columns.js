@@ -47,6 +47,25 @@ const columnRevenueOverViews = (typeActive, dataFilter, history) => [
                 sorter: (a, b) => a?.revenue?.total_revenue - b?.revenue?.total_revenue,
             },
             {
+                title: 'TỈ LỆ', dataIndex: ['revenue', 'total_revenue'],
+                render: (value, datas) => {
+                    const percenRevenue = (value / datas?.shop_monthly_target?.value) * 100;
+                    if (percenRevenue >= 0 && percenRevenue < 100) {
+                        return {
+                            children: <Text strong className='text-red-500'>{`${formatNumber(percenRevenue, 0, 2)} %`}</Text>,
+                            __style__: { color: 'eb2315' },
+                        }
+                    } else {
+                        return {
+                            children: <Text strong className='text-green-500'>{`${formatNumber(percenRevenue, 0, 2)} %`}</Text>,
+                            __style__: { color: '22c55e' },
+                        }
+                    }
+                },
+                sorter: (a, b) => (a?.revenue?.total_revenue / a?.shop_monthly_target?.value * 100) - (b?.revenue?.total_revenue / b?.shop_monthly_target?.value * 100),
+
+            },
+            {
                 title: `CÒN LẠI`, dataIndex: ['revenue', 'total_revenue'],
                 render: (value, datas) => {
                     const remainingRevenue = datas?.shop_monthly_target?.value - value;
@@ -81,25 +100,7 @@ const columnRevenueOverViews = (typeActive, dataFilter, history) => [
                     }
                 },
             },
-            {
-                title: 'TỈ LỆ', dataIndex: ['revenue', 'total_revenue'],
-                render: (value, datas) => {
-                    const percenRevenue = (value / datas?.shop_monthly_target?.value) * 100;
-                    if (percenRevenue >= 0 && percenRevenue < 100) {
-                        return {
-                            children: <Text strong className='text-red-500'>{`${formatNumber(percenRevenue, 0, 2)} %`}</Text>,
-                            __style__: { color: 'eb2315' },
-                        }
-                    } else {
-                        return {
-                            children: <Text strong className='text-green-500'>{`${formatNumber(percenRevenue, 0, 2)} %`}</Text>,
-                            __style__: { color: '22c55e' },
-                        }
-                    }
-                },
-                sorter: (a, b) => (a?.revenue?.total_revenue / a?.shop_monthly_target?.value * 100) - (b?.revenue?.total_revenue / b?.shop_monthly_target?.value * 100),
 
-            },
             {
                 title: `TARGET NGÀY`, dataIndex: ['revenue', 'total_revenue'],
                 render: (value, datas) => {
@@ -201,6 +202,13 @@ const calculateSummary = (datas, dataFilter) => {
                 <Table.Summary.Cell index={2}>
                     <Text strong>{formatNumber(totalAchievedMoney)}</Text>
                 </Table.Summary.Cell>
+                <Table.Summary.Cell index={5}>
+                    {(totalPercenRevenue >= 0 && totalPercenRevenue < 100) ?
+                        <Text className='text-red-500' strong>{formatNumber(totalPercenRevenue, 0, 2)}%</Text>
+                        :
+                        <Text className='text-green-500' strong>{formatNumber(totalPercenRevenue, 0, 2)}%</Text>
+                    }
+                </Table.Summary.Cell>
                 <Table.Summary.Cell index={3}>
                     {(totalTargetMoney - totalAchievedMoney) > 0 ?
                         <Text className='text-red-500' strong>{`-${formatNumber(totalTargetMoney - totalAchievedMoney)}`}</Text>
@@ -215,13 +223,7 @@ const calculateSummary = (datas, dataFilter) => {
                         <Text className='text-green-500' strong>ĐẠT</Text>
                     }
                 </Table.Summary.Cell>
-                <Table.Summary.Cell index={5}>
-                    {(totalPercenRevenue >= 0 && totalPercenRevenue < 100) ?
-                        <Text className='text-red-500' strong>{formatNumber(totalPercenRevenue, 0, 2)}%</Text>
-                        :
-                        <Text className='text-green-500' strong>{formatNumber(totalPercenRevenue, 0, 2)}%</Text>
-                    }
-                </Table.Summary.Cell>
+
                 <Table.Summary.Cell index={6}>
                     <Text strong>{formatNumber(totalTargetMoneyDate)}</Text>
                 </Table.Summary.Cell>
