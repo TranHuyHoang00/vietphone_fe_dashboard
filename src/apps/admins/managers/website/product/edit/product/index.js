@@ -97,6 +97,7 @@ class index extends Component {
                         const newDataMedias = await this.handleDataMedias(dataMedias);
                         newDataProduct.media = newDataMedias;
                     }
+                    delete newDataProduct.attribute_values;
                     // if (dataAtbvls.length !== 0) {
                     //     const newDataAtbvls = await this.handleDataAtbvls(dataAtbvls);
                     //     newDataProduct.attribute_values = newDataAtbvls;
