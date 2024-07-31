@@ -66,12 +66,12 @@ const columnRevenueOverViews = (typeActive, dataFilter, history) => [
                     const percenRevenue = (revenueMonth / value) * 100;
                     if (percenRevenue >= 0 && percenRevenue < 100) {
                         return {
-                            children: <Text strong className='text-red-500'>{`${formatNumber(percenRevenue, 0, 5)} %`}</Text>,
+                            children: <Text strong className='text-red-500'>{`${formatNumber(percenRevenue, 0, 10)} %`}</Text>,
                             __style__: { color: 'eb2315' },
                         }
                     } else {
                         return {
-                            children: <Text strong className='text-green-500'>{`${formatNumber(percenRevenue, 0, 5)} %`}</Text>,
+                            children: <Text strong className='text-green-500'>{`${formatNumber(percenRevenue, 0, 10)} %`}</Text>,
                             __style__: { color: '22c55e' },
                         }
                     }
