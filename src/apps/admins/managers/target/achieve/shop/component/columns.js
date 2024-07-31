@@ -82,6 +82,25 @@ const columnRevenueOverViews = (typeActive, dataFilter, history) => [
                 },
             },
             {
+                title: 'TỈ LỆ', dataIndex: ['revenue', 'total_revenue'],
+                render: (value, datas) => {
+                    const percenRevenue = (value / datas?.shop_monthly_target?.value) * 100;
+                    if (percenRevenue >= 0 && percenRevenue < 100) {
+                        return {
+                            children: <Text strong className='text-red-500'>{`${formatNumber(percenRevenue, 0, 2)} %`}</Text>,
+                            __style__: { color: 'eb2315' },
+                        }
+                    } else {
+                        return {
+                            children: <Text strong className='text-green-500'>{`${formatNumber(percenRevenue, 0, 2)} %`}</Text>,
+                            __style__: { color: '22c55e' },
+                        }
+                    }
+                },
+                sorter: (a, b) => (a?.revenue?.total_revenue / a?.shop_monthly_target?.value * 100) - (b?.revenue?.total_revenue / b?.shop_monthly_target?.value * 100),
+
+            },
+            {
                 title: `TARGET NGÀY`, dataIndex: ['revenue', 'total_revenue'],
                 render: (value, datas) => {
                     const remainingRevenue = datas?.shop_monthly_target?.value - value;
@@ -163,10 +182,12 @@ const calculateSummary = (datas, dataFilter) => {
         let totalAchievedMoney = 0;
         let totalTargetMoneyDate = 0;
         let totalDailyMoney = 0;
+        let totalPercenRevenue = 0;
         datas.forEach(({ shop_monthly_target, revenue, daily }) => {
             totalTargetMoney += parseFloat(shop_monthly_target?.value);
             totalAchievedMoney += parseFloat(revenue?.total_revenue);
             totalDailyMoney += parseFloat(daily?.total_revenue);
+            totalPercenRevenue += parseFloat((revenue?.total_revenue / shop_monthly_target?.value * 100) / datas.length)
         });
         totalTargetMoneyDate = getTargetDate(dataFilter?.end, totalTargetMoney - totalAchievedMoney, 0);
         return (
@@ -195,19 +216,26 @@ const calculateSummary = (datas, dataFilter) => {
                     }
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={5}>
-                    <Text strong>{formatNumber(totalTargetMoneyDate)}</Text>
+                    {(totalPercenRevenue >= 0 && totalPercenRevenue < 100) ?
+                        <Text className='text-red-500' strong>{formatNumber(totalPercenRevenue, 0, 2)}%</Text>
+                        :
+                        <Text className='text-green-500' strong>{formatNumber(totalPercenRevenue, 0, 2)}%</Text>
+                    }
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={6}>
-                    <Text strong>{formatNumber(totalDailyMoney)}</Text>
+                    <Text strong>{formatNumber(totalTargetMoneyDate)}</Text>
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={7}>
+                    <Text strong>{formatNumber(totalDailyMoney)}</Text>
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={8}>
                     {(totalTargetMoneyDate - totalDailyMoney) > 0 ?
                         <Text className='text-red-500' strong>{`-${formatNumber(totalTargetMoneyDate - totalDailyMoney)}`}</Text>
                         :
                         <Text className='text-green-500' strong>{`+${formatNumber(Math.abs(totalTargetMoneyDate - totalDailyMoney))}`}</Text>
                     }
                 </Table.Summary.Cell>
-                <Table.Summary.Cell index={8}>
+                <Table.Summary.Cell index={9}>
                     {(totalTargetMoneyDate - totalDailyMoney) > 0 ?
                         <Text className='text-red-500' strong>CHƯA</Text>
                         :

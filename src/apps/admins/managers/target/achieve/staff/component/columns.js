@@ -97,6 +97,25 @@ const columnRevenueOverViews = (typeActive, dataFilter, history) => [
                 },
             },
             {
+                title: 'TỈ LỆ', dataIndex: ['staff_monthly_target', 'value'],
+                render: (value, datas) => {
+                    const revenueMonth = getDataTableRevenueOverView(datas, 'revenueMonth');
+                    const percenRevenue = (revenueMonth / value) * 100;
+                    if (percenRevenue >= 0 && percenRevenue < 100) {
+                        return {
+                            children: <Text strong className='text-red-500'>{`${formatNumber(percenRevenue, 0, 2)} %`}</Text>,
+                            __style__: { color: 'eb2315' },
+                        }
+                    } else {
+                        return {
+                            children: <Text strong className='text-green-500'>{`${formatNumber(percenRevenue, 0, 2)} %`}</Text>,
+                            __style__: { color: '22c55e' },
+                        }
+                    }
+                },
+                sorter: (a, b) => (getDataTableRevenueOverView(a, 'revenueMonth') / a?.staff_monthly_target?.value * 100) - (getDataTableRevenueOverView(b, 'revenueMonth') / b?.staff_monthly_target?.value * 100),
+            },
+            {
                 title: `TARGET NGÀY`, dataIndex: ['staff_monthly_target', 'value'],
                 render: (value, datas) => {
                     const revenueMonth = getDataTableRevenueOverView(datas, 'revenueMonth');
