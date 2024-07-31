@@ -52,12 +52,12 @@ const columnRevenueOverViews = (typeActive, dataFilter, history) => [
                     const percenRevenue = (value / datas?.shop_monthly_target?.value) * 100;
                     if (percenRevenue >= 0 && percenRevenue < 100) {
                         return {
-                            children: <Text strong className='text-red-500'>{`${formatNumber(percenRevenue, 0, 2)} %`}</Text>,
+                            children: <Text strong className='text-red-500'>{`${formatNumber(percenRevenue, 0, 5)} %`}</Text>,
                             __style__: { color: 'eb2315' },
                         }
                     } else {
                         return {
-                            children: <Text strong className='text-green-500'>{`${formatNumber(percenRevenue, 0, 2)} %`}</Text>,
+                            children: <Text strong className='text-green-500'>{`${formatNumber(percenRevenue, 0, 5)} %`}</Text>,
                             __style__: { color: '22c55e' },
                         }
                     }
@@ -204,9 +204,9 @@ const calculateSummary = (datas, dataFilter) => {
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={5}>
                     {(totalPercenRevenue >= 0 && totalPercenRevenue < 100) ?
-                        <Text className='text-red-500' strong>{formatNumber(totalPercenRevenue, 0, 2)}%</Text>
+                        <Text className='text-red-500' strong>{formatNumber(totalPercenRevenue, 0, 5)}%</Text>
                         :
-                        <Text className='text-green-500' strong>{formatNumber(totalPercenRevenue, 0, 2)}%</Text>
+                        <Text className='text-green-500' strong>{formatNumber(totalPercenRevenue, 0, 5)}%</Text>
                     }
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={3}>
