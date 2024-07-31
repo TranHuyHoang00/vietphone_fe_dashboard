@@ -188,8 +188,8 @@ const calculateSummary = (datas, dataFilter) => {
             totalTargetMoney += parseFloat(shop_monthly_target?.value);
             totalAchievedMoney += parseFloat(revenue?.total_revenue);
             totalDailyMoney += parseFloat(daily?.total_revenue);
-            totalPercenRevenue += parseFloat((revenue?.total_revenue / shop_monthly_target?.value * 100) / datas.length)
         });
+        totalPercenRevenue += parseFloat((totalAchievedMoney / totalTargetMoney * 100))
         totalTargetMoneyDate = getTargetDate(dataFilter?.end, totalTargetMoney - totalAchievedMoney, 0);
         return (
             <Table.Summary.Row>
