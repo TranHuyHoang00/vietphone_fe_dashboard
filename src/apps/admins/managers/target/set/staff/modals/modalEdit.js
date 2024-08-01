@@ -170,14 +170,18 @@ class index extends Component {
                                                             <input className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                                                 type="number" min="0"
                                                                 value={item?.data?.value}
-                                                                onChange={(event) => this.handleOnchangeInput(event.target.value, 'value', item)} />
+                                                                disabled
+                                                            // onChange={(event) => this.handleOnchangeInput(event.target.value, 'value', item)}
+                                                            />
                                                         </div>
                                                         <div className='space-y-[3px]'>
                                                             <Text italic strong>Số lượng</Text>
                                                             <input className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                                                 type="number" min="0"
                                                                 value={item?.data?.quantity}
-                                                                onChange={(event) => this.handleOnchangeInput(event.target.value, 'quantity', item)} />
+                                                                disabled
+                                                            // onChange={(event) => this.handleOnchangeInput(event.target.value, 'quantity', item)} 
+                                                            />
                                                         </div>
                                                     </div>
                                                 </Card>

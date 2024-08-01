@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Modal, Spin, Typography, Card, message, Collapse, Select } from 'antd';
+import { Modal, Spin, Typography, Card, message, Collapse, Select, Button } from 'antd';
 import ModalFooter from '@components/modals/modalFooter';
 import dayjs from 'dayjs';
 import { createTargetProductCategory } from '@services/target/targetProductCategoryServices';
@@ -238,7 +238,8 @@ class index extends Component {
                                 </div>
                             </div>
                             <Collapse defaultActiveKey={[1]} size='small' >
-                                <Collapse.Panel key={1} header="KPI SẢN PHẨM">
+                                <Collapse.Panel key={1} header="KPI SẢN PHẨM"
+                                    extra={<Button onClick={() => this.setState({ dataTPCs: [] })} className='bg-red-500 text-white'>Xóa</Button>}>
                                     <div className='space-y-[5px]'>
                                         {dataProductCategoryTargets && dataProductCategoryTargets.reverse().map((item, index) => {
                                             return (
@@ -249,14 +250,18 @@ class index extends Component {
                                                             <input className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                                                 type="number" min="0"
                                                                 value={this.getValue('value', item) || ''}
-                                                                onChange={(event) => this.handleOnchangeInput(event.target.value, 'value', item)} />
+                                                                disabled
+                                                            //onChange={(event) => this.handleOnchangeInput(event.target.value, 'value', item)} 
+                                                            />
                                                         </div>
                                                         <div className='space-y-[3px]'>
                                                             <Text italic strong>Số lượng</Text>
                                                             <input className='border border-gray-300 rounded-[2px] w-full h-[35px] px-[10px]'
                                                                 type="number" min="0"
                                                                 value={this.getValue('quantity', item) || ''}
-                                                                onChange={(event) => this.handleOnchangeInput(event.target.value, 'quantity', item)} />
+                                                                disabled
+                                                            //onChange={(event) => this.handleOnchangeInput(event.target.value, 'quantity', item)} 
+                                                            />
                                                         </div>
                                                     </div>
                                                 </Card>
