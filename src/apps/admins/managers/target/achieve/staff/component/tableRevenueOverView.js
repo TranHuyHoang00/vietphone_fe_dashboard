@@ -18,7 +18,7 @@ class index extends Component {
             <Table rowKey="id"
                 columns={columnRevenueOverViews(typeActive, dataFilter, this.props.history)} dataSource={dataReportTargetStaffs}
                 pagination={false}
-                size="small" bordered scroll={{ x: 1000 }} />
+                size="small" bordered scroll={{ x: 1100 }} />
         );
     }
 }
