@@ -161,7 +161,7 @@ class index extends Component {
                             <Collapse defaultActiveKey={[1]} size='small'>
                                 <Collapse.Panel key={1} header="KPI SẢN PHẨM">
                                     <div className='space-y-[5px]'>
-                                        {dataPCs && dataPCs.reverse().map((item, index) => {
+                                        {dataPCs && dataPCs.map((item, index) => {
                                             return (
                                                 <Card key={index} title={`${item.name}`} size='small'>
                                                     <div className='flex items-center justify-center space-x-[5px]'>

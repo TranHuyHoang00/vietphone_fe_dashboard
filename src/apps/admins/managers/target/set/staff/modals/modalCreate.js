@@ -74,7 +74,7 @@ class index extends Component {
     validationData = (data) => {
         const { listSelectedStaffId } = this.state;
         if (listSelectedStaffId && listSelectedStaffId.length === 0) {
-            return { mess: "Không được bỏ trống 'Cửa hàng' ", check: false };
+            return { mess: "Không được bỏ trống 'Nhân viên' ", check: false };
         }
         if (!data.month) {
             return { mess: "Không được bỏ trống 'Thời gian' ", check: false };
@@ -241,7 +241,7 @@ class index extends Component {
                                 <Collapse.Panel key={1} header="KPI SẢN PHẨM"
                                     extra={<Button onClick={() => this.setState({ dataTPCs: [] })} className='bg-red-500 text-white'>Xóa</Button>}>
                                     <div className='space-y-[5px]'>
-                                        {dataProductCategoryTargets && dataProductCategoryTargets.reverse().map((item, index) => {
+                                        {dataProductCategoryTargets && dataProductCategoryTargets.map((item, index) => {
                                             return (
                                                 <Card key={index} title={`${item.name}`} size='small'>
                                                     <div className='flex items-center justify-center space-x-[5px]'>
