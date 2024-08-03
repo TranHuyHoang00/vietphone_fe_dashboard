@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import * as actions from '@actions';
 import { connect } from 'react-redux';
@@ -7,13 +7,35 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { moduleQuills, formatQuills } from '@datas/dataModuleReactQuill';
 import '../../../statics/product.css';
+import Quill from 'quill';
+
+const ImageEmbed = Quill.import('formats/image');
+class CustomImage extends ImageEmbed {
+    static create(value) {
+        let node = super.create();
+        node.setAttribute('src', value.url);
+        node.setAttribute('alt', value.alt || '');
+        node.setAttribute('title', value.title || '');
+        return node;
+    }
+
+    static value(node) {
+        return {
+            url: node.getAttribute('src'),
+            alt: node.getAttribute('alt'),
+            title: node.getAttribute('title')
+        };
+    }
+}
+Quill.register(CustomImage, true);
+
 class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isToolbarFixed: false,
         }
-        this.quillRef = React.createRef();
+        this.quillRef = createRef();
     }
     componentDidMount() {
         document.querySelectorAll(".ql-picker").forEach(tool => {
@@ -35,6 +57,7 @@ class index extends Component {
         event.stopPropagation();
         this.setState({ isToolbarFixed: !this.state.isToolbarFixed });
     };
+
     handleImageUpload = () => {
         const { dataProduct } = this.props;
         const input = document.createElement('input');
@@ -49,12 +72,12 @@ class index extends Component {
                     const range = quill.getSelection();
                     if (range) {
                         const url = reader.result;
-                        quill.insertEmbed(range.index, 'image', url);
-                        const img = quill.container.querySelector('img');
-                        if (img) {
-                            img.setAttribute('alt', dataProduct?.name);
-                            img.setAttribute('title', dataProduct?.name);
-                        }
+                        const imageEmbed = {
+                            url: url,
+                            alt: dataProduct?.name || '',
+                            title: dataProduct?.name || ''
+                        };
+                        quill.insertEmbed(range.index, 'image', imageEmbed);
                     }
                 };
                 reader.readAsDataURL(file);
