@@ -178,6 +178,8 @@ class index extends Component {
                             <ProductAtbvlQuillTable />
                             <ProductMedia />
                             {/* <ProductAttributeValue /> */}
+
+
                         </div>
                     </div>
                     <ProductContent />
