@@ -13,6 +13,7 @@ class index extends Component {
         this.state = {
             isToolbarFixed: false,
         }
+        this.quillRef = React.createRef();
     }
     componentDidMount() {
         document.querySelectorAll(".ql-picker").forEach(tool => {
@@ -34,6 +35,43 @@ class index extends Component {
         event.stopPropagation();
         this.setState({ isToolbarFixed: !this.state.isToolbarFixed });
     };
+    handleImageUpload = () => {
+        const { dataProduct } = this.props;
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.addEventListener('change', () => {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const quill = this.quillRef.current.getEditor();
+                    const range = quill.getSelection();
+                    if (range) {
+                        const url = reader.result;
+                        quill.insertEmbed(range.index, 'image', url);
+                        const img = quill.container.querySelector('img');
+                        if (img) {
+                            img.setAttribute('alt', dataProduct?.name);
+                            img.setAttribute('title', dataProduct?.name);
+                        }
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        input.click();
+    };
+    getModules = () => ({
+        toolbar: {
+            container: moduleQuills.toolbar,
+            handlers: {
+                'image': this.handleImageUpload
+            }
+        },
+        clipboard: moduleQuills.clipboard
+    });
+
     render() {
         const { isEdit, description, onChangeProductDescription } = this.props;
         const { isToolbarFixed } = this.state;
@@ -48,7 +86,8 @@ class index extends Component {
                     </Button>,
                 children: <div className={`editor-container ${isToolbarFixed ? 'toolbar-fixed' : ''}`}>
                     <ReactQuill theme="snow" readOnly={!isEdit}
-                        modules={moduleQuills}
+                        ref={this.quillRef}
+                        modules={this.getModules()}
                         formats={formatQuills}
                         bounds={'.editor-container'}
                         value={description}
@@ -67,6 +106,8 @@ const mapStateToProps = state => {
     return {
         isEdit: state.product.isEdit,
         description: state.product.description,
+        dataProduct: state.product.dataProduct,
+
     };
 };
 const mapDispatchToProps = dispatch => {
