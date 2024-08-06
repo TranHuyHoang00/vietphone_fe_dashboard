@@ -21,6 +21,7 @@ class index extends Component {
             modalCreate: false,
             indexActiveVariant: 0,
             dataCheckPermis: {},
+            isLoadingMedia: false,
         }
     }
     async componentDidMount() {
@@ -161,6 +162,7 @@ class index extends Component {
         }
     }
     handleDataMedias = async (dataMedias) => {
+        this.setState({ isLoadingMedia: true });
         const promises = dataMedias.map(async (media) => {
             if (media.id) {
                 return media.id;
@@ -170,6 +172,7 @@ class index extends Component {
         });
         const results = await Promise.all(promises);
         const newDataMediaIds = results.filter(id => id != null);
+        this.setState({ isLoadingMedia: false });
         return newDataMediaIds;
     }
     openModal = () => {
@@ -209,11 +212,11 @@ class index extends Component {
         }
     }
     render() {
-        const { dataProduct, isEdit, isLoading } = this.props;
-        const { dataCheckPermis, indexActiveVariant, modalCreate } = this.state;
+        const { dataProduct, isEdit, isLoadingVariant } = this.props;
+        const { dataCheckPermis, indexActiveVariant, modalCreate, isLoadingMedia } = this.state;
         return (
             <>
-                <Spin size='large' spinning={isLoading}>
+                <Spin size='large' spinning={isLoadingVariant || isLoadingMedia}>
                     <div className=" space-y-[10px]">
                         <div className='flex items-center justify-between'>
                             <Button disabled={!dataCheckPermis['product.change_product']}
@@ -264,7 +267,7 @@ class index extends Component {
 }
 const mapStateToProps = state => {
     return {
-        isLoading: state.variant.isLoading,
+        isLoadingVariant: state.variant.isLoading,
         dataProduct: state.product.dataProduct,
         dataVariant: state.variant.dataVariant,
         dataVariants: state.variant.dataVariants,

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Button, Typography, Space, message, Modal, notification } from 'antd';
+import { Button, Typography, Space, message, Modal, notification, Spin } from 'antd';
 import ProductIntroduce from './elements/product_introduce';
 //import ProductAttributeValue from './elements/product_attribute_value';
 import ProductPage from './elements/product_page';
@@ -20,6 +20,7 @@ class index extends Component {
         super(props);
         this.state = {
             dataCheckPermis: {},
+            isLoadingMedia: false,
         }
     }
     async componentDidMount() {
@@ -57,16 +58,24 @@ class index extends Component {
         }
     }
     handleDataMedias = async (dataMedias) => {
-        let newDataMediaIds = [];
-        for (const media of dataMedias) {
-            if (media.id) { newDataMediaIds.push(media.id) }
-            else {
-                const newMediaId = await this.handleCreateMedia(media);
-                if (newMediaId) { newDataMediaIds.push(newMediaId); }
-            }
+        this.setState({ isLoadingMedia: true });
+        try {
+            const promises = dataMedias.map(async (media) => {
+                if (media.id) { return media.id; }
+                try {
+                    const newMediaId = await this.handleCreateMedia(media);
+                    return newMediaId || null;
+                } catch (error) {
+                    showNotification(error);
+                    return null;
+                }
+            });
+            const newDataMediaIds = await Promise.all(promises);
+            return newDataMediaIds.filter(id => id !== null);
+        } finally {
+            this.setState({ isLoadingMedia: false });
         }
-        return newDataMediaIds;
-    }
+    };
     handleDataAtbvls = async (dataAtbvls) => {
         let newDataAtbvlIds = [];
         for (const Atbvl of dataAtbvls) {
@@ -149,42 +158,44 @@ class index extends Component {
         }
     }
     render() {
-        const { dataProduct, isEdit } = this.props;
-        const { dataCheckPermis } = this.state;
+        const { dataProduct, isEdit, isLoadingProduct, } = this.props;
+        const { dataCheckPermis, isLoadingMedia } = this.state;
         return (
-            <div className='space-y-[10px]'>
-                <div className='flex items-center justify-between'>
-                    <Typography.Title level={4}>{dataProduct.name}</Typography.Title>
-                    <Space>
-                        {isEdit &&
-                            <Button onClick={() => this.handleCancel()}
-                                className='bg-[#e94138] text-white'>
-                                Hủy
-                            </Button>
-                        }
-                        <Button disabled={!dataCheckPermis['product.change_product']}
-                            onClick={() => this.handleEdit()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
-                            {isEdit ? 'Lưu' : 'Chỉnh sửa'}
-                        </Button>
-                    </Space>
-                </div>
+            <Spin size='large' spinning={isLoadingProduct || isLoadingMedia}>
                 <div className='space-y-[10px]'>
-                    <div className='lg:grid grid-cols-2 gap-[10px] space-y-[10px] lg:space-y-0'>
-                        <div className='space-y-[10px]'>
-                            <ProductIntroduce />
-                            <ProductPage dataProduct={dataProduct} />
-                        </div>
-                        <div className='space-y-[10px]'>
-                            <ProductAtbvlQuillTable />
-                            <ProductMedia />
-                            {/* <ProductAttributeValue /> */}
-
-
-                        </div>
+                    <div className='flex items-center justify-between'>
+                        <Typography.Title level={4}>{dataProduct.name}</Typography.Title>
+                        <Space>
+                            {isEdit &&
+                                <Button onClick={() => this.handleCancel()}
+                                    className='bg-[#e94138] text-white'>
+                                    Hủy
+                                </Button>
+                            }
+                            <Button disabled={!dataCheckPermis['product.change_product']}
+                                onClick={() => this.handleEdit()} className='bg-[#0e97ff] dark:bg-white text-white dark:text-black'>
+                                {isEdit ? 'Lưu' : 'Chỉnh sửa'}
+                            </Button>
+                        </Space>
                     </div>
-                    <ProductContent />
+                    <div className='space-y-[10px]'>
+                        <div className='lg:grid grid-cols-2 gap-[10px] space-y-[10px] lg:space-y-0'>
+                            <div className='space-y-[10px]'>
+                                <ProductIntroduce />
+                                <ProductPage dataProduct={dataProduct} />
+                            </div>
+                            <div className='space-y-[10px]'>
+                                <ProductAtbvlQuillTable />
+                                <ProductMedia />
+                                {/* <ProductAttributeValue /> */}
+
+
+                            </div>
+                        </div>
+                        <ProductContent />
+                    </div>
                 </div>
-            </div>
+            </Spin>
         );
     }
 
@@ -195,6 +206,7 @@ const mapStateToProps = state => {
         dataProduct: state.product.dataProduct,
         dataProductOriginal: state.product.dataProductOriginal,
         isEdit: state.product.isEdit,
+        isLoadingProduct: state.product.isLoading,
         description: state.product.description,
         shortDescription: state.product.shortDescription,
         dataProductPage: state.productPage.dataProductPage,

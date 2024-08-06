@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '@actions';
-import { Button, Spin, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import Product from './product/index';
 import Variant from './variant/index';
 import { ExclamationCircleFilled } from '@ant-design/icons';
@@ -61,18 +61,16 @@ class index extends Component {
 
     }
     render() {
-        const { isLoading, dataProduct } = this.props;
+        const { dataProduct } = this.props;
         return (
-            <Spin size='large' spinning={isLoading}>
-                <div className='p-[10px] space-y-[10px]'>
-                    <Button onClick={() => this.onCLickBack()}
-                        className='bg-[#e94138] text-white'>
-                        Quay lại
-                    </Button>
-                    <Product />
-                    <Variant dataVariantIds={dataProduct?.variants} />
-                </div>
-            </Spin>
+            <div className='p-[10px] space-y-[10px]'>
+                <Button onClick={() => this.onCLickBack()}
+                    className='bg-[#e94138] text-white'>
+                    Quay lại
+                </Button>
+                <Product />
+                <Variant dataVariantIds={dataProduct?.variants} />
+            </div>
         );
     }
 
@@ -81,7 +79,6 @@ class index extends Component {
 const mapStateToProps = state => {
     return {
         dataProduct: state.product.dataProduct,
-        isLoading: state.product.isLoading,
         isEditProduct: state.product.isEditProduct,
         isEditVariant: state.variant.isEditVariant,
         isEditPRD: state.product.isEdit,
