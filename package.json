@@ -23,6 +23,7 @@
     "dotenv": "^16.3.1",
     "history": "^4.7.2",
     "html2canvas": "^1.4.1",
+    "katex": "0.16.0",
     "moment": "^2.29.4",
     "react": "^17.0.2",
     "react-apexcharts": "^1.4.1",
@@ -30,8 +31,6 @@
     "react-dom": "^17.0.2",
     "react-icons": "^4.10.1",
     "react-multi-carousel": "^2.8.4",
-    "katex": "0.16.0",
-    "suneditor-react": "2.16.1",
     "react-quill": "^2.0.0",
     "react-redux": "^7.2.5",
     "react-responsive-carousel": "^3.2.23",
@@ -43,8 +42,11 @@
     "redux-thunk": "^2.4.2",
     "sass": "^1.39.0",
     "source-map-js": "^1.0.2",
+    "suneditor-react": "2.16.1",
     "uifx": "^2.0.7",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "xlsx": "^0.18.5",
+    "xml2js": "^0.6.2"
   },
   "scripts": {
     "start": "craco start",

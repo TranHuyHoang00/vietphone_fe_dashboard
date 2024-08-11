@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Divider, Card, Spin, Popconfirm, Button, Space } from 'antd';
+import { Divider, Card, Spin, Popconfirm, Button, Space, message } from 'antd';
 import { AiOutlineCloudDownload } from "react-icons/ai";
 import { syncAllProducts, getDataTask } from '@services/system/taskServices';
 import { showNotification } from '@utils/handleFuncNotification';
 import { handleCheckPermis } from '@utils/handleFuncPermission';
 import { dataSyncs } from '@datas/dataPermissionsOrigin';
+
+import * as XLSX from 'xlsx';
+import { parseStringPromise } from 'xml2js';
+
 class index extends Component {
     constructor(props) {
         super(props);
@@ -16,6 +20,8 @@ class index extends Component {
             dataSyncProduct: {},
 
             dataCheckPermis: {},
+
+            isLoadingExport: false,
         }
     }
     async componentDidMount() {
@@ -90,6 +96,25 @@ class index extends Component {
             this.handleLoading(syncName, false, false);
         }
     }
+
+    handleExportExcel = async () => {
+        this.setState({ isLoadingExport: true });
+        try {
+            const response = await fetch('https://www.vietphone.vn/sitemap.xml');
+            const xmlText = await response.text();
+            const result = await parseStringPromise(xmlText);
+            const urls = result.urlset.url.map(item => item.loc[0]);
+            const worksheet = XLSX.utils.json_to_sheet(urls.map(url => ({ URL: url })));
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Sitemap URLs');
+            XLSX.writeFile(workbook, 'sitemap_urls.xlsx');
+            message.success('Xuất file thành công')
+        } catch (e) {
+            message.error('Xuất file thất bại');
+        } finally {
+            this.setState({ isLoadingExport: false });
+        }
+    }
     render() {
         const syncSuscess = (name, data) => {
             return (
@@ -108,7 +133,7 @@ class index extends Component {
                 </div>
             )
         }
-        const { isLoadingSyncProduct, isResultSyncProduct, dataSyncProduct } = this.state;
+        const { isLoadingSyncProduct, isResultSyncProduct, dataSyncProduct, isLoadingExport } = this.state;
         return (
             <div className="mx-[10px] space-y-[10px]">
                 <div className='bg-white dark:bg-[#001529] p-[10px] rounded-[5px] shadow-md'>
@@ -134,6 +159,18 @@ class index extends Component {
                                     {isResultSyncProduct === false && <>{syncFailed('sản phẩm')}</>}
                                     {isResultSyncProduct && <> {syncSuscess('sản phẩm', dataSyncProduct)}</>}
                                 </Card>
+                            </Spin>
+                        </div>
+
+                        <div>
+                            <Spin spinning={isLoadingExport}>
+                                <Button onClick={() => this.handleExportExcel()}
+                                    className='bg-[#0e97ff]'>
+                                    <Space className='text-white'>
+                                        <AiOutlineCloudDownload className='text-[20px]' />
+                                        Xuất Excel Url Sản Phẩm
+                                    </Space>
+                                </Button>
                             </Spin>
                         </div>
                     </div>
