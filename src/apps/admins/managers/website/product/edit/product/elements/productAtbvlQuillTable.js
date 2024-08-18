@@ -20,29 +20,31 @@ class Index extends Component {
             this.editorRef.current.editor.setContents(shortDescription);
         }
     }
-
+    componentDidUpdate(prevProps) {
+        if (prevProps.shortDescription !== this.props.shortDescription) {
+            if (this.editorRef.current) {
+                this.editorRef.current.editor.setContents(this.props.shortDescription || '');
+            }
+        }
+    }
     handleChange = (value) => {
         this.props.onChangeProductShortDescription(value);
     };
 
     render() {
         const { isEdit, shortDescription } = this.props;
-        const items = [
-            {
-                key: '1',
-                label: 'Thông số kĩ thuật',
-                children:
+        return (
+            <Collapse defaultActiveKey={[1]} >
+                <Collapse.Panel header="Thông số kĩ thuật" key="1">
                     <SunEditor disable={!isEdit}
                         ref={this.editorRef}
                         setOptions={moduleSunEditor}
                         lang="en"
                         onChange={this.handleChange}
-                        setContents={shortDescription}
+                        setContents={shortDescription || ""}
                     />
-            },
-        ]
-        return (
-            <Collapse defaultActiveKey={[1]} items={items}></Collapse>
+                </Collapse.Panel>
+            </Collapse>
         );
     }
 }

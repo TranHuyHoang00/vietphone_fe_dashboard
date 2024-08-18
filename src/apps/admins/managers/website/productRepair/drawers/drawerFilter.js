@@ -15,7 +15,7 @@ class index extends Component {
         }
     }
     async componentDidMount() {
-        const { dataFilter } = this.props;
+        const { dataFilter } = this.state;
         const { getListBrand, getListTag, getListCategory } = this.props;
         await getListBrand(dataFilter);
         await getListTag(dataFilter);
